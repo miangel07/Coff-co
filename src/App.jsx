@@ -1,6 +1,6 @@
 import './App.css'
 import {Route,  Routes} from "react-router-dom";
-import LoginPages from "./pages/auth/LoginPages.jsx";
+import LoginPages from "./pages/Auth/LoginPages";
 const  App=()=> {
     return (
         <>
