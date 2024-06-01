@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useLoginUserMutation } from "../../store/api/auth/index.js";
 import { getCookie, removeCookie } from "../../utils/index.js";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const LoginComponent = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginUser, { isSuccess }] = useLoginUserMutation();
-
+const navigation = useNavigate();
   /*{} -> query's
    * [] -> mutation's*/
 
@@ -29,6 +30,8 @@ const LoginComponent = () => {
   useEffect(() => {
     if (isSuccess) {
       console.log("User has logged in, successfully");
+    navigation("/inicio")
+
     }
     if (getCookie("authToken")) {
       setIsAuthenticated(true);
