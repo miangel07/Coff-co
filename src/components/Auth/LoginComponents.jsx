@@ -30,7 +30,7 @@ const navigation = useNavigate();
   useEffect(() => {
     if (isSuccess) {
       console.log("User has logged in, successfully");
-    navigation("/inicio")
+    navigation("/home")
 
     }
     if (getCookie("authToken")) {
