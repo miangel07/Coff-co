@@ -1,11 +1,15 @@
-import LoginComponent from "../../components/molecules/Auth/LoginComponents";
 
-const Login = () => {
+import React from "react";
+import LoginComponent from "../../components/molecules/Auth/LoginComponents"
+import LoginFooter from "../../components/organismo/LoginFooter";
+
+
+const LoginPages = () => {
   return (
-    <>
-      <LoginComponent />
-    </>
+    <div >
+      <LoginFooter/>
+    </div>
   );
 };
 
-export default Login;
+export default LoginPages;

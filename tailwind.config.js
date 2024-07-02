@@ -7,7 +7,11 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        sena: "rgb(57, 169, 0)",
+      },
+    },
   },
   darkMode: "class",
   plugins: [nextui(), require("daisyui")],

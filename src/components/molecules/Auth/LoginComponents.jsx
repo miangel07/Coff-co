@@ -8,8 +8,6 @@ import Mybutton from "../../atoms/Mybutton.jsx";
 import Input from "../../atoms/Input.jsx";
 
 const LoginComponent = () => {
-  
-
   const [loginUser, { isSuccess }] = useLoginUserMutation();
   const navigation = useNavigate();
   /*{} -> query's
@@ -42,62 +40,64 @@ const LoginComponent = () => {
 
   return (
     <>
-    <div>
-    <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text" style={{ color: "#586E26" }}>
-                        Número de documento
-                      </span>
-                    </label>
-                    <Input
-                      id={"id"}
-                      type={"text"}
-                      register={register}
-                      name={"id"}
-                      erros={errors}
-                    />
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text" style={{ color: "#586E26" }}>
-                        Contraseña
-                      </span>
-                    </label>
+      <div className=" rounded-lg shadow-xl w-fit mt-40">
+        <div className="lg:w-[450px] lg:h-[400px] md:w-96 w-72 ">
+          <div className="card-header">
+            <h1 className="card-title text-center justify-center mt-6">
+              COFFCO
+            </h1>
+          </div>
+          <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control gap-3">
+              <label className="label">
+                <span className="label-text" style={{ color: "#586E26" }}>
+                  Número de documento
+                </span>
+              </label>
+              <Input
+                id={"id"}
+                type={"text"}
+                register={register}
+                name={"id"}
+                erros={errors}
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text" style={{ color: "#586E26" }}>
+                  Contraseña
+                </span>
+              </label>
 
-                    <Input
-                      id={"password"}
-                      type={"password"}
-                      register={register}
-                      name={"password"}
-                      erros={errors}
-                    />
+              <Input
+                id={"password"}
+                type={"password"}
+                register={register}
+                name={"password"}
+                erros={errors}
+              />
 
-                    <label className="label">
-                      <a
-                        className="label-text-alt link link-hover"
-                        style={{ color: "#586E26" }}
-                      >
-                        Registrarse
-                      </a>
+              <label className="label">
+                <a
+                  className="label-text-alt link link-hover"
+                  style={{ color: "#586E26" }}
+                >
+                  Registrarse
+                </a>
 
-                      <a
-                        href="#"
-                        className="label-text-alt link link-hover"
-                        style={{ color: "#586E26" }}
-                      >
-                        ¿Olvidaste tu contraseña?
-                      </a>
-                    </label>
-                  </div>
-                  <div className="form-control mt-3">
-                    <Mybutton type={"submit"} color={"primary"}>
-                      ingresar
-                    </Mybutton>
-                  </div>
-                </form>
-    </div>
-     
+                <a href="#" className="label-text-alt link link-hover  ">
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </label>
+            </div>
+            <div className="form-control mt-3">
+              <Mybutton type={"submit"} >
+                ingresar
+              </Mybutton>
+            </div>
+          </form>
+        </div>
+      </div>
     </>
   );
 };

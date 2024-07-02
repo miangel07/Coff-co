@@ -14,11 +14,11 @@ const Input = ({ type, placeholder, id, name, erros, register }) => {
             message: `${name} es obligatorio`,
           },
         })}
-        className="text-black w-full h-[32px] rounded-lg  outline outline-3 outline-none  pl-3
+        className="text-black w-full h-[36px] rounded-lg  outline outline-3 outline-none  pl-3
         border-solid border-2 "
       />
 
-      {erros[name] && <p className="text-amber-700">{erros[name].message}</p>}
+      {erros[name] && <p className="text-amber-700 mt-2 relative">{erros[name].message}</p>}
     </div>
   );
 };
