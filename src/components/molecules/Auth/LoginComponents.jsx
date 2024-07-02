@@ -42,19 +42,8 @@ const LoginComponent = () => {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col">
-        <div className="flex flex-grow">
-          <div className="w-1/2 flex justify-center items-center bg-gray-500">
-            <div className="cardF w-full max-w-md shadow-lg rounded-md bg-white bg-opacity-90 p-8">
-              <h1 className="text-3xl font-semibold text-gray-800 text-center">
-                COFFCO
-              </h1>
-              <h2 className="text-lg font-medium text-gray-800 text-center mb-4">
-                coffee control
-              </h2>
-
-          
-                <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+    <div>
+    <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text" style={{ color: "#586E26" }}>
@@ -107,11 +96,8 @@ const LoginComponent = () => {
                     </Mybutton>
                   </div>
                 </form>
-          
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+     
     </>
   );
 };
