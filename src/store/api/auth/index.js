@@ -19,7 +19,7 @@ export const authApi = createApi({
                     body: data,
                 }),
                 transformResponse(baseQueryReturnValue) {
-                    setCookie("user", JSON.stringify(baseQueryReturnValue.user), 30);
+                /*     setCookie("user", JSON.stringify(baseQueryReturnValue.user), 30); */
                     setCookie("authToken", baseQueryReturnValue.token, 30);
                 }
             }),
