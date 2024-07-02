@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLoginUserMutation } from "../../store/api/auth/index.js";
-import { getCookie, removeCookie } from "../../utils/index.js";
+import { useLoginUserMutation } from "../../../store/api/auth/index.js";
+import { getCookie, removeCookie } from "../../../utils/index.js";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { rol } from "../../utils/rol.js";
-import { Button } from "@nextui-org/react";
+import { rol } from "../../../utils/rol.js";
+import Mybutton from "../../atoms/Mybutton.jsx";
 
 const LoginComponent = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -117,13 +117,9 @@ const LoginComponent = () => {
                     </label>
                   </div>
                   <div className="form-control mt-3">
-                    <button
-                      type="submit"
-                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      Ingresar
-                    </button>
-                    <Button color="primary">Button</Button>
+                    <Mybutton type={"submit"} color={"primary"}>
+                      ingresar
+                    </Mybutton>
                   </div>
                 </form>
               )}

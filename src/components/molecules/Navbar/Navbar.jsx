@@ -9,10 +9,9 @@ import { FaUsers } from "react-icons/fa";
 import { ImExit } from "react-icons/im";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { removeCookie } from "../../utils/index.js";
+import { removeCookie } from "../../../utils/index.js";
 
 const Navbar = () => {
-   
   const icons = [
     { icon: <IoHomeSharp />, label: "inicio", link: "/home" },
     {
@@ -28,7 +27,12 @@ const Navbar = () => {
       label: "alquiler de laboratorio",
       link: "/home",
     },
-    { icon: <ImExit />, label: "salir", link: "/home" ,onClick: ()=>logout() },
+    {
+      icon: <ImExit />,
+      label: "salir",
+      link: "/home",
+      onClick: () => logout(),
+    },
   ];
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const logout = () => {
@@ -63,12 +67,10 @@ const Navbar = () => {
             >
               <MdClose className="size-7" />
             </button>
-         
-          {icons.map(({ icon, label, link }, index) => (
+
+            {icons.map(({ icon, label, link }, index) => (
               <Link to={link} key={index}>
-                <ul
-                  className="text-center flex text-white text-lg hover:text-slate-300 cursor-pointer py-3 mb-2"
-                >
+                <ul className="text-center flex text-white text-lg hover:text-slate-300 cursor-pointer py-3 mb-2">
                   <div className="flex ml-5 gap-2 ">
                     {React.cloneElement(icon, { size: 25 })}
                     <p>{label}</p>
@@ -76,9 +78,6 @@ const Navbar = () => {
                 </ul>
               </Link>
             ))}
-
-       
-          
           </div>
         </div>
       </div>

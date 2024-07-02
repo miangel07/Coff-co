@@ -1,4 +1,4 @@
-import LoginComponent from "../../components/Auth/LoginComponents.jsx";
+import LoginComponent from "../../components/molecules/Auth/LoginComponents";
 
 const Login = () => {
   return (

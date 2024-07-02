@@ -1,5 +1,5 @@
-import Navbar from "../../components/Navbar/Navbar"
-import Menu from "../../components/Navbar/Menu"
+import Navbar from "../../components/molecules/Navbar/Navbar"
+
 
 const HomePages = () => {
     return (
