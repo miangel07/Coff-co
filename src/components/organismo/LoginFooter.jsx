@@ -1,5 +1,5 @@
 import React from "react";
-import LoginComponent from "../molecules/Auth/LoginComponents";
+import LoginComponent from "../molecules/login/LoginComponents";
 import Footer from "../molecules/Footer/Footer";
 
 const LoginFooter = () => {

@@ -1,13 +1,10 @@
-import Navbar from "../../components/molecules/Navbar/Navbar"
+import HomePlantilla from "../../components/plantillas/Home/HomePlantilla"
 
 
 const HomePages = () => {
     return (
         <>
-        <Navbar/>
-            
-       
-       
+        <HomePlantilla/>
         </>
     )
     
