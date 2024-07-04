@@ -40,7 +40,7 @@ const LoginComponent = () => {
   }, [isSuccess]);
 
   return (
-    <>
+
       <div className=" rounded-lg shadow-xl w-fit   ">
         <div className="lg:w-[450px] lg:h-[420px] md:w-96 w-72 ">
           <div className="card-header">
@@ -89,7 +89,7 @@ const LoginComponent = () => {
           </form>
         </div>
       </div>
-    </>
+
   );
 };
 export default LoginComponent;
