@@ -4,7 +4,7 @@ import { SocialIcon } from "react-social-icons";
 const Socialicon = ({ url,bgColor,fgColor }) => {
   return (
     <div>
-      <SocialIcon bgColor={bgColor} fgColor={fgColor} url={url} />
+      <SocialIcon  bgColor={bgColor} fgColor={fgColor} url={url} />
     </div>
   );
 };
