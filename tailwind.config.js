@@ -13,6 +13,19 @@ export default {
       },
     },
   },
+
+  theme: {
+    extend: {
+      boxShadow: {
+        "dark-lg":
+          "0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.5)",
+
+        "shadow-sena":
+          "0 10px 15px -3px rgb(57, 169, 0), 0 4px 6px -2px rgb(57, 169, 0)",
+      },
+    },
+  },
+
   darkMode: "class",
   plugins: [nextui(), require("daisyui")],
 };
