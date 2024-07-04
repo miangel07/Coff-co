@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { rol } from "../../../utils/rol.js";
 import Mybutton from "../../atoms/Mybutton.jsx";
 import Input from "../../atoms/Input.jsx";
+import Label from "../../atoms/Label.jsx";
 
 const LoginComponent = () => {
   const [loginUser, { isSuccess }] = useLoginUserMutation();
@@ -43,17 +44,13 @@ const LoginComponent = () => {
       <div className=" rounded-lg shadow-xl w-fit mt-40">
         <div className="lg:w-[450px] lg:h-[400px] md:w-96 w-72 ">
           <div className="card-header">
-            <h1 className="card-title text-center justify-center mt-6">
+            <h1 className="card-title text-center justify-center mt-6 font-sans text-2xl">
               COFFCO
             </h1>
           </div>
           <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control gap-3">
-              <label className="label">
-                <span className="label-text" style={{ color: "#586E26" }}>
-                  Número de documento
-                </span>
-              </label>
+              <Label>Numero de cedula</Label>
               <Input
                 id={"id"}
                 type={"text"}
@@ -63,11 +60,7 @@ const LoginComponent = () => {
               />
             </div>
             <div className="form-control">
-              <label className="label">
-                <span className="label-text" style={{ color: "#586E26" }}>
-                  Contraseña
-                </span>
-              </label>
+            <Label>Contraseña</Label>
 
               <Input
                 id={"password"}
@@ -82,18 +75,16 @@ const LoginComponent = () => {
                   className="label-text-alt link link-hover"
                   style={{ color: "#586E26" }}
                 >
-                  Registrarse
+                    <Label>Registrarse</Label>
                 </a>
 
                 <a href="#" className="label-text-alt link link-hover  ">
-                  ¿Olvidaste tu contraseña?
+                <Label>¿Olvido su Contraseña?</Label>
                 </a>
               </label>
             </div>
             <div className="form-control mt-3">
-              <Mybutton type={"submit"} >
-                ingresar
-              </Mybutton>
+              <Mybutton type={"submit"}>ingresar</Mybutton>
             </div>
           </form>
         </div>
