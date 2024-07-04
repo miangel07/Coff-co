@@ -41,8 +41,8 @@ const LoginComponent = () => {
 
   return (
     <>
-      <div className=" rounded-lg shadow-xl w-fit mt-40">
-        <div className="lg:w-[450px] lg:h-[400px] md:w-96 w-72 ">
+      <div className=" rounded-lg shadow-xl w-fit lg:mt- md:mt-20  ">
+        <div className="lg:w-[450px] lg:h-[420px] md:w-96 w-72 ">
           <div className="card-header">
             <h1 className="card-title text-center justify-center mt-6 font-sans text-2xl">
               COFFCO
@@ -59,7 +59,7 @@ const LoginComponent = () => {
                 erros={errors}
               />
             </div>
-            <div className="form-control">
+            <div className="form-control ">
             <Label>Contraseña</Label>
 
               <Input
@@ -83,7 +83,7 @@ const LoginComponent = () => {
                 </a>
               </label>
             </div>
-            <div className="form-control mt-3">
+            <div className="form-control ">
               <Mybutton type={"submit"}>ingresar</Mybutton>
             </div>
           </form>
