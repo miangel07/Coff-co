@@ -9,10 +9,10 @@ const LoginFooter = () => {
       <div className=" pl-7 mt-3  md:justify-start justify-center flex">
         <Logosímbolo />
       </div>
-      <div className="w-full   justify-center items-center  flex">
+      <div className="w-full justify-center items-center  flex">
         <LoginComponent />
       </div>
-      <div className="w-ful h-full justify-end flex-col flex ">
+      <div className=" h-full justify-end flex-col flex ">
         <Footer />
       </div>
     </div>
