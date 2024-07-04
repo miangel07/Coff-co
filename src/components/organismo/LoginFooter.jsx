@@ -5,14 +5,14 @@ import Logosímbolo from "../atoms/Logosímbolo";
 
 const LoginFooter = () => {
   return (
-    <div className="w-full  flex flex-col h-screen ">
-      <div className=" pl-7 mt-3  md:justify-start justify-center flex">
+    <div className="w-full  flex flex-col min-h-screen justify-between">
+      <div className=" pl-7 pt-2  md:justify-start  justify-center flex">
         <Logosímbolo />
       </div>
-      <div className="w-full justify-center items-center  flex">
+      <div className="w-full justify-center  items-center  flex">
         <LoginComponent />
       </div>
-      <div className=" h-full justify-end flex-col flex ">
+      <div className="justify-center flex ">
         <Footer />
       </div>
     </div>
