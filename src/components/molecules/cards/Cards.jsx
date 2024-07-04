@@ -8,15 +8,15 @@ const Cards = ({ title, span, icon1, span1, icon2,span2, icon3,span3 }) => {
         <h1 className="text-3xl font-bold font-sans">{title}</h1>
         <span className="font-calibri">{span}</span>
         <div className="space-y-4 pt-2">
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {icon1}
             {span1}
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {icon2}
             {span2}
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             {icon3}
             {span3}
           </div>
