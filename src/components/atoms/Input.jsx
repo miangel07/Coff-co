@@ -18,7 +18,7 @@ const Input = ({ type, placeholder, id, name, erros, register }) => {
         border-solid border-2 "
       />
 
-      {erros[name] && <p className="text-amber-700 mt-2 relative">{erros[name].message}</p>}
+      {erros[name] && <p className="text-amber-700">{erros[name].message}</p>}
     </div>
   );
 };

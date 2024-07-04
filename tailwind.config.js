@@ -12,8 +12,8 @@ export default {
         sena: "rgb(57, 169, 0)",
       },
       fontFamily: {
-        sans: ['Work Sans', 'sans-serif'],
-        calibri:['Calibri', 'Arial', 'sans-serif']
+        sans: ["Work Sans", "sans-serif"] /* principal titulos */,
+        calibri: ["Calibri", "Arial", "sans-serif"] /* secundaria  */,
       },
     },
   },
