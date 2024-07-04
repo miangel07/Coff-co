@@ -41,7 +41,7 @@ const LoginComponent = () => {
 
   return (
     <>
-      <div className=" rounded-lg shadow-xl w-fit lg:mt- md:mt-20  ">
+      <div className=" rounded-lg shadow-xl w-fit   ">
         <div className="lg:w-[450px] lg:h-[420px] md:w-96 w-72 ">
           <div className="card-header">
             <h1 className="card-title text-center justify-center mt-6 font-sans text-2xl">

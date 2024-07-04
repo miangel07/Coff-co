@@ -3,7 +3,7 @@ import Socialicon from "../../atoms/Socialicon";
 
 const Footer = () => {
   return (
-    <div className="w-full md:h-32 h-24 bg-sena  flex flex-col justify-center">
+    <div className="w-full md:h-32  bg-sena  flex flex-col justify-center">
       <div className="flex flex-row gap-3">
         <Socialicon
           bgColor={"white"}

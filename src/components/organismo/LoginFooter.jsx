@@ -5,7 +5,7 @@ import Logosímbolo from "../atoms/Logosímbolo";
 
 const LoginFooter = () => {
   return (
-    <div className="w-screen  flex flex-col h-screen ">
+    <div className="w-full  flex flex-col h-screen ">
       <div className=" pl-7 mt-3  md:justify-start justify-center flex">
         <Logosímbolo />
       </div>
