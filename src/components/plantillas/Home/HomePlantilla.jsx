@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import Footer from "../../molecules/Footer/Footer";
 import Cards from '../../molecules/cards/Cards'
 
@@ -25,7 +25,4 @@ const HomePlantilla = () => {
 
 export default HomePlantilla;
 
-{
-  /* <div className="w-1/2 h-full  bg-slate-700"></div>
-        <div className="w-1/2 h-full  bg-yellow-700"></div> */
-}
+
