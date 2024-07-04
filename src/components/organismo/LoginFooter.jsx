@@ -8,9 +8,9 @@ const LoginFooter = () => {
       <div className="w-full h-4/5  justify-center items-center flex">
         <LoginComponent />
       </div>
-      <div className="w-ful  justify-end flex-col flex">
+      <div className="w-ful h-full justify-end flex-col flex ">
 
-        <Footer /> 
+     <Footer /> 
       </div>
     </div>
   );
