@@ -14,14 +14,18 @@ const HomePlantilla = () => {
       <div className="w-full max-w-screen-lg flex flex-col md:flex-row bg-blue-300  gap-4 justify-between mt-4">
         <div className="w-full md:w-1/2 mb-4 md:mb-0">
           <Cards
-            title="Gestion documental"
+            title={"Gestion documental"}
+            span={"Organiza y administra tus documentos"}
             icon1={<IoDocumentAttachSharp className="ml-4 text-3xl" />}
             icon2={<HiDocumentMagnifyingGlass className="ml-4 text-3xl" />}
             icon3={<MdEditDocument className="ml-4 text-3xl" />}
           />
         </div>
         <div className="w-full md:w-1/2 h-64 bg-green-300">
-          <Cards/>
+          <Cards
+            title={"Servicios"}
+            span={"Nuestra gama de productos y servicios."}
+          />
         </div>
       </div>
     </div>
