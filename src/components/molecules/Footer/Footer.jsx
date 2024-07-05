@@ -3,7 +3,7 @@ import Socialicon from "../../atoms/Socialicon";
 
 const Footer = () => {
   return (
-    <div className="md:h-32 bg-sena w-full flex md:flex-row  flex-col justify-around  items-center">
+    <div className="md:h-32 bg-sena w-full flex md:flex-row flex-col justify-around  items-center">
       <div className=" items-center md:items-start flex flex-col ">
         <div className="flex flex-row gap-3 ">
           <Socialicon
@@ -47,7 +47,7 @@ const Footer = () => {
         </div>
        
       </div>
-      <div className="h-full justify-center items-center flex">
+      <div className="h-full justify-center items-center flex ">
           <p className="text-white font-calibri font-bold text-xl -tracking-tighter">www.sena.edu.co</p>
         </div> 
     </div>
