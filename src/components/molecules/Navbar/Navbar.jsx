@@ -1,21 +1,24 @@
 import { CgMenu } from "react-icons/cg";
 import { MdClose } from "react-icons/md";
 import { GrHomeRounded } from "react-icons/gr";
-
 import { GiTransparentTubes } from "react-icons/gi";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { ImExit } from "react-icons/im";
 import React, { useState } from "react";
-
 import { removeCookie } from "../../../utils/index.js";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
-
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdHelpOutline } from "react-icons/md";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  const logout = () => {
+    removeCookie("authToken");
+  };
+
   const icons = [
     { icon: <GrHomeRounded />, label: "Inicio", link: "/home" },
     {
@@ -37,16 +40,14 @@ const Navbar = () => {
     { icon: <IoSettingsOutline />, label: "Configuraciones", link: "/home" },
     { icon: <MdHelpOutline />, label: "Ayuda", link: "/home" },
 
-    { icon: <ImExit />, label: "Salir", link: "/home" },
+    {
+      icon: <ImExit />,
+      label: "Salir",
+      link: "/",
+      onClick: logout,
+    },
   ];
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-  const logout = () => {
-    alert("hola");
-    removeCookie("authToken");
-    removeCookie("user");
-    setIsAuthenticated(false);
-  };
   const handleOpenMenu = () => {
     setIsOpenMenu(!isOpenMenu);
   };
@@ -71,11 +72,13 @@ const Navbar = () => {
             <MdClose className="size-7" />
           </button>
 
-          {icons.map(({ icon, label, link }, index) => (
+          {icons.map(({ icon, label, link, onClick }, index) => (
             <Link to={link} key={index}>
               <ul className="text-center flex  text-white text-lg hover:bg-slate-500 cursor-pointer py-3 mb-2">
                 <div className="flex ml-5 gap-2 ">
-                  {React.cloneElement(icon, { size: 25 })}
+                  <span onClick={onClick}>
+                    {React.cloneElement(icon, { size: 25 })}
+                  </span>
                   <p>{label}</p>
                 </div>
               </ul>
@@ -92,11 +95,13 @@ const Navbar = () => {
     <>
       <div className="bg-white flex-row py-3 flex fixed top-0 left-0 md:justify-between justify-around right-0 shadow-md">
         <div className=" xl:w-3/4 w-4/5  flex-row  justify-between xl:ml-7 lg:flex hidden">
-          {icons.map(({ icon, label, link }, index) => (
+          {icons.map(({ icon, label, link, onClick }, index) => (
             <Link to={link} key={index}>
               <ul className="text-center flex  text-lg hover:text-slate-300 cursor-pointer ">
-                <div className="flex ml-5 gap-1 flex-wrap justify-center" > 
-                  {React.cloneElement(icon, { size: 25 })}
+                <div className="flex ml-5 gap-1 flex-wrap justify-center">
+                  <span onClick={onClick}>
+                    {React.cloneElement(icon, { size: 25 })}
+                  </span>
                   <p className="font-calibri font-black line-clamp-1">
                     {label}
                   </p>
