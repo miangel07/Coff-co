@@ -2,15 +2,16 @@ import { CgMenu } from "react-icons/cg";
 import { MdClose } from "react-icons/md";
 import { GrHomeRounded } from "react-icons/gr";
 import { GiTransparentTubes } from "react-icons/gi";
-import { HiOutlineUsers } from "react-icons/hi2";
 import { ImExit } from "react-icons/im";
 import React, { useState } from "react";
 import { removeCookie } from "../../../utils/index.js";
-import { HiOutlineDocumentSearch } from "react-icons/hi";
+
+import { FcConferenceCall } from "react-icons/fc";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdHelpOutline } from "react-icons/md";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { FcOpenedFolder } from "react-icons/fc";
 
 const Navbar = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -26,9 +27,9 @@ const Navbar = () => {
       label: "Notificaciones",
       link: "/home",
     },
-    { icon: <HiOutlineUsers />, label: "Administrar Usuarios", link: "/home" },
+    { icon: <FcConferenceCall />, label: "Administrar Usuarios", link: "/users" },
     {
-      icon: <HiOutlineDocumentSearch />,
+      icon: <FcOpenedFolder />,
       label: "Documentos",
       link: "/home",
     },

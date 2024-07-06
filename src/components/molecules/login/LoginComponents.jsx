@@ -78,7 +78,7 @@ const LoginComponent = () => {
             </label>
           </div>
           <div className="form-control ">
-            <Mybutton type={"submit"}>ingresar</Mybutton>
+            <Mybutton  type={"submit"}>Ingresar</Mybutton>
           </div>
           
         </form>

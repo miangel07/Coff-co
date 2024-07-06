@@ -22,7 +22,7 @@ export const authApi = createApi({
         /*     setCookie("user", JSON.stringify(baseQueryReturnValue.user), 30); */
         setCookie("authToken", baseQueryReturnValue.token, 30);
       },
-      transformErrorResponse: (response, meta, arg) => {
+      transformErrorResponse: (response, arg) => {
         return {
           originalArg: arg,
           error: response.data.message 
