@@ -10,6 +10,7 @@ export default {
     extend: {
       colors: {
         sena: "rgb(57, 169, 0)",
+        hover: "rgb(249,249,250)",
       },
       fontFamily: {
         sans: ["Work Sans", "sans-serif"] /* principal titulos */,
