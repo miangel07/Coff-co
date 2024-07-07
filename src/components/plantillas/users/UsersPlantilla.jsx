@@ -8,7 +8,7 @@ const UsersPlantilla = () => {
       <div>
         <Navbar/>
       </div>
-      <div className="mt-20">
+      <div className="md:mt-32">
       <UsuarioOrganismo />
 
       </div>
