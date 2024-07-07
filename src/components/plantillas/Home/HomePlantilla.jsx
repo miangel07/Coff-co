@@ -52,11 +52,11 @@ import { MdEditDocument } from "react-icons/md";
 
 const HomePlantilla = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen ">
+    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden ">
       <div className="w-full">
         <Navbar />
       </div>
-      <div className="relative w-full max-w-screen-lg flex flex-col md:flex-row gap-16 justify-between mt-auto">
+      <div className="absolute w-full max-w-screen-lg flex flex-col md:flex-row gap-16 justify-between mt-auto">
         <div className="w-full md:w-1/2 mb-4 md:mb-0">
           <Cards
             title={"Gestion documental"}
@@ -76,7 +76,7 @@ const HomePlantilla = () => {
           />
         </div>
       </div>
-      <div className="mt-auto">
+      <div className="mt-auto w-screen">
         <Footer />
       </div>
     </div>
