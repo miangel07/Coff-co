@@ -21,7 +21,7 @@ const UserTable = () => {
   };
 
   return (
-    <div className="overflow-y-hidden">
+    <div className="overflow-x-auto ">
       <table className="min-w-full  divide-y  table cursor-pointer">
         <thead>
           <tr>
@@ -36,7 +36,7 @@ const UserTable = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((usuario) => (
+          {data?.map((usuario) => (
             <tr className="hover:bg-hover " key={usuario.id_usuario}>
               <Td>{usuario.id_usuario}</Td>
               <Td>{usuario.nombre_usuario}</Td>
