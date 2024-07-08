@@ -9,6 +9,7 @@ import Td from "../../atoms/Td";
 
 const UserTable = () => {
   const { data, isLoading, isError, error } = useGetusersQuery();
+  console.table(data)
   if (isLoading) {
     return <Spinner />;
   }

@@ -25,7 +25,7 @@ export const authApi = createApi({
       transformErrorResponse: (response, arg) => {
         return {
           originalArg: arg,
-          error: response.data.message 
+          error: response.data.message,
         };
       },
     }),
@@ -40,4 +40,6 @@ export const authApi = createApi({
     }),
   }),
 });
+
+
 export const { useLoginUserMutation, useGetListQuery } = authApi;
