@@ -30,10 +30,13 @@ export const userApi = createApi({
         url: "usuario/registrar",
         method: "POST",
         body: data,
+   /*      onSuccess:((response)=>  response.data.message), */
         headers: {
           token: `${getCookie("authToken")}`,
         },
       }),
+     
+
       transformErrorResponse: (response, meta, arg) => {
         return {
           originalArg: arg,

@@ -9,9 +9,10 @@ import UserFrom from "../../molecules/Formulario/UserFrom";
 import Input from "../../atoms/Input";
 import { useForm } from "react-hook-form";
 import { usePostUsersMutation } from "../../../store/api/users";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 
 const UsuarioOrganismo = () => {
-  const [postUsers, { isLoading, isSuccess, isError, error }] =
+  const [postUsers, { isLoading, isSuccess, data, isError, error }] =
     usePostUsersMutation();
   const {
     handleSubmit,
@@ -20,6 +21,7 @@ const UsuarioOrganismo = () => {
   } = useForm();
 
   const [openModal, setOpenModal] = useState(false);
+  const [sucess, setsucess] = useState("");
   const handleClick = () => {
     setOpenModal(true);
   };
@@ -33,12 +35,15 @@ const UsuarioOrganismo = () => {
   };
   useEffect(() => {
     if (isSuccess) {
-      closeModal();
+      setsucess(data.message);
+      window.location.reload();
     }
+
     if (isError) {
       console.log(error);
     }
-  }, []);
+  }, [isSuccess, error, data]);
+
   /* type, placeholder, id, name, erros, register */
   const modal = openModal ? (
     <ModalOrganismo
@@ -61,7 +66,7 @@ const UsuarioOrganismo = () => {
                 name={"apellido_usuario"}
                 erros={errors}
                 id={"apellido"}
-                placeholder={"Ingrese el nombre del apellido"}
+                placeholder={"Ingrese el  apellido del usuario"}
                 type={"text"}
               />
               <Input
@@ -69,7 +74,7 @@ const UsuarioOrganismo = () => {
                 name={"correo_electronico"}
                 erros={errors}
                 id={"correo"}
-                placeholder={"Ingrese el nombre del correo"}
+                placeholder={"Ingrese el  correo del usuario"}
                 type={"text"}
               />
               <Input
@@ -77,7 +82,7 @@ const UsuarioOrganismo = () => {
                 name={"telefono_usuario"}
                 erros={errors}
                 id={"telefono"}
-                placeholder={"Ingrese el nombre del telefono"}
+                placeholder={"Ingrese el   telefono del usuario"}
                 type={"text"}
               />
               <Input
@@ -85,7 +90,7 @@ const UsuarioOrganismo = () => {
                 name={"password"}
                 erros={errors}
                 id={"password"}
-                placeholder={"Ingrese el nombre del contraseña"}
+                placeholder={"Ingrese el   contraseña del usuario"}
                 type={"text"}
               />
               <Input
@@ -93,7 +98,7 @@ const UsuarioOrganismo = () => {
                 name={"rol_usuario"}
                 erros={errors}
                 id={"rol"}
-                placeholder={"Ingrese el nombre del rol"}
+                placeholder={"Ingrese el  rol del usuario"}
                 type={"text"}
               />
               <Input
@@ -101,7 +106,7 @@ const UsuarioOrganismo = () => {
                 name={"tipo_documento"}
                 erros={errors}
                 id={"tipo_documento"}
-                placeholder={"Ingrese el nombre del tipo_documento"}
+                placeholder={"Ingrese el   tipo de documento del usuario"}
                 type={"text"}
               />
               <Input
@@ -109,7 +114,7 @@ const UsuarioOrganismo = () => {
                 name={"numero_identificacion"}
                 erros={errors}
                 id={"numero_identificacion"}
-                placeholder={"Ingrese el nombre del numero_identificacion"}
+                placeholder={"Ingrese el  numero de identificacion del usuario"}
                 type={"number"}
               />
             </>

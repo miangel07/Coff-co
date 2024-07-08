@@ -94,7 +94,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-white flex-row py-3 flex fixed top-0 left-0 md:justify-between justify-around right-0 shadow-md">
+      <div className="bg-white flex-row py-3 flex  top-0 left-0 md:justify-between justify-around right-0 shadow-md">
         <div className=" xl:w-3/4 w-4/5  flex-row  justify-between xl:ml-7 lg:flex hidden">
           {icons.map(({ icon, label, link, onClick }, index) => (
             <Link to={link} key={index}>
