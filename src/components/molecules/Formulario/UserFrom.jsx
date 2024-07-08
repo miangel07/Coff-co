@@ -1,14 +1,16 @@
-import React from 'react'
+import React from "react";
 
-
-const UserFrom = () => {
+const UserFrom = ({ children,onsubmit }) => {
   return (
     <div>
-      <form className='card-body'>
-      
+      <form className="card-body" onSubmit={onsubmit}> 
+        <div className="form-control gap-2">{children}</div>
+        <div className="form-control gap-2">
+          <button className="btn btn-primary">Submit</button>
+        </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default UserFrom
+export default UserFrom;

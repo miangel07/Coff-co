@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Spinner } from "@nextui-org/react";
 import { useGetusersQuery } from "../../../store/api/users";
 import { MdDeleteOutline } from "react-icons/md";
@@ -8,7 +8,7 @@ import Th from "../../atoms/Th";
 import Td from "../../atoms/Td";
 
 const UserTable = () => {
-  const { data, isLoading, isError, error } = useGetusersQuery();
+  const { data, isLoading, isError, error, refetch } = useGetusersQuery();
   if (isLoading) {
     return <Spinner />;
   }
