@@ -21,11 +21,27 @@ export const userApi = createApi({
       transformErrorResponse: (response, meta, arg) => {
         return {
           originalArg: arg,
-          error: response.data.message 
+          error: response.data.message,
         };
       },
     }),
+    postUsers:build.mutation({
+      query: (data) => ({
+        url: "usuario/registrar",
+        method: "POST",
+        body: data,
+        headers: {
+          token: `${getCookie("authToken")}`,
+        },
+      }),
+      transformErrorResponse: (response, meta, arg) => {
+        return {
+          originalArg: arg,
+          error: response.data.message,
+        };
+      },
+    })
   }),
 });
 
-export const { useGetusersQuery } = userApi;
+export const { useGetusersQuery,usePostUsersMutation } = userApi;

@@ -23,7 +23,11 @@ const LoginComponent = () => {
   const onSubmit = (data) => {
     loginUser(data);
   };
-  const errorLogin = isError ? <p className="text-red-400 font-calibri">{error.error}</p> : "";
+  const errorLogin = isError ? (
+    <p className="text-red-400 font-calibri">{error.error}</p>
+  ) : (
+    ""
+  );
 
   useEffect(() => {
     if (isSuccess) {
@@ -40,7 +44,6 @@ const LoginComponent = () => {
             COFFCO
           </h1>
           {errorLogin}
-         
         </div>
         <form className="card-body mt-0" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-control gap-1">
@@ -78,9 +81,8 @@ const LoginComponent = () => {
             </label>
           </div>
           <div className="form-control ">
-            <Mybutton  type={"submit"}>Ingresar</Mybutton>
+            <Mybutton type={"submit"}>Ingresar</Mybutton>
           </div>
-          
         </form>
       </div>
     </div>
