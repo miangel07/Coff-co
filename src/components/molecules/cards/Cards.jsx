@@ -1,25 +1,24 @@
 import React from 'react'
-import Mybutton from '../../atoms/Mybutton'
+import Mybutton from "../../atoms/Mybutton";
 
-const Cards = ({ title, span, icon1, span1, icon2,span2, icon3,span3 }) => {
+
+const Cards = ({ title, span, icons}) => {
   return (
     <>
-      <div className="h-full w-full bg-slate-50 rounded-badge pl-2 pt-4 shadow-dark-lg cursor-pointer  transform hover:scale-y-105 hover:scale-x-105  transition duration-300 ">
-        <h1 className="text-3xl font-bold font-sans">{title}</h1>
-        <span className="font-calibri">{span}</span>
+      <div className="h-full w-full bg-slate-50 rounded-badge pl-2 pt-4 shadow-dark-lg cursor-pointer transform hover:scale-y-105 hover:scale-x-105 transition duration-300 ">
+        <h1 className="text-4xl font-bold font-sans">{title}</h1>
+        <span className="font-calibri text-2xl">{span}</span>
         <div className="space-y-4 pt-2">
-          <div className="flex gap-4">
-            {icon1}
-            {span1}
-          </div>
-          <div className="flex gap-4">
-            {icon2}
-            {span2}
-          </div>
-          <div className="flex gap-4">
-            {icon3}
-            {span3}
-          </div>
+          {icons.map((icon, index) => (
+            <div key={index} className="flex gap-2">
+            <div className="ml-4 text-3xl">
+                {icon.icon}
+            </div>
+            <div className='text-[18px]'>
+                {icon.description}
+            </div>
+            </div>
+          ))}
         </div>
         <div className="pl-4 pt-3 pb-2">
           <Mybutton>Empezar</Mybutton>
@@ -30,6 +29,7 @@ const Cards = ({ title, span, icon1, span1, icon2,span2, icon3,span3 }) => {
 };
 
 export default Cards
+
 
 
 

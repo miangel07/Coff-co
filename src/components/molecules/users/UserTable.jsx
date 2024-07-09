@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { FcOk } from "react-icons/fc";
 
 const UserTable = () => {
+
   const { data, isLoading, isError, error, refetch } = useGetusersQuery();
   const [
     deleteUsers,
@@ -89,7 +90,7 @@ const UserTable = () => {
   return (
     <>
       <div className="overflow-x-auto ">
-        <table className="min-w-full  divide-y  table cursor-pointer">
+        <table className="min-w-full   divide-y  table cursor-pointer">
           <thead>
             <tr>
               <Th>ID</Th>
