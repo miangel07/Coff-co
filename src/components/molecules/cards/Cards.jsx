@@ -11,12 +11,8 @@ const Cards = ({ title, span, icons}) => {
         <div className="space-y-4 pt-2">
           {icons.map((icon, index) => (
             <div key={index} className="flex gap-2">
-            <div className="ml-4 text-3xl">
-                {icon.icon}
-            </div>
-            <div className='text-[18px]'>
-                {icon.description}
-            </div>
+              <div className="ml-4 text-3xl">{icon.icon}</div>
+              <div className="text-[18px]">{icon.description}</div>
             </div>
           ))}
         </div>

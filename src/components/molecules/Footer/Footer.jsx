@@ -3,42 +3,42 @@ import Socialicon from "../../atoms/Socialicon";
 
 const Footer = () => {
   return (
-    <div className="md:h-32 bg-sena w-full flex md:flex-row flex-col justify-around  items-center">
+    <div className="md:h-20 bg-sena w-full flex md:flex-row flex-col justify-around  items-center">
       <div className=" items-center md:items-start flex flex-col ">
         <div className="flex flex-row gap-3 ">
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.facebook.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.instagram.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.linkedin.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.x.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.youtube.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
         </div>
         <div className="flex flex-row  items-end w-[223px] ">
-          <h1 className="text-white font-calibri font-bold text-3xl tracking-widest">
+          <h1 className="text-white font-calibri font-bold text-2xl tracking-widest">
             @SENAC
           </h1>
           <p className="text-white font-calibri font-bold text-2xl tracking-wider ">
