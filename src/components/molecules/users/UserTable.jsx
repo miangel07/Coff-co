@@ -1,35 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Spinner } from "@nextui-org/react";
-import { useGetusersQuery } from "../../../store/api/users";
+import {
+  useGetusersQuery,
+  useDeleteUsersMutation,
+} from "../../../store/api/users";
 import { MdDeleteOutline } from "react-icons/md";
-
 import { FiEdit } from "react-icons/fi";
 import Th from "../../atoms/Th";
 import Td from "../../atoms/Td";
 import PaginationMolecula from "../pagination/PaginationMolecula";
+import toast from "react-hot-toast";
+
+import { FcOk } from "react-icons/fc";
 
 const UserTable = () => {
-  const { data, isLoading, isError, error } = useGetusersQuery();
+  const { data, isLoading, isError, error, refetch } = useGetusersQuery();
+  const [
+    deleteUsers,
+    { isLoading: isLoadingDelete, isError: isErrorDalete, error: ErroDelete },
+  ] = useDeleteUsersMutation();
 
-  const [cantidadData, setCantidadData] = useState(7);
   const [pages, setPage] = useState(1);
+
+  const cantidadData = 7;
   const final = pages * cantidadData;
   const inicial = final - cantidadData;
-
   const numeroPagina = Math.ceil(data?.length / cantidadData);
+
   if (isLoading) {
     return <Spinner />;
   }
-
   if (isError) {
     return <p className="text-red-400">{error.message}</p>;
   }
   const handlePageChange = (page) => {
     setPage(page);
   };
-  const Editar = (id) => {
-    alert(`Editando usuario con ID:${id}`);
+  const Eliminar = async (id) => {
+    try {
+      if (window.confirm("¿Estás seguro de eliminar este usuario?")) {
+        const result = await deleteUsers(id).unwrap();
+        toast.success(result.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+        refetch();
+      }
+      if (isErrorDalete) {
+        console.error(ErroDelete);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   const DataArray = data ? data.slice(inicial, final) : [];
   const User = DataArray
     ? DataArray.map((usuario) => (

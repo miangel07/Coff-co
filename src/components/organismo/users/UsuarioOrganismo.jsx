@@ -9,7 +9,9 @@ import UserFrom from "../../molecules/Formulario/UserFrom";
 import Input from "../../atoms/Input";
 import { useForm } from "react-hook-form";
 import { usePostUsersMutation } from "../../../store/api/users";
-import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
+import toast from "react-hot-toast";
+
+import { FcOk } from "react-icons/fc";
 
 const UsuarioOrganismo = () => {
   const [postUsers, { isLoading, isSuccess, data, isError, error }] =
@@ -18,6 +20,7 @@ const UsuarioOrganismo = () => {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm();
 
   const [openModal, setOpenModal] = useState(false);
@@ -29,20 +32,28 @@ const UsuarioOrganismo = () => {
     setOpenModal(false);
   };
   const onsubmit = (data) => {
-    console.log(data);
     postUsers(data);
-    console.log(data);
+    reset();
+    setOpenModal(false);
   };
   useEffect(() => {
     if (isSuccess) {
       setsucess(data.message);
-      window.location.reload();
+      toast.success(data?.message, {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+        icon: <FcOk />,
+      });
     }
 
     if (isError) {
       console.log(error);
     }
-  }, [isSuccess, error, data]);
+  }, [isSuccess]);
 
   /* type, placeholder, id, name, erros, register */
   const modal = openModal ? (

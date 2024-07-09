@@ -30,7 +30,6 @@ export const userApi = createApi({
         url: "usuario/registrar",
         method: "POST",
         body: data,
-   /*      onSuccess:((response)=>  response.data.message), */
         headers: {
           token: `${getCookie("authToken")}`,
         },
@@ -43,8 +42,19 @@ export const userApi = createApi({
           error: response.data.message,
         };
       },
+    }),
+    deleteUsers:build.mutation({
+      query: (id) => ({
+        url: `usuario/eliminar/${id}`,
+        method: "DELETE",
+        headers: {
+          token: `${getCookie("authToken")}`,
+        },
+      }),
     })
+
+
   }),
 });
 
-export const { useGetusersQuery,usePostUsersMutation } = userApi;
+export const { useGetusersQuery,usePostUsersMutation,useDeleteUsersMutation } = userApi;
