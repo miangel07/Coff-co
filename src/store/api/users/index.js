@@ -34,14 +34,27 @@ export const userApi = createApi({
           token: `${getCookie("authToken")}`,
         },
       }),
+     
+
       transformErrorResponse: (response, meta, arg) => {
         return {
           originalArg: arg,
           error: response.data.message,
         };
       },
+    }),
+    deleteUsers:build.mutation({
+      query: (id) => ({
+        url: `usuario/eliminar/${id}`,
+        method: "DELETE",
+        headers: {
+          token: `${getCookie("authToken")}`,
+        },
+      }),
     })
+
+
   }),
 });
 
-export const { useGetusersQuery,usePostUsersMutation } = userApi;
+export const { useGetusersQuery,usePostUsersMutation,useDeleteUsersMutation } = userApi;

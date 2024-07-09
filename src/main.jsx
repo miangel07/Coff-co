@@ -6,6 +6,7 @@ import { store } from "./store";
 import { BrowserRouter } from "react-router-dom";
 import { NextUIProvider } from "@nextui-org/react";
 import "./index.css";
+import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Provider store={store}>
         <BrowserRouter>
           <App />
+          <Toaster />
         </BrowserRouter>
       </Provider>
     </NextUIProvider>
