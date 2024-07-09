@@ -44,7 +44,7 @@ const HomePlantilla = () => {
           <Navbar />
         </div>
         <div className=" w-full max-w-screen-lg flex flex-col md:flex-row gap-16 justify-between mt-28">
-          <div className="w-full md:w-1/2 mb-4 md:mb-0">
+          <div className="w-full md:w-1/2 mb-4 md:mb-0 justify-between">
             <Cards
               title="Gestión Documental"
               span="Organiza y administra tus documentos"
