@@ -27,7 +27,11 @@ const Navbar = () => {
       label: "Notificaciones",
       link: "/home",
     },
-    { icon: <FcConferenceCall />, label: "Administrar Usuarios", link: "/users" },
+    {
+      icon: <FcConferenceCall />,
+      label: "Administrar Usuarios",
+      link: "/users",
+    },
     {
       icon: <FcOpenedFolder />,
       label: "Documentos",
@@ -116,7 +120,7 @@ const Navbar = () => {
             <CgMenu className="size-7" />
           </button>
         </div>
-        <p className="text-center mr-7 relative items-center font-sans text-2xl font-bold">
+        <p className="text-center mr-7 relative items-center font-sans text-xl font-bold">
           Coffco
         </p>
       </div>
