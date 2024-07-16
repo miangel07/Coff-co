@@ -10,31 +10,31 @@ const Footer = () => {
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.facebook.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.instagram.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.linkedin.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.x.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
           <Socialicon
             bgColor={"white"}
             fgColor={"rgb(57, 169, 0)"}
             url={"https://www.youtube.com/SENAHuila/reviews"}
-            iconSize="35px"
+            iconSize="20px"
           />
         </div>
         <div className="flex flex-row  items-end w-[223px] ">
