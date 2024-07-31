@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Spinner } from "@nextui-org/react";
 import {
   useGetusersQuery,
@@ -14,11 +14,10 @@ import toast from "react-hot-toast";
 import { FcOk } from "react-icons/fc";
 
 const UserTable = () => {
-
   const { data, isLoading, isError, error, refetch } = useGetusersQuery();
   const [
     deleteUsers,
-    { isLoading: isLoadingDelete, isError: isErrorDalete, error: ErroDelete },
+    {   isError: isErrorDalete, error: ErroDelete },
   ] = useDeleteUsersMutation();
 
   const [pages, setPage] = useState(1);
