@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const { nextui } = require("@nextui-org/react");
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 export default {
   content: [
     "./index.html",
@@ -27,5 +29,10 @@ export default {
   },
 
   darkMode: "class",
-  plugins: [nextui(), require("daisyui")],
+  plugins: [nextui(), require("daisyui"), react({
+    jsxImportSource: '@emotion/react',
+    babel: {
+      plugins: ['@emotion/babel-plugin'],
+    },
+  }),],
 };
