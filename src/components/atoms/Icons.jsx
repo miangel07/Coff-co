@@ -6,8 +6,8 @@ const Icons = ({ img }) => {
       style={{
         backgroundImage: `url(${img})`,
         backgroundSize: "cover",
-        width: "20px",
-        height: "20px",
+        width: "35px",
+        height: "35px",
       }}
     ></div>
   );
