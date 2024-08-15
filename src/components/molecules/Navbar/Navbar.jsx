@@ -11,19 +11,20 @@ const Navbar = () => {
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
     seticon(true);
-    setItmes(false);
+    setItmes(!Items);
   };
   const icons = icon ? (
-    <LuArrowLeftCircle
-      onClick={toggleMenu}
-      size={32}
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-125"
-    />
-  ) : (
     <LuArrowRightCircle
       onClick={toggleMenu}
       size={32}
       className="cursor-pointer transform transition-transform duration-300 hover:scale-110"
+    />
+  ) : (
+
+    <LuArrowLeftCircle
+      onClick={toggleMenu}
+      size={32}
+      className="cursor-pointer transform transition-transform duration-300 hover:scale-125"
     />
   );
   return (
