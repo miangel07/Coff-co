@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
-
-
+import { AiFillDollarCircle } from "react-icons/ai";
+import { GoFileDirectoryFill } from "react-icons/go";
+import { GiCoffeeBeans } from "react-icons/gi";
+import { IoIosSettings } from "react-icons/io";
+import { BsHousesFill } from "react-icons/bs";
+import { GoHomeFill } from "react-icons/go";
+import { IoDocument } from "react-icons/io5";
+import { FaCalendarAlt } from "react-icons/fa";
+import { BsFillFileBarGraphFill } from "react-icons/bs";
+import { TbReportMoney } from "react-icons/tb";
+import { ImExit } from "react-icons/im";
 const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
   const [subItems, setSubitems] = useState(-1);
@@ -10,86 +19,86 @@ const ItemsNavbar = ({ visiblite }) => {
 
   const handleClick = (index) => {
     setItemsUser(index);
-    console.log(index)
+    console.log(index);
     if (index == 8 && items[index].label === "Configuraciones") {
       setSubMenuVisible(!subMenuVisible);
     } else {
-      setSubMenuVisible(false)
+      setSubMenuVisible(false);
     }
-
-
   };
   const handleClickSubimitem = (subIndex) => {
-    setSubitems(subIndex)
-  }
+    setSubitems(subIndex);
+  };
 
   const items = [
     {
       label: `${!visiblite ? "Home" : ""}`,
-      icon: <Icons img={"/home.png"} />,
+      icon: <GoHomeFill size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Servicios" : ""}`,
-      icon: <Icons img={"/maquina-de-cafe.png"} />,
-      link: "/servicios"
+      icon: <GiCoffeeBeans size={"35px"} />,
+      link: "/servicios",
     },
     {
       label: `${!visiblite ? "Documentos" : ""}`,
-      icon: <Icons img={"/documento.png"} />,
+      icon: <GoFileDirectoryFill size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Precios" : ""}`,
-      icon: <Icons img={"/precios.png"} />,
+      icon: <AiFillDollarCircle size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Ambientes" : ""}`,
-      icon: <Icons img={"/moverse.png"} />,
+      icon: <BsHousesFill size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <Icons img={"/contrato.png"} />,
+      icon: <IoDocument size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Tipo de Servicios" : ""}`,
-      icon: <Icons img={"/soporte-tecnico.png"} />,
+      icon: <Icons img={"/maquina-de-cafe.png"} />,
     },
     {
       label: `${!visiblite ? "Variables" : ""}`,
-      icon: <Icons img={"/base-de-datos.png"} />,
+      icon: <Icons img={"/variable.png"} />,
     },
     {
       label: `${!visiblite ? "Configuraciones" : ""}`,
-      icon: <Icons img={"/configuraciones.png"} />,
-      items: !visiblite ? [
-        {
-          label: `${!visiblite ? "Usuarios" : ""}`,
-          icon: 'pi pi-users',
-        },
-        {
-          label: `${!visiblite ? "Ayuda" : ""}`,
-          icon: 'pi-question-circle'
-        },
-        {
-          label: `${!visiblite ? "Logos" : ""}`,
-          icon: 'pi pi-image'
-        }
-      ] : [],
+      icon: <IoIosSettings size={"35px"} />,
+      items: !visiblite
+        ? [
+            {
+              label: `${!visiblite ? "Usuarios" : ""}`,
+              icon: "pi pi-users",
+            },
+            {
+              label: `${!visiblite ? "Ayuda" : ""}`,
+              icon: "pi-question-circle",
+            },
+            {
+              label: `${!visiblite ? "Logos" : ""}`,
+              icon: "pi pi-image",
+            },
+          ]
+        : [],
     },
     {
       label: `${!visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <Icons img={"/laboratorio.png"} />,
+      icon: <FaCalendarAlt size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Reportes" : ""}`,
-      icon: <Icons img={"/reporte.png"} />,
+      icon: <BsFillFileBarGraphFill size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Facturas" : ""}`,
-      icon: <Icons img={"/facturacion.png"} />,
+      icon: <TbReportMoney size={"35px"} />,
     },
     {
       label: `${!visiblite ? "Salir" : ""}`,
-      icon: <Icons img={"/cerrar-sesion.png"} />,
+      icon: <ImExit size={"35px"} />,
     },
   ];
 
@@ -98,35 +107,41 @@ const ItemsNavbar = ({ visiblite }) => {
       <ul className="w-full">
         {items.map((item, index) => (
           <div key={index}>
-            <Link
-              to={item.link}
-            >
+            <Link to={item.link}>
               <li
-                className={`flex items-center p-2 rounded-lg ${itemsUser === index ? "bg-slate-400" : ""}`}
+                className={`flex items-center p-2 rounded-lg ${
+                  itemsUser === index ? "bg-slate-400" : ""
+                }`}
                 onClick={() => handleClick(index)}
               >
-
-
                 <div className="flex items-center space-x-2 w-full cursor-pointer">
                   <div className="cursor-pointer">{item.icon}</div>
-                  <span className="cursor-pointer line-clamp-1">{item.label}</span>
+                  <span className="cursor-pointer line-clamp-1">
+                    {item.label}
+                  </span>
                 </div>
               </li>
               {itemsUser == 8 && subMenuVisible && (
                 <ul className="pl-4 ">
                   {item.items?.map((subItem, subIndex) => (
-                    <li key={subIndex} className={`flex items-center p-3 mt-2 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""}`}
-                      onClick={() => handleClickSubimitem(subIndex)}>
+                    <li
+                      key={subIndex}
+                      className={`flex items-center p-3 mt-2 rounded-lg ${
+                        subItems === subIndex ? "bg-slate-400" : ""
+                      }`}
+                      onClick={() => handleClickSubimitem(subIndex)}
+                    >
                       <div className="flex items-center space-x-2 w-full cursor-pointer">
                         <div className="cursor-pointer">
                           <i className={subItem.icon}></i>
                         </div>
-                        <span className="cursor-pointer line-clamp-1">{subItem.label}</span>
+                        <span className="cursor-pointer line-clamp-1">
+                          {subItem.label}
+                        </span>
                       </div>
                     </li>
                   ))}
                 </ul>
-
               )}
             </Link>
           </div>
