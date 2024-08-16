@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ItemsNavbar from "./ItemsNavbar";
 import { LuArrowLeftCircle } from "react-icons/lu";
 import { LuArrowRightCircle } from "react-icons/lu";
-
+import { GiCoffeeBeans } from "react-icons/gi";
 const Navbar = () => {
   const [menuAbierto, setMenuAbierto] = useState(true);
   const [Items, setItmes] = useState(false);
@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
-    seticon(true);
+    seticon(!icon);
     setItmes(!Items);
   };
   const icons = icon ? (
@@ -20,7 +20,6 @@ const Navbar = () => {
       className="cursor-pointer transform transition-transform duration-300 hover:scale-110"
     />
   ) : (
-
     <LuArrowLeftCircle
       onClick={toggleMenu}
       size={32}
@@ -30,12 +29,14 @@ const Navbar = () => {
   return (
     <div className="flex">
       <div
-        className={`fixed top-0 left-0 h-full bg-slate-800  text-white transition-all duration-300 ease-in-out ${menuAbierto ? "w-64 " : "w-16"
-          }`}
+        className={`fixed top-0 left-0 h-full bg-slate-800  text-white transition-all duration-300 ease-in-out ${
+          menuAbierto ? "w-64 " : "w-16"
+        }`}
       >
         <div
-          className={`p-4 text-white transition-all duration-100 ease-in-out flex ${menuAbierto ? "justify-end" : "justify-center"
-            }`}
+          className={`p-4 text-white transition-all duration-100 ease-in-out flex ${
+            menuAbierto ? "justify-end" : "justify-center"
+          }`}
         >
           {icons}
         </div>
