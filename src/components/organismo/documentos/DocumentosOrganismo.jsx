@@ -1,14 +1,18 @@
-import React from "react";
 import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
 import BarraBusqueda from "../../molecules/documentos/BarraBusqueda";
 import SelectAtomo from "../../atoms/Select";
+import { useState } from "react";
 
 const DocumentosOrganismo = () => {
+  const [data, SetData] = useState("");
+  console.log(data);
   return (
     <section className="w-full  flex flex-row justify-around  items-center">
       <div>
-        <Mybutton color={"primary"} children={"Nuevo"} type={"submit"} />
+        <Mybutton color={"primary"} type={"submit"}>
+          Nuevo
+        </Mybutton>
       </div>
       <div className="w-72 ">
         <SelectAtomo
@@ -23,6 +27,7 @@ const DocumentosOrganismo = () => {
               nombre: "Procesos Misionales",
             },
           ]}
+          onchage={(e) => SetData(e.target.value)}
         />
       </div>
       <div>

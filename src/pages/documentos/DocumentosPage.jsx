@@ -1,10 +1,7 @@
-import React from 'react'
-import Documentos from '../../components/plantillas/Documentos/Documentos'
+import Documentos from "../../components/plantillas/Documentos/Documentos";
 
 const DocumentosPage = () => {
-    return (
-        <Documentos />
-    )
-}
+  return <Documentos />;
+};
 
-export default DocumentosPage
+export default DocumentosPage;

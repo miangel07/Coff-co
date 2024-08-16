@@ -1,13 +1,13 @@
-import React from "react";
+
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Tbody from "../../molecules/table/Tbody";
 import Th from "../../atoms/Th";
 import Td from "../../atoms/Td";
 import { useGetDocumentosQuery } from "../../../store/api/documentos";
-import SelectAtomo from "../../atoms/Select";
 
-const TableDocumentos = () => {
+
+const TableDocumentos = ({data}) => {
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   console.log(data);
   if (isLoading) return <p>Loading...</p>;
