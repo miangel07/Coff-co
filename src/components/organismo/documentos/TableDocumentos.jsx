@@ -18,7 +18,6 @@ const TableDocumentos = () => {
                 <Thead>
                     <Th>Id</Th>
                     <Th>Codigo</Th>
-
                     <Th>Nombre</Th>
                     <Th>Version</Th>
                     <Th>Fecha De Version</Th>
@@ -34,10 +33,10 @@ const TableDocumentos = () => {
                             <Td>{doc.id_documentos}</Td>
                             <Td>{doc.codigo_documentos}</Td>
                             <Td>{doc.nombre}</Td>
-                            <Td>{doc.versiones[0].version}</Td>
-                            <Td>{doc.versiones[0].fechaVersion.split('T')[0]}</Td>
+                            <Td>{doc.versiones[0]?.version}</Td>
+                            <Td>{doc.versiones[0]?.fechaVersion.split('T')[0]}</Td>
                             <Td>{doc.fecha_emision.split('T')[0]}</Td>
-                            <Td>{doc.versiones[0].estado}</Td>
+                            <Td>{doc.versiones[0]?.estado}</Td>
                             <Td>{doc.fk_idTipoDocumento}</Td>
                             <Td>
                                 <button className='text-blue-500'>Editar</button>
