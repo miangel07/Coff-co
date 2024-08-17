@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -75,19 +75,19 @@ const ItemsNavbar = ({ visiblite }) => {
       icon: <IoIosSettings size={"28px"} />,
       items: !visiblite
         ? [
-          {
-            label: `${!visiblite ? "Usuarios" : ""}`,
-            icon: "pi pi-users",
-          },
-          {
-            label: `${!visiblite ? "Ayuda" : ""}`,
-            icon: "pi-question-circle",
-          },
-          {
-            label: `${!visiblite ? "Logos" : ""}`,
-            icon: "pi pi-image",
-          },
-        ]
+            {
+              label: `${!visiblite ? "Usuarios" : ""}`,
+              icon: "pi pi-users",
+            },
+            {
+              label: `${!visiblite ? "Ayuda" : ""}`,
+              icon: "pi-question-circle",
+            },
+            {
+              label: `${!visiblite ? "Logos" : ""}`,
+              icon: "pi pi-image",
+            },
+          ]
         : [],
     },
     {
@@ -115,8 +115,9 @@ const ItemsNavbar = ({ visiblite }) => {
           <div key={index}>
             <Link to={item.link}>
               <li
-                className={`flex items-center p-2 rounded-lg ${itemsUser === index ? "bg-slate-400" : ""
-                  }  `}
+                className={`flex items-center p-2 rounded-lg ${
+                  itemsUser === index ? "bg-slate-400" : ""
+                }  `}
                 onClick={() => handleClick(index)}
               >
                 <div className="flex items-center space-x-2 w-full cursor-pointer">
@@ -131,8 +132,9 @@ const ItemsNavbar = ({ visiblite }) => {
                   {item.items?.map((subItem, subIndex) => (
                     <li
                       key={subIndex}
-                      className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""
-                        }`}
+                      className={`flex items-center p-3 mt-1 rounded-lg ${
+                        subItems === subIndex ? "bg-slate-400" : ""
+                      }`}
                       onClick={() => handleClickSubimitem(subIndex)}
                     >
                       <div className="flex items-center space-x-2 w-full cursor-pointer">

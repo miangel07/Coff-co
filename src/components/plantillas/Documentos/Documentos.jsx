@@ -1,18 +1,13 @@
-import React from 'react'
-import DocumentosOrganismo from '../../organismo/documentos/DocumentosOrganismo'
-import TableDocumentos from '../../organismo/documentos/TableDocumentos'
+import DocumentosOrganismo from "../../organismo/documentos/DocumentosOrganismo";
 
 const Documentos = () => {
-    return (
-        <div>
-            <div>
-                <DocumentosOrganismo />
-            </div>
-            <div>
-                <TableDocumentos />
-            </div>
-        </div>
-    )
-}
+  return (
+    <div>
+      <div className=" ">
+        <DocumentosOrganismo />
+      </div>
+    </div>
+  );
+};
 
-export default Documentos
+export default Documentos;
