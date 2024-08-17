@@ -6,11 +6,10 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import ModalOrganismo from "../Modal/ModalOrganismo";
 import Logosímbolo from "../../atoms/Logosímbolo";
 import UserFrom from "../../molecules/Formulario/UserFrom";
-import Input from "../../atoms/Input";
+import InputAtomo from "../../atoms/Input";
 import { useForm } from "react-hook-form";
 import { usePostUsersMutation } from "../../../store/api/users";
 import toast from "react-hot-toast";
-
 import { FcOk } from "react-icons/fc";
 
 const UsuarioOrganismo = () => {
@@ -64,7 +63,7 @@ const UsuarioOrganismo = () => {
           onsubmit={handleSubmit(onsubmit)}
           children={
             <>
-              <Input
+              <InputAtomo
                 register={register}
                 name={"nombre_usuario"}
                 erros={errors}
@@ -72,7 +71,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el nombre del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"apellido_usuario"}
                 erros={errors}
@@ -80,7 +79,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el  apellido del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"correo_electronico"}
                 erros={errors}
@@ -88,7 +87,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el  correo del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"telefono_usuario"}
                 erros={errors}
@@ -96,7 +95,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el   telefono del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"password"}
                 erros={errors}
@@ -104,7 +103,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el   contraseña del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"rol_usuario"}
                 erros={errors}
@@ -112,7 +111,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el  rol del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"tipo_documento"}
                 erros={errors}
@@ -120,7 +119,7 @@ const UsuarioOrganismo = () => {
                 placeholder={"Ingrese el   tipo de documento del usuario"}
                 type={"text"}
               />
-              <Input
+              <InputAtomo
                 register={register}
                 name={"numero_identificacion"}
                 erros={errors}

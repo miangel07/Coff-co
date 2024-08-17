@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -12,6 +12,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { BsFillFileBarGraphFill } from "react-icons/bs";
 import { TbReportMoney } from "react-icons/tb";
 import { ImExit } from "react-icons/im";
+import { BiSolidCoffeeBean } from "react-icons/bi";
 const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
   const [subItems, setSubitems] = useState(-1);
@@ -20,7 +21,7 @@ const ItemsNavbar = ({ visiblite }) => {
   const handleClick = (index) => {
     setItemsUser(index);
     console.log(index);
-    if (index == 8 && items[index].label === "Configuraciones") {
+    if (index == 9 && items[index].label === "Configuraciones") {
       setSubMenuVisible(!subMenuVisible);
     } else {
       setSubMenuVisible(false);
@@ -33,32 +34,37 @@ const ItemsNavbar = ({ visiblite }) => {
   const items = [
     {
       label: `${!visiblite ? "Home" : ""}`,
-      icon: <GoHomeFill size={"35px"} />,
+      icon: <GoHomeFill size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Servicios" : ""}`,
-      icon: <GiCoffeeBeans size={"35px"} />,
+      icon: <GiCoffeeBeans size={"28px"} />,
       link: "/servicios",
     },
     {
       label: `${!visiblite ? "Documentos" : ""}`,
-      icon: <GoFileDirectoryFill size={"35px"} />,
+      icon: <GoFileDirectoryFill size={"28px"} />,
+      link: "/documentos",
     },
     {
       label: `${!visiblite ? "Precios" : ""}`,
-      icon: <AiFillDollarCircle size={"35px"} />,
+      icon: <AiFillDollarCircle size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Ambientes" : ""}`,
-      icon: <BsHousesFill size={"35px"} />,
+      icon: <BsHousesFill size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <IoDocument size={"35px"} />,
+      icon: <IoDocument size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Tipo de Servicios" : ""}`,
       icon: <Icons img={"/maquina-de-cafe.png"} />,
+    },
+    {
+      label: `${!visiblite ? "Muestras" : ""}`,
+      icon: <BiSolidCoffeeBean size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Variables" : ""}`,
@@ -66,7 +72,7 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${!visiblite ? "Configuraciones" : ""}`,
-      icon: <IoIosSettings size={"35px"} />,
+      icon: <IoIosSettings size={"28px"} />,
       items: !visiblite
         ? [
             {
@@ -86,19 +92,19 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${!visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <FaCalendarAlt size={"35px"} />,
+      icon: <FaCalendarAlt size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Reportes" : ""}`,
-      icon: <BsFillFileBarGraphFill size={"35px"} />,
+      icon: <BsFillFileBarGraphFill size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Facturas" : ""}`,
-      icon: <TbReportMoney size={"35px"} />,
+      icon: <TbReportMoney size={"28px"} />,
     },
     {
       label: `${!visiblite ? "Salir" : ""}`,
-      icon: <ImExit size={"35px"} />,
+      icon: <ImExit size={"28px"} />,
     },
   ];
 
@@ -111,7 +117,7 @@ const ItemsNavbar = ({ visiblite }) => {
               <li
                 className={`flex items-center p-2 rounded-lg ${
                   itemsUser === index ? "bg-slate-400" : ""
-                }`}
+                }  `}
                 onClick={() => handleClick(index)}
               >
                 <div className="flex items-center space-x-2 w-full cursor-pointer">
@@ -121,12 +127,12 @@ const ItemsNavbar = ({ visiblite }) => {
                   </span>
                 </div>
               </li>
-              {itemsUser == 8 && subMenuVisible && (
+              {itemsUser == 9 && subMenuVisible && (
                 <ul className="pl-4 ">
                   {item.items?.map((subItem, subIndex) => (
                     <li
                       key={subIndex}
-                      className={`flex items-center p-3 mt-2 rounded-lg ${
+                      className={`flex items-center p-3 mt-1 rounded-lg ${
                         subItems === subIndex ? "bg-slate-400" : ""
                       }`}
                       onClick={() => handleClickSubimitem(subIndex)}
