@@ -54,5 +54,3 @@ function CalendarPlantilla() {
 }
 
 export default CalendarPlantilla;
-
-//hola gente falta la conexion a la base de datos y unas varias 
