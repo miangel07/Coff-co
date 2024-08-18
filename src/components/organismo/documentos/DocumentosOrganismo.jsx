@@ -30,8 +30,8 @@ const DocumentosOrganismo = () => {
   }
   const openForm = form ? <DocumentosFrom /> : ""
   return (
-    <section className="w-full  flex flex-col  items-center">
-      <div className="w-full  flex flex-row justify-around  items-center">
+    <section className="w-full  flex flex-col gap-8 items-center">
+      <div className="w-full  flex flex-wrap justify-around   items-center">
         <Mybutton color={"primary"} type={"submit"} onClick={HandelForm}>
           Nuevo
         </Mybutton>
@@ -66,7 +66,7 @@ const DocumentosOrganismo = () => {
         </Thead>
         <Tbody>
           {data?.map((doc) => (
-            <tr key={doc.id_documentos}>
+            <tr className=" hover:bg-slate-100 " key={doc.id_documentos}>
               <Td>{doc.id_documentos}</Td>
               <Td>{doc.codigo_documentos}</Td>
               <Td>{doc.nombre_documento}</Td>
@@ -87,7 +87,10 @@ const DocumentosOrganismo = () => {
           ))}
         </Tbody>
       </TableMolecula>
-      {openForm}
+      <section >
+        {openForm}
+      </section>
+
     </section>
   );
 };

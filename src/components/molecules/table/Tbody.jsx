@@ -3,7 +3,7 @@ import React from 'react'
 const Tbody = ({ children }) => {
     return (
 
-        <tbody>{children}</tbody>
+        <tbody className=''>{children}</tbody>
 
     )
 }
