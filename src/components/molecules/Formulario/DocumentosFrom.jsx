@@ -3,89 +3,189 @@ import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
 import SelectAtomo from '../../atoms/Select';
-
+import { useGetVariablesQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
-
+import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
+import CheckboxAtomo from '../../atoms/CheckboxAtomo';
+import { useGetLogosQuery } from '../../../store/api/logos';
 
 const DocumentosFrom = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const [file, setFile] = useState(null);
+    const [ArryVersiones, setArryVersiones] = useState(null);
+    const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
+    const [servicio, setTipoServicio] = useState('')
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
+    const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
+    const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
+    const { data: TpoServicio, isLoading: TipoServicio } = useGetTipoServicioQuery();
+    if (TipoServicio) {
+        return <p>Loading...</p>;
+    }
     if (isLoading) {
         return <p>Loading...</p>;
     }
     if (isError) {
         return <p>Error: {error.message}</p>;
     }
+    const onDataChangeVersiones = (data) => {
+
+        setArryVersiones(data)
+    }
+    const onDataChangeLogos = (data) => {
+        setlogos(data)
+    }
+
+
 
     const HanderEnviar = (e) => {
-
         setFile(e.target.files[0].name);
+    }
 
-    }
     const onSubmit = (data) => {
-        console.log(data, file, dataInput)
+        console.log(data, file, dataInput, ArryVersiones, servicio,);
     }
-    const AgregarVariable = dataInput == 5 ? <section>
-        hola
-    </section> : ""
+
+    const AgregarVariable = dataInput == 5 ? (
+        <section className='flex flex-col w-full mt-10 '>
+
+            <SelectAtomo
+                ValueItem={"nombreServicio"}
+                data={TpoServicio}
+                items={"idTipoServicio"}
+                label={"Seleccione El servicio"}
+                onChange={(e) => setTipoServicio(e.target.value)}
+            />
+
+
+
+        </section>
+    ) : "";
 
     return (
-        <div className=' w-full justify-center flex '>
-
-            <form className='w-[1022px]  md:rounded-xl md:shadow-xl sm:h-[500px]  justify-around flex flex-col items-center ' onSubmit={handleSubmit(onSubmit)}>
-                <h1>Formulario De Registro De Documentos</h1>
-                <section className='grid grid-cols-2 sm:grid-cols-3 sm:justify-center sm:items-center divide-y  gap-4'>
-                    <div className='w-56'>
+        <div className='w-full flex justify-center'>
+            <form
+                className='w-full max-w-4xl md:rounded-xl md:shadow-xl p-6 flex flex-col gap-6'
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <h1 className='text-2xl font-bold mb-4'>Formulario De Registro De Documentos</h1>
+                <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                    <div className='flex w-[270px] h-[155px] flex-col '>
                         <Label>Nombre Del Documento</Label>
-                        <InputAtomo register={register} name={'nombre'} erros={errors} placeholder={"Nombre"} id={'nombre'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'nombre'}
+                            erros={errors}
+                            placeholder={"Nombre"}
+                            id={'nombre'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Fecha Cargar</Label>
-                        <InputAtomo register={register} name={'fecha_carga'} erros={errors} placeholder={"Fecha De carga"} id={'fecha'} type={"date"} />
+                        <InputAtomo
+                            register={register}
+                            name={'fecha_carga'}
+                            erros={errors}
+                            placeholder={"Fecha De carga"}
+                            id={'fecha'}
+                            type={"date"}
+                        />
                     </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Descripcion Del Documento</Label>
-                        <InputAtomo register={register} name={'descripcion'} erros={errors} placeholder={"descripcion"} id={'descripcion'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'descripcion'}
+                            erros={errors}
+                            placeholder={"descripcion"}
+                            id={'descripcion'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Codigo Del Documento</Label>
-                        <InputAtomo register={register} name={'codigo_documentos'} erros={errors} placeholder={"codigo del documentos"} id={'codigo_documentos'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'codigo_documentos'}
+                            erros={errors}
+                            placeholder={"codigo del documentos"}
+                            id={'codigo_documentos'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
+                        <CheckboxAtomo
+                            data={datalogos.data}
+                            items={"nombre"}
+                            valor={"idLogos"}
+                            onDataChange={onDataChangeLogos}
+                            cantidad={2}
+                        />
+                    </div>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Fecha Emision</Label>
-                        <InputAtomo register={register} erros={errors} type={'date'} name={'fecha_emision'} placeholder={"Fecha De Emision"} />
+                        <InputAtomo
+                            register={register}
+                            erros={errors}
+                            type={'date'}
+                            name={'fecha_emision'}
+                            placeholder={"Fecha De Emision"}
+                        />
                     </div>
-                    <div className='w-56 '>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Version Del Documento</Label>
-                        <InputAtomo register={register} name={'version'} erros={errors} placeholder={"version"} id={'version'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'version'}
+                            erros={errors}
+                            placeholder={"version"}
+                            id={'version'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56 '>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        <SelectAtomo ValueItem={"nombreDocumento"} data={data} items={"idTipoDocumento"} label={"Tipo Documento"} onChange={(e) => SetDataInput(e.target.value)} />
+                        <SelectAtomo
+                            ValueItem={"nombreDocumento"}
+                            data={data}
+                            items={"idTipoDocumento"}
+                            label={"Tipo Documento"}
+                            onChange={(e) => SetDataInput(e.target.value)}
+                        />
+                    </div>
+                    <div className='flex w-[270px] h-[155px]'>
+                        {AgregarVariable}
+                    </div>
+                    <div>
+                        {AgregarVariable && <div className='w-full  h-[250px]'>
+                            <CheckboxAtomo
+                                data={varibles}
+                                items={"nombre"}
+                                valor={"idVariable"}
+                                onDataChange={onDataChangeVersiones}
+                                cantidad={4}
+                            />
+                        </div>}
                     </div>
 
-                    {AgregarVariable}
-                    <div className='w-56'>
+                    <div className={`flex w-[270px] h-[155px] flex-col  `} >
                         <Label>Cargar Archivo</Label>
                         <input
                             type="file"
                             name="file"
                             accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx"
                             onChange={HanderEnviar}
-                            className='w-56 h-[48px]'
+                            className='w-full h-[48px] border border-gray-300 rounded-md p-2'
                         />
                     </div>
-
                 </section>
-
-
                 <Mybutton type={'submit'}>Enviar</Mybutton>
             </form>
         </div>
-    )
+    );
 }
 
 export default DocumentosFrom
