@@ -28,7 +28,9 @@ const DocumentosOrganismo = () => {
   const HandelForm = () => {
     setFrom(true)
   }
+
   const openForm = form ? <DocumentosFrom /> : ""
+  
   return (
     <section className="w-full  flex flex-col gap-8 items-center">
       <div className="w-full  flex flex-wrap justify-around   items-center">
