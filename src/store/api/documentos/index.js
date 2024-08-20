@@ -92,8 +92,23 @@ export const docuentosApi = createApi({
 
 
         }),
+        CambioEstado: build.mutation({
+            query: (data) => ({
+                url: `versiones/actualizarEstado/${data.id}`,
+                method: "POST",
+                body: data,
+            }),
+
+            transformErrorResponse: (response, meta, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response.data.message,
+                };
+            },
+            invalidatesTags: ["Documentos"],
+        }),
 
     })
 })
 
-export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation } = docuentosApi
+export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation, useCambioEstadoMutation } = docuentosApi

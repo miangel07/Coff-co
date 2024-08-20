@@ -1,6 +1,6 @@
 import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
-
+import { BiDownload } from "react-icons/bi";
 import SelectAtomo from "../../atoms/Select";
 import { useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
@@ -12,10 +12,11 @@ import { useGetDocumentosQuery } from "../../../store/api/documentos";
 import { useGetTipoDocumentosQuery } from "../../../store/api/TipoDocumentos";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
-import { FaArrowCircleDown } from "react-icons/fa";
 import DocumentosFrom from "../../molecules/Formulario/DocumentosFrom";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
+import { Switch } from "@nextui-org/react";
+import { useCambioEstadoMutation } from "../../../store/api/documentos";
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
@@ -23,13 +24,18 @@ const DocumentosOrganismo = () => {
   const [form, setFrom] = useState(false)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
+  //  const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado }] = useCambioEstadoMutation()
+  const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
   const handlePageChange = (page) => {
     setPages(page);
   };
-  const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
-
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading && Tipo) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
+  if (tipoError) {
+
+    return <p>Error: {tipoError.message}</p>;
+
+  }
 
   const cantidad = 6;
   const final = pages * cantidad;
@@ -45,14 +51,27 @@ const DocumentosOrganismo = () => {
     })
     : [];
   ;
+  const hadleClose = () => {
+    setFrom(false)
+  }
+  const handleEstadoChange = (doc) => {
+    const id = doc.id_documentos
+
+    const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
 
 
-  const numeroPagina = Math.ceil(data.length / cantidad);
+
+
+  };
+
+  const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
   const HandelForm = () => {
     setFrom(true)
   }
-  const openForm = form ? <DocumentosFrom /> : ""
+
+  const openForm = form ? <DocumentosFrom hadleClose={hadleClose} /> : ""
+
   return (
     <section className="w-full  flex flex-col gap-8 items-center">
       <div className="w-full  flex flex-wrap justify-around   items-center">
@@ -97,13 +116,20 @@ const DocumentosOrganismo = () => {
               <Td>{doc.version}</Td>
               <Td>{doc.fecha_version.split("T")[0]}</Td>
               <Td>{doc.fecha_emision.split("T")[0]}</Td>
-              <Td>{doc.estado_version}</Td>
+              <Td>
+                <Switch
+                  isSelected={doc.estado_version}
+                  onValueChange={() => handleEstadoChange(doc)}
+                >
+                  {doc.estado_version}
+                </Switch>
+              </Td>
               <Td>{doc.tipo_documento}</Td>
               <Td>
                 <div className=" flex flex-row gap-3 justify-between">
-                  <FaRegEye size={"35px"} />
-                  <FaArrowCircleDown size={"30px"} />
-                  <FaRegEdit size={"30px"} />
+                  <FaRegEye className="cursor-pointer" size={"35px"} />
+                  <BiDownload className="cursor-pointer" size={"30px"} />
+                  <FaRegEdit className="cursor-pointer" size={"30px"} />
                 </div>
 
               </Td>

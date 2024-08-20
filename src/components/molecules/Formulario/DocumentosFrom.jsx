@@ -10,8 +10,11 @@ import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { toast } from "react-toastify";
+import Alert from '../../atoms/Alert';
 
-const DocumentosFrom = () => {
+const DocumentosFrom = ({ hadleClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
@@ -19,18 +22,21 @@ const DocumentosFrom = () => {
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse }] = useCrearDocumentoMutation()
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
-    const { data: TpoServicio, isLoading: TipoServicio } = useGetTipoServicioQuery();
+    const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
 
     if (loandCrearDocumneto) {
         return <p>Loading...</p>;
     }
+    if (tipoServicioError) {
+        return <p>Error: {ErroTipo.message}</p>;
+    }
     if (isErrorDocumento) {
         return <p>Error: {ErrorDocumento.message}</p>;
     }
-    if (TipoServicio) {
+    if (TipoServicio && LoandVariables) {
         return <p>Loading...</p>;
     }
     if (isLoading && loandingLogos) {
@@ -70,14 +76,15 @@ const DocumentosFrom = () => {
         crearDocumento(
             DataForm
         );
-        console.log(dataResponse)
-
-
+        reset();
+    }
+    if (isSuccess) {
+        return <Alert estado={true} evento={"success"} mensaje={`${dataResponse.message}`} titulo={""} tiempo={3000} />
 
     }
     const AgregarVariable = dataInput == 5 ? (
-        <section className='flex flex-col w-full mt-10 '>
-
+        <section className='flex flex-col w-full  '>
+            <Label>Tipo De servicio</Label>
             <SelectAtomo
                 ValueItem={"nombreServicio"}
                 data={TpoServicio}
@@ -85,20 +92,19 @@ const DocumentosFrom = () => {
                 label={"Seleccione El servicio"}
                 onChange={(e) => setTipoServicio(e.target.value)}
             />
-
-
-
         </section>
     ) : "";
 
     return (
         <div className='w-full flex justify-center'>
+
             <form
                 className='w-full max-w-4xl md:rounded-xl md:shadow-xl p-6 flex flex-col gap-6'
                 onSubmit={handleSubmit(onSubmit)}
-            >
-                <h1 className='text-2xl font-bold mb-4'>Formulario De Registro De Documentos</h1>
-                <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            ><span className='w-full  sm:justify-end justify-center flex'><IoIosCloseCircleOutline onClick={hadleClose} className='cursor-pointer' size={"35px"} /></span>
+                <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Registro De Documentos</h1>
+
+                <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
                     <div className='flex w-[270px] h-[155px] flex-col '>
                         <Label>Nombre Del Documento</Label>
                         <InputAtomo
@@ -172,11 +178,11 @@ const DocumentosFrom = () => {
                             onChange={(e) => SetDataInput(e.target.value)}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px]'>
-                        {AgregarVariable}
-                    </div>
+
+                    {AgregarVariable && <div className='flex w-[270px] h-[155px]'>{AgregarVariable}</div>}
+
                     <div>
-                        {AgregarVariable && <div className='w-full  h-[250px]'>
+                        {AgregarVariable && <div className='w-full h-[250px]'>
                             <CheckboxAtomo
                                 data={varibles}
                                 items={"nombre"}
@@ -198,7 +204,12 @@ const DocumentosFrom = () => {
                         />
                     </div>
                 </section>
-                <Mybutton type={'submit'}>Enviar</Mybutton>
+                <div className='w-full justify-end gap-10 flex '>
+                    <Mybutton color={"blue-700"} type={'submit'}>Registrar</Mybutton>
+                    <Mybutton onClick={hadleClose} >Cerrar </Mybutton>
+
+                </div>
+
             </form>
         </div>
     );

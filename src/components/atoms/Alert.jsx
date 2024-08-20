@@ -18,7 +18,7 @@ const Alert = ({ evento, estado, mensaje, titulo, tiempo }) => {
     }, [])
 
     return (
-        <div className="card flex justify-content-center">
+        <div className="card flex justify-items-center">
             <Toast ref={toast} />
         </div>
     )

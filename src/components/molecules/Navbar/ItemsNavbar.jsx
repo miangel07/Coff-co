@@ -49,10 +49,12 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${!visiblite ? "Precios" : ""}`,
       icon: <AiFillDollarCircle size={"28px"} />,
+      link:'/precios'
     },
     {
       label: `${!visiblite ? "Ambientes" : ""}`,
       icon: <BsHousesFill size={"28px"} />,
+      link: '/ambientes'
     },
     {
       label: `${!visiblite ? "Tipo de Documentos" : ""}`,
