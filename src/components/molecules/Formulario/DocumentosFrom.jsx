@@ -3,89 +3,216 @@ import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
 import SelectAtomo from '../../atoms/Select';
-
+import { useGetVariablesQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
+import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
+import CheckboxAtomo from '../../atoms/CheckboxAtomo';
+import { useGetLogosQuery } from '../../../store/api/logos';
+import { useCrearDocumentoMutation } from '../../../store/api/documentos';
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { toast } from "react-toastify";
+import Alert from '../../atoms/Alert';
 
-
-const DocumentosFrom = () => {
+const DocumentosFrom = ({ hadleClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const [file, setFile] = useState(null);
+    const [ArryVariables, setArryVariables] = useState(null);
+    const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
+    const [servicio, setTipoServicio] = useState('')
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    if (isLoading) {
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
+    const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
+    const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
+    const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
+
+    if (loandCrearDocumneto) {
+        return <p>Loading...</p>;
+    }
+    if (tipoServicioError) {
+        return <p>Error: {ErroTipo.message}</p>;
+    }
+    if (isErrorDocumento) {
+        return <p>Error: {ErrorDocumento.message}</p>;
+    }
+    if (TipoServicio && LoandVariables) {
+        return <p>Loading...</p>;
+    }
+    if (isLoading && loandingLogos) {
         return <p>Loading...</p>;
     }
     if (isError) {
         return <p>Error: {error.message}</p>;
     }
+    const onDataChangeVersiones = (data) => {
+
+        setArryVariables(data)
+    }
+    const onDataChangeLogos = (data) => {
+        setlogos(data)
+    }
+
+
 
     const HanderEnviar = (e) => {
-
-        setFile(e.target.files[0].name);
-
+        setFile(e.target.files[0]);
     }
+
     const onSubmit = (data) => {
-        console.log(data, file, dataInput)
+        const DataForm = new FormData();
+
+        DataForm.append('nombre', data.nombre);
+        DataForm.append('descripcion', data.descripcion);
+        DataForm.append('codigo', data.codigo_documentos);
+        DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('servicios', servicio);
+        DataForm.append('tipo_documento', dataInput);
+        DataForm.append('version', data.version);
+        DataForm.append('variables', JSON.stringify(ArryVariables));
+        DataForm.append('logos', JSON.stringify(logos));
+        DataForm.append('file', file);
+
+        crearDocumento(
+            DataForm
+        );
+        reset();
     }
-    const AgregarVariable = dataInput == 5 ? <section>
-        hola
-    </section> : ""
+    if (isSuccess) {
+        return toast.success(`${dataResponse.message}`)
+
+    }
+    const AgregarVariable = dataInput == 5 ? (
+        <section className='flex flex-col w-full  '>
+            <Label>Tipo De servicio</Label>
+            <SelectAtomo
+                ValueItem={"nombreServicio"}
+                data={TpoServicio}
+                items={"idTipoServicio"}
+                label={"Seleccione El servicio"}
+                onChange={(e) => setTipoServicio(e.target.value)}
+            />
+        </section>
+    ) : "";
 
     return (
-        <div className=' w-full justify-center flex '>
+        <div className='w-full flex justify-center'>
 
-            <form className='w-[1022px]  md:rounded-xl md:shadow-xl sm:h-[500px]  justify-around flex flex-col items-center ' onSubmit={handleSubmit(onSubmit)}>
-                <h1>Formulario De Registro De Documentos</h1>
-                <section className='grid grid-cols-2 sm:grid-cols-3 sm:justify-center sm:items-center divide-y  gap-4'>
-                    <div className='w-56'>
+            <form
+                className='w-full max-w-4xl md:rounded-xl md:shadow-xl p-6 flex flex-col gap-6'
+                onSubmit={handleSubmit(onSubmit)}
+            ><span className='w-full  sm:justify-end justify-center flex'><IoIosCloseCircleOutline onClick={hadleClose} className='cursor-pointer' size={"35px"} /></span>
+                <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Registro De Documentos</h1>
+
+                <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
+                    <div className='flex w-[270px] h-[155px] flex-col '>
                         <Label>Nombre Del Documento</Label>
-                        <InputAtomo register={register} name={'nombre'} erros={errors} placeholder={"Nombre"} id={'nombre'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'nombre'}
+                            erros={errors}
+                            placeholder={"Nombre"}
+                            id={'nombre'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56'>
-                        <Label>Fecha Cargar</Label>
-                        <InputAtomo register={register} name={'fecha_carga'} erros={errors} placeholder={"Fecha De carga"} id={'fecha'} type={"date"} />
-                    </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Descripcion Del Documento</Label>
-                        <InputAtomo register={register} name={'descripcion'} erros={errors} placeholder={"descripcion"} id={'descripcion'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'descripcion'}
+                            erros={errors}
+                            placeholder={"descripcion"}
+                            id={'descripcion'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Codigo Del Documento</Label>
-                        <InputAtomo register={register} name={'codigo_documentos'} erros={errors} placeholder={"codigo del documentos"} id={'codigo_documentos'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'codigo_documentos'}
+                            erros={errors}
+                            placeholder={"codigo del documentos"}
+                            id={'codigo_documentos'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56'>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
+                        <CheckboxAtomo
+                            data={datalogos.data}
+                            items={"nombre"}
+                            valor={"idLogos"}
+                            onDataChange={onDataChangeLogos}
+                            cantidad={2}
+                        />
+                    </div>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Fecha Emision</Label>
-                        <InputAtomo register={register} erros={errors} type={'date'} name={'fecha_emision'} placeholder={"Fecha De Emision"} />
+                        <InputAtomo
+                            register={register}
+                            erros={errors}
+                            type={'date'}
+                            name={'fecha_emision'}
+                            placeholder={"Fecha De Emision"}
+                        />
                     </div>
-                    <div className='w-56 '>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Version Del Documento</Label>
-                        <InputAtomo register={register} name={'version'} erros={errors} placeholder={"version"} id={'version'} type={"text"} />
+                        <InputAtomo
+                            register={register}
+                            name={'version'}
+                            erros={errors}
+                            placeholder={"version"}
+                            id={'version'}
+                            type={"text"}
+                        />
                     </div>
-                    <div className='w-56 '>
+                    <div className='flex w-[270px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        <SelectAtomo ValueItem={"nombreDocumento"} data={data} items={"idTipoDocumento"} label={"Tipo Documento"} onChange={(e) => SetDataInput(e.target.value)} />
+                        <SelectAtomo
+                            ValueItem={"nombreDocumento"}
+                            data={data}
+                            items={"idTipoDocumento"}
+                            label={"Tipo Documento"}
+                            onChange={(e) => SetDataInput(e.target.value)}
+                        />
                     </div>
 
-                    {AgregarVariable}
-                    <div className='w-56'>
+                    {AgregarVariable && <div className='flex w-[270px] h-[155px]'>{AgregarVariable}</div>}
+
+                    <div>
+                        {AgregarVariable && <div className='w-full h-[250px]'>
+                            <CheckboxAtomo
+                                data={varibles}
+                                items={"nombre"}
+                                valor={"idVariable"}
+                                onDataChange={onDataChangeVersiones}
+                                cantidad={4}
+                            />
+                        </div>}
+                    </div>
+
+                    <div className={`flex w-[270px] h-[155px] flex-col  `} >
                         <Label>Cargar Archivo</Label>
                         <input
                             type="file"
                             name="file"
                             accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx"
                             onChange={HanderEnviar}
-                            className='w-56 h-[48px]'
+                            className='w-full h-[48px] border border-gray-300 rounded-md p-2'
                         />
                     </div>
-
                 </section>
+                <div className='w-full justify-end gap-10 flex '>
+                    <Mybutton color={"blue-700"} type={'submit'}>Registrar</Mybutton>
+                    <Mybutton onClick={hadleClose} >Cerrar </Mybutton>
 
+                </div>
 
-                <Mybutton type={'submit'}>Enviar</Mybutton>
             </form>
         </div>
-    )
+    );
 }
 
 export default DocumentosFrom

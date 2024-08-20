@@ -22,7 +22,7 @@ const AmbientesPlantilla = () => {
   // Estado para la página actual y número de ítems por página__________________________________________________
   const [paginaActual, setPaginaActual] = useState(1);
   const [itemsPorPagina] = useState(2);
- //_____________________________________________________________________________________________________________
+  //_____________________________________________________________________________________________________________
 
   //Constantes para el manejo de métodos provenientes del slice de Redux._______________________________________
   const { data, isLoading, isError, error } = useGetAmbientesQuery();
@@ -60,7 +60,7 @@ const AmbientesPlantilla = () => {
             try {
               await eliminarAmbiente(id).unwrap();
               // toast.success('Ambiente eliminado con éxito');
-              
+
             } catch (error) {
               console.error('Error al eliminar el ambiente', error);
               toast.error('Error al eliminar el ambiente');
@@ -127,22 +127,22 @@ const AmbientesPlantilla = () => {
 
   if (isLoading) {
     return (
-      <Spinner className='flex justify-center items-center h-screen bg-gray-100'/>
+      <Spinner className='flex justify-center items-center h-screen bg-gray-100' />
     );
   }
 
   if (isError) {
     toast.error('Error')
-    return(
-          <div className='flex justify-center items-center h-screen bg-gray-100'>
-      <p><b>ha ocurrido un error =)</b></p>
-    </div>
+    return (
+      <div className='flex justify-center items-center h-screen bg-gray-100'>
+        <p><b>ha ocurrido un error </b></p>
+      </div>
     )
   }
 
 
-   // Calcular el número total de páginas basado en el número total de ítems
-   const totalPages = Math.ceil(data.length / itemsPorPagina);
+  // Calcular el número total de páginas basado en el número total de ítems
+  const totalPages = Math.ceil(data.length / itemsPorPagina);
 
   // Obtener los ítems para la página actual
   const datosPaginados = data.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
@@ -197,45 +197,45 @@ const AmbientesPlantilla = () => {
         </div>
       </div>
 
-      <div className='flex '> 
-      <ModalOrganismo
-        visible={visible}
-        closeModal={cerrarModal}
-        title={ambienteSeleccionado ? 'Actualizar ambiente' : 'Nuevo ambiente'}
-        onSubmit={handleSubmit}
+      <div className='flex '>
+        <ModalOrganismo
+          visible={visible}
+          closeModal={cerrarModal}
+          title={ambienteSeleccionado ? 'Actualizar ambiente' : 'Nuevo ambiente'}
+          onSubmit={handleSubmit}
         >
-        <form onSubmit={handleSubmit}>
-          <div>
-            <input
-              type="text"
-              value={DatosDelFormulario.nombre_ambiente || ''}
-              onChange={(e) => setDatosDelFormulario({ ...DatosDelFormulario, nombre_ambiente: e.target.value })}
-              placeholder='Nombre del ambiente'
-              className="p-2 border border-gray-300 rounded"
-            />
-            
-            {ambienteSeleccionado && (
-              <div className="mt-4">
-                <label className="mr-2">Estado:</label>
-                <input
-                  className='cursor-pointer'
-                  type="checkbox"
-                  checked={DatosDelFormulario.estado === 'activo'}
-                  onChange={(e) =>
-                    setDatosDelFormulario({
-                      ...DatosDelFormulario,
-                      estado: e.target.checked ? 'activo' : 'inactivo',
-                    })
-                  }
-                />
-                <span className="ml-2">
-                  {DatosDelFormulario.estado === 'activo' ? 'activo' : 'inactivo'}
-                </span>
-              </div>
-            )}
-          </div>
-        </form>
-      </ModalOrganismo>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <input
+                type="text"
+                value={DatosDelFormulario.nombre_ambiente || ''}
+                onChange={(e) => setDatosDelFormulario({ ...DatosDelFormulario, nombre_ambiente: e.target.value })}
+                placeholder='Nombre del ambiente'
+                className="p-2 border border-gray-300 rounded"
+              />
+
+              {ambienteSeleccionado && (
+                <div className="mt-4">
+                  <label className="mr-2">Estado:</label>
+                  <input
+                    className='cursor-pointer'
+                    type="checkbox"
+                    checked={DatosDelFormulario.estado === 'activo'}
+                    onChange={(e) =>
+                      setDatosDelFormulario({
+                        ...DatosDelFormulario,
+                        estado: e.target.checked ? 'activo' : 'inactivo',
+                      })
+                    }
+                  />
+                  <span className="ml-2">
+                    {DatosDelFormulario.estado === 'activo' ? 'activo' : 'inactivo'}
+                  </span>
+                </div>
+              )}
+            </div>
+          </form>
+        </ModalOrganismo>
       </div>
     </>
   );

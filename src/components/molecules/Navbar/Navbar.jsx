@@ -1,47 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 import ItemsNavbar from "./ItemsNavbar";
-import { LuArrowLeftCircle } from "react-icons/lu";
-import { LuArrowRightCircle } from "react-icons/lu";
+import { LuArrowLeftCircle, LuArrowRightCircle } from "react-icons/lu";
 
-const Navbar = () => {
-  const [menuAbierto, setMenuAbierto] = useState(true);
-  const [Items, setItmes] = useState(false);
-  const [icon, seticon] = useState(false);
+const Navbar = ({ menuAbierto, toggleMenu, visible }) => {
 
-  const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto);
-    seticon(!icon);
-    setItmes(!Items);
-  };
-  const icons = icon ? (
-    <LuArrowRightCircle
+  const menu = menuAbierto ? menuAbierto : false
+  const icons = menuAbierto ? (
+    <LuArrowLeftCircle
       onClick={toggleMenu}
       size={32}
       className="cursor-pointer transform transition-transform duration-300 hover:scale-110"
     />
   ) : (
-    <LuArrowLeftCircle
+    <LuArrowRightCircle
       onClick={toggleMenu}
       size={32}
       className="cursor-pointer transform transition-transform duration-300 hover:scale-125"
     />
   );
+
   return (
-    <div className="flex">
+    <div
+      className={`fixed top-0 left-0 h-full bg-slate-800 text-white transition-all duration-300 ease-in-out ${menuAbierto ? "w-64" : "w-16"
+        }`}
+    >
       <div
-        className={`fixed top-0 left-0 h-full bg-slate-800  text-white transition-all duration-300 ease-in-out ${menuAbierto ? "w-64 " : "w-16"
+        className={`p-3 text-white transition-all duration-100 ease-in-out flex ${menuAbierto ? "justify-end" : "justify-center"
           }`}
       >
-        <div
-          className={`p-3 text-white transition-all duration-100 ease-in-out flex ${menuAbierto ? "justify-end" : "justify-center"
-            }`}
-        >
-          {icons}
-        </div>
-        <section className="">
-          <ItemsNavbar visiblite={Items} />
-        </section>
+        {icons}
       </div>
+      <section>
+        <ItemsNavbar visiblite={menu} />
+      </section>
     </div>
   );
 };

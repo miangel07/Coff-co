@@ -14,6 +14,7 @@ import { TbReportMoney } from "react-icons/tb";
 import { ImExit } from "react-icons/im";
 import { BiSolidCoffeeBean } from "react-icons/bi";
 const ItemsNavbar = ({ visiblite }) => {
+
   const [itemsUser, setItemsUser] = useState(-1);
   const [subItems, setSubitems] = useState(-1);
   const [subMenuVisible, setSubMenuVisible] = useState(false);
@@ -33,79 +34,80 @@ const ItemsNavbar = ({ visiblite }) => {
 
   const items = [
     {
-      label: `${!visiblite ? "Home" : ""}`,
+      label: `${visiblite ? "Home" : ""}`,
       icon: <GoHomeFill size={"28px"} />,
     },
     {
-      label: `${!visiblite ? "Servicios" : ""}`,
+      label: `${visiblite ? "Servicios" : ""}`,
       icon: <GiCoffeeBeans size={"28px"} />,
       link: "/servicios",
     },
     {
-      label: `${!visiblite ? "Documentos" : ""}`,
+      label: `${visiblite ? "Documentos" : ""}`,
       icon: <GoFileDirectoryFill size={"28px"} />,
       link: "/documentos",
     },
     {
-      label: `${!visiblite ? "Precios" : ""}`,
+      label: `${visiblite ? "Precios" : ""}`,
       icon: <AiFillDollarCircle size={"28px"} />,
-      link:'/precios'
+      link: '/precios'
     },
     {
-      label: `${!visiblite ? "Ambientes" : ""}`,
+      label: `${visiblite ? "Ambientes" : ""}`,
       icon: <BsHousesFill size={"28px"} />,
       link: '/ambientes'
     },
     {
-      label: `${!visiblite ? "Tipo de Documentos" : ""}`,
+      label: `${visiblite ? "Tipo de Documentos" : ""}`,
       icon: <IoDocument size={"28px"} />,
     },
     {
-      label: `${!visiblite ? "Tipo de Servicios" : ""}`,
+      label: `${visiblite ? "Tipo de Servicios" : ""}`,
       icon: <Icons img={"/maquina-de-cafe.png"} />,
     },
     {
-      label: `${!visiblite ? "Muestras" : ""}`,
+      label: `${visiblite ? "Muestras" : ""}`,
       icon: <BiSolidCoffeeBean size={"28px"} />,
     },
     {
-      label: `${!visiblite ? "Variables" : ""}`,
+      label: `${visiblite ? "Variables" : ""}`,
       icon: <Icons img={"/variable.png"} />,
     },
     {
-      label: `${!visiblite ? "Configuraciones" : ""}`,
+      label: `${visiblite ? "Configuraciones" : ""}`,
       icon: <IoIosSettings size={"28px"} />,
-      items: !visiblite
+      items: visiblite
         ? [
-            {
-              label: `${!visiblite ? "Usuarios" : ""}`,
-              icon: "pi pi-users",
-            },
-            {
-              label: `${!visiblite ? "Ayuda" : ""}`,
-              icon: "pi-question-circle",
-            },
-            {
-              label: `${!visiblite ? "Logos" : ""}`,
-              icon: "pi pi-image",
-            },
-          ]
+          {
+            label: `${visiblite ? "Usuarios" : ""}`,
+            icon: "pi pi-users",
+          },
+          {
+            label: `${visiblite ? "Ayuda" : ""}`,
+            icon: "pi-question-circle",
+          },
+          {
+            label: `${visiblite ? "Logos" : ""}`,
+            icon: "pi pi-image",
+          },
+        ]
         : [],
     },
     {
-      label: `${!visiblite ? "Alquiler Del Laboratorio" : ""}`,
+      label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
       icon: <FaCalendarAlt size={"28px"} />,
+      link: "/alquiler",
     },
     {
-      label: `${!visiblite ? "Reportes" : ""}`,
+      label: `${visiblite ? "Reportes" : ""}`,
       icon: <BsFillFileBarGraphFill size={"28px"} />,
     },
     {
-      label: `${!visiblite ? "Facturas" : ""}`,
+      label: `${visiblite ? "Facturas" : ""}`,
       icon: <TbReportMoney size={"28px"} />,
     },
     {
-      label: `${!visiblite ? "Salir" : ""}`,
+      label: `${visiblite ? "Salir" : ""}`,
       icon: <ImExit size={"28px"} />,
     },
   ];
@@ -117,9 +119,8 @@ const ItemsNavbar = ({ visiblite }) => {
           <div key={index}>
             <Link to={item.link}>
               <li
-                className={`flex items-center p-2 rounded-lg ${
-                  itemsUser === index ? "bg-slate-400" : ""
-                }  `}
+                className={`flex items-center p-2 rounded-lg ${itemsUser === index ? "bg-slate-400" : ""
+                  }  `}
                 onClick={() => handleClick(index)}
               >
                 <div className="flex items-center space-x-2 w-full cursor-pointer">
@@ -134,9 +135,8 @@ const ItemsNavbar = ({ visiblite }) => {
                   {item.items?.map((subItem, subIndex) => (
                     <li
                       key={subIndex}
-                      className={`flex items-center p-3 mt-1 rounded-lg ${
-                        subItems === subIndex ? "bg-slate-400" : ""
-                      }`}
+                      className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""
+                        }`}
                       onClick={() => handleClickSubimitem(subIndex)}
                     >
                       <div className="flex items-center space-x-2 w-full cursor-pointer">
