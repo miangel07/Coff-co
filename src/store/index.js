@@ -7,6 +7,7 @@ import { userApi } from "./api/users";
 import { docuentosApi } from "./api/documentos";
 import { TipoDocumento } from "./api/TipoDocumentos";
 import { ambientesApiSlice } from "./api/ambientes/ambientesSlice";
+import { preciosSlice } from "./api/precios/preciosSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [docuentosApi.reducerPath]: docuentosApi.reducer,
     [TipoDocumento.reducerPath]: TipoDocumento.reducer,
     [ambientesApiSlice.reducerPath]: ambientesApiSlice.reducer,
+    [preciosSlice.reducerPath]: preciosSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -26,5 +28,6 @@ export const store = configureStore({
       docuentosApi.middleware,
       TipoDocumento.middleware,
       ambientesApiSlice.middleware,
+      preciosSlice.middleware,
     ),
 });
