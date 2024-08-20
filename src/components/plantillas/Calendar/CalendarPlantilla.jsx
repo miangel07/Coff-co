@@ -5,35 +5,51 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import dayjs from 'dayjs';
 import { CiCalendarDate } from "react-icons/ci";
 import "dayjs/locale/es";
+import Mybutton from "../../atoms/Mybutton";
+import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
+import InputAtomo from "../../atoms/Input";
+import { useForm } from "react-hook-form";
 
 dayjs.locale("es");
 
 function CalendarPlantilla() {
     const localizer = dayjsLocalizer(dayjs);
-    
-    // Estado para manejar los eventos
-    const [events, setEvents] = useState([
-        {
-            start: dayjs('2024-07-30T09:00:00').toDate(),
-            end: dayjs('2024-07-30T17:00:00').toDate(),
-            title: "Evento 1"
-        }
-    ]);
 
-    // Función para agregar un nuevo evento
-    const addEvent = () => {
+    const [events, setEvents] = useState([]);
+
+    
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            fecha_inicio_alquiler: dayjs().format('YYYY-MM-DDTHH:mm'), 
+        }
+    });
+
+    const openModal = () => setModalVisible(true);
+
+    const closeModal = () => setModalVisible(false);
+
+    
+    const onSubmit = data => {
+
         const newEvent = {
-            start: dayjs().toDate(),
-            end: dayjs().add(1, 'hour').toDate(),
-            title: `Nuevo Evento ${events.length + 1}`
+            start: dayjs(data.fecha_inicio_alquiler).toDate(),
+            end: dayjs(data.fecha_fin_alquiler).toDate(),
+            title: data['Observaciones-laboratorio'],
+            client: data.cliente,
         };
+
         setEvents([...events, newEvent]);
+
+        
+        closeModal();
     };
 
     const EventComponent = ({ event }) => (
         <div className="flex items-center">
             <CiCalendarDate className="mr-2" />
-            {event.title}
+            {event.title} - {event.client}
         </div>
     );
 
@@ -47,12 +63,12 @@ function CalendarPlantilla() {
             </div>
             <div className="flex justify-center items-center h-screen flex-col">
                 <div style={{ width: '80%', maxWidth: '800px', marginBottom: '20px' }}>
-                    <button 
-                        onClick={addEvent}
-                        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                    <Mybutton 
+                        onClick={openModal}
+                        color="blue-500"
                     >
                         Agregar Evento
-                    </button>
+                    </Mybutton>
                     <Calendar
                         events={events}
                         localizer={localizer}
@@ -68,6 +84,61 @@ function CalendarPlantilla() {
                     />
                 </div>
             </div>
+
+            <ModalOrganismo 
+                visible={isModalVisible}
+                closeModal={closeModal}
+                title="Registrar Evento"
+                logo={<CiCalendarDate />}
+            >
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="mb-4">
+                        <InputAtomo 
+                            type="datetime-local"
+                            placeholder="Fecha Inicio Alquiler"
+                            id="fecha_inicio_alquiler"
+                            name="fecha_inicio_alquiler"
+                            register={register}
+                            erros={errors}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputAtomo 
+                            type="datetime-local"
+                            placeholder="Fecha Fin Alquiler"
+                            id="fecha_fin_alquiler"
+                            name="fecha_fin_alquiler"
+                            register={register}
+                            erros={errors}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputAtomo 
+                            type="text"
+                            placeholder="Observaciones Laboratorio"
+                            id="Observaciones-laboratorio"
+                            name="Observaciones-laboratorio"
+                            register={register}
+                            erros={errors}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputAtomo 
+                            type="text"
+                            placeholder="Cliente"
+                            id="cliente"
+                            name="cliente"
+                            register={register}
+                            erros={errors}
+                        />
+                    </div>
+                    <div className="flex justify-end mt-4">
+                        <Mybutton type="submit" color="green-500">
+                            Registrar Evento
+                        </Mybutton>
+                    </div>
+                </form>
+            </ModalOrganismo>
         </>
     );
 }

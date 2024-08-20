@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
-    seticon(true);
+    seticon(!icon);
     setItmes(!Items);
   };
   const icons = icon ? (
@@ -20,7 +20,6 @@ const Navbar = () => {
       className="cursor-pointer transform transition-transform duration-300 hover:scale-110"
     />
   ) : (
-
     <LuArrowLeftCircle
       onClick={toggleMenu}
       size={32}
@@ -34,12 +33,12 @@ const Navbar = () => {
           }`}
       >
         <div
-          className={`p-4 text-white transition-all duration-100 ease-in-out flex ${menuAbierto ? "justify-end" : "justify-center"
+          className={`p-3 text-white transition-all duration-100 ease-in-out flex ${menuAbierto ? "justify-end" : "justify-center"
             }`}
         >
           {icons}
         </div>
-        <section className="p-2">
+        <section className="">
           <ItemsNavbar visiblite={Items} />
         </section>
       </div>
