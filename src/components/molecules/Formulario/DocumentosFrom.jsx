@@ -79,7 +79,7 @@ const DocumentosFrom = ({ hadleClose }) => {
         reset();
     }
     if (isSuccess) {
-        return <Alert estado={true} evento={"success"} mensaje={`${dataResponse.message}`} titulo={""} tiempo={3000} />
+        return toast.success(`${dataResponse.message}`)
 
     }
     const AgregarVariable = dataInput == 5 ? (

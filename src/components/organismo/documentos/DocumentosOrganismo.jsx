@@ -16,7 +16,7 @@ import DocumentosFrom from "../../molecules/Formulario/DocumentosFrom";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
 import { Switch } from "@nextui-org/react";
-import { useCambioEstadoMutation } from "../../../store/api/documentos";
+
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
