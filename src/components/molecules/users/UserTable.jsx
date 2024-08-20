@@ -91,7 +91,7 @@ const UserTable = () => {
       <div className="overflow-x-auto ">
         <table className="min-w-full   divide-y  table cursor-pointer">
           <thead>
-            <tr>
+            <tr className="">
               <Th>ID</Th>
               <Th>Nombre</Th>
               <Th>Correo</Th>
