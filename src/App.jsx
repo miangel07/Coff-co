@@ -4,6 +4,7 @@ import HomePages from "./pages/Home/HomePages";
 import LoginPages from "./pages/login/LoginPages";
 import UsersPages from "./pages/users/UsersPages";
 import CalendarPages from "./pages/Calendar/CalendarPages";
+import DocumentosPage from "./pages/documentos/DocumentosPage";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/home" element={<HomePages />}></Route>
         <Route path="/users" element={<UsersPages />}></Route>
         <Route path="/alquiler" element={<CalendarPages />}></Route>
+        <Route path="/documentos" element={<DocumentosPage />}></Route>
       </Routes>
     </>
   );
