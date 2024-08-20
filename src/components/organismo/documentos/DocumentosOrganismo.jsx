@@ -1,6 +1,6 @@
 import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
-import BarraBusqueda from "../../molecules/documentos/BarraBusqueda";
+
 import SelectAtomo from "../../atoms/Select";
 import { useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
@@ -14,17 +14,41 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
 import { FaArrowCircleDown } from "react-icons/fa";
 import DocumentosFrom from "../../molecules/Formulario/DocumentosFrom";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
+import Search from "../../atoms/Search";
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
+  const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
+  const [searchTerm, setSearchTerm] = useState('');
+  const handlePageChange = (page) => {
+    setPages(page);
+  };
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
+  const cantidad = 6;
+  const final = pages * cantidad;
+  const inicial = final - cantidad;
 
+  const filteredData = data && data.length > 0
+    ? data.filter((item) => {
+      const tipoDocumentoMatch = dataInput === "" ||
+        (item.tipo_documento && item.tipo_documento.toLowerCase() === dataInput.toLowerCase());
+      const nombreDocumentoMatch = searchTerm === "" ||
+        (item.nombre_documento && item.nombre_documento.toLowerCase().includes(searchTerm.toLowerCase()));
+      return tipoDocumentoMatch && nombreDocumentoMatch;
+    })
+    : [];
+  ;
+
+
+  const numeroPagina = Math.ceil(data.length / cantidad);
+  const DataArrayPaginacion = filteredData.slice(inicial, final);
   const HandelForm = () => {
     setFrom(true)
   }
@@ -45,8 +69,8 @@ const DocumentosOrganismo = () => {
           />
 
         </div>
-        <div>
-          <BarraBusqueda />
+        <div className="w-[550px]">
+          <Search label={"Search"} placeholder={"Buscar..."} onchange={(e) => setSearchTerm(e.target.value)} />
         </div>
         <div>
           <Filtro />
@@ -65,7 +89,7 @@ const DocumentosOrganismo = () => {
           <Th>acciones</Th>
         </Thead>
         <Tbody>
-          {data?.map((doc) => (
+          {DataArrayPaginacion?.map((doc) => (
             <tr className=" hover:bg-slate-100 " key={doc.id_documentos}>
               <Td>{doc.id_documentos}</Td>
               <Td>{doc.codigo_documentos}</Td>
@@ -87,6 +111,13 @@ const DocumentosOrganismo = () => {
           ))}
         </Tbody>
       </TableMolecula>
+      <div>
+        <PaginationMolecula
+          initialPage={pages}
+          total={numeroPagina}
+          onChange={handlePageChange}
+        />
+      </div>
       <section >
         {openForm}
       </section>

@@ -9,22 +9,31 @@ import Label from '../../atoms/Label';
 import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
+import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 
 const DocumentosFrom = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
     const [file, setFile] = useState(null);
-    const [ArryVersiones, setArryVersiones] = useState(null);
+    const [ArryVariables, setArryVariables] = useState(null);
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio } = useGetTipoServicioQuery();
+
+    if (loandCrearDocumneto) {
+        return <p>Loading...</p>;
+    }
+    if (isErrorDocumento) {
+        return <p>Error: {ErrorDocumento.message}</p>;
+    }
     if (TipoServicio) {
         return <p>Loading...</p>;
     }
-    if (isLoading) {
+    if (isLoading && loandingLogos) {
         return <p>Loading...</p>;
     }
     if (isError) {
@@ -32,7 +41,7 @@ const DocumentosFrom = () => {
     }
     const onDataChangeVersiones = (data) => {
 
-        setArryVersiones(data)
+        setArryVariables(data)
     }
     const onDataChangeLogos = (data) => {
         setlogos(data)
@@ -41,13 +50,31 @@ const DocumentosFrom = () => {
 
 
     const HanderEnviar = (e) => {
-        setFile(e.target.files[0].name);
+        setFile(e.target.files[0]);
     }
 
     const onSubmit = (data) => {
-        console.log(data, file, dataInput, ArryVersiones, servicio,);
-    }
+        const DataForm = new FormData();
 
+        DataForm.append('nombre', data.nombre);
+        DataForm.append('descripcion', data.descripcion);
+        DataForm.append('codigo', data.codigo_documentos);
+        DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('servicios', servicio);
+        DataForm.append('tipo_documento', dataInput);
+        DataForm.append('version', data.version);
+        DataForm.append('variables', JSON.stringify(ArryVariables));
+        DataForm.append('logos', JSON.stringify(logos));
+        DataForm.append('file', file);
+
+        crearDocumento(
+            DataForm
+        );
+        console.log(dataResponse)
+
+
+
+    }
     const AgregarVariable = dataInput == 5 ? (
         <section className='flex flex-col w-full mt-10 '>
 
@@ -81,17 +108,6 @@ const DocumentosFrom = () => {
                             placeholder={"Nombre"}
                             id={'nombre'}
                             type={"text"}
-                        />
-                    </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
-                        <Label>Fecha Cargar</Label>
-                        <InputAtomo
-                            register={register}
-                            name={'fecha_carga'}
-                            erros={errors}
-                            placeholder={"Fecha De carga"}
-                            id={'fecha'}
-                            type={"date"}
                         />
                     </div>
                     <div className='flex w-[270px] h-[155px] flex-col'>

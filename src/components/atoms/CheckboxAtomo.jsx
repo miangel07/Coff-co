@@ -13,9 +13,7 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
 
     // Filtra los datos que se le pasan al componente y crea un nuevo array con los elementos que coinciden con la búsqueda.
     const filteredData = data.filter(item =>
-        // item[items].toLowerCase() convierte el valor del campo 'items' a minúsculas para hacer la búsqueda sensible a mayúsculas.
-        // searchTerm.toLowerCase() convierte el término de búsqueda a minúsculas para compararlo de manera sensible a mayúsculas.
-        // includes(searchTerm.toLowerCase()) verifica si el término de búsqueda está presente en el valor del campo 'items'.
+ 
         item[items].toLowerCase().includes(searchTerm.toLowerCase())
     );
     // calcula en numero de paginas que segun la cantidad de datos que se le pasa al componete 
