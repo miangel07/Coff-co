@@ -12,7 +12,7 @@ import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { toast } from "react-toastify";
-import Alert from '../../atoms/Alert';
+
 
 const DocumentosFrom = ({ hadleClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
@@ -77,6 +77,9 @@ const DocumentosFrom = ({ hadleClose }) => {
             DataForm
         );
         reset();
+
+
+
     }
     if (isSuccess) {
         return toast.success(`${dataResponse.message}`)
@@ -205,7 +208,7 @@ const DocumentosFrom = ({ hadleClose }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end gap-10 flex '>
-                    <Mybutton color={"blue-700"} type={'submit'}>Registrar</Mybutton>
+                    <Mybutton color={"primary"} type={'submit'}>Registrar</Mybutton>
                     <Mybutton onClick={hadleClose} >Cerrar </Mybutton>
 
                 </div>

@@ -16,12 +16,14 @@ import DocumentosFrom from "../../molecules/Formulario/DocumentosFrom";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
 import { Switch } from "@nextui-org/react";
+import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
+  const [Nombre_documentoVerion, setNombre_documentoVerion] = useState({})
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
   //  const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado }] = useCambioEstadoMutation()
@@ -29,6 +31,7 @@ const DocumentosOrganismo = () => {
   const handlePageChange = (page) => {
     setPages(page);
   };
+
   if (isLoading && Tipo) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   if (tipoError) {
@@ -54,6 +57,21 @@ const DocumentosOrganismo = () => {
   const hadleClose = () => {
     setFrom(false)
   }
+
+
+
+
+  console.log(Nombre_documentoVerion)
+
+
+
+  const visorDocumento = Nombre_documentoVerion?.nombre && Nombre_documentoVerion?.fecha ? (
+    <DocViewer
+      documents={[{ uri: `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${Nombre_documentoVerion.fecha}${Nombre_documentoVerion.nombre}` }]}
+      pluginRenderers={DocViewerRenderers}
+      config={{ header: { disableHeader: false } }}
+    />
+  ) : null;
   const handleEstadoChange = (doc) => {
     const id = doc.id_documentos
 
@@ -66,6 +84,7 @@ const DocumentosOrganismo = () => {
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
+
   const HandelForm = () => {
     setFrom(true)
   }
@@ -75,6 +94,7 @@ const DocumentosOrganismo = () => {
   return (
     <section className="w-full  flex flex-col gap-8 items-center">
       <div className="w-full  flex flex-wrap justify-around   items-center">
+        {visorDocumento}
         <Mybutton color={"primary"} type={"submit"} onClick={HandelForm}>
           Nuevo
         </Mybutton>
@@ -127,7 +147,13 @@ const DocumentosOrganismo = () => {
               <Td>{doc.tipo_documento}</Td>
               <Td>
                 <div className=" flex flex-row gap-3 justify-between">
-                  <FaRegEye className="cursor-pointer" size={"35px"} />
+                  <FaRegEye onClick={() => setNombre_documentoVerion(
+                    {
+                      nombre: doc.nombre_documento_version,
+                      fecha: doc.fecha_version.split(".")[0],
+                    }
+
+                  )} className="cursor-pointer" size={"35px"} />
                   <BiDownload className="cursor-pointer" size={"30px"} />
                   <FaRegEdit className="cursor-pointer" size={"30px"} />
                 </div>
