@@ -20,7 +20,7 @@ export const docuentosApi = createApi({
                     token: `${getCookie("authToken")}`,
                 },
             }),
-
+            providesTags: ["Documentos"],
         }),
         //crear documento
         crearDocumento: build.mutation({
@@ -38,7 +38,8 @@ export const docuentosApi = createApi({
                     error: response.data.message,
                 };
             },
-            invalidatesTags: ["getDocumentos"],
+            invalidatesTags: ["Documentos"],
+
         }),
         //actualizar documento
         actualizarDocumento: build.mutation({
@@ -56,7 +57,7 @@ export const docuentosApi = createApi({
                     error: response.data.message,
                 };
             },
-            invalidatesTags: ["getDocumentos"],
+            invalidatesTags: ["Documentos"],
         }),
         //buscar documento
         buscarDocumento: build.query({
@@ -70,6 +71,7 @@ export const docuentosApi = createApi({
                     error: response.data.message,
                 };
             },
+            invalidatesTags: ["getDocumentos"],
         }),
         //eliminar documento
         eliminarDocumento: build.mutation({
@@ -90,8 +92,23 @@ export const docuentosApi = createApi({
 
 
         }),
+        CambioEstado: build.mutation({
+            query: (data) => ({
+                url: `versiones/actualizarEstado/${data.id}`,
+                method: "POST",
+                body: data,
+            }),
+
+            transformErrorResponse: (response, meta, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response.data.message,
+                };
+            },
+            invalidatesTags: ["Documentos"],
+        }),
 
     })
 })
 
-export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation } = docuentosApi
+export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation, useCambioEstadoMutation } = docuentosApi

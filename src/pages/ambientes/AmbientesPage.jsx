@@ -3,9 +3,9 @@ import AmbientesPlantilla from '../../components/plantillas/ambientes/AmbientesP
 
 const AmbientesPage = () => {
   return (
-    <>
-    <AmbientesPlantilla/>  
-    </>
+
+    <AmbientesPlantilla />
+
   )
 }
 
