@@ -12,12 +12,12 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
     const inicial = final - cantidad;
 
     // Filtra los datos que se le pasan al componente y crea un nuevo array con los elementos que coinciden con la búsqueda.
-    const filteredData = data.filter(item =>
- 
+    const filteredData = data?.filter(item =>
+
         item[items].toLowerCase().includes(searchTerm.toLowerCase())
     );
     // calcula en numero de paginas que segun la cantidad de datos que se le pasa al componete 
-    const numeroPagina = Math.ceil(filteredData.length / cantidad);
+    const numeroPagina = Math.ceil(filteredData?.length / cantidad);
     const DataArrayPaginacion = filteredData.slice(inicial, final);
     //cambia el numero de la pagina 
     const handlePageChange = (page) => {

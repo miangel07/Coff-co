@@ -8,7 +8,7 @@ import Thead from "../../molecules/table/Thead";
 import Tbody from "../../molecules/table/Tbody";
 import Th from "../../atoms/Th";
 import Td from "../../atoms/Td";
-import { useGetDocumentosQuery } from "../../../store/api/documentos";
+import { useCambioEstadoMutation, useGetDocumentosQuery } from "../../../store/api/documentos";
 import { useGetTipoDocumentosQuery } from "../../../store/api/TipoDocumentos";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
@@ -16,6 +16,7 @@ import DocumentosFrom from "../../molecules/Formulario/DocumentosFrom";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
 import { Switch } from "@nextui-org/react";
+import ModalOrganismo from "../Modal/ModalOrganismo";
 import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 
 
@@ -26,7 +27,7 @@ const DocumentosOrganismo = () => {
   const [Nombre_documentoVerion, setNombre_documentoVerion] = useState({})
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
-  //  const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado }] = useCambioEstadoMutation()
+  const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado }] = useCambioEstadoMutation()
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
   const handlePageChange = (page) => {
     setPages(page);
@@ -34,10 +35,9 @@ const DocumentosOrganismo = () => {
 
   if (isLoading && Tipo) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
-  if (tipoError) {
+  if (tipoError || isErrorEstado) {
 
-    return <p>Error: {tipoError.message}</p>;
-
+    return <p>Error: {tipoError.message} || Error: {errorEstado.message}</p>
   }
 
   const cantidad = 6;
@@ -54,17 +54,6 @@ const DocumentosOrganismo = () => {
     })
     : [];
   ;
-  const hadleClose = () => {
-    setFrom(false)
-  }
-
-
-
-
-  console.log(Nombre_documentoVerion)
-
-
-
   const visorDocumento = Nombre_documentoVerion?.nombre && Nombre_documentoVerion?.fecha ? (
     <DocViewer
       documents={[{ uri: `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${Nombre_documentoVerion.fecha}${Nombre_documentoVerion.nombre}` }]}
@@ -72,32 +61,45 @@ const DocumentosOrganismo = () => {
       config={{ header: { disableHeader: false } }}
     />
   ) : null;
-  const handleEstadoChange = (doc) => {
+  const handleClick = async (doc) => {
     const id = doc.id_documentos
 
     const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
-
-
-
-
+    const data = { id: id, estado: nuevoEstado }
+    console.log(data);
+    await CambioEstado(data)
   };
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
 
-  const HandelForm = () => {
-    setFrom(true)
+
+
+
+  const closeModal = () => {
+    setFrom(false)
   }
 
-  const openForm = form ? <DocumentosFrom hadleClose={hadleClose} /> : ""
 
   return (
     <section className="w-full  flex flex-col gap-8 items-center">
       <div className="w-full  flex flex-wrap justify-around   items-center">
         {visorDocumento}
-        <Mybutton color={"primary"} type={"submit"} onClick={HandelForm}>
+        <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
           Nuevo
         </Mybutton>
+        {
+          form &&
+          <ModalOrganismo
+            closeModal={closeModal}
+            title={"Registrar Documentos"}
+            visible={form}
+          >
+            <DocumentosFrom closeModal={closeModal} />
+
+
+          </ModalOrganismo>
+        }
         <div className="w-72 ">
           <SelectAtomo
             label={"Selecione el Tipo de Documento"}
@@ -138,8 +140,9 @@ const DocumentosOrganismo = () => {
               <Td>{doc.fecha_emision.split("T")[0]}</Td>
               <Td>
                 <Switch
+                  color={doc.estado_version === "activo" ? "primary" : "default"}
                   isSelected={doc.estado_version}
-                  onValueChange={() => handleEstadoChange(doc)}
+                  onClick={() => handleClick(doc)}
                 >
                   {doc.estado_version}
                 </Switch>
@@ -170,10 +173,6 @@ const DocumentosOrganismo = () => {
           onChange={handlePageChange}
         />
       </div>
-      <section >
-        {openForm}
-      </section>
-
     </section>
   );
 };
