@@ -57,6 +57,10 @@ const DocumentosFrom = ({ closeModal }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
+        if (!servicio || !dataInput || !ArryVariables || !logos || !file) {
+            toast.info('Todos los campos son obligatorios');
+            return;
+        }
         try {
             await crearDocumento(
                 DataForm

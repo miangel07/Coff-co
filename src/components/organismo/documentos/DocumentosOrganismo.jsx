@@ -2,7 +2,7 @@ import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
 import { BiDownload } from "react-icons/bi";
 import SelectAtomo from "../../atoms/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Tbody from "../../molecules/table/Tbody";
@@ -18,8 +18,8 @@ import Search from "../../atoms/Search";
 import { Switch } from "@nextui-org/react";
 import ModalOrganismo from "../Modal/ModalOrganismo";
 import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
-
-
+import { toast } from "react-toastify";
+import { confirmAlert } from 'react-confirm-alert';
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
@@ -27,18 +27,21 @@ const DocumentosOrganismo = () => {
   const [Nombre_documentoVerion, setNombre_documentoVerion] = useState({})
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
-  const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado }] = useCambioEstadoMutation()
+  const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
+
+
   const handlePageChange = (page) => {
     setPages(page);
   };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(`${dataEstado?.message}`);
 
-  if (isLoading && Tipo) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
-  if (tipoError || isErrorEstado) {
+    }
 
-    return <p>Error: {tipoError.message} || Error: {errorEstado.message}</p>
-  }
+  }, [isSuccess])
+
 
   const cantidad = 6;
   const final = pages * cantidad;
@@ -62,24 +65,50 @@ const DocumentosOrganismo = () => {
     />
   ) : null;
   const handleClick = async (doc) => {
-    const id = doc.id_documentos
+    try {
+      const id = doc.id_documentos
+      confirmAlert({
+        title: 'Confirmación de Cambiar el estado a inactivo',
+        message: `¿Estás seguro de que quieres Cambiar el Estado al Documento  ${id}?`,
+        buttons: [
+          {
+            label: 'Sí',
+            onClick: async () => {
+              try {
+                await CambioEstado(data)
+              } catch (error) {
+                toast.error('Error al Cambiar el estado');
+              }
+            }
+          },
+          {
+            label: 'No',
+            onClick: () => toast.info('Operacion cancelada')
+          }
+        ],
+        closeOnClickOutside: true,
+      });
 
-    const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
-    const data = { id: id, estado: nuevoEstado }
-    console.log(data);
-    await CambioEstado(data)
+      const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
+      const data = { id: id, estado: nuevoEstado }
+
+
+    } catch (error) {
+      console.error(error)
+    }
+
   };
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
 
-
-
-
   const closeModal = () => {
     setFrom(false)
   }
-
+  if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
+  if (tipoError || isErrorEstado || isError) {
+    return <p>Error: {errorTipo.message} || Error: {errorEstado.message}|| Error: {error.message}</p>
+  }
 
   return (
     <section className="w-full  flex flex-col gap-8 items-center">
