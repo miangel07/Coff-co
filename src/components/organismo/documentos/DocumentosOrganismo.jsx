@@ -20,6 +20,7 @@ import ModalOrganismo from "../Modal/ModalOrganismo";
 import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import { toast } from "react-toastify";
 import { confirmAlert } from 'react-confirm-alert';
+import { MdEditDocument } from "react-icons/md";
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
@@ -29,7 +30,7 @@ const DocumentosOrganismo = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
-
+  console.log(data)
 
   const handlePageChange = (page) => {
     setPages(page);
@@ -188,6 +189,7 @@ const DocumentosOrganismo = () => {
                   )} className="cursor-pointer" size={"35px"} />
                   <BiDownload className="cursor-pointer" size={"30px"} />
                   <FaRegEdit className="cursor-pointer" size={"30px"} />
+                  <MdEditDocument className="cursor-pointer" size={"30px"}/>
                 </div>
 
               </Td>
