@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import AmbientesPlantilla from '../../components/plantillas/ambientes/AmbientesPlantilla'
+import PreciosPlantilla from '../../components/plantillas/precios/PreciosPlantilla'
 import Navbar from '../../components/molecules/Navbar/Navbar'
 
-const AmbientesPage = () => {
-
+const PreciosPage = () => {
   const [menuAbierto, setMenuAbierto] = useState(false)
 
   const toggleMenu = ()=>{
@@ -19,7 +18,7 @@ const AmbientesPage = () => {
         className={`transition-all duration-300 ease-in-out ${menuAbierto ? "ml-64" : "ml-16"
           } w-full`}
       >
-        <AmbientesPlantilla />
+        <PreciosPlantilla />
       </div>
     </div>
     </>
@@ -27,4 +26,4 @@ const AmbientesPage = () => {
   )
 }
 
-export default AmbientesPage
+export default PreciosPage

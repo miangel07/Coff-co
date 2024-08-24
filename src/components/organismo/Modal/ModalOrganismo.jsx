@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Modal,
@@ -40,4 +41,5 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
 };
 
 export default ModalOrganismo;
+
 
