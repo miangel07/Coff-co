@@ -65,7 +65,7 @@ function CalendarPlantilla() {
                 <div style={{ width: '80%', maxWidth: '800px', marginBottom: '20px' }}>
                     <Mybutton 
                         onClick={openModal}
-                        color="blue-500"
+                        color={"primary"}
                     >
                         Agregar Evento
                     </Mybutton>
@@ -133,7 +133,7 @@ function CalendarPlantilla() {
                         />
                     </div>
                     <div className="flex justify-end mt-4">
-                        <Mybutton type="submit" color="green-500">
+                        <Mybutton type="submit" color={"primary"}>
                             Registrar Evento
                         </Mybutton>
                     </div>

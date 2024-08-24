@@ -30,9 +30,6 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children, onSubmit }
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" onClick={onSubmit} >
-                  Registrar
-                </Button>
               </ModalFooter>
             </>
           )}
