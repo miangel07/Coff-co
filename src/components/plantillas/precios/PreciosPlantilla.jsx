@@ -282,7 +282,13 @@ console.log(articulosActualesPrecio)
                 )}
               </div>
             </div>
+              <div className='pt-10 pl-20'>
+                <Mybutton color={'primary'} type="submit">
+                  Registrar
+                </Mybutton>
+              </div>
           </form>
+          
 
         </ModalOrganismo>
       </div>
