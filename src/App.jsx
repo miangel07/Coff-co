@@ -9,6 +9,8 @@ import AmbientesPage from "./pages/ambientes/AmbientesPage";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AmbientesPlantilla from "./components/plantillas/ambientes/AmbientesPlantilla";
+// import DashBoardPage from "./pages/dashBoardPage/DashBoardPage";
+import PreciosPage from "./pages/precios/PreciosPage";
 
 const App = () => {
   return (
@@ -31,6 +33,7 @@ const App = () => {
         <Route path="/alquiler" element={<CalendarPages />}></Route>
         <Route path="/documentos" element={<DocumentosPage />}></Route>
         <Route path="/ambientes" element={<AmbientesPage />}></Route>
+        <Route path="/precios" element={<PreciosPage/>}></Route>
 
       </Routes>
     </>
