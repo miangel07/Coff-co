@@ -153,9 +153,6 @@ const AmbientesPlantilla = () => {
   return (
     <>
       <div className='w-full h-screen flex flex-col gap-8'>
-        <div>
-          <Navbar/>
-        </div>
         <div className='pt-10 pl-20'>
           <Mybutton color={'primary'} onClick={() => abrirModal(null)}>
             Nuevo
@@ -190,7 +187,8 @@ const AmbientesPlantilla = () => {
                     </div>
                   </Td>
                 </tr>
-              ))}
+              ))
+            }
             </Tbody>
           </TableMolecula>
         </div>
