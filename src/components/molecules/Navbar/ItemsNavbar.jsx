@@ -36,6 +36,7 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? "Home" : ""}`,
       icon: <GoHomeFill size={"28px"} />,
+      link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
@@ -119,7 +120,7 @@ const ItemsNavbar = ({ visiblite }) => {
           <div key={index}>
             <Link to={item.link}>
               <li
-                className={`flex items-center p-2 rounded-lg ${itemsUser === index ? "bg-slate-400" : ""
+                className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-slate-400 " : ""
                   }  `}
                 onClick={() => handleClick(index)}
               >
