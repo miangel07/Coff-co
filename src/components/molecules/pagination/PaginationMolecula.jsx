@@ -1,9 +1,9 @@
 import React from "react";
 import { Pagination } from "@nextui-org/react";
 
-const PaginationMolecula = ({ total, initialPage,onChange }) => {
+const PaginationMolecula = ({ total, initialPage, onChange }) => {
   return (
-    <div>
+    <div className="w-full justify-center flex">
       <Pagination
         loop
         showControls
@@ -11,7 +11,7 @@ const PaginationMolecula = ({ total, initialPage,onChange }) => {
         className="flex-wrap flex "
         total={total}
         initialPage={initialPage}
-        onChange={(pagina)=>onChange(pagina)}
+        onChange={(pagina) => onChange(pagina)}
       />
     </div>
   );

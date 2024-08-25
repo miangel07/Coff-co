@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 
 
-const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
+const ModalOrganismo = ({ visible, closeModal, title, logo, children, onSubmit }) => {
   return (
     <>
       <Modal size={"5xl"} isOpen={visible} onClose={closeModal}>
@@ -30,9 +30,6 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" >
-                  Registrar
-                </Button>
               </ModalFooter>
             </>
           )}
@@ -43,3 +40,4 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
 };
 
 export default ModalOrganismo;
+
