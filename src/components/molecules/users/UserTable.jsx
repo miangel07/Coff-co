@@ -1,118 +1,93 @@
-import React, { useState } from "react";
-import { Spinner } from "@nextui-org/react";
-import {
-  useGetusersQuery,
-  useDeleteUsersMutation,
-} from "../../../store/api/users";
-import { MdDeleteOutline } from "react-icons/md";
-import { FiEdit } from "react-icons/fi";
-import Th from "../../atoms/Th";
-import Td from "../../atoms/Td";
-import PaginationMolecula from "../pagination/PaginationMolecula";
-import toast from "react-hot-toast";
-
-import { FcOk } from "react-icons/fc";
+import MUIDataTable from "mui-datatables";
+import { useGetusersQuery } from "../../../store/api/users";
 
 const UserTable = () => {
 
-  const { data, isLoading, isError, error, refetch } = useGetusersQuery();
-  const [
-    deleteUsers,
-    { isLoading: isLoadingDelete, isError: isErrorDalete, error: ErroDelete },
-  ] = useDeleteUsersMutation();
+  const { data, error, isLoading } = useGetusersQuery();
 
-  const [pages, setPage] = useState(1);
-
-  const cantidadData = 7;
-  const final = pages * cantidadData;
-  const inicial = final - cantidadData;
-  const numeroPagina = Math.ceil(data?.length / cantidadData);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (isError) {
-    return <p className="text-red-400">{error.message}</p>;
-  }
-  const handlePageChange = (page) => {
-    setPage(page);
-  };
-  const Eliminar = async (id) => {
-    try {
-      if (window.confirm("¿Estás seguro de eliminar este usuario?")) {
-        const result = await deleteUsers(id).unwrap();
-        toast.success(result.message, {
-          duration: 5000,
-          position: "top-center",
-          style: {
-            background: "#333",
-            color: "#fff",
-          },
-          icon: <FcOk />,
-        });
-        refetch();
-      }
-      if (isErrorDalete) {
-        console.error(ErroDelete);
-      }
-    } catch (error) {
-      console.error(error);
+  const columnas = [
+    {
+      name: "id_usuario",
+      label: "ID"
+    },
+    {
+      name: "nombre",
+      label: "NOMBRES"
+    },
+    {
+        name: "apellidos",
+        label: "APELLIDOS"
+    },
+    {
+      name: "correo_electronico",
+      label: "CORREO"
+    },
+    {
+      name: "telefono",
+      label: "TELEFONO"
+    },
+    {
+      name: "numero_documento",
+      label: "DOCUMENTO"
+    },
+    {
+      name: "tipo_documento",
+      label: "TIPO"
+    },
+    {
+        name: "estado",
+        label: "ESTADO"  
+    },
+    {
+        name: "fk_idRol",
+        label: "ROL"
     }
-  };
+  ];
 
-  const DataArray = data ? data.slice(inicial, final) : [];
-  const User = DataArray
-    ? DataArray.map((usuario) => (
-        <tr className="hover:bg-hover " key={usuario.id_usuario}>
-          <Td>{usuario.id_usuario}</Td>
-          <Td>{usuario.nombre_usuario}</Td>
-          <Td>{usuario.correo_electronico}</Td>
-          <Td>{usuario.telefono_usuario}</Td>
-          <Td>{usuario.rol_usuario}</Td>
-          <Td>{usuario.tipo_documento}</Td>
-          <Td>{usuario.numero_identificacion}</Td>
-          <Td>
-            <p className="flex-row flex  text-2xl text-left">
-              <FiEdit
-                className="hover:text-sena"
-                onClick={() => Editar(usuario.id_usuario)}
-              />
-              <MdDeleteOutline
-                className="hover:text-red-400"
-                onClick={() => Eliminar(usuario.id_usuario)}
-              />
-            </p>
-          </Td>
-        </tr>
-      ))
-    : null;
+  const options = {
+    selectableRows: "none",
+    // elevation: 0,
+    rowsPerPage: 7,
+    rowsPerPageOptions: [7, 10, 15],
+
+    textLabels: { 
+        filter: {
+            all: "Todo",
+            title: "FILTROS", 
+            reset: "RESETEAR",
+        },
+        viewColumns: { 
+            title: "Mostrar/Ocultar Columnas"
+        },
+        body: {
+            noMatch: "No se encontraron resultados",
+            toolTip: "Ordenar"
+          },
+        toolbar: {
+            search: "Buscar",
+            downloadCsv: "Descargar CSV",
+            print: "Imprimir",
+            viewColumns: "Ver columnas",
+            filterTable: "Filtrar tabla",
+          },
+        pagination: {
+          next: "Siguiente página",
+          previous: "Página anterior",
+          rowsPerPage: "Filas por página:",
+          displayRows: "de",
+        },
+      }, 
+    
+  }
 
   return (
     <>
-      <div className="overflow-x-auto ">
-        <table className="min-w-full   divide-y  table cursor-pointer">
-          <thead>
-            <tr>
-              <Th>ID</Th>
-              <Th>Nombre</Th>
-              <Th>Correo</Th>
-              <Th>Telefono</Th>
-              <Th>Rol</Th>
-              <Th>Tipo de Identificación</Th>
-              <Th> Número de Identificación</Th>
-              <Th> Acciones</Th>
-            </tr>
-          </thead>
-          <tbody>{User}</tbody>
-        </table>
-      </div>
-      <div className="min-w-full  justify-center flex  mt-8">
-        <PaginationMolecula
-          initialPage={pages}
-          total={numeroPagina}
-          onChange={handlePageChange}
-        />
-      </div>
+      <MUIDataTable
+        title={"Usuarios"}
+        data={data}
+        columns={columnas}
+        options={options}
+      />
     </>
   );
 };

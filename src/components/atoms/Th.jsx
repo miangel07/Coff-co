@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Th = ({children}) => {
+const Th = ({ children }) => {
   return (
-    <th className="text-lg font-sans font-semibold text-black ">{children}</th>
+    <th className="text-lg font-sans font-semibold text-black  ">{children}</th>
   )
 }
 

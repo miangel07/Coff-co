@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Modal,
@@ -13,7 +14,7 @@ import {
 const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
   return (
     <>
-      <Modal size={"5xl"} isOpen={visible} onClose={closeModal}>
+      <Modal size={"4xl"} isOpen={visible} onClose={closeModal}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -30,9 +31,6 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>
-                <Button color="primary" >
-                  Registrar
-                </Button>
               </ModalFooter>
             </>
           )}
@@ -43,3 +41,5 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
 };
 
 export default ModalOrganismo;
+
+
