@@ -9,7 +9,10 @@ export const userApi = createApi({
       "Content-Type": "application/json",
     },
   }),
+
   endpoints: (build) => ({
+
+  // END POINT PARA LISTAR USUARIOS
     getusers: build.query({
       query: () => ({
         url: "http://localhost:3000/api/usuario/listar",
