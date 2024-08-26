@@ -12,7 +12,7 @@ import { logosApi } from "./api/logos";
 import { ambientesApiSlice } from "./api/ambientes/ambientesSlice";
 import { ServicioApi } from "./api/servicio";
 import { preciosSlice } from "./api/precios/preciosSlice";
-
+import { AlquilerApi } from "./api/alquilerLaboratorio";
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
@@ -25,7 +25,7 @@ export const store = configureStore({
     [ambientesApiSlice.reducerPath]: ambientesApiSlice.reducer,
     [ServicioApi.reducerPath]: ServicioApi.reducer,
     [preciosSlice.reducerPath]: preciosSlice.reducer,
-
+    [AlquilerApi.reducerPath]: AlquilerApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -41,7 +41,7 @@ export const store = configureStore({
       logosApi.middleware,
       ambientesApiSlice.middleware,
       ServicioApi.middleware,
-      preciosSlice.middleware
-
+      preciosSlice.middleware,
+      AlquilerApi.middleware,
     ),
 });
