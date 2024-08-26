@@ -8,6 +8,7 @@ import { IoIosSettings } from "react-icons/io";
 import { BsHousesFill } from "react-icons/bs";
 import { GoHomeFill } from "react-icons/go";
 import { IoDocument } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
 import { BsFillFileBarGraphFill } from "react-icons/bs";
 import { TbReportMoney } from "react-icons/tb";
@@ -106,6 +107,11 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? "Facturas" : ""}`,
       icon: <TbReportMoney size={"28px"} />,
+    },
+    {
+      label: `${visiblite ? "Ambientes" : ""}`,
+      icon: <FaUser size={"28px"} />,
+      link: '/users'
     },
     {
       label: `${visiblite ? "Salir" : ""}`,

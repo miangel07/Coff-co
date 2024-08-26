@@ -12,11 +12,11 @@ export const userApi = createApi({
   endpoints: (build) => ({
     getusers: build.query({
       query: () => ({
-        url: "usuario/listar",
+        url: "http://localhost:3000/api/usuario/listar",
         method: "GET",
-        headers: {
-          token: `${getCookie("authToken")}`,
-        },
+        // headers: {
+        //   token: `${getCookie("authToken")}`,
+        // },
       }),
       transformErrorResponse: (response, meta, arg) => {
         return {
