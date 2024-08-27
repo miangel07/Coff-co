@@ -1,5 +1,12 @@
 import { Select, SelectItem } from "@nextui-org/react";
-const SelectAtomo = ({ data, label, onChange, items, ValueItem }) => {
+const SelectAtomo = ({ data, label, onChange, items, ValueItem,value }) => {
+
+  const seacrh= data.find(
+    item => item[items] === value
+    
+  )
+  console.log("buscar",seacrh);
+  console.log(data)
   return (
     <div className="w-full flex flex-col gap-4">
       <div
@@ -9,6 +16,8 @@ const SelectAtomo = ({ data, label, onChange, items, ValueItem }) => {
         <Select
           variant={"flat"}
           label={label}
+          value={value}
+          defaultSelectedKeys={[value]}
           className="max-w-xs"
           onChange={onChange}
         >

@@ -14,27 +14,39 @@ import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 
 
-const DocumentosFrom = ({ closeModal }) => {
+const DocumentosFrom = ({ closeModal,Valor }) => {
 
     const [file, setFile] = useState(null);
+    const [activate,setActivate]=useState(false);
     const [ArryVariables, setArryVariables] = useState(null);
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
-    const { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const { register, handleSubmit, formState: { errors }, reset ,setValue} = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
     const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
-
     useEffect(() => {
         if (isSuccess) {
             toast.success(`${dataResponse?.message}`);
             closeModal()
         }
 
-    }, [isSuccess, dataResponse, reset]);
+    }, [isSuccess, dataResponse]);
+
+        if(Valor){
+
+            setValue("nombre",Valor?.nombre_documento)
+            setValue("descripcion",Valor?.descripcion)
+            setValue("codigo_documentos",Valor?.codigo_documentos)
+            setValue("fecha_emision",Valor?.fecha_emision.split("T")[0])
+            setValue("version",Valor?.version)
+
+        }
+      
+
     const onDataChangeVersiones = (data) => {
         setArryVariables(data)
     }
@@ -127,6 +139,7 @@ const DocumentosFrom = ({ closeModal }) => {
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <CheckboxAtomo
+                        value={Valor.logos}
                             data={datalogos.data}
                             items={"nombre"}
                             valor={"idLogos"}
@@ -158,6 +171,7 @@ const DocumentosFrom = ({ closeModal }) => {
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
                         <SelectAtomo
+                         value={Valor.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
@@ -170,6 +184,7 @@ const DocumentosFrom = ({ closeModal }) => {
                         <section className='flex w-[230px] h-[155px] flex-col '>
                             <Label>Tipo De servicio</Label>
                             <SelectAtomo
+                               
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
@@ -179,8 +194,9 @@ const DocumentosFrom = ({ closeModal }) => {
                         </section>}
 
 
-                    {dataInput == 5 && <div className='w-full h-[20px]'>
+                    {dataInput == 5  && <div className='w-full h-[20px]'>
                         <CheckboxAtomo
+                      
                             data={varibles}
                             items={"nombre"}
                             valor={"idVariable"}

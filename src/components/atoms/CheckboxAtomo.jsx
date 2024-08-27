@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox } from "@nextui-org/react";
 import PaginationMolecula from '../molecules/pagination/PaginationMolecula';
 
-const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
+const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad ,value}) => {
+    console.log(value)
     const [pages, setPages] = useState(1);
     const [dataArray, setDataArray] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -58,7 +59,7 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
                         isSelected={dataArray.includes(item[valor])}
                         //maneja el evento del click del checkbox y llama a la funcion handleCheckbox con el valor y el estado del checkbox seleccionado
                         onValueChange={(isSelected) => handleCheckbox(item[valor], isSelected)}
-                        value={item[valor]}
+                        value={item[valor]||[]}
                         name={item[items]}
                     >
                         {item[items]}

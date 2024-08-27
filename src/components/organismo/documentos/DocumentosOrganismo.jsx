@@ -26,6 +26,7 @@ const DocumentosOrganismo = () => {
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
   const [Nombre_documentoVerion, setNombre_documentoVerion] = useState({})
+  const [value,setValue]=useState([])
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
@@ -99,6 +100,11 @@ const DocumentosOrganismo = () => {
     }
 
   };
+  const hadleActualizar=(doc)=>{
+    setFrom(true)
+    setValue(doc)
+   
+  }
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
@@ -125,7 +131,7 @@ const DocumentosOrganismo = () => {
             title={"Registrar Documentos"}
             visible={form}
           >
-            <DocumentosFrom closeModal={closeModal} />
+            <DocumentosFrom  Valor={value} closeModal={closeModal}  />
 
 
           </ModalOrganismo>
@@ -189,7 +195,7 @@ const DocumentosOrganismo = () => {
                   )} className="cursor-pointer" size={"35px"} />
                   <BiDownload className="cursor-pointer" size={"30px"} />
                   <FaRegEdit className="cursor-pointer" size={"30px"} />
-                  <MdEditDocument className="cursor-pointer" size={"30px"}/>
+                  <MdEditDocument onClick={()=>hadleActualizar(doc)} className="cursor-pointer" size={"30px"}/>
                 </div>
 
               </Td>
