@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AmbientesPlantilla from "./components/plantillas/ambientes/AmbientesPlantilla";
 // import DashBoardPage from "./pages/dashBoardPage/DashBoardPage";
 import PreciosPage from "./pages/precios/PreciosPage";
+import ServicioPage from "./pages/servicios/ServicioPage";
 
 const App = () => {
   return (
@@ -34,7 +35,7 @@ const App = () => {
         <Route path="/documentos" element={<DocumentosPage />}></Route>
         <Route path="/ambientes" element={<AmbientesPage />}></Route>
         <Route path="/precios" element={<PreciosPage/>}></Route>
-
+        <Route path="/servicios" element={<ServicioPage/>}></Route>
       </Routes>
     </>
   );
