@@ -10,42 +10,56 @@ import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
-
+import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 
 
-const DocumentosFrom = ({ closeModal,Valor }) => {
+const DocumentosFrom = ({ closeModal, valor }) => {
 
     const [file, setFile] = useState(null);
-    const [activate,setActivate]=useState(false);
     const [ArryVariables, setArryVariables] = useState(null);
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
-    const { register, handleSubmit, formState: { errors }, reset ,setValue} = useForm()
+    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, 
+    error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
+    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion, 
+    data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
     useEffect(() => {
         if (isSuccess) {
             toast.success(`${dataResponse?.message}`);
             closeModal()
         }
-
-    }, [isSuccess, dataResponse]);
-
-        if(Valor){
-
-            setValue("nombre",Valor?.nombre_documento)
-            setValue("descripcion",Valor?.descripcion)
-            setValue("codigo_documentos",Valor?.codigo_documentos)
-            setValue("fecha_emision",Valor?.fecha_emision.split("T")[0])
-            setValue("version",Valor?.version)
-
+        if (isSuccessActualizarVersion) {
+            toast.success(`${dataResponseActualizarVersion?.message}`);
+            closeModal()
         }
-      
+
+    }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
+
+    if (valor) {
+
+        setValue("nombre", valor?.nombre_documento)
+        setValue("descripcion", valor?.descripcion)
+        setValue("codigo_documentos", valor?.codigo_documentos)
+        setValue("fecha_emision", valor?.fecha_emision?.split("T")[0])
+        setValue("version", valor?.version)
+
+    }
+
+    useEffect(() => {
+        if (valor?.tipo_servicio) {
+            SetDataInput(5)
+        }
+
+
+    }, [valor])
+
 
     const onDataChangeVersiones = (data) => {
         setArryVariables(data)
@@ -69,7 +83,7 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-        if (!servicio || !dataInput || !ArryVariables || !logos || !file) {
+        if ( !logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
@@ -85,12 +99,44 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
             console.log(error)
         }
     }
-    if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto) {
+    const hadleActualizar = async (data) => {
+        const DataForm = new FormData();
+
+        DataForm.append('nombre', data.nombre);
+        DataForm.append('descripcion', data.descripcion);
+        DataForm.append('codigo', data.codigo_documentos);
+        DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('servicios', servicio);
+        DataForm.append('idVersion', valor.idversion);
+        DataForm.append('tipo_documento', dataInput);
+        DataForm.append('version', data.version);
+        DataForm.append('variables', JSON.stringify(ArryVariables));
+        DataForm.append('logos', JSON.stringify(logos));
+        DataForm.append('file', file);
+        if ( !logos || !file) {
+            toast.info('Todos los campos son obligatorios');
+            return;
+        }
+        try {
+            await actualizarVersion(
+                DataForm
+            );
+
+            reset()
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto || loandActualizarVersion) {
         return <p>Loading...</p>;
     }
 
-    if (isError || tipoServicioError || isErrorDocumento || ErrorVariable) {
-        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message}</p>;
+    if (isError || tipoServicioError || isErrorDocumento || ErrorVariable || isErrorActualizarVersion) {
+        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
+            || ErrorActualizarVersion.message} </p>;
     }
 
 
@@ -99,7 +145,7 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
 
             <form
                 className='w-full max-w-4xl md:rounded-xl  p-6 flex flex-col gap-6'
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
                 <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Registro De Documentos</h1>
 
@@ -139,7 +185,7 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <CheckboxAtomo
-                        value={Valor.logos}
+                            value={valor?.logos}
                             data={datalogos.data}
                             items={"nombre"}
                             valor={"idLogos"}
@@ -170,21 +216,21 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        <SelectAtomo
-                         value={Valor.tipo_documento}
+                        {<SelectAtomo
+                            value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
                             label={"Tipo Documento"}
                             onChange={(e) => SetDataInput(e.target.value)}
-                        />
+                        />}
                     </div>
 
                     {dataInput == 5 &&
                         <section className='flex w-[230px] h-[155px] flex-col '>
                             <Label>Tipo De servicio</Label>
                             <SelectAtomo
-                               
+                                value={valor?.tipo_servicio}
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
@@ -194,9 +240,9 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
                         </section>}
 
 
-                    {dataInput == 5  && <div className='w-full h-[20px]'>
+                    {dataInput == 5 && <div className='w-full h-[20px]'>
                         <CheckboxAtomo
-                      
+                            value={valor?.variables}
                             data={varibles}
                             items={"nombre"}
                             valor={"idVariable"}
@@ -220,7 +266,7 @@ const DocumentosFrom = ({ closeModal,Valor }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end gap-10 flex '>
-                    <Mybutton color={"primary"} type={'submit'}>Registrar</Mybutton>
+                    <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
 
 
                 </div>
