@@ -8,6 +8,7 @@ import { IoIosSettings } from "react-icons/io";
 import { BsHousesFill } from "react-icons/bs";
 import { GoHomeFill } from "react-icons/go";
 import { IoDocument } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
 import { BsFillFileBarGraphFill } from "react-icons/bs";
 import { TbReportMoney } from "react-icons/tb";
@@ -36,6 +37,7 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? "Home" : ""}`,
       icon: <GoHomeFill size={"28px"} />,
+      link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
@@ -81,6 +83,7 @@ const ItemsNavbar = ({ visiblite }) => {
           {
             label: `${visiblite ? "Usuarios" : ""}`,
             icon: "pi pi-users",
+            link: '/users'
           },
           {
             label: `${visiblite ? "Ayuda" : ""}`,
@@ -117,46 +120,45 @@ const ItemsNavbar = ({ visiblite }) => {
       <ul className="w-full">
         {items.map((item, index) => (
           <div key={index}>
-            <Link to={item.link}>
-              <li
-                className={`flex items-center p-2 rounded-lg ${itemsUser === index ? "bg-slate-400" : ""
-                  }  `}
-                onClick={() => handleClick(index)}
-              >
-                <div className="flex items-center space-x-2 w-full cursor-pointer">
-                  <div className="cursor-pointer">{item.icon}</div>
-                  <span className="cursor-pointer line-clamp-1">
-                    {item.label}
-                  </span>
-                </div>
-              </li>
-              {itemsUser == 9 && subMenuVisible && (
-                <ul className="pl-4 ">
-                  {item.items?.map((subItem, subIndex) => (
-                    <li
-                      key={subIndex}
-                      className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""
-                        }`}
-                      onClick={() => handleClickSubimitem(subIndex)}
-                    >
-                      <div className="flex items-center space-x-2 w-full cursor-pointer">
-                        <div className="cursor-pointer">
-                          <i className={subItem.icon}></i>
-                        </div>
-                        <span className="cursor-pointer line-clamp-1">
-                          {subItem.label}
-                        </span>
+            <li
+              className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-slate-400 " : ""
+                }  `}
+              onClick={() => handleClick(index)}
+            >
+              <Link to={item.link} className="flex items-center space-x-2 w-full cursor-pointer">
+                <div className="cursor-pointer">{item.icon}</div>
+                <span className="cursor-pointer line-clamp-1">
+                  {item.label}
+                </span>
+              </Link>
+            </li>
+            {itemsUser == 9 && subMenuVisible && (
+              <ul className="pl-4 ">
+                {item.items?.map((subItem, subIndex) => (
+                  <li
+                    key={subIndex}
+                    className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""
+                      }`}
+                    onClick={() => handleClickSubimitem(subIndex)}
+                  >
+                    <Link to={subItem.link} className="flex items-center space-x-2 w-full cursor-pointer">
+                      <div className="cursor-pointer">
+                        <i className={subItem.icon}></i>
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Link>
+                      <span className="cursor-pointer line-clamp-1">
+                        {subItem.label}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         ))}
       </ul>
     </div>
   );
+
 };
 
 export default ItemsNavbar;

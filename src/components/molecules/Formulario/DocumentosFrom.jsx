@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
@@ -10,56 +10,67 @@ import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
-import { IoIosCloseCircleOutline } from "react-icons/io";
+import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
-import Alert from '../../atoms/Alert';
 
-const DocumentosFrom = ({ hadleClose }) => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm()
+
+const DocumentosFrom = ({ closeModal, valor }) => {
+
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
+    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, 
+    error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
+    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion, 
+    data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success(`${dataResponse?.message}`);
+            closeModal()
+        }
+        if (isSuccessActualizarVersion) {
+            toast.success(`${dataResponseActualizarVersion?.message}`);
+            closeModal()
+        }
 
-    if (loandCrearDocumneto) {
-        return <p>Loading...</p>;
+    }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
+
+    if (valor) {
+
+        setValue("nombre", valor?.nombre_documento)
+        setValue("descripcion", valor?.descripcion)
+        setValue("codigo_documentos", valor?.codigo_documentos)
+        setValue("fecha_emision", valor?.fecha_emision?.split("T")[0])
+        setValue("version", valor?.version)
+
     }
-    if (tipoServicioError) {
-        return <p>Error: {ErroTipo.message}</p>;
-    }
-    if (isErrorDocumento) {
-        return <p>Error: {ErrorDocumento.message}</p>;
-    }
-    if (TipoServicio && LoandVariables) {
-        return <p>Loading...</p>;
-    }
-    if (isLoading && loandingLogos) {
-        return <p>Loading...</p>;
-    }
-    if (isError) {
-        return <p>Error: {error.message}</p>;
-    }
+
+    useEffect(() => {
+        if (valor?.tipo_servicio) {
+            SetDataInput(5)
+        }
+
+
+    }, [valor])
+
+
     const onDataChangeVersiones = (data) => {
-
         setArryVariables(data)
     }
     const onDataChangeLogos = (data) => {
         setlogos(data)
     }
-
-
-
     const HanderEnviar = (e) => {
         setFile(e.target.files[0]);
     }
-
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const DataForm = new FormData();
 
         DataForm.append('nombre', data.nombre);
@@ -72,40 +83,74 @@ const DocumentosFrom = ({ hadleClose }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
+        if ( !logos || !file) {
+            toast.info('Todos los campos son obligatorios');
+            return;
+        }
+        try {
+            await crearDocumento(
+                DataForm
+            );
 
-        crearDocumento(
-            DataForm
-        );
-        reset();
+            reset()
+
+
+        } catch (error) {
+            console.log(error)
+        }
     }
-    if (isSuccess) {
-        return toast.success(`${dataResponse.message}`)
+    const hadleActualizar = async (data) => {
+        const DataForm = new FormData();
+
+        DataForm.append('nombre', data.nombre);
+        DataForm.append('descripcion', data.descripcion);
+        DataForm.append('codigo', data.codigo_documentos);
+        DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('servicios', servicio);
+        DataForm.append('idVersion', valor.idversion);
+        DataForm.append('tipo_documento', dataInput);
+        DataForm.append('version', data.version);
+        DataForm.append('variables', JSON.stringify(ArryVariables));
+        DataForm.append('logos', JSON.stringify(logos));
+        DataForm.append('file', file);
+        if ( !logos || !file) {
+            toast.info('Todos los campos son obligatorios');
+            return;
+        }
+        try {
+            await actualizarVersion(
+                DataForm
+            );
+
+            reset()
+
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }
-    const AgregarVariable = dataInput == 5 ? (
-        <section className='flex flex-col w-full  '>
-            <Label>Tipo De servicio</Label>
-            <SelectAtomo
-                ValueItem={"nombreServicio"}
-                data={TpoServicio}
-                items={"idTipoServicio"}
-                label={"Seleccione El servicio"}
-                onChange={(e) => setTipoServicio(e.target.value)}
-            />
-        </section>
-    ) : "";
+    if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto || loandActualizarVersion) {
+        return <p>Loading...</p>;
+    }
+
+    if (isError || tipoServicioError || isErrorDocumento || ErrorVariable || isErrorActualizarVersion) {
+        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
+            || ErrorActualizarVersion.message} </p>;
+    }
+
 
     return (
         <div className='w-full flex justify-center'>
 
             <form
-                className='w-full max-w-4xl md:rounded-xl md:shadow-xl p-6 flex flex-col gap-6'
-                onSubmit={handleSubmit(onSubmit)}
-            ><span className='w-full  sm:justify-end justify-center flex'><IoIosCloseCircleOutline onClick={hadleClose} className='cursor-pointer' size={"35px"} /></span>
+                className='w-full max-w-4xl md:rounded-xl  p-6 flex flex-col gap-6'
+                onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
+            >
                 <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Registro De Documentos</h1>
 
-                <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>
-                    <div className='flex w-[270px] h-[155px] flex-col '>
+                <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
+                    <div className='flex w-[230px] h-[155px] flex-col '>
                         <Label>Nombre Del Documento</Label>
                         <InputAtomo
                             register={register}
@@ -116,7 +161,7 @@ const DocumentosFrom = ({ hadleClose }) => {
                             type={"text"}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
+                    <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Descripcion Del Documento</Label>
                         <InputAtomo
                             register={register}
@@ -127,7 +172,7 @@ const DocumentosFrom = ({ hadleClose }) => {
                             type={"text"}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
+                    <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Codigo Del Documento</Label>
                         <InputAtomo
                             register={register}
@@ -138,8 +183,9 @@ const DocumentosFrom = ({ hadleClose }) => {
                             type={"text"}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
+                    <div className='flex w-[230px] h-[155px] flex-col'>
                         <CheckboxAtomo
+                            value={valor?.logos}
                             data={datalogos.data}
                             items={"nombre"}
                             valor={"idLogos"}
@@ -147,7 +193,7 @@ const DocumentosFrom = ({ hadleClose }) => {
                             cantidad={2}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
+                    <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Fecha Emision</Label>
                         <InputAtomo
                             register={register}
@@ -157,7 +203,7 @@ const DocumentosFrom = ({ hadleClose }) => {
                             placeholder={"Fecha De Emision"}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
+                    <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Version Del Documento</Label>
                         <InputAtomo
                             register={register}
@@ -168,32 +214,47 @@ const DocumentosFrom = ({ hadleClose }) => {
                             type={"text"}
                         />
                     </div>
-                    <div className='flex w-[270px] h-[155px] flex-col'>
+                    <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        <SelectAtomo
+                        {<SelectAtomo
+                            value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
                             label={"Tipo Documento"}
                             onChange={(e) => SetDataInput(e.target.value)}
-                        />
+                        />}
                     </div>
 
-                    {AgregarVariable && <div className='flex w-[270px] h-[155px]'>{AgregarVariable}</div>}
-
-                    <div>
-                        {AgregarVariable && <div className='w-full h-[250px]'>
-                            <CheckboxAtomo
-                                data={varibles}
-                                items={"nombre"}
-                                valor={"idVariable"}
-                                onDataChange={onDataChangeVersiones}
-                                cantidad={4}
+                    {dataInput == 5 &&
+                        <section className='flex w-[230px] h-[155px] flex-col '>
+                            <Label>Tipo De servicio</Label>
+                            <SelectAtomo
+                                value={valor?.tipo_servicio}
+                                ValueItem={"nombreServicio"}
+                                data={TpoServicio}
+                                items={"idTipoServicio"}
+                                label={"Seleccione El servicio"}
+                                onChange={(e) => setTipoServicio(e.target.value)}
                             />
-                        </div>}
-                    </div>
+                        </section>}
 
-                    <div className={`flex w-[270px] h-[155px] flex-col  `} >
+
+                    {dataInput == 5 && <div className='w-full h-[20px]'>
+                        <CheckboxAtomo
+                            value={valor?.variables}
+                            data={varibles}
+                            items={"nombre"}
+                            valor={"idVariable"}
+                            onDataChange={onDataChangeVersiones}
+                            cantidad={6}
+                        />
+                    </div>}
+
+
+
+
+                    <div className={`flex w-[230px] h-[155px] flex-col  `} >
                         <Label>Cargar Archivo</Label>
                         <input
                             type="file"
@@ -205,8 +266,8 @@ const DocumentosFrom = ({ hadleClose }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end gap-10 flex '>
-                    <Mybutton color={"blue-700"} type={'submit'}>Registrar</Mybutton>
-                    <Mybutton onClick={hadleClose} >Cerrar </Mybutton>
+                    <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
+
 
                 </div>
 
