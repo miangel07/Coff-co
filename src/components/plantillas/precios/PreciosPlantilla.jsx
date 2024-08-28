@@ -268,7 +268,7 @@ const PreciosPlantilla = () => {
               />
 
               <input
-                type="text"
+                type="number"
                 value={datosDelFormulario.precio || ''}
                 onChange={(e) => setDatosDelFormulario({ ...datosDelFormulario, precio: e.target.value })}
                 placeholder='Precio'
@@ -287,28 +287,6 @@ const PreciosPlantilla = () => {
                     </option>
                     ))}
                 </select>
-              </div>
-
-              <div>
-                {precioSeleccionado && (
-                  <div className="mt-4">
-                    <label className="mr-2">Estado:</label>
-                    <input
-                      className='cursor-pointer'
-                      type="checkbox"
-                      checked={datosDelFormulario.estado_precio === 'activo'}
-                      onChange={(e) =>
-                        setDatosDelFormulario({
-                          ...datosDelFormulario,
-                          estado_precio: e.target.checked ? 'activo' : 'inactivo',
-                        })
-                      }
-                    />
-                    <span className="ml-2">
-                      {datosDelFormulario.estado_precio === 'activo' ? 'activo' : 'inactivo'}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
               <div className='pt-10 pl-20'>
