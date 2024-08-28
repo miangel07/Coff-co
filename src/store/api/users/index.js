@@ -28,6 +28,7 @@ export const userApi = createApi({
         };
       },
     }),
+
     postUsers:build.mutation({
       query: (data) => ({
         url: "usuario/registrar",
@@ -46,6 +47,7 @@ export const userApi = createApi({
         };
       },
     }),
+    
     deleteUsers:build.mutation({
       query: (id) => ({
         url: `usuario/eliminar/${id}`,
