@@ -9,6 +9,8 @@ export const docuentosApi = createApi({
             "Content-Type": "application/json",
             token: `${getCookie("authToken")}`,
         },
+        mode: 'cors',
+        credentials: 'include'
     }),
     endpoints: (build) => ({
         //listar documentos
@@ -99,7 +101,7 @@ export const docuentosApi = createApi({
 
                     url: `versiones/actualizarEstado/${data.id}`,
                     method: "PUT",
-                    body: JSON.stringify({ estado: data.estado })
+                    body: ({ estado: data.estado })
                 }),
             /*  { id: 7, estado: 'inactivo' } */
 
