@@ -5,6 +5,7 @@ import { getMuiTheme } from "../table/UsersTable";
 import { options } from "../table/UsersTable";
 import styled from 'styled-components';
 import { useGetusersQuery } from "../../../store/api/users";
+import { Button } from "@mui/material"; // Puedes usar el botón de Material-UI u otro de tu preferencia
 
 const UserTable = () => {
 
@@ -20,8 +21,8 @@ const UserTable = () => {
       label: "NOMBRES"
     },
     {
-        name: "apellidos",
-        label: "APELLIDOS"
+      name: "apellidos",
+      label: "APELLIDOS"
     },
     {
       name: "correo_electronico",
@@ -40,8 +41,8 @@ const UserTable = () => {
       label: "TIPO"
     },
     {
-        name: "estado",
-        label: "ESTADO"  
+      name: "estado",
+      label: "ESTADO"
     },
     {
         name: "rol",

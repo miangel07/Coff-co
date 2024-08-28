@@ -3,7 +3,7 @@ import Navbar from "../../molecules/Navbar/Navbar";
 import { useState } from "react";
 
 const Documentos = () => {
-  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [menuAbierto, setMenuAbierto] = useState(true);
 
 
   const toggleMenu = () => {
@@ -12,10 +12,10 @@ const Documentos = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
       <div
-        className={`transition-all duration-300 ease-in-out ${menuAbierto ? "ml-64" : "ml-16"
+        className={`transition-all duration-300 ease-in-out ${menuAbierto ? "ml-28" : "ml-16"
           } w-full`}
       >
         <DocumentosOrganismo />

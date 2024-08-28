@@ -51,6 +51,23 @@ export const preciosSlice = createApi({
             invalidatesTags:['precios']
         }),
 
+
+        actualizarEstadoPrecio:build.mutation({
+            query:(data)=>({
+                url:`precio/actualizarestadoprecio/${data.id}`,
+                method:'PUT',
+                body:data,
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['precios']
+        }),
+
+
         eliminarPrecio:build.mutation({
             query:(id)=>({
                 url:`precio/eliminar/${id}`,
@@ -67,4 +84,4 @@ export const preciosSlice = createApi({
     })
 })
 
-export const { useGetPreciosQuery, useRegistrarPrecioMutation,useActualizarPrecioMutation,useEliminarPrecioMutation } = preciosSlice
+export const { useGetPreciosQuery, useRegistrarPrecioMutation,useActualizarEstadoPrecioMutation,useActualizarPrecioMutation,useEliminarPrecioMutation } = preciosSlice
