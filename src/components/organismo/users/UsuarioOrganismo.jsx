@@ -1,159 +1,339 @@
 import React, { useEffect, useState } from "react";
+import { TextField, FormControl, Select, InputLabel } from '@mui/material';
+import axios from 'axios';
 import UserTable from "../../molecules/users/UserTable";
 import CardMolecula from "../../molecules/users/CardMolecula";
 import Mybutton from "../../atoms/Mybutton";
-import { IoPersonAddOutline } from "react-icons/io5";
-import ModalOrganismo from "../Modal/ModalOrganismo";
-import Logosímbolo from "../../atoms/Logosímbolo";
-import UserFrom from "../../molecules/Formulario/UserFrom";
-import InputAtomo from "../../atoms/Input";
-import { useForm } from "react-hook-form";
-import { usePostUsersMutation } from "../../../store/api/users";
-import toast from "react-hot-toast";
-import { FcOk } from "react-icons/fc";
+import styled from 'styled-components';
 
 const UsuarioOrganismo = () => {
-  const [postUsers, { isLoading, isSuccess, data, isError, error }] =
-    usePostUsersMutation();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm();
 
-  const [openModal, setOpenModal] = useState(false);
-  const [sucess, setsucess] = useState("");
-  const handleClick = () => {
-    setOpenModal(true);
-  };
-  const closeModal = () => {
-    setOpenModal(false);
-  };
-  const onsubmit = (data) => {
-    postUsers(data);
-    reset();
-    setOpenModal(false);
-  };
-  useEffect(() => {
-    if (isSuccess) {
-      setsucess(data.message);
-      toast.success(data?.message, {
-        duration: 5000,
-        position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
-        icon: <FcOk />,
+    const endpoint = 'http://localhost:3000/api/usuario/registrar';
+
+    //VALORES GLOBALES Y VALORES EN EL REGISTRO
+    const [values, setValues] = useState({
+      id_usuario: "",
+      nombre: "",
+      apellidos: ""	,
+      correo_electronico: "",
+      telefono: "",
+      password:"",
+      numero_documento: "",	
+      tipo_documento: "",	
+      estado: "",	
+      fk_idRol: ""
+    });
+
+    const handleInputChange = (event) => {
+      setValues({...values,
+      [event.target.name] : event.target.value,
       });
-    }
+    };
 
-    if (isError) {
-      console.log(error);
+    //REGISTRAR USARIO
+    const registrarUsuario = async (event) => {
+      // event.preventDefault();
+      try {
+        console.log('Valores a enviar al servidor:', values); 
+    
+        const response = await axios.post(endpoint, values);
+    
+        if (response.status === 200) {
+          setOpenModal(false);
+          console.log('REGISTRADO')
+        }
+      } catch (error) {
+        console.log(error.response.data);
     }
-  }, [isSuccess]);
+    };
 
-  /* type, placeholder, id, name, erros, register */
-  const modal = openModal ? (
-    <ModalOrganismo
-      logo={<Logosímbolo />}
-      children={
-        <UserFrom
-          onsubmit={handleSubmit(onsubmit)}
-          children={
-            <>
-              <InputAtomo
-                register={register}
-                name={"nombre_usuario"}
-                erros={errors}
-                id={"nombre"}
-                placeholder={"Ingrese el nombre del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"apellido_usuario"}
-                erros={errors}
-                id={"apellido"}
-                placeholder={"Ingrese el  apellido del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"correo_electronico"}
-                erros={errors}
-                id={"correo"}
-                placeholder={"Ingrese el  correo del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"telefono_usuario"}
-                erros={errors}
-                id={"telefono"}
-                placeholder={"Ingrese el   telefono del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"password"}
-                erros={errors}
-                id={"password"}
-                placeholder={"Ingrese el   contraseña del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"rol_usuario"}
-                erros={errors}
-                id={"rol"}
-                placeholder={"Ingrese el  rol del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"tipo_documento"}
-                erros={errors}
-                id={"tipo_documento"}
-                placeholder={"Ingrese el   tipo de documento del usuario"}
-                type={"text"}
-              />
-              <InputAtomo
-                register={register}
-                name={"numero_identificacion"}
-                erros={errors}
-                id={"numero_identificacion"}
-                placeholder={"Ingrese el  numero de identificacion del usuario"}
-                type={"number"}
-              />
-            </>
-          }
-        />
-      }
-      visible={true}
-      title={"Registro de Usuarios"}
-      closeModal={closeModal}
-    />
-  ) : (
-    ""
-  );
+    //ROL
+    const apiRol = 'http://localhost:3000/api/rol/listar';
+    const [rolUsuario, setRolUsuario] = useState([]);
+    const getRol = async () => {
+        try {
+            const respuesta = await axios.get(`${apiRol}`);
+            setRolUsuario(respuesta.data);
+        } catch (error) {
+            console.log("Error al obtener rol", error);
+        }
+    };
+
+    const [openModal, setOpenModal] = useState(false);
+
+        // FUNCIONES QUE SON CONSTANTES
+        useEffect(()=>{
+          getRol();
+        }, []);
+
   return (
+    <StyledContainer>
+
     <div className="max-w-full min-h-screen ">
       <div className="mt-4 ">
         <CardMolecula />
       </div>
       <div className=" w-full justify-center flex mt-16">
-        {modal}
         <div className=" w-[90%] ml-8  mr-8">
-          <Mybutton onClick={handleClick} color={"primary"}>
-            Nuevo <IoPersonAddOutline />
+          <Mybutton onClick={()=>setOpenModal(true)} color={"primary"}>
+            Nuevo 
           </Mybutton>
           <UserTable />
         </div>
       </div>
     </div>
+
+    { openModal && (
+      <form onSubmit={registrarUsuario}>
+      <div className='ModalPrincipal'>
+          <div className='ModalPrincipal2'>
+            <div className="TituloModal">
+                  <h4>Registrar Usuario</h4>
+                  <p>Ingresa los datos.</p>
+            </div>
+
+            <div className='ContenidoFormulario'>
+            <div className="ContenedorFormulario">
+            <div className="ContenedorFormulario2">
+            
+                <TextField
+                  
+                  label="Identificacion"
+                  variant='outlined'  
+                  type="number"
+                  name="numero_documento"
+                  value={values.numero_documento}
+                  onChange={handleInputChange}
+                />
+
+              <StyledFormControl>
+              <InputLabel>Tipo Documento</InputLabel>
+                  <StyledSelect 
+                  variant='outlined'  
+                  type="number"
+                  name="tipo_documento"
+                  value={values.tipo_documento}
+                  onChange={handleInputChange}
+
+                  native
+                  >
+                  <option value="" disabled hidden></option>
+                  <option value="cc">Cedula Ciudadania</option>
+                  <option value="ti">Tarjeta Identidad</option>
+                  <option value="nit">N.I.T</option>
+                  <option value="pasaporte">Pasaporte</option>
+
+                  </StyledSelect>
+              </StyledFormControl>
+
+                <TextField
+                  label="Nombres"
+                  variant='outlined'  
+                  type="text"
+                  name="nombre"    
+                  value={values.nombre}
+                  onChange={handleInputChange}
+                />
+
+                <TextField
+
+                  label="Apellidos"  
+                  type="text"
+                  name="apellidos"
+                  value={values.apellidos}
+                  onChange={handleInputChange}
+                />
+
+
+                <TextField
+                  label="Correo"
+                  variant='outlined'  
+                  type="email"
+                  name="correo_electronico"
+                  value={values.correo_electronico}
+                  onChange={handleInputChange}
+                />
+            </div>
+
+            <div className="ContenedorFormulario3">
+              <TextField
+
+              label="Telefono"
+              variant='outlined'  
+              type="number"
+              name="telefono"
+              value={values.telefono}
+              onChange={handleInputChange}
+              />
+              <TextField
+
+              label="Contraseña"
+              variant='outlined'  
+              type="text"
+              name="password"
+              value={values.password}
+              onChange={handleInputChange}
+              />
+
+            <StyledFormControl>
+              <InputLabel>Seleccione una Estado</InputLabel>
+                  <StyledSelect 
+
+                  label="Seleccione una Unidad"                    
+                  value={values.estado} 
+                  onChange={handleInputChange} 
+                  name="estado" 
+                  native
+                  >
+                  <option value="" disabled hidden></option>
+                  <option value="activo">Activo</option>
+                  <option value="inactivo">Inactivo</option>
+
+                  </StyledSelect>
+              </StyledFormControl>
+
+              <StyledFormControl>
+              <InputLabel>Seleccione una Rol</InputLabel>
+                  <StyledSelect 
+
+                  label="Seleccione un Rol"                    
+                  value={values.fk_idRol} 
+                  onChange={handleInputChange} 
+                  name="fk_idRol" 
+                  native
+                  >
+                    {/* <option value="" disabled hidden></option>
+                        {rolUsuario.map(rolUsuario => (
+                            
+                        <option key={rolUsuario.idRol} value={rolUsuario.idRol}>{rolUsuario.rol}</option>
+                    ))} */}
+                  </StyledSelect>
+              </StyledFormControl>
+
+            </div>
+            </div>
+
+            </div>
+              
+            <div className="Botones">
+            <button type="button" className="BtnCancelar" 
+            onClick={() => {setOpenModal(false);
+          }}
+          >CANCELAR
+          </button>
+            <button type="submit" className="BtnRegistrar">
+                REGISTRAR
+            </button>
+            </div>
+          </div>
+      </div>
+    </form>
+    )}
+
+    </StyledContainer>
   );
 };
+
+const StyledFormControl = styled(FormControl)`
+  width: 300px; 
+`;
+
+const StyledSelect = styled(Select)`
+  width: 100%;  
+`;
+
+const StyledContainer = styled.div`
+  .ModalPrincipal{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;  
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);     
+  justify-content: center;
+  align-items: center;
+  
+  .ModalPrincipal2{
+  background-color: #ffffff;
+  padding: 2rem; /* Equivalente a p-5 en Tailwind */
+  border-radius: 0.75rem; /* Equivalente a rounded-md en Tailwind */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem; /* Equivalente a gap-5 en Tailwind */
+  
+  .TituloModal{
+  width: 100%;
+  h4{
+  padding: 0.25rem; /* Equivalente a p-1 en Tailwind */
+  font-size: 25px;
+  } 
+  p{
+  padding: 0.25rem; 
+  font-weight: normal;
+  } 
+  }
+  
+  .ContenedorFormulario {
+  display: flex;
+  gap: 0.5rem;
+  }
+  
+  .ContenidoFormulario {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  }
+  
+  .ContenedorFormulario2 {
+  margin-bottom: 1rem; 
+  margin-right: 1rem;
+  justify-content: center;
+  }
+  
+  .ContenedorFormulario3 {
+  padding: 0.50rem;
+  margin-bottom: 1rem; 
+  }
+  
+  .ContenedorFormulario2,
+  .ContenedorFormulario3 {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  }
+  
+  .Botones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  
+  .BtnCancelar {
+  padding: 0.4rem 4.5rem;
+  background-color: #ffffff; /* Color de fondo del botón */
+  color: #000000; /* Color del texto */
+  border: 2px solid #000000; /* Borde negro */
+  border-radius: 0.5rem;
+  cursor: pointer; 
+  }
+  
+  .BtnRegistrar {
+  padding: 0.5rem 4.5rem;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  }
+  }
+  }
+}
+`;
 
 export default UsuarioOrganismo;

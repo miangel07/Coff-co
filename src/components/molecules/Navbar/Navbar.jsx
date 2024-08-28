@@ -21,7 +21,7 @@ const Navbar = ({ menuAbierto, toggleMenu, visible }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full bg-slate-800 text-white transition-all duration-300 ease-in-out ${menuAbierto ? "w-64" : "w-16"
+      className={` top-0 left-0 h-full bg-black text-white transition-all duration-300 ease-in-out ${menuAbierto ? "w-64" : "w-16"
         }`}
     >
       <div
