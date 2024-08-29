@@ -102,8 +102,7 @@ const DocumentosOrganismo = () => {
   };
   const hadleActualizar = (doc) => {
     setFrom(true)
-    setValuedocs(doc)
-
+      setValuedocs(doc)
 
   }
 
@@ -118,7 +117,7 @@ const DocumentosOrganismo = () => {
   if (tipoError || isErrorEstado || isError) {
     return (
       <p>
-        Error: {errorTipo?.message || "Error al cargar los tipos de documentos"} 
+        Error: {errorTipo?.message || "Error al cargar los tipos de documentos"}
         || Error: {errorEstado?.message || "Error al cambiar el estado del documento"}
         || Error: {error?.message || "Error al cargar los documentos"}
       </p>

@@ -23,13 +23,13 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const [servicio, setTipoServicio] = useState('')
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, 
-    error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento,
+        error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
-    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion, 
-    data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
+    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
+        data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
     useEffect(() => {
         if (isSuccess) {
             toast.success(`${dataResponse?.message}`);
@@ -41,24 +41,25 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         }
 
     }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
-
-    if (valor) {
-
+    console.log(dataInput)
+    useEffect(() => {
+        if (valor?.tipo_servicio) {
+            SetDataInput(5)
+        }
         setValue("nombre", valor?.nombre_documento)
         setValue("descripcion", valor?.descripcion)
         setValue("codigo_documentos", valor?.codigo_documentos)
         setValue("fecha_emision", valor?.fecha_emision?.split("T")[0])
         setValue("version", valor?.version)
-
-    }
-
-    useEffect(() => {
-        if (valor?.tipo_servicio) {
-            SetDataInput(5)
-        }
+        SetDataInput(valor?.tipo_documento)
+        setTipoServicio(valor?.tipo_servicio)
 
 
-    }, [valor])
+
+
+
+    }, [valor, setValue, SetDataInput, setTipoServicio])
+
 
 
     const onDataChangeVersiones = (data) => {
@@ -83,7 +84,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-        if ( !logos || !file) {
+        if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
@@ -101,19 +102,23 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     }
     const hadleActualizar = async (data) => {
         const DataForm = new FormData();
+        const idVersionProcessed = parseInt(valor.idversion);
+        console.log(idVersionProcessed)
 
         DataForm.append('nombre', data.nombre);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
         DataForm.append('servicios', servicio);
-        DataForm.append('idVersion', valor.idversion);
+        DataForm.append('idVersion', idVersionProcessed);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('version', data.version);
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-        if ( !logos || !file) {
+        console.log("data", data, "datainput", dataInput, 'servicios', servicio, 'variables', ArryVariables, 'logos', logos, "file", file);
+
+        if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
@@ -217,7 +222,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
                         {<SelectAtomo
-                            value={valor?.tipo_documento}
+                            value={dataInput}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
@@ -230,7 +235,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         <section className='flex w-[230px] h-[155px] flex-col '>
                             <Label>Tipo De servicio</Label>
                             <SelectAtomo
-                                value={valor?.tipo_servicio}
+                                value={servicio}
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
