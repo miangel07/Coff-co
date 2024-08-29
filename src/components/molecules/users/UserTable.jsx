@@ -1,24 +1,15 @@
+import React, { useEffect, useState } from 'react';
 import MUIDataTable from "mui-datatables";
+import { ThemeProvider } from "@mui/material";
+import { getMuiTheme } from "../table/UsersTable";
+import { options } from "../table/UsersTable";
+import styled from 'styled-components';
 import { useGetusersQuery } from "../../../store/api/users";
 import { Button } from "@mui/material"; // Puedes usar el botón de Material-UI u otro de tu preferencia
 
 const UserTable = () => {
-  const { data, error, isLoading } = useGetusersQuery();
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  // Funciones para manejar las acciones
-  const handleEdit = (id) => {
-    console.log("Edit user with ID:", id);
-    // Aquí iría la lógica para editar el usuario
-  };
-
-  const handleDelete = (id) => {
-    console.log("Delete user with ID:", id);
-    // Aquí iría la lógica para eliminar el usuario
-  };
+  const { data } = useGetusersQuery();
 
   const columnas = [
     {
@@ -54,80 +45,72 @@ const UserTable = () => {
       label: "ESTADO"
     },
     {
-      name: "fk_idRol",
-      label: "ROL"
+        name: "rol",
+        label: "ROL"
     },
-    {
-      name: "acciones",
-      label: "ACCIONES",
+    { 
+      name: "opciones", 
+      label: "EDITAR",
       options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const userId = tableMeta.rowData;
-          return (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleEdit(userId)}
-                style={{ marginRight: "8px" }}
-              >
-                Editar
-              </Button>
-              <Button
-                variant="contained"
-                color="warning"
-                onClick={() => handleDelete(userId)}
-              >
-                Eliminar
-              </Button>
-            </div>
-          );
-        }
+          customBodyRenderLite: (dataIndex) => (
+              <button className='btnActualizar' onClick={() => editUsuario(usuarios[dataIndex])}> 
+                  <svg className='icon-default' xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                    </svg>
+                  <svg className='icon-hover' xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                  </svg>
+              </button>
+          ),
+          columns: false,
+          filter: false,
       }
-    }
-  ];
-
-  const options = {
-    selectableRows: "none",
-    rowsPerPage: 5,
-    rowsPerPageOptions: [7, 10, 15],
-    textLabels: {
-      filter: {
-        all: "Todo",
-        title: "FILTROS",
-        reset: "RESETEAR",
-      },
-      viewColumns: {
-        title: "Mostrar/Ocultar Columnas"
-      },
-      body: {
-        noMatch: "No se encontraron resultados",
-        toolTip: "Ordenar"
-      },
-      toolbar: {
-        search: "Buscar",
-        downloadCsv: "Descargar CSV",
-        print: "Imprimir",
-        viewColumns: "Ver columnas",
-        filterTable: "Filtrar tabla",
-      },
-      pagination: {
-        next: "Siguiente página",
-        previous: "Página anterior",
-        rowsPerPage: "Filas por página:",
-        displayRows: "de",
-      },
-    },
-  };
+  },
+];
 
   return (
-    <MUIDataTable
-      title={"Usuarios"}
-      data={data}
-      columns={columnas}
-      options={options}
-    />
+    <StyledContainer>
+      <ThemeProvider theme={getMuiTheme()}>
+        <MUIDataTable
+          title={"Usuarios"}
+          data={data}
+          columns={columnas}
+          options={options}
+        />
+      </ThemeProvider>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  .btnActualizar{
+        background: none;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        height:30px;
+        width: 60px;
+        border-radius: 5px;
+        border: none;
+        .icon-default{
+            display: block;
+        }
+        .icon-hover{
+                display:none
+        }
+}
+
+.btnActualizar:hover{
+    border-radius: 100px;
+    background:rgba(128, 128, 128, 0.3);
+        .icon-default{
+            display: none;
+        }
+        .icon-hover{
+            display:block
+        }
+}
+`
 
 export default UserTable;
