@@ -41,24 +41,18 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         }
 
     }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
-    console.log(dataInput)
     useEffect(() => {
-        if (valor?.tipo_servicio) {
-            SetDataInput(5)
+        if (valor) {
+            reset({
+                nombre: valor?.nombre_documento,
+                descripcion: valor?.descripcion,
+                codigo_documentos: valor?.codigo_documentos,
+                fecha_emision: valor?.fecha_emision?.split("T")[0],
+                version: valor?.version,
+            });
         }
-        setValue("nombre", valor?.nombre_documento)
-        setValue("descripcion", valor?.descripcion)
-        setValue("codigo_documentos", valor?.codigo_documentos)
-        setValue("fecha_emision", valor?.fecha_emision?.split("T")[0])
-        setValue("version", valor?.version)
-        SetDataInput(valor?.tipo_documento)
-        setTipoServicio(valor?.tipo_servicio)
-
-
-
-
-
-    }, [valor, setValue, SetDataInput, setTipoServicio])
+    }, [valor, reset ]);
+    
 
 
 
@@ -146,13 +140,13 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
     return (
-        <div className='w-full flex justify-center'>
+        <div className='w-full flex flex-col max-h-full  '>
 
             <form
-                className='w-full max-w-4xl md:rounded-xl  p-6 flex flex-col gap-6'
+                className='w-full max-w-4xl md:rounded-xl  max-h-full  justify-between  flex flex-col gap-4'
                 onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
-                <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Registro De Documentos</h1>
+                <h1 className='text-2xl font-bold mb-4 justify-center flex'>{valor ? "Formulario De Actualizacion " : "Formulario De Registro"}</h1>
 
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
@@ -222,7 +216,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
                         {<SelectAtomo
-                            value={dataInput}
+                            value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
@@ -235,7 +229,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         <section className='flex w-[230px] h-[155px] flex-col '>
                             <Label>Tipo De servicio</Label>
                             <SelectAtomo
-                                value={servicio}
+                                value={valor?.tipo_servicio}
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
@@ -270,7 +264,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                 </section>
-                <div className='w-full justify-end gap-10 flex '>
+                <div className='w-full justify-end  flex '>
                     <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
 
 

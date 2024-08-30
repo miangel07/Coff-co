@@ -112,6 +112,7 @@ const DocumentosOrganismo = () => {
   const closeModal = () => {
     setValuedocs(null)
     setFrom(false)
+ 
   }
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
@@ -135,7 +136,7 @@ const DocumentosOrganismo = () => {
           form &&
           <ModalOrganismo
             closeModal={closeModal}
-            title={"Registrar Documentos"}
+            title={`${valuedocs ?'Actualizar':"Registrar"}`}
             visible={form}
           >
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
