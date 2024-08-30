@@ -185,7 +185,7 @@ const PreciosPlantilla = () => {
 
   return (
     <>
-      <div className='w-full h-screen flex flex-col gap-8'>
+      <div className='w-full  flex flex-col gap-8'>
         <div className='pt-10 pl-20'>
           <Mybutton color={'primary'} onClick={() => abrirModal(null)}>
             Nuevo
@@ -195,27 +195,29 @@ const PreciosPlantilla = () => {
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Estado</Th>
               <Th>Presentacion</Th>
               <Th>Precio</Th>
               <Th>Tipo servicio</Th>
+              <Th>Estado</Th>
+              <Th>Acciones</Th>
             </Thead>
             <Tbody>
               {articulosActualesPrecio.length > 0 ? (
               articulosActualesPrecio.map((precio) => (
                 <tr className='hover:bg-slate-200' key={precio.idPrecio}>
                   <Td>{precio.idPrecio}</Td>
+                  <Td>{precio.presentacion}</Td>
+                  <Td>{precio.precio}</Td>
+                  <Td>{precio.nombreServicio}</Td>
                   <Td>
                     <Switch
+                    color={precio.estado_precio==='activo'?'success':'default'}
                     isSelected={precio.estado_precio=== 'activo' }
                     onValueChange={(checked)=> manejadorCambioEstadoSwitch(checked,precio.idPrecio,dataTipoServicio.idTipoServicio)}
                     >
                       {precio.estado_precio}
                     </Switch>
                   </Td>
-                  <Td>{precio.presentacion}</Td>
-                  <Td>{precio.precio}</Td>
-                  <Td>{precio.nombreServicio}</Td>
                   <Td>
                     <div className='flex flex-row gap-6'>
                       <MdDelete

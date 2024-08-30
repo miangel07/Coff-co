@@ -1,15 +1,8 @@
-import React from "react";
+import React from 'react';
 
-const Icons = ({ img }) => {
+const Icons = ({ img, className }) => {
   return (
-    <div
-      style={{
-        backgroundImage: `url(${img})`,
-        backgroundSize: "cover",
-        width: "35px",
-        height: "35px",
-      }}
-    ></div>
+    <img src={img} alt="icon" className={`sm:w-5 sm:h-5 ${className}`} />
   );
 };
 
