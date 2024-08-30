@@ -59,7 +59,7 @@ const AmbientesPlantilla = () => {
   //funcion que controla la apertura del modal, se le pasa el ambiente el cual si es para actualizar trae la
   //info necesaria para realizar el proceso______________________________________________________________________________________________
   const abrirModal = (ambiente) => {
-    console.log(ambiente);
+
     if (ambiente) {
       setAmbienteSeleccionado(ambiente);
       setDatosDelFormulario({
