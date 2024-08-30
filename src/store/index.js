@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 
 // ** Reducers
 import { authApi } from "./api/auth";
-import { userApi } from "./api/users";
 import { docuentosApi } from "./api/documentos";
 import { TipoDocumento } from "./api/TipoDocumentos";
 import { VariablesApi } from "./api/variables";
@@ -12,11 +11,11 @@ import { logosApi } from "./api/logos";
 import { ambientesApiSlice } from "./api/ambientes/ambientesSlice";
 import { ServicioApi } from "./api/servicio";
 import { preciosSlice } from "./api/precios/preciosSlice";
+import { usuariosSlice } from "./api/users";
 
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
-    [userApi.reducerPath]: userApi.reducer,
     [docuentosApi.reducerPath]: docuentosApi.reducer,
     [TipoDocumento.reducerPath]: TipoDocumento.reducer,
     [VariablesApi.reducerPath]: VariablesApi.reducer,
@@ -25,6 +24,7 @@ export const store = configureStore({
     [ambientesApiSlice.reducerPath]: ambientesApiSlice.reducer,
     [ServicioApi.reducerPath]: ServicioApi.reducer,
     [preciosSlice.reducerPath]: preciosSlice.reducer,
+    [usuariosSlice.reducerPath]:usuariosSlice.reducer,
 
   },
 
@@ -33,7 +33,6 @@ export const store = configureStore({
       serializableCheck: false,
     }).concat(
       authApi.middleware,
-      userApi.middleware,
       docuentosApi.middleware,
       TipoDocumento.middleware,
       VariablesApi.middleware,
@@ -41,7 +40,7 @@ export const store = configureStore({
       logosApi.middleware,
       ambientesApiSlice.middleware,
       ServicioApi.middleware,
-      preciosSlice.middleware
-
+      preciosSlice.middleware,
+      usuariosSlice.middleware,
     ),
 });
