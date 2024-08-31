@@ -25,13 +25,13 @@ const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
-  const [Nombre_documentoVerion, setNombre_documentoVerion] = useState({})
+  const [showdocument, setShowdocument] = useState(null)
   const [valuedocs, setValuedocs] = useState(null)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
-  console.log(data)
+
 
   const handlePageChange = (page) => {
     setPages(page);
@@ -59,13 +59,19 @@ const DocumentosOrganismo = () => {
     })
     : [];
   ;
-  const visorDocumento = Nombre_documentoVerion?.nombre && Nombre_documentoVerion?.fecha ? (
-    <DocViewer
-      documents={[{ uri: `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${Nombre_documentoVerion.fecha}${Nombre_documentoVerion.nombre}` }]}
-      pluginRenderers={DocViewerRenderers}
-      config={{ header: { disableHeader: false } }}
-    />
-  ) : null;
+
+  const handleVerdocumento = (doc) => {
+    const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`
+    window.open(url, '_blank');
+  }
+  const handledescargar = (doc) => {
+    const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = doc;
+    link.click();
+
+  }
   const handleClick = async (doc) => {
     try {
       const id = doc.id_documentos
@@ -102,7 +108,7 @@ const DocumentosOrganismo = () => {
   };
   const hadleActualizar = (doc) => {
     setFrom(true)
-      setValuedocs(doc)
+    setValuedocs(doc)
 
   }
 
@@ -112,7 +118,7 @@ const DocumentosOrganismo = () => {
   const closeModal = () => {
     setValuedocs(null)
     setFrom(false)
- 
+
   }
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
@@ -126,9 +132,9 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full  flex flex-col gap-8 items-center">
+    <section className="w-full   flex flex-col  items-center">
       <div className="w-full  flex flex-wrap justify-around   items-center">
-        {visorDocumento}
+
         <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
           Nuevo
         </Mybutton>
@@ -136,10 +142,13 @@ const DocumentosOrganismo = () => {
           form &&
           <ModalOrganismo
             closeModal={closeModal}
-            title={`${valuedocs ?'Actualizar':"Registrar"}`}
+            title={`${valuedocs ? 'Actualizar' : "Registrar"}`}
             visible={form}
           >
+
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
+
+
 
 
           </ModalOrganismo>
@@ -161,56 +170,56 @@ const DocumentosOrganismo = () => {
           <Filtro />
         </div>
       </div>
-      <TableMolecula>
-        <Thead>
-          <Th>Id</Th>
-          <Th>Codigo</Th>
-          <Th>Nombre</Th>
-          <Th>Version</Th>
-          <Th>Fecha De Version</Th>
-          <Th>Fecha Emision</Th>
-          <Th>Estado</Th>
-          <Th>Tipo De Documento</Th>
-          <Th>acciones</Th>
-        </Thead>
-        <Tbody>
-          {DataArrayPaginacion?.map((doc) => (
-            <tr className=" hover:bg-slate-100 " key={doc.id_documentos}>
-              <Td>{doc.id_documentos}</Td>
-              <Td>{doc.codigo_documentos}</Td>
-              <Td>{doc.nombre_documento}</Td>
-              <Td>{doc.version}</Td>
-              <Td>{doc.fecha_version.split("T")[0]}</Td>
-              <Td>{doc.fecha_emision.split("T")[0]}</Td>
-              <Td>
-                <Switch
-                  color={doc.estado_version === "activo" ? "primary" : "default"}
-                  isSelected={doc.estado_version}
-                  onClick={() => handleClick(doc)}
-                >
-                  {doc.estado_version}
-                </Switch>
-              </Td>
-              <Td>{doc.tipo_documento}</Td>
-              <Td>
-                <div className=" flex flex-row gap-3 justify-between">
-                  <FaRegEye onClick={() => setNombre_documentoVerion(
-                    {
-                      nombre: doc.nombre_documento_version,
-                      fecha: doc.fecha_version.split(".")[0],
-                    }
+      <div className="  w-full justify-center flex overflow-x-auto ">
+        <TableMolecula>
+          <Thead>
+            <Th>Id</Th>
+            <Th>Codigo</Th>
+            <Th>Nombre</Th>
+            <Th>Version</Th>
+            <Th>Fecha De Version</Th>
+            <Th>Fecha Emision</Th>
+            <Th>Estado</Th>
+            <Th>Tipo De Documento</Th>
+            <Th>acciones</Th>
+          </Thead>
+          <Tbody>
+            {DataArrayPaginacion?.map((doc) => (
+              <tr className=" hover:bg-slate-100 " key={doc.id_documentos}>
+                <Td>{doc.id_documentos}</Td>
+                <Td>{doc.codigo_documentos}</Td>
+                <Td>{doc.nombre_documento}</Td>
+                <Td>{doc.version}</Td>
+                <Td>{doc.fecha_version.split("T")[0]}</Td>
+                <Td>{doc.fecha_emision.split("T")[0]}</Td>
+                <Td>
+                  <Switch
+                    color={doc.estado_version === "activo" ? "primary" : "default"}
+                    isSelected={doc.estado_version}
+                    onClick={() => handleClick(doc)}
+                  >
+                    {doc.estado_version}
+                  </Switch>
+                </Td>
+                <Td>{doc.tipo_documento}</Td>
+                <Td>
+                  <div className=" flex flex-row gap-3 justify-between">
+                    <FaRegEye onClick={() => handleVerdocumento(doc.nombre_documento_version
+                    )} className="cursor-pointer" size={"35px"} />
+                    <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version
+                    )} />
+                    <FaRegEdit className="cursor-pointer" size={"30px"} />
+                    <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />
+                  </div>
 
-                  )} className="cursor-pointer" size={"35px"} />
-                  <BiDownload className="cursor-pointer" size={"30px"} />
-                  <FaRegEdit className="cursor-pointer" size={"30px"} />
-                  <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />
-                </div>
+                </Td>
+              </tr>
+            ))}
+          </Tbody>
+        </TableMolecula>
 
-              </Td>
-            </tr>
-          ))}
-        </Tbody>
-      </TableMolecula>
+      </div>
+
       <div>
         <PaginationMolecula
           initialPage={pages}

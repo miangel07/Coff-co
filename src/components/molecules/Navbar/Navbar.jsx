@@ -7,13 +7,13 @@ const Navbar = ({ menuAbierto, toggleMenu, visible }) => {
     <LuArrowLeftCircle
       onClick={toggleMenu}
       size={20} // Tamaño del icono ajustado
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-110"
+      className="cursor-pointer transform transition-transform duration-300 hover:scale-110 lg:size-7"
     />
   ) : (
     <LuArrowRightCircle
       onClick={toggleMenu}
       size={20} // Tamaño del icono ajustado
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-125"
+      className="cursor-pointer transform transition-transform duration-300 hover:scale-125 lg:size-7"
     />
   );
 

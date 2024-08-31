@@ -110,7 +110,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-        console.log("data", data, "datainput", dataInput, 'servicios', servicio, 'variables', ArryVariables, 'logos', logos, "file", file);
+      
 
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
@@ -143,7 +143,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         <div className='w-full flex flex-col max-h-full  '>
 
             <form
-                className='w-full max-w-4xl md:rounded-xl  max-h-full  justify-between  flex flex-col gap-4'
+                className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
                 onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
                 <h1 className='text-2xl font-bold mb-4 justify-center flex'>{valor ? "Formulario De Actualizacion " : "Formulario De Registro"}</h1>
