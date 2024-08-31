@@ -6,7 +6,7 @@ import Logosímbolo from '../../atoms/Logosímbolo';
 const Header = ({ color, contenido }) => {
     return (
         <header
-            className={`inset-x-0 top-0   h-16 md:px-8 sm:px-8 max-sm:px-8 ${color} z-50`}
+            className={`inset-x-0 top-0 shadow-lg h-16 md:px-8 sm:px-8 max-sm:px-8 ${color} z-50`}
         >
             <nav
                 className="flex items-center justify-between  lg:px-8"
