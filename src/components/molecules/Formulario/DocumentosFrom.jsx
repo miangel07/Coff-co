@@ -23,13 +23,13 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const [servicio, setTipoServicio] = useState('')
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento,
-        error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
+    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento, 
+    error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
-    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
-        data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
+    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion, 
+    data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
     useEffect(() => {
         if (isSuccess) {
             toast.success(`${dataResponse?.message}`);
@@ -41,19 +41,24 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         }
 
     }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
-    useEffect(() => {
-        if (valor) {
-            reset({
-                nombre: valor?.nombre_documento,
-                descripcion: valor?.descripcion,
-                codigo_documentos: valor?.codigo_documentos,
-                fecha_emision: valor?.fecha_emision?.split("T")[0],
-                version: valor?.version,
-            });
-        }
-    }, [valor, reset ]);
-    
 
+    if (valor) {
+
+        setValue("nombre", valor?.nombre_documento)
+        setValue("descripcion", valor?.descripcion)
+        setValue("codigo_documentos", valor?.codigo_documentos)
+        setValue("fecha_emision", valor?.fecha_emision?.split("T")[0])
+        setValue("version", valor?.version)
+
+    }
+
+    useEffect(() => {
+        if (valor?.tipo_servicio) {
+            SetDataInput(5)
+        }
+
+
+    }, [valor])
 
 
     const onDataChangeVersiones = (data) => {
@@ -78,7 +83,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-        if (!logos || !file) {
+        if ( !logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
@@ -96,23 +101,19 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     }
     const hadleActualizar = async (data) => {
         const DataForm = new FormData();
-        const idVersionProcessed = parseInt(valor.idversion);
-        console.log(idVersionProcessed)
 
         DataForm.append('nombre', data.nombre);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
         DataForm.append('servicios', servicio);
-        DataForm.append('idVersion', idVersionProcessed);
+        DataForm.append('idVersion', valor.idversion);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('version', data.version);
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-        console.log("data", data, "datainput", dataInput, 'servicios', servicio, 'variables', ArryVariables, 'logos', logos, "file", file);
-
-        if (!logos || !file) {
+        if ( !logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
@@ -140,13 +141,13 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
     return (
-        <div className='w-full flex flex-col max-h-full  '>
+        <div className='w-full flex justify-center'>
 
             <form
-                className='w-full max-w-4xl md:rounded-xl  max-h-full  justify-between  flex flex-col gap-4'
+                className='w-full max-w-4xl md:rounded-xl  p-6 flex flex-col gap-6'
                 onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
-                <h1 className='text-2xl font-bold mb-4 justify-center flex'>{valor ? "Formulario De Actualizacion " : "Formulario De Registro"}</h1>
+                <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Registro De Documentos</h1>
 
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
@@ -264,7 +265,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                 </section>
-                <div className='w-full justify-end  flex '>
+                <div className='w-full justify-end gap-10 flex '>
                     <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
 
 

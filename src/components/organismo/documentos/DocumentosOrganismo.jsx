@@ -102,7 +102,8 @@ const DocumentosOrganismo = () => {
   };
   const hadleActualizar = (doc) => {
     setFrom(true)
-      setValuedocs(doc)
+    setValuedocs(doc)
+
 
   }
 
@@ -112,13 +113,12 @@ const DocumentosOrganismo = () => {
   const closeModal = () => {
     setValuedocs(null)
     setFrom(false)
- 
   }
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
     return (
       <p>
-        Error: {errorTipo?.message || "Error al cargar los tipos de documentos"}
+        Error: {errorTipo?.message || "Error al cargar los tipos de documentos"} 
         || Error: {errorEstado?.message || "Error al cambiar el estado del documento"}
         || Error: {error?.message || "Error al cargar los documentos"}
       </p>
@@ -136,7 +136,7 @@ const DocumentosOrganismo = () => {
           form &&
           <ModalOrganismo
             closeModal={closeModal}
-            title={`${valuedocs ?'Actualizar':"Registrar"}`}
+            title={"Registrar Documentos"}
             visible={form}
           >
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
