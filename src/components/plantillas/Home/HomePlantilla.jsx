@@ -41,25 +41,6 @@ const HomePlantilla = () => {
         <div className="w-full absolute">
           <Navbar />
         </div>
-        <div className=" w-full max-w-screen-lg flex flex-col md:flex-row gap-10 justify-between mt-28">
-          <div className="w-full md:w-1/2 mb-4 md:mb-0">
-            <Cards
-              title="Gestión Documental"
-              span="Organiza y administra tus documentos"
-              icons={iconGestion}
-            />
-          </div>
-          <div className="w-full md:w-1/2">
-            <Cards
-              title={"Servicios"}
-              span={"Nuestra gama de productos y servicios."}
-              icons={iconServicios}
-            />
-          </div>
-        </div>
-        <div className="mt-auto w-screen">
-          <Footer />
-        </div>
       </div>
     </>
   );

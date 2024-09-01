@@ -1,3 +1,4 @@
+//../src/components/molecules/Navbar/Navbar.jsx
 import React from "react";
 import ItemsNavbar from "./ItemsNavbar";
 import { LuArrowLeftCircle, LuArrowRightCircle } from "react-icons/lu";

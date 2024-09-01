@@ -24,7 +24,7 @@ function CalendarPlantilla() {
     const [postFormulario, { isSuccess, data: dataVariables, isError: variablesIsError, error: errorVariable }] = usePostFormularioMutation();
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            fecha_inicio_alquiler: dayjs().format('YYYY-MM-DDTHH:mm'),
+            fecha_inicio_alquiler: dayjs().format('YYYY-MM-DD'),
         }
     });
     const localizer = dayjsLocalizer(dayjs);
@@ -42,10 +42,10 @@ function CalendarPlantilla() {
         try {
 
             const data = {
-                "idTipoFormulario": 6
+                "idTipoFormulario": 8
             }
             await postFormulario(
-                data
+                data    
             )
 
 
@@ -91,7 +91,7 @@ function CalendarPlantilla() {
             <div className="flex justify-center">
                 <h1 className="text-4xl font-bold">Alquiler de Laboratorio</h1>
             </div>
-            <div className="w-full absolute">
+            <div className="w-full">
                 <Navbar />
             </div>
             <div className="flex justify-center items-center h-screen flex-col">

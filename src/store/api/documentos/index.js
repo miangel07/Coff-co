@@ -116,7 +116,7 @@ export const docuentosApi = createApi({
             query: (data) => (
                 {
                     url: `documentos/actualizarversion`,
-                    method: "PUT",
+                    method: "POST",
                     body: data,
                 }),
             transformErrorResponse: (response, meta, arg) => {

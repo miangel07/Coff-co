@@ -1,3 +1,4 @@
+//../src/components/molecules/Navbar/Navbar.jsx
 import { useState } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
