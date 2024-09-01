@@ -6,11 +6,9 @@ export const docuentosApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
-            "Content-Type": "application/json",
+            
             token: `${getCookie("authToken")}`,
         },
-        mode: 'cors',
-        credentials: 'include'
     }),
     endpoints: (build) => ({
         //listar documentos
@@ -116,9 +114,9 @@ export const docuentosApi = createApi({
 
         ActualizarVersion: build.mutation({
             query: (data) => (
-                {
+               {
                     url: `documentos/actualizarversion`,
-                    method: "PUT",
+                    method: "POST",
                     body: data,
                 }),
             transformErrorResponse: (response, meta, arg) => {
