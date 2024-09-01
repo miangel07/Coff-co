@@ -20,6 +20,7 @@ import ModalOrganismo from "../Modal/ModalOrganismo";
 import { toast } from "react-toastify";
 import { confirmAlert } from 'react-confirm-alert';
 import { MdEditDocument } from "react-icons/md";
+import DocumentoEdit from "../../molecules/Formulario/DocumentoEdit";
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
@@ -121,7 +122,7 @@ const DocumentosOrganismo = () => {
   const hadeleEditar = (doc) => {
     console.log(doc)
     setShowModal(true)
-     setDataValue(doc)
+    setDataValue(doc)
 
   }
 
@@ -174,8 +175,7 @@ const DocumentosOrganismo = () => {
             visible={true}
           >
 
-            <h1>hola</h1>
-
+            <DocumentoEdit closeModal={closeModal} valor={dataValue} />
 
 
 

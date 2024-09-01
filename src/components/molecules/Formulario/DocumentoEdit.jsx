@@ -12,6 +12,7 @@ import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
+import { useEffect, useState } from 'react';
 const DocumentoEdit = ({ valor, closeModal }) => {
 
     const [file, setFile] = useState(null);
@@ -25,7 +26,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
   
-    useEffect(() => {
+   /*  useEffect(() => {
         if (isSuccess) {
             toast.success(`${dataResponse?.message}`);
             closeModal()
@@ -35,7 +36,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
             closeModal()
         }
 
-    }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
+    }, [isSuccess, dataResponse, isSuccessActualizarVersion]); */
     useEffect(() => {
         if (valor) {
             reset({
