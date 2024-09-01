@@ -396,7 +396,8 @@ const UsersPlantilla = () => {
                 onChange={(e) => setValue("rol", e.target.value)}
                 items={"value"}
                 ValueItem={"label"}
-                value={usuarioSeleccionado?.estado || ""}
+                placeholder={usuarioSeleccionado?.rol}
+                value={usuarioSeleccionado?.fk_idRol || ""}
               />
 
               <SelectAtomoActualizar
@@ -405,7 +406,8 @@ const UsersPlantilla = () => {
                 onChange={(e) => setValue("estado", e.target.value)}
                 items={"value"}
                 ValueItem={"label"}
-                value={usuarioSeleccionado?.estado || ""}
+                placeholder={usuarioSeleccionado?.estado}
+                value={'inactivo'}
               />
 
               <SelectAtomoActualizar
@@ -414,6 +416,7 @@ const UsersPlantilla = () => {
                 onChange={(e) => setValue("tipo_documento", e.target.value)}
                 items={"value"}
                 ValueItem={"label"}
+                placeholder={usuarioSeleccionado?.tipo_documento}
                 value={usuarioSeleccionado?.tipo_documento || ""}
               />
 
