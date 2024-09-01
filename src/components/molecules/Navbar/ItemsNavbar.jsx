@@ -10,7 +10,7 @@ import { FaCalendarAlt, FaUser } from "react-icons/fa";
 import { TbReportMoney } from "react-icons/tb";
 import { ImExit } from "react-icons/im";
 import { BiSolidCoffeeBean } from "react-icons/bi";
-import { IoDocumentText } from "react-icons/io5"; // Asegúrate de usar el nombre correcto del icono
+import { IoDocumentText } from "react-icons/io5"; 
 
 const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
@@ -33,48 +33,48 @@ const ItemsNavbar = ({ visiblite }) => {
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
-      icon: <GoHomeFill className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <GoHomeFill className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
-      icon: <GiCoffeeBeans className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <GiCoffeeBeans className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       link: "/servicios",
     },
     {
       label: `${visiblite ? "Documentos" : ""}`,
-      icon: <GoFileDirectoryFill className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <GoFileDirectoryFill className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       link: "/documentos",
     },
     {
       label: `${visiblite ? "Precios" : ""}`,
-      icon: <AiFillDollarCircle className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <AiFillDollarCircle className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       link: "/precios",
     },
     {
       label: `${visiblite ? "Ambientes" : ""}`,
-      icon: <BsHousesFill className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <BsHousesFill className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       link: "/ambientes",
     },
     {
       label: `${visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <IoDocumentText className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <IoDocumentText className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Tipo de Servicios" : ""}`,
-      icon: <Icons img={"/maquina-de-cafe.png"} className="w-5 h-5 "/>,
+      icon: <Icons img={"/maquina-de-cafe.png"} className="w-5 h-5 lg:size-7 "/>,
     },
     {
       label: `${visiblite ? "Muestras" : ""}`,
-      icon: <BiSolidCoffeeBean className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <BiSolidCoffeeBean className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Variables" : ""}`,
-      icon: <Icons img={"/variable.png"} className="w-5 h-5 " />,
+      icon: <Icons img={"/variable.png"} className="w-5 h-5 lg:size-7 " />,
     },
     {
       label: `${visiblite ? "Configuraciones" : ""}`,
-      icon: <IoIosSettings className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <IoIosSettings className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       items: visiblite
         ? [
             {
@@ -95,20 +95,20 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <FaCalendarAlt className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <FaCalendarAlt className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
       link: "/alquiler",
     },
     {
       label: `${visiblite ? "Reportes" : ""}`,
-      icon: <BsFillFileBarGraphFill className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <BsFillFileBarGraphFill className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Facturas" : ""}`,
-      icon: <TbReportMoney className="w-5 h-5  " />, // Tamaño ajustable
+      icon: <TbReportMoney className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit className="w-5 h-5 " />, // Tamaño ajustable
+      icon: <ImExit className="w-5 h-5 lg:size-7" />, // Tamaño ajustable
     },
   ];
 
@@ -119,7 +119,7 @@ const ItemsNavbar = ({ visiblite }) => {
           <div key={index}>
             <li
               className={`flex items-center p-2 rounded-lg ${
-                location.pathname === item.link ? "bg-slate-400" : ""
+                location.pathname === item.link ? "bg-light-gray" : ""
               }`}
               onClick={() => handleClick(index)}
             >
@@ -139,7 +139,7 @@ const ItemsNavbar = ({ visiblite }) => {
                   <li
                     key={subIndex}
                     className={`flex items-center p-3 mt-1 rounded-lg ${
-                      subItems === subIndex ? "bg-slate-400" : ""
+                      subItems === subIndex ? "bg-black" : ""
                     }`}
                     onClick={() => handleClickSubimitem(subIndex)}
                   >
