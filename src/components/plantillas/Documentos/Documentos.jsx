@@ -3,7 +3,10 @@ import DocumentosOrganismo from "../../organismo/documentos/DocumentosOrganismo"
 const Documentos = () => {
   return (
     <>
-      <DocumentosOrganismo />
+      <div className=" w-auto px-10 flex ">
+        <DocumentosOrganismo />
+      </div>
+
     </>
   );
 };

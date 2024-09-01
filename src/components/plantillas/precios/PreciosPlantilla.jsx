@@ -185,13 +185,13 @@ const PreciosPlantilla = () => {
 
   return (
     <>
-      <div className='w-full  flex flex-col gap-8'>
+      <div className='w-auto h-screen  flex flex-col gap-8 bg-gray-100'>
         <div className='pt-10 pl-20'>
           <Mybutton color={'primary'} onClick={() => abrirModal(null)}>
             Nuevo
           </Mybutton>
         </div>
-        <div className='w-full px-20'>
+        <div className='w-full px-20 h-auto overflow-y-auto'>
           <TableMolecula>
             <Thead>
               <Th>ID</Th>

@@ -6,7 +6,7 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value }) =>
     const [pages, setPages] = useState(1);
     const [dataArray, setDataArray] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    console.log(value)
+
 
     useEffect(() => {
         // Convierte 'value' en una lista de nombres separados por comas
