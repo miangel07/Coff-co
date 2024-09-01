@@ -6,7 +6,7 @@ export const docuentosApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
-            
+            " Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             token: `${getCookie("authToken")}`,
         },
     }),
@@ -114,7 +114,7 @@ export const docuentosApi = createApi({
 
         ActualizarVersion: build.mutation({
             query: (data) => (
-               {
+                {
                     url: `documentos/actualizarversion`,
                     method: "POST",
                     body: data,

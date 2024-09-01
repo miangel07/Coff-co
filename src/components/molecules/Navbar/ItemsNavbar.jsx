@@ -33,48 +33,48 @@ const ItemsNavbar = ({ visiblite }) => {
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
-      icon: <GoHomeFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <GoHomeFill className="w-5 h-5 " />, // Tamaño ajustable
       link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
-      icon: <GiCoffeeBeans className="w-5 h-5" />, // Tamaño ajustable
+      icon: <GiCoffeeBeans className="w-5 h-5 " />, // Tamaño ajustable
       link: "/servicios",
     },
     {
       label: `${visiblite ? "Documentos" : ""}`,
-      icon: <GoFileDirectoryFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <GoFileDirectoryFill className="w-5 h-5 " />, // Tamaño ajustable
       link: "/documentos",
     },
     {
       label: `${visiblite ? "Precios" : ""}`,
-      icon: <AiFillDollarCircle className="w-5 h-5" />, // Tamaño ajustable
+      icon: <AiFillDollarCircle className="w-5 h-5 " />, // Tamaño ajustable
       link: "/precios",
     },
     {
       label: `${visiblite ? "Ambientes" : ""}`,
-      icon: <BsHousesFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <BsHousesFill className="w-5 h-5 " />, // Tamaño ajustable
       link: "/ambientes",
     },
     {
       label: `${visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <IoDocumentText className="w-5 h-5" />, // Tamaño ajustable
+      icon: <IoDocumentText className="w-5 h-5 " />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Tipo de Servicios" : ""}`,
-      icon: <Icons img={"/maquina-de-cafe.png"}/>,
+      icon: <Icons img={"/maquina-de-cafe.png"} className="w-5 h-5 "/>,
     },
     {
       label: `${visiblite ? "Muestras" : ""}`,
-      icon: <BiSolidCoffeeBean className="w-5 h-5" />, // Tamaño ajustable
+      icon: <BiSolidCoffeeBean className="w-5 h-5 " />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Variables" : ""}`,
-      icon: <Icons img={"/variable.png"} />,
+      icon: <Icons img={"/variable.png"} className="w-5 h-5 " />,
     },
     {
       label: `${visiblite ? "Configuraciones" : ""}`,
-      icon: <IoIosSettings className="w-5 h-5" />, // Tamaño ajustable
+      icon: <IoIosSettings className="w-5 h-5 " />, // Tamaño ajustable
       items: visiblite
         ? [
             {
@@ -95,20 +95,20 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <FaCalendarAlt className="w-5 h-5" />, // Tamaño ajustable
+      icon: <FaCalendarAlt className="w-5 h-5 " />, // Tamaño ajustable
       link: "/alquiler",
     },
     {
       label: `${visiblite ? "Reportes" : ""}`,
-      icon: <BsFillFileBarGraphFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <BsFillFileBarGraphFill className="w-5 h-5 " />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Facturas" : ""}`,
-      icon: <TbReportMoney className="w-5 h-5" />, // Tamaño ajustable
+      icon: <TbReportMoney className="w-5 h-5  " />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit className="w-5 h-5" />, // Tamaño ajustable
+      icon: <ImExit className="w-5 h-5 " />, // Tamaño ajustable
     },
   ];
 
