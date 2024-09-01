@@ -4,7 +4,9 @@ import Carousel from "../../organismo/carousel/Carousel";
 const HomePlantilla = () => {
   return (
     <>
+    {/* contenedor padre */}
       <div className="flex flex-row gap-3 h-full">
+        {/* contenedor del carousel */}
         <div className="flex-1 bg-gray-200 p-4">
           <Carousel />
         </div>
@@ -45,18 +47,3 @@ const HomePlantilla = () => {
 
 export default HomePlantilla;
 
-{
-  /* <>
-  <div className="bg-green-300 flex flex-col h-screen">
-    <div className="flex-1 p-4 overflow-auto">
-      <Carousel />
-    </div>
-    <div className="flex-1 flex items-center justify-center">
-      <h1>Contenedor 2</h1>
-    </div>
-    <div className="flex-1 flex items-center justify-center">
-      <h1>Contenedor 3</h1>
-    </div>
-  </div>
-</> */
-}
