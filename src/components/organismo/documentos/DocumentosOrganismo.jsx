@@ -25,8 +25,10 @@ const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
+  const [showModal, setShowModal] = useState(false)
   const [showdocument, setShowdocument] = useState([])
   const [valuedocs, setValuedocs] = useState(null)
+  const [dataValue, setDataValue] = useState(null)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
@@ -116,6 +118,12 @@ const DocumentosOrganismo = () => {
     setValuedocs(doc)
 
   }
+  const hadeleEditar = (doc) => {
+    console.log(doc)
+    setShowModal(true)
+     setDataValue(doc)
+
+  }
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
@@ -158,16 +166,21 @@ const DocumentosOrganismo = () => {
 
           </ModalOrganismo>
         }
-        {/*  {
-          showdocument && <div >
-            <DocViewer
-              documents={showdocument}
-              pluginRenderers={DocViewerRenderers}
-             
-              style={{ height: 500 , width:500}}
-            />
-          </div>
-        } */}
+        {
+          showModal &&
+          <ModalOrganismo
+            closeModal={closeModal}
+            title={`hola`}
+            visible={true}
+          >
+
+            <h1>hola</h1>
+
+
+
+
+          </ModalOrganismo>
+        }
         <div className="w-72 ">
           <SelectAtomo
             label={"Selecione el Tipo de Documento"}
@@ -222,7 +235,7 @@ const DocumentosOrganismo = () => {
                     <FaRegEye onClick={() => handleVerdocumento(doc.nombre_documento_version
                     )} className="cursor-pointer" size={"35px"} />
                     <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version)} />
-                    <FaRegEdit className="cursor-pointer" size={"30px"} />
+                    <FaRegEdit className="cursor-pointer" size={"30px"} onClick={() => hadeleEditar(doc)} />
                     <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />
                   </div>
 
