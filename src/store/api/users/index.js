@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getCookie } from "../../../utils";
 
-
-
 export const usuariosSlice = createApi({
   reducerPath: 'usuarios',
   baseQuery: fetchBaseQuery({
@@ -15,17 +13,19 @@ export const usuariosSlice = createApi({
 
   endpoints:(build)=>({
 
+    //LISTAR
   getUsuario: build.query({
     query:()=>({
-      url:'usuario/listar',
+      url:'http://localhost:3000/api/usuario/listar',
       method:'GET',
     }),
     providesTags:['usuarios']
   }),
-
+   
+    //REGISTRAR
   registrarUsuario: build.mutation({
     query:(data)=>({
-      url:'usuario/registrar',
+      url:'http://localhost:3000/api/usuario/registrar',
       method:'POST',
       body:data,
     }),
@@ -38,24 +38,28 @@ export const usuariosSlice = createApi({
     invalidatesTags:['usuarios']
   }),
 
-  actualizarUsuario:build.mutation({
-    query:(data)=>({
-      url:`usuario/actualizar/${data.id}`,
-      method: 'PUT',
-      body:data,
+    //ACTUALIZAR
+    actualizarUsuario: build.mutation({
+      query: ({ data, id }) => ({
+        url: `http://localhost:3000/api/usuario/actualizar/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      transformErrorResponse: (response, meta, arg) => {
+        console.log("Respuesta completa de error:", response);
+        
+        return {
+          originalArg: arg,
+          error: response?.data?.message || response?.statusText || "Error desconocido",
+        };
+      },
+      invalidatesTags: ['usuarios'],
     }),
-    transformErrorResponse:(response,meta,arg)=>{
-      return{
-        originalArg: arg,
-        error:response.data.message
-      }
-    },
-    invalidatesTags:['usuarios']
-  }),
 
+    //ELIMINAR
   eliminarUsuario:build.mutation({
     query:(id)=>({
-      url:`usuario/eliminar/${id}`,
+      url:`http://localhost:3000/api/usuario/eliminar/${id}`,
       method:'DELETE',
     }),
     transformErrorResponse:(response,meta,arg)=>{
