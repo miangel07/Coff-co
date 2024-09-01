@@ -1,35 +1,31 @@
-//../src/components/molecules/Navbar/Navbar.jsx
-import { useState } from "react";
+import React, { useState } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
-import { GoFileDirectoryFill } from "react-icons/go";
+import { GoFileDirectoryFill, GoHomeFill } from "react-icons/go";
 import { GiCoffeeBeans } from "react-icons/gi";
 import { IoIosSettings } from "react-icons/io";
-import { BsHousesFill } from "react-icons/bs";
-import { GoHomeFill } from "react-icons/go";
-import { IoDocument } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
-import { FaCalendarAlt } from "react-icons/fa";
-import { BsFillFileBarGraphFill } from "react-icons/bs";
+import { BsHousesFill, BsFillFileBarGraphFill } from "react-icons/bs";
+import { FaCalendarAlt, FaUser } from "react-icons/fa";
 import { TbReportMoney } from "react-icons/tb";
 import { ImExit } from "react-icons/im";
 import { BiSolidCoffeeBean } from "react-icons/bi";
-const ItemsNavbar = ({ visiblite }) => {
+import { IoDocumentText } from "react-icons/io5"; // Asegúrate de usar el nombre correcto del icono
 
+const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
   const [subItems, setSubitems] = useState(-1);
   const [subMenuVisible, setSubMenuVisible] = useState(false);
 
   const handleClick = (index) => {
     setItemsUser(index);
-    console.log(index);
-    if (index == 9 && items[index].label === "Configuraciones") {
+    if (index === 9 && items[index].label === "Configuraciones") {
       setSubMenuVisible(!subMenuVisible);
     } else {
       setSubMenuVisible(false);
     }
   };
+
   const handleClickSubimitem = (subIndex) => {
     setSubitems(subIndex);
   };
@@ -37,40 +33,40 @@ const ItemsNavbar = ({ visiblite }) => {
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
-      icon: <GoHomeFill size={"28px"} />,
+      icon: <GoHomeFill className="w-5 h-5" />, // Tamaño ajustable
       link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
-      icon: <GiCoffeeBeans size={"28px"} />,
+      icon: <GiCoffeeBeans className="w-5 h-5" />, // Tamaño ajustable
       link: "/servicios",
     },
     {
       label: `${visiblite ? "Documentos" : ""}`,
-      icon: <GoFileDirectoryFill size={"28px"} />,
+      icon: <GoFileDirectoryFill className="w-5 h-5" />, // Tamaño ajustable
       link: "/documentos",
     },
     {
       label: `${visiblite ? "Precios" : ""}`,
-      icon: <AiFillDollarCircle size={"28px"} />,
-      link: '/precios'
+      icon: <AiFillDollarCircle className="w-5 h-5" />, // Tamaño ajustable
+      link: "/precios",
     },
     {
       label: `${visiblite ? "Ambientes" : ""}`,
-      icon: <BsHousesFill size={"28px"} />,
-      link: '/ambientes'
+      icon: <BsHousesFill className="w-5 h-5" />, // Tamaño ajustable
+      link: "/ambientes",
     },
     {
       label: `${visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <IoDocument size={"28px"} />,
+      icon: <IoDocumentText className="w-5 h-5" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Tipo de Servicios" : ""}`,
-      icon: <Icons img={"/maquina-de-cafe.png"} />,
+      icon: <Icons img={"/maquina-de-cafe.png"}/>,
     },
     {
       label: `${visiblite ? "Muestras" : ""}`,
-      icon: <BiSolidCoffeeBean size={"28px"} />,
+      icon: <BiSolidCoffeeBean className="w-5 h-5" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Variables" : ""}`,
@@ -78,41 +74,41 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Configuraciones" : ""}`,
-      icon: <IoIosSettings size={"28px"} />,
+      icon: <IoIosSettings className="w-5 h-5" />, // Tamaño ajustable
       items: visiblite
         ? [
-          {
-            label: `${visiblite ? "Usuarios" : ""}`,
-            icon: "pi pi-users",
-            link: '/users'
-          },
-          {
-            label: `${visiblite ? "Ayuda" : ""}`,
-            icon: "pi-question-circle",
-          },
-          {
-            label: `${visiblite ? "Logos" : ""}`,
-            icon: "pi pi-image",
-          },
-        ]
+            {
+              label: `${visiblite ? "Usuarios" : ""}`,
+              icon: "pi pi-users",
+              link: "/users",
+            },
+            {
+              label: `${visiblite ? "Ayuda" : ""}`,
+              icon: "pi-question-circle",
+            },
+            {
+              label: `${visiblite ? "Logos" : ""}`,
+              icon: "pi pi-image",
+            },
+          ]
         : [],
     },
     {
       label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <FaCalendarAlt size={"28px"} />,
+      icon: <FaCalendarAlt className="w-5 h-5" />, // Tamaño ajustable
       link: "/alquiler",
     },
     {
       label: `${visiblite ? "Reportes" : ""}`,
-      icon: <BsFillFileBarGraphFill size={"28px"} />,
+      icon: <BsFillFileBarGraphFill className="w-5 h-5" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Facturas" : ""}`,
-      icon: <TbReportMoney size={"28px"} />,
+      icon: <TbReportMoney className="w-5 h-5" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit size={"28px"} />,
+      icon: <ImExit className="w-5 h-5" />, // Tamaño ajustable
     },
   ];
 
@@ -122,27 +118,35 @@ const ItemsNavbar = ({ visiblite }) => {
         {items.map((item, index) => (
           <div key={index}>
             <li
-              className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-slate-400 " : ""
-                }  `}
+              className={`flex items-center p-2 rounded-lg ${
+                location.pathname === item.link ? "bg-slate-400" : ""
+              }`}
               onClick={() => handleClick(index)}
             >
-              <Link to={item.link} className="flex items-center space-x-2 w-full cursor-pointer">
+              <Link
+                to={item.link}
+                className="flex items-center space-x-2 w-full cursor-pointer"
+              >
                 <div className="cursor-pointer">{item.icon}</div>
                 <span className="cursor-pointer line-clamp-1">
                   {item.label}
                 </span>
               </Link>
             </li>
-            {itemsUser == 9 && subMenuVisible && (
-              <ul className="pl-4 ">
+            {itemsUser === 9 && subMenuVisible && (
+              <ul className="pl-4">
                 {item.items?.map((subItem, subIndex) => (
                   <li
                     key={subIndex}
-                    className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""
-                      }`}
+                    className={`flex items-center p-3 mt-1 rounded-lg ${
+                      subItems === subIndex ? "bg-slate-400" : ""
+                    }`}
                     onClick={() => handleClickSubimitem(subIndex)}
                   >
-                    <Link to={subItem.link} className="flex items-center space-x-2 w-full cursor-pointer">
+                    <Link
+                      to={subItem.link}
+                      className="flex items-center space-x-2 w-full cursor-pointer"
+                    >
                       <div className="cursor-pointer">
                         <i className={subItem.icon}></i>
                       </div>
@@ -159,7 +163,6 @@ const ItemsNavbar = ({ visiblite }) => {
       </ul>
     </div>
   );
-
 };
 
 export default ItemsNavbar;

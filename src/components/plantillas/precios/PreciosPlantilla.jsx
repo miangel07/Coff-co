@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../../molecules/Navbar/Navbar'
+import React, { useState } from 'react'
 import Mybutton from '../../atoms/Mybutton'
 import TableMolecula from '../../molecules/table/TableMolecula'
 import Thead from '../../molecules/table/Thead'
@@ -8,13 +7,14 @@ import Tbody from '../../molecules/table/Tbody'
 import { MdDelete } from 'react-icons/md'
 import { FaRegEdit } from 'react-icons/fa'
 import {
+  useActualizarEstadoPrecioMutation,
   useActualizarPrecioMutation,
   useEliminarPrecioMutation,
   useGetPreciosQuery,
   useRegistrarPrecioMutation
 } from '../../../store/api/precios/preciosSlice'
 import PaginationMolecula from '../../molecules/pagination/PaginationMolecula'
-import { Spinner } from '@nextui-org/react'
+import { Spinner, Switch } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import Td from '../../atoms/Td';
 import { confirmAlert } from 'react-confirm-alert';
@@ -25,21 +25,18 @@ import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio'
 const PreciosPlantilla = () => {
 
   const [paginaActual, setPaginaActual] = useState(1);
-  const itemsPorPagina = 2;
+  const itemsPorPagina = 4;
 
 
   const { data: dataTipoServicio,
-    isLoading: isLoadingTipoServicio,
-    isError: isErrorTipoServicio,
-    error: errorTipoServicio } = useGetTipoServicioQuery()
-
+    isLoading: isLoadingTipoServicio} = useGetTipoServicioQuery()
+// console.log('Datos del tipo de servicio obtenidos arriba: ',dataTipoServicio)
   const { data: dataPrecio,
-    isLoading: isLoadingPrecio,
-    isError: isErrorPrecio,
-    error: errorPrecio } = useGetPreciosQuery()
-  const [eliminarPrecio] = useEliminarPrecioMutation()
-  const [registrarPrecio ,{isSuccess,isLoading,isError,error,data}] = useRegistrarPrecioMutation()
-  const [actualizarPrecio] = useActualizarPrecioMutation()
+    isLoading: isLoadingPrecio, refetch} = useGetPreciosQuery()
+    const [registrarPrecio ,{isLoading,isError,error,data}] = useRegistrarPrecioMutation()
+    const [actualizarPrecio] = useActualizarPrecioMutation()
+    const [actualizarEstadoPrecio]= useActualizarEstadoPrecioMutation()
+    const [eliminarPrecio] = useEliminarPrecioMutation()
 
   const [visible, setVisible] = useState(false)
   const [precioSeleccionado, setPrecioSeleccionado] = useState(null)
@@ -51,11 +48,98 @@ const PreciosPlantilla = () => {
 
   const totalPages = Math.ceil((dataPrecio?.length || 0) / itemsPorPagina);
 
-  useEffect(() => {
-    if(isSuccess){
-  toast.success(`${data?.message}`)}
 
-  },[isSuccess])
+  if (isLoadingPrecio || isLoadingTipoServicio ||isLoading) {
+    return (
+      <Spinner className='flex justify-center items-center h-screen bg-gray-100' />
+    );
+  }
+
+
+  const abrirModal = (precio) => {
+    if (precio) {
+      setPrecioSeleccionado(precio)
+      setDatosDelFormulario({
+        presentacion: precio.presentacion,
+        precio: precio.precio,
+        fk_idTipoServicio: precio.fk_idTipoServicio
+      })
+    } else {
+      setPrecioSeleccionado(null)
+      setDatosDelFormulario({
+        presentacion: '',
+        precio: '',
+        fk_idTipoServicio: ''
+      })
+    }
+    setVisible(true)
+  }
+
+  const cerrarModal = () => setVisible(false)
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+
+      if (
+        !datosDelFormulario.presentacion.trim() ||
+        !datosDelFormulario.precio.trim() ||
+        !datosDelFormulario.fk_idTipoServicio
+      ) {
+        toast.error('Por favor, completa todos los campos');
+        return;
+      }
+
+
+      const payload = { 
+        presentacion: datosDelFormulario.presentacion, 
+        precio: datosDelFormulario.precio, 
+        fk_idTipoServicio: datosDelFormulario.fk_idTipoServicio }
+
+      if (precioSeleccionado) {
+        await actualizarPrecio({ id: precioSeleccionado.idPrecio, ...payload }).unwrap()
+      } else {
+        await registrarPrecio(payload).unwrap()
+        toast.success('Precio registrado con éxito')
+      }
+      cerrarModal()
+    } catch (error) {
+      console.error('Error al procesar la solicitud', error)
+      toast.error('Error al procesar la solicitud')
+    }
+  }
+
+  const manejadorCambioEstadoSwitch = (checked, id ) => {
+
+    const nuevoEstado = checked ? 'activo':'inactivo'
+
+    const precioActual = dataPrecio.find(precio=>precio.idPrecio===id)
+
+    if(!precioActual){
+      toast.error('Registro de precio no encontrado')
+      return;
+    }
+
+    const payload ={
+      id:id,
+      estado_precio:nuevoEstado,
+    }
+    actualizarEstadoPrecio(payload).unwrap()
+      .then(()=>{
+        toast.success('Estado actualizado con éxito')
+        refetch()
+      })
+      .catch(error=>{
+        console.error('Error al actualizar el estado del ambiente', error);
+        toast.error('Error al actualizar el estado del ambiente');
+      })
+
+  };
+  
+
+
+
 
 
   const handleEliminarPrecio = (id, presentacion) => {
@@ -94,84 +178,14 @@ const PreciosPlantilla = () => {
     });
   }
  
-
-  const abrirModal = (precio) => {
-    if (precio) {
-      setPrecioSeleccionado(precio)
-      setDatosDelFormulario({
-        presentacion: precio.presentacion,
-        precio: precio.precio,
-        fk_idTipoServicio: precio.fk_idTipoServicio
-      })
-    } else {
-      setPrecioSeleccionado(null)
-      setDatosDelFormulario({
-        presentacion: '',
-        precio: '',
-        fk_idTipoServicio: ''
-      })
-    }
-    setVisible(true)
-  }
-
-  const cerrarModal = () => setVisible(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-
-      if (
-        !datosDelFormulario.presentacion.trim() ||
-        !datosDelFormulario.precio.trim() ||
-        !datosDelFormulario.fk_idTipoServicio
-      ) {
-        toast.error('Por favor, completa todos los campos');
-        return;
-      }
-
-
-      const payload = { 
-        presentacion: datosDelFormulario.presentacion, 
-        precio: datosDelFormulario.precio, 
-        fk_idTipoServicio: datosDelFormulario.fk_idTipoServicio }
-
-      if (precioSeleccionado) {
-        await actualizarPrecio({ id: precioSeleccionado.idPrecio, ...payload }).unwrap()
-      } else {
-        await registrarPrecio(payload).unwrap()
-        toast.success('Precio registrado con éxito')
-      }
-      cerrarModal()
-    } catch (error) {
-      console.error('Error al procesar la solicitud', error)
-      toast.error('Error al procesar la solicitud')
-    }
-  }
-  if (isLoadingPrecio || isLoadingTipoServicio ||isLoading) {
-    return (
-      <Spinner className='flex justify-center items-center h-screen bg-gray-100' />
-    );
-  }
-
-
-  if (isErrorPrecio || isErrorTipoServicio) {
-
-    return(
-      <div>Error al cargar los datos: {errorPrecio?.message || errorTipoServicio?.message}</div>
-    )
-
-
-  }
-
-
   const indexOfLastItem = paginaActual * itemsPorPagina;
   const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
-  const articulosActualesPrecio = dataPrecio?.slice(indexOfFirstItem, indexOfLastItem);
-console.log(articulosActualesPrecio)
+  const articulosActualesPrecio = dataPrecio? dataPrecio.slice(indexOfFirstItem, indexOfLastItem):[];
+
 
   return (
     <>
-      <div className='w-full h-screen flex flex-col gap-8'>
+      <div className='w-full  flex flex-col gap-8'>
         <div className='pt-10 pl-20'>
           <Mybutton color={'primary'} onClick={() => abrirModal(null)}>
             Nuevo
@@ -181,19 +195,29 @@ console.log(articulosActualesPrecio)
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Estado</Th>
               <Th>Presentacion</Th>
               <Th>Precio</Th>
               <Th>Tipo servicio</Th>
+              <Th>Estado</Th>
+              <Th>Acciones</Th>
             </Thead>
             <Tbody>
-              {articulosActualesPrecio?.map((precio) => (
+              {articulosActualesPrecio.length > 0 ? (
+              articulosActualesPrecio.map((precio) => (
                 <tr className='hover:bg-slate-200' key={precio.idPrecio}>
                   <Td>{precio.idPrecio}</Td>
-                  <Td>{precio.estado_precio}</Td>
                   <Td>{precio.presentacion}</Td>
                   <Td>{precio.precio}</Td>
                   <Td>{precio.nombreServicio}</Td>
+                  <Td>
+                    <Switch
+                    color={precio.estado_precio==='activo'?'success':'default'}
+                    isSelected={precio.estado_precio=== 'activo' }
+                    onValueChange={(checked)=> manejadorCambioEstadoSwitch(checked,precio.idPrecio,dataTipoServicio.idTipoServicio)}
+                    >
+                      {precio.estado_precio}
+                    </Switch>
+                  </Td>
                   <Td>
                     <div className='flex flex-row gap-6'>
                       <MdDelete
@@ -209,7 +233,14 @@ console.log(articulosActualesPrecio)
                     </div>
                   </Td>
                 </tr>
-              ))}
+              ))
+            ):(
+              <tr>
+                <td colSpan={5} className='text-center'>
+                  <h1 className='text-2xl'><b>No hay datos</b></h1>
+                </td>
+              </tr>
+            )}
             </Tbody>
           </TableMolecula>
         </div>
@@ -239,7 +270,7 @@ console.log(articulosActualesPrecio)
               />
 
               <input
-                type="text"
+                type="number"
                 value={datosDelFormulario.precio || ''}
                 onChange={(e) => setDatosDelFormulario({ ...datosDelFormulario, precio: e.target.value })}
                 placeholder='Precio'
@@ -258,28 +289,6 @@ console.log(articulosActualesPrecio)
                     </option>
                     ))}
                 </select>
-              </div>
-
-              <div>
-                {precioSeleccionado && (
-                  <div className="mt-4">
-                    <label className="mr-2">Estado:</label>
-                    <input
-                      className='cursor-pointer'
-                      type="checkbox"
-                      checked={datosDelFormulario.estado_precio === 'activo'}
-                      onChange={(e) =>
-                        setDatosDelFormulario({
-                          ...datosDelFormulario,
-                          estado_precio: e.target.checked ? 'activo' : 'inactivo',
-                        })
-                      }
-                    />
-                    <span className="ml-2">
-                      {datosDelFormulario.estado_precio === 'activo' ? 'activo' : 'inactivo'}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
               <div className='pt-10 pl-20'>
