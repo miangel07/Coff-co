@@ -17,15 +17,15 @@ import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
 import { Switch } from "@nextui-org/react";
 import ModalOrganismo from "../Modal/ModalOrganismo";
-import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import { toast } from "react-toastify";
 import { confirmAlert } from 'react-confirm-alert';
 import { MdEditDocument } from "react-icons/md";
+
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
-  const [showdocument, setShowdocument] = useState(null)
+  const [showdocument, setShowdocument] = useState([])
   const [valuedocs, setValuedocs] = useState(null)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
@@ -61,14 +61,19 @@ const DocumentosOrganismo = () => {
   ;
 
   const handleVerdocumento = (doc) => {
-    const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`
-    window.open(url, '_blank');
+    const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
+    setShowdocument([{ uri: url }]);
+
   }
   const handledescargar = (doc) => {
-    const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`
-    const link = document.createElement("a");
+    const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
+
+
+    const link = document.createElement('a');
     link.href = url;
     link.download = doc;
+
+
     link.click();
 
   }
@@ -153,6 +158,16 @@ const DocumentosOrganismo = () => {
 
           </ModalOrganismo>
         }
+        {/*  {
+          showdocument && <div >
+            <DocViewer
+              documents={showdocument}
+              pluginRenderers={DocViewerRenderers}
+             
+              style={{ height: 500 , width:500}}
+            />
+          </div>
+        } */}
         <div className="w-72 ">
           <SelectAtomo
             label={"Selecione el Tipo de Documento"}
@@ -206,8 +221,7 @@ const DocumentosOrganismo = () => {
                   <div className=" flex flex-row gap-3 justify-between">
                     <FaRegEye onClick={() => handleVerdocumento(doc.nombre_documento_version
                     )} className="cursor-pointer" size={"35px"} />
-                    <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version
-                    )} />
+                    <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version)} />
                     <FaRegEdit className="cursor-pointer" size={"30px"} />
                     <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />
                   </div>
