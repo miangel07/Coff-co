@@ -139,7 +139,7 @@ const ItemsNavbar = ({ visiblite }) => {
                   <li
                     key={subIndex}
                     className={`flex items-center p-3 mt-1 rounded-lg ${
-                      subItems === subIndex ? "bg-black" : ""
+                      subItems === subIndex ? "bg-light-gray" : ""
                     }`}
                     onClick={() => handleClickSubimitem(subIndex)}
                   >
