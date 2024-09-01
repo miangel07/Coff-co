@@ -13,13 +13,13 @@ const Navbar = () => {
     <LuArrowLeftCircle
       onClick={toggleMenu}
       size={20} 
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-110"
+      className="cursor-pointer transform transition-transform duration-300 hover:scale-110 lg:size-7"
     />
   ) : (
     <LuArrowRightCircle
       onClick={toggleMenu}
       size={20} 
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-125"
+      className="cursor-pointer transform transition-transform duration-300 hover:scale-125 lg:size-7"
     />
   );
 
