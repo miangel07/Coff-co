@@ -9,8 +9,7 @@ import Label from '../../atoms/Label';
 import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
-import { useCrearDocumentoMutation } from '../../../store/api/documentos';
-import { useActualizarVersionMutation } from '../../../store/api/documentos';
+
 import { toast } from "react-toastify";
 import { useEffect, useState } from 'react';
 const DocumentoEdit = ({ valor, closeModal }) => {
