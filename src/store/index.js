@@ -24,6 +24,8 @@ export const store = configureStore({
     [ambientesApiSlice.reducerPath]: ambientesApiSlice.reducer,
     [ServicioApi.reducerPath]: ServicioApi.reducer,
     [preciosSlice.reducerPath]: preciosSlice.reducer,
+    [AlquilerApi.reducerPath]: AlquilerApi.reducer,
+    [usuariosSlice.reducerPath]: usuariosSlice.reducer,
 
   },
 
@@ -39,7 +41,9 @@ export const store = configureStore({
       logosApi.middleware,
       ambientesApiSlice.middleware,
       ServicioApi.middleware,
-      preciosSlice.middleware
+      preciosSlice.middleware,
+      AlquilerApi.middleware,
+      usuariosSlice.middleware,
 
     ),
 });

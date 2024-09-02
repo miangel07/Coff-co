@@ -1,4 +1,3 @@
-//../src/components/molecules/Navbar/Navbar.jsx
 import React from "react";
 import ItemsNavbar from "./ItemsNavbar";
 import { LuArrowLeftCircle, LuArrowRightCircle } from "react-icons/lu";
@@ -39,3 +38,4 @@ const Navbar = ({ menuAbierto, toggleMenu, visible }) => {
 };
 
 export default Navbar;
+

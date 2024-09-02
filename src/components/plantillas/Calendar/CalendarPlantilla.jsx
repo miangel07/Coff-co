@@ -91,9 +91,7 @@ function CalendarPlantilla() {
             <div className="flex justify-center">
                 <h1 className="text-4xl font-bold">Alquiler de Laboratorio</h1>
             </div>
-            <div className="w-full">
-                <Navbar />
-            </div>
+
             <div className="flex justify-center items-center h-screen flex-col">
                 <div style={{ width: '80%', maxWidth: '800px', marginBottom: '20px' }}>
                     <Mybutton
