@@ -24,18 +24,18 @@ const DocumentoEdit = ({ valor, closeModal }) => {
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
-  
-   /*  useEffect(() => {
-        if (isSuccess) {
-            toast.success(`${dataResponse?.message}`);
-            closeModal()
-        }
-        if (isSuccessActualizarVersion) {
-            toast.success(`${dataResponseActualizarVersion?.message}`);
-            closeModal()
-        }
 
-    }, [isSuccess, dataResponse, isSuccessActualizarVersion]); */
+    /*  useEffect(() => {
+         if (isSuccess) {
+             toast.success(`${dataResponse?.message}`);
+             closeModal()
+         }
+         if (isSuccessActualizarVersion) {
+             toast.success(`${dataResponseActualizarVersion?.message}`);
+             closeModal()
+         }
+ 
+     }, [isSuccess, dataResponse, isSuccessActualizarVersion]); */
     useEffect(() => {
         if (valor) {
             reset({
@@ -89,48 +89,14 @@ const DocumentoEdit = ({ valor, closeModal }) => {
             console.log(error)
         }
     }
-    const hadleActualizar = async (data) => {
-        const DataForm = new FormData();
-        const idVersionProcessed = parseInt(valor.idversion);
-        console.log(idVersionProcessed)
 
-        DataForm.append('nombre', data.nombre);
-        DataForm.append('descripcion', data.descripcion);
-        DataForm.append('codigo', data.codigo_documentos);
-        DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('servicios', servicio);
-        DataForm.append('idVersion', idVersionProcessed);
-        DataForm.append('tipo_documento', dataInput);
-        DataForm.append('version', data.version);
-        DataForm.append('variables', JSON.stringify(ArryVariables));
-        DataForm.append('logos', JSON.stringify(logos));
-        DataForm.append('file', file);
-
-
-        if (!logos || !file) {
-            toast.info('Todos los campos son obligatorios');
-            return;
-        }
-        try {
-            await actualizarVersion(
-                DataForm
-            );
-
-            reset()
-
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
-    if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto || loandActualizarVersion) {
+    if (isLoading || loandingLogos || TipoServicio || LoandVariables) {
         return <p>Loading...</p>;
     }
 
-    if (isError || tipoServicioError || isErrorDocumento || ErrorVariable || isErrorActualizarVersion) {
-        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
-            || ErrorActualizarVersion.message} </p>;
+    if (isError || tipoServicioError || ErrorVariable) {
+        return <p>Error: {error?.message || ErroTipo?.message || Error?.message
+        } </p>;
     }
 
 
@@ -139,7 +105,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
 
             <form
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
-                onSubmit={handleSubmit( onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Actualizacion </h1>
 
@@ -260,7 +226,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end  flex '>
-                    <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
+                    <Mybutton color={"primary"} type={'submit'} >Actualizar</Mybutton>
 
 
                 </div>

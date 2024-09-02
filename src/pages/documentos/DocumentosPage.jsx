@@ -23,7 +23,7 @@ const DocumentosPage = () => {
           >
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
-          <div className="w-full ">
+          <div className="w-full  bg-gray-100">
             <Documentos/>
           </div>
         </div>

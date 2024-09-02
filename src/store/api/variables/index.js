@@ -23,7 +23,7 @@ export const VariablesApi = createApi({
                     error: response.data.message,
                 }
             },
-            providesTags: ['getVariable']
+            providesTags: ['Variable']
         }),
         //crear variable
         crearVariable: build.mutation({
@@ -38,6 +38,7 @@ export const VariablesApi = createApi({
                     error: response.data.message,
                 }
             },
+            invalidatesTags: ["Variable"],
         }),
         //editar variable
         editarVariable: build.mutation({
