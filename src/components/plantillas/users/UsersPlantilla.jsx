@@ -8,6 +8,7 @@ import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarU
 import { Spinner } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
+import toast from "react-hot-toast";
 //Importaciones para el modal
 import { IoPersonAddOutline } from "react-icons/io5";
 import SelectAtomo from "../../atoms/Select";
@@ -19,7 +20,6 @@ import InputAtomo from "../../atoms/Input";
 import InputAtomoActualizar from "../../atoms/InputActualizar";
 import CustomSwitch from "../../atoms/CustomSwitch";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { FcOk } from "react-icons/fc";
 import Td from "../../atoms/Td";
 
@@ -42,23 +42,23 @@ const UsersPlantilla = () => {
   const [roles, setRoles] = useState([]); // Estado para almacenar los roles
 
   useEffect(() => {
-    // Función para obtener los roles desde el backend
-    const fetchRoles = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/rol/listar'); 
-        const data = await response.json();
-        setRoles(data);
-      } catch (error) {
-        console.error('Error al obtener los roles:', error);
-      }
-    };
-    fetchRoles();
-    }, []);
+      // Función para obtener los roles desde el backend
+      const fetchRoles = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/api/rol/listar'); 
+          const data = await response.json();
+          setRoles(data);
+        } catch (error) {
+          console.error('Error al obtener los roles:', error);
+        }
+      };
+      fetchRoles();
+  }, []);
 
-    //Abrir modal
-    const [openModal, setOpenModal] = useState(false);
-    const [openModalActualizar, setOpenModalActualizar] = useState(false);
-    const [sucess, setsucess] = useState("");
+  //Abrir modal
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalActualizar, setOpenModalActualizar] = useState(false);
+  const [sucess, setsucess] = useState("");
 
     //Modal registrar
   const handleClick = () => {setOpenModal(true);};
@@ -177,202 +177,202 @@ const UsersPlantilla = () => {
   
   return (
     <>
-      <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
+    <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
 
-      {/* TABLA */}
-        <div className="pt-10 pl-20">
-          <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
-        </div>
-        <div className="w-full px-20 h-auto overflow-y-auto">
-          <TableMolecula lassName="w-full">
-            <Thead>
-              <Th>ID</Th>
-              <Th>Nombre</Th>
-              <Th>Apellidos</Th>
-              <Th>Correo</Th>
-              <Th>Telefono</Th>
-              <Th>Documento</Th>
-              <Th>Tipo</Th>
-              <Th>Estado</Th>
-              <Th>Rol</Th>
-              <Th>Editar</Th>
-              <Th>Estado</Th>
-            </Thead>
-            <Tbody>
-              {elementosActuales.length>0?(
-                elementosActuales.map((usuario)=>(
-                  <tr className="hover:bg-slate-200" key={usuario.id_usuario}>
-                    <Td>{usuario.id_usuario}</Td>
-                    <Td>{usuario.nombre}</Td>
-                    <Td>{usuario.apellidos}</Td>
-                    <Td>{usuario.correo_electronico}</Td>
-                    <Td>{usuario.telefono}</Td>
-                    <Td>{usuario.numero_documento}</Td>
-                    <Td>{usuario.tipo_documento}</Td>
-                    <Td>{usuario.estado}</Td>
-                    <Td>{usuario.rol}</Td>
-                    <Td>
-                    <div className="flex justify-center items-center space-x-4">
-                      
-                    <button
-                      className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
-                      onClick={() => handleClickActualizar(usuario)}
-                    >
-                    <svg
-                      className="icon-default block group-hover:hidden"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="15"
-                      height="15"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                    </svg>
-                    <svg
-                      className="icon-hover hidden group-hover:block"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="15"
-                      height="15"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
-                    </svg>
-                    </button>
-                      {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
-                    </div>
-                    </Td>
-                    <Td>
-                      <CustomSwitch
-                          setisSelected={usuario.estado === "activo"}
-                          onChange={() => handleSwitchChange(usuario.id_usuario, usuario.nombre)}
-                      />
-                      {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
-                    </Td>
+    {/* TABLA */}
+      <div className="pt-10 pl-20">
+        <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
+      </div>
+      <div className="w-full px-20 h-auto overflow-y-auto">
+        <TableMolecula lassName="w-full">
+          <Thead>
+            <Th>ID</Th>
+            <Th>Nombre</Th>
+            <Th>Apellidos</Th>
+            <Th>Correo</Th>
+            <Th>Telefono</Th>
+            <Th>Documento</Th>
+            <Th>Tipo</Th>
+            {/* <Th>Estado</Th> */}
+            <Th>Rol</Th>
+            <Th>Editar</Th>
+            <Th>Estado</Th>
+          </Thead>
+          <Tbody>
+            {elementosActuales.length>0?(
+              elementosActuales.map((usuario)=>(
+                <tr className="hover:bg-slate-200" key={usuario.id_usuario}>
+                  <Td>{usuario.id_usuario}</Td>
+                  <Td>{usuario.nombre}</Td>
+                  <Td>{usuario.apellidos}</Td>
+                  <Td>{usuario.correo_electronico}</Td>
+                  <Td>{usuario.telefono}</Td>
+                  <Td>{usuario.numero_documento}</Td>
+                  <Td>{usuario.tipo_documento}</Td>
+                  {/* <Td>{usuario.estado}</Td> */}
+                  <Td>{usuario.rol}</Td>
+                  <Td>
+                  <div className="flex justify-center items-center space-x-4">
+                    
+                  <button
+                    className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
+                    onClick={() => handleClickActualizar(usuario)}
+                  >
+                  <svg
+                    className="icon-default block group-hover:hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="15"
+                    height="15"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                  </svg>
+                  <svg
+                    className="icon-hover hidden group-hover:block"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="15"
+                    height="15"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                  </svg>
+                  </button>
+                    {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
+                  </div>
+                  </Td>
+                  <Td>
+                    <CustomSwitch
+                        setisSelected={usuario.estado === "activo"}
+                        onChange={() => handleSwitchChange(usuario.id_usuario, usuario.nombre)}
+                    />
+                    {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
+                  </Td>
 
-                  </tr>
-                ))
-              ):(
-                <tr>
-                <td colSpan={9} className="text-center">
-                  <h1 className="text-2xl">
-                    <b>No hay datos</b>
-                  </h1>
-                </td>
-              </tr>
-              )
-              }
-
-            </Tbody>
-          </TableMolecula>
-        </div>
-        <div className="flex justify-center mt-4">
-            <PaginationMolecula
-            total={totalPages}
-            initialPage={paginaActual}
-            onChange={(pagina)=>setPaginaActual(pagina)}
-            />
-        </div>
-      {/* FIN TABLA */}
-
-     {/* MODAL REGISTRO*/}
-      {openModal && (
-            <ModalOrganismo
-            logo={<Logosímbolo />}
-            children={
-              <UserFrom
-                onsubmit={handleSubmit(onsubmit)}
-                children={
-                  <>
-                   <InputAtomo
-                    register={register}
-                    name={"nombre"}
-                    erros={errors}
-                    id={"nombre"}
-                    placeholder={"Ingrese el nombre del usuario"}
-                    type={"text"}
-                  />
-                  <InputAtomo
-                    register={register}
-                    name={"apellidos"}
-                    erros={errors}
-                    id={"apellidos"}
-                    placeholder={"Ingrese el  apellido del usuario"}
-                    type={"text"}
-                  />
-                  <InputAtomo
-                    register={register}
-                    name={"correo_electronico"}
-                    erros={errors}
-                    id={"correo_electronico"}
-                    placeholder={"Ingrese el  correo del usuario"}
-                    type={"email"}
-                  />
-                  <InputAtomo
-                    register={register}
-                    name={"telefono"}
-                    erros={errors}
-                    id={"telefono"}
-                    placeholder={"Ingrese el telefono del usuario"}
-                    type={"number"}
-                  />
-                  <InputAtomo
-                    register={register}
-                    name={"password"}
-                    erros={errors}
-                    id={"password"}
-                    placeholder={"Ingrese la contraseña del usuario"}
-                    type={"password"}
-                  />
-
-                  <SelectAtomo
-                    data={roles.map(role => ({ value: role.idRol, label: role.rol }))} // Mapeo de roles
-                    label={"Rol"} 
-                    onChange={(e) => setValue("rol", e.target.value)} 
-                    items={"value"} 
-                    ValueItem={"label"} 
-                    value={watch("rol")} 
-                  />
-
-                  <SelectAtomo
-                    data={estadoOptions} 
-                    label={"Estado"} 
-                    onChange={(e) => setValue("estado", e.target.value)} 
-                    items={"value"} 
-                    ValueItem={"label"} 
-                    value={watch("estado")} 
-                  />
-
-                  <SelectAtomo
-                    data={documentoOptions} 
-                    label={"Tipo Documento"} 
-                    onChange={(e) => setValue("tipo_documento", e.target.value)} 
-                    items={"value"} 
-                    ValueItem={"label"} 
-                    value={watch("tipo_documento")} 
-                  />
-
-                  <InputAtomo
-                    register={register}
-                    name={"numero_documento"}
-                    erros={errors}
-                    id={"numero_documento"}
-                    placeholder={"Ingrese el numero de identificación del usuario"}
-                    type={"number"}
-                  />
-                  </>
-                }
-              />
+                </tr>
+              ))
+            ):(
+              <tr>
+              <td colSpan={9} className="text-center">
+                <h1 className="text-2xl">
+                  <b>No hay datos</b>
+                </h1>
+              </td>
+            </tr>
+            )
             }
-            visible={true}
-            title={"Registro de Usuarios"}
-            closeModal={closeModal}
-          />
-      )}
-     {/* FIN MODAL REGISTRO*/}
 
-     {/* MODAL ACTUALIZAR*/}
-     {openModalActualizar && (
+          </Tbody>
+        </TableMolecula>
+      </div>
+      <div className="flex justify-center mt-4">
+          <PaginationMolecula
+          total={totalPages}
+          initialPage={paginaActual}
+          onChange={(pagina)=>setPaginaActual(pagina)}
+          />
+      </div>
+    {/* FIN TABLA */}
+
+    {/* MODAL REGISTRO*/}
+    {openModal && (
+          <ModalOrganismo
+          logo={<Logosímbolo />}
+          children={
+            <UserFrom
+              onsubmit={handleSubmit(onsubmit)}
+              children={
+                <>
+                  <InputAtomo
+                  register={register}
+                  name={"nombre"}
+                  erros={errors}
+                  id={"nombre"}
+                  placeholder={"Ingrese el nombre del usuario"}
+                  type={"text"}
+                />
+                <InputAtomo
+                  register={register}
+                  name={"apellidos"}
+                  erros={errors}
+                  id={"apellidos"}
+                  placeholder={"Ingrese el  apellido del usuario"}
+                  type={"text"}
+                />
+                <InputAtomo
+                  register={register}
+                  name={"correo_electronico"}
+                  erros={errors}
+                  id={"correo_electronico"}
+                  placeholder={"Ingrese el  correo del usuario"}
+                  type={"email"}
+                />
+                <InputAtomo
+                  register={register}
+                  name={"telefono"}
+                  erros={errors}
+                  id={"telefono"}
+                  placeholder={"Ingrese el telefono del usuario"}
+                  type={"number"}
+                />
+                <InputAtomo
+                  register={register}
+                  name={"password"}
+                  erros={errors}
+                  id={"password"}
+                  placeholder={"Ingrese la contraseña del usuario"}
+                  type={"password"}
+                />
+
+                <SelectAtomo
+                  data={roles.map(role => ({ value: role.idRol, label: role.rol }))} // Mapeo de roles
+                  label={"Rol"} 
+                  onChange={(e) => setValue("rol", e.target.value)} 
+                  items={"value"} 
+                  ValueItem={"label"} 
+                  value={watch("rol")} 
+                />
+
+                <SelectAtomo
+                  data={estadoOptions} 
+                  label={"Estado"} 
+                  onChange={(e) => setValue("estado", e.target.value)} 
+                  items={"value"} 
+                  ValueItem={"label"} 
+                  value={watch("estado")} 
+                />
+
+                <SelectAtomo
+                  data={documentoOptions} 
+                  label={"Tipo Documento"} 
+                  onChange={(e) => setValue("tipo_documento", e.target.value)} 
+                  items={"value"} 
+                  ValueItem={"label"} 
+                  value={watch("tipo_documento")} 
+                />
+
+                <InputAtomo
+                  register={register}
+                  name={"numero_documento"}
+                  erros={errors}
+                  id={"numero_documento"}
+                  placeholder={"Ingrese el numero de identificación del usuario"}
+                  type={"number"}
+                />
+                </>
+              }
+            />
+          }
+          visible={true}
+          title={"Registro de Usuarios"}
+          closeModal={closeModal}
+        />
+    )}
+    {/* FIN MODAL REGISTRO*/}
+
+    {/* MODAL ACTUALIZAR*/}
+    {openModalActualizar && (
     <ModalOrganismo
       logo={<Logosímbolo />}
       children={
@@ -484,6 +484,7 @@ const UsersPlantilla = () => {
       title={"Actualizar Usuario"}
       closeModal={closeModalActualizar}
     />
+
       )}
       {/* FIN MODAL ACTUALIZAR*/}
       </div>
