@@ -42,7 +42,7 @@ const UsersPlantilla = () => {
     // Función para obtener los roles desde el backend
     const fetchRoles = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/rol/listar'); // Ajusta la URL según tu backend
+        const response = await fetch('http://localhost:3000/api/rol/listar'); 
         const data = await response.json();
         setRoles(data); // Almacena los roles en el estado
       } catch (error) {
