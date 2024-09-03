@@ -242,7 +242,7 @@ const UsersPlantilla = () => {
      {/* MODAL REGISTRO*/}
       {openModal && (
             <ModalOrganismo
-            logo={<Logosímbolo />}
+            // logo={<Logosímbolo />}
             children={
               <UserFrom
                 onsubmit={handleSubmit(onsubmit)}
@@ -338,7 +338,7 @@ const UsersPlantilla = () => {
      {/* MODAL ACTUALIZAR*/}
      {openModalActualizar && (
     <ModalOrganismo
-      logo={<Logosímbolo />}
+      // logo={<Logosímbolo />}
       children={
         <UserFrom
           onsubmit={handleSubmit(onsubmitActualizar)}

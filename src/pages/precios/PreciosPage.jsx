@@ -20,7 +20,7 @@ const PreciosPage = () => {
         <div className={`transition-all duration-300 ease-in-out`}>
         <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu}/>
         </div>
-      <div className="w-full">
+      <div className="w-full overflow-auto">
         <PreciosPlantilla/>
       </div>
       </div>
