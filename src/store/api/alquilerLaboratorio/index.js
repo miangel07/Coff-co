@@ -21,13 +21,22 @@ export const AlquilerApi=createApi({
             }),
             providesTags:['alquiler']
         }),      
+        //Endpoint para registrar alquiler
+        postAlquiler:build.mutation({
+            query: (datos) => ({
+                url: "servicios/agregarAlquiler",
+                method: "POST",
+                body: datos,
+            }),
+            invalidatesTags:['alquiler']
+        })
 
     })
     
 
 })
 
-export const { useGetAlquilerQuery, useCreateAlquilerMutation } = AlquilerApi;
+export const { useGetAlquilerQuery, usePostAlquilerMutation } = AlquilerApi;
 
 
 

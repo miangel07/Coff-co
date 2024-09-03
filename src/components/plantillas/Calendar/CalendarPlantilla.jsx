@@ -19,7 +19,6 @@ dayjs.locale("es");
 function CalendarPlantilla() {
     const [events, setEvents] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [formulario, setFromulario] = useState(false)
     const { data, isLoading, isError, error } = useGetAlquilerQuery();
     const [postFormulario, { isSuccess, data: dataVariables, isError: variablesIsError, error: errorVariable }] = usePostFormularioMutation();
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -45,7 +44,7 @@ function CalendarPlantilla() {
                 "idTipoFormulario": 8
             }
             await postFormulario(
-                data    
+                data
             )
 
 
@@ -66,14 +65,9 @@ function CalendarPlantilla() {
     const onSubmit = (data) => {
         console.log("hola", data)
 
-        const newEvent = {
-            start: dayjs(data.fecha_inicio_alquiler).toDate(),
-            end: dayjs(data.fecha_fin_alquiler).toDate(),
-            title: data.observaciones_laboratorio,
-            client: data.cliente,
-        };
-//data aca trae el evento que es la consula que ya trae esa info
-        setEvents([...data, newEvent]);
+
+        //data aca trae el evento que es la consula que ya trae esa info
+        setEvents([data, newEvent]);
 
 
         closeModal();
@@ -102,7 +96,7 @@ function CalendarPlantilla() {
                         Agregar Evento
                     </Mybutton>
                     <Calendar
-                        events={events}
+                        events={data}
                         localizer={localizer}
                         style={{
                             height: '500px',
@@ -124,6 +118,50 @@ function CalendarPlantilla() {
                 logo={<CiCalendarDate />}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    {/* aca mete los valores estaticos del formulario ose los que no son variables */}
+                    <div>
+                    <InputAtomo
+                        type={items.servicio_nombre}
+                        placeholder={items.servicio_nombre}
+                        id={items.servicio_nombre}
+                        name={items.servicio_nombre}
+                        register={register}
+                        erros={errors}
+                    />
+                    <InputAtomo
+                        type={items.id_tipo_servicio}
+                        placeholder={items.id_tipo_servicio}
+                        id={items.id_tipo_servicio}
+                        name={items.id_tipo_servicio}
+                        register={register}
+                        erros={errors}
+                    />
+                    <InputAtomo
+                        type={items.id_precio}
+                        placeholder={items.id_precio}
+                        id={items.id_precio}
+                        name={items.id_precio}
+                        register={register}
+                        erros={errors}
+                    />
+                    <InputAtomo
+                        type={items.id_usuario}
+                        placeholder={items.id_usuario}
+                        id={items.id_usuario}
+                        name={items.id_usuario}
+                        register={register}
+                        erros={errors}
+                    />
+                    <InputAtomo
+                        type={items.id_ambiente}
+                        placeholder={items.id_ambiente}
+                        id={items.id_ambiente}
+                        name={items.id_ambiente}
+                        register={register}
+                        erros={errors}
+                    />
+                    </div>
+                    {/* hasta aca */}
                     {isSuccess &&
 
                         dataVariables?.map((items) => (
