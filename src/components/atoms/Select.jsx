@@ -5,7 +5,6 @@ const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
  
   const trimmedValue = String(value || "").trim();
 
-
   const selectedItem = useMemo(() => {
     return data?.find(item => 
       String(item[items]).trim() === trimmedValue || 
@@ -19,10 +18,7 @@ const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
     }
   }, [selectedItem, trimmedValue, onChange, items]);
 
-
   const selectedKey = selectedItem ? String(selectedItem[items]) : "";
-
-
 
   return (
     <div className="w-full flex flex-col gap-4">

@@ -9,7 +9,7 @@ const SelectAtomoActualizar = ({ data, label, onChange, items, ValueItem, value,
           variant="flat"
           label={label}
           placeholder={placeholder}
-          value={"cc"} 
+          value={value} 
           className="w-full"
           onChange={onChange} 
         >

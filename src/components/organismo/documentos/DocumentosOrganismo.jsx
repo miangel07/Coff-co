@@ -105,15 +105,11 @@ const DocumentosOrganismo = () => {
         ],
         closeOnClickOutside: true,
       });
-
       const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
       const data = { id: id, estado: nuevoEstado }
-
-
     } catch (error) {
       console.error(error)
     }
-
   };
 
   const hadleActualizar = (doc) => {
@@ -159,12 +155,7 @@ const DocumentosOrganismo = () => {
             title={`${valuedocs ? 'Actualizar' : "Registrar"}`}
             visible={form}
           >
-
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
-
-
-
-
           </ModalOrganismo>
         }
         {

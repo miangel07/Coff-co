@@ -4,7 +4,7 @@ import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
-import { useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
+import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
 import { Spinner } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 //Importaciones para el modal
@@ -16,6 +16,7 @@ import Logosímbolo from "../../atoms/Logosímbolo";
 import UserFrom from "../../molecules/Formulario/UserFrom";
 import InputAtomo from "../../atoms/Input";
 import InputAtomoActualizar from "../../atoms/InputActualizar";
+import CustomSwitch from "../../atoms/CustomSwitch";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FcOk } from "react-icons/fc";
@@ -30,8 +31,9 @@ const UsersPlantilla = () => {
   // FUNCIONES CRUD
   const {data,isLoading, refetch} = useGetUsuarioQuery()
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
-  const [actualizarUsuario, { correcto, valores, problema, hayerror }]= useActualizarUsuarioMutation()
-  const [eliminarUsuario]= useEliminarUsuarioMutation()
+  const [actualizarEstado] = useActualizarEstadoMutation();
+  const [actualizarUsuario, { correcto, valores, problema, hayerror }]= useActualizarUsuarioMutation();
+  const [eliminarUsuario] = useEliminarUsuarioMutation();
 
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
@@ -49,9 +51,8 @@ const UsersPlantilla = () => {
         console.error('Error al obtener los roles:', error);
       }
     };
-
     fetchRoles();
-  }, []);
+    }, []);
 
     //Abrir modal
     const [openModal, setOpenModal] = useState(false);
@@ -68,6 +69,15 @@ const UsersPlantilla = () => {
     console.log("Usuario seleccionado:", usuario); 
     setUsuarioSeleccionado(usuario);
     setOpenModalActualizar(true);
+  };
+
+  const handleSwitchChange = async (id_usuario, newState) => {
+    try {
+      await actualizarEstado(id_usuario).unwrap();
+      // Opcionalmente, puedes actualizar el estado local aquí si es necesario
+    } catch (error) {
+      console.error('Error al actualizar el estado:', error);
+    }
   };
 
   useEffect(() => {
@@ -197,7 +207,8 @@ const UsersPlantilla = () => {
               <Th>Tipo</Th>
               <Th>Estado</Th>
               <Th>Rol</Th>
-              <Th>Acciones</Th>
+              <Th>Editar</Th>
+              <Th>Estado</Th>
             </Thead>
             <Tbody>
               {elementosActuales.length>0?(
@@ -214,10 +225,43 @@ const UsersPlantilla = () => {
                     <Td>{usuario.rol}</Td>
                     <Td>
                     <div className="flex justify-center items-center space-x-4">
-                      <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton>
-                      <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton>
+                      
+                    <button
+                      className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
+                      onClick={() => handleClickActualizar(usuario)}
+                    >
+                    <svg
+                      className="icon-default block group-hover:hidden"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="15"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                    </svg>
+                    <svg
+                      className="icon-hover hidden group-hover:block"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="15"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                    </svg>
+                    </button>
+                      {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
                     </div>
                     </Td>
+                    <Td>
+                    <CustomSwitch
+                        isSelected={usuario.estado === 'activo'}
+                        onChange={(newState) => handleSwitchChange(usuario.id_usuario, newState)}
+                      />
+                      {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
+                    </Td>
+
                   </tr>
                 ))
               ):(
@@ -452,8 +496,8 @@ const UsersPlantilla = () => {
       title={"Actualizar Usuario"}
       closeModal={closeModalActualizar}
     />
-  )}
-     {/* FIN MODAL ACTUALIZAR*/}
+      )}
+      {/* FIN MODAL ACTUALIZAR*/}
       </div>
     </>
   );
