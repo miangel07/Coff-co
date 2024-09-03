@@ -80,6 +80,7 @@ const DocumentosOrganismo = () => {
     link.click();
 
   }
+
   const handleClick = async (doc) => {
     try {
       const id = doc.id_documentos
@@ -114,16 +115,16 @@ const DocumentosOrganismo = () => {
     }
 
   };
+
   const hadleActualizar = (doc) => {
     setFrom(true)
     setValuedocs(doc)
-
   }
+
   const hadeleEditar = (doc) => {
     console.log(doc)
     setShowModal(true)
     setDataValue(doc)
-
   }
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
@@ -132,8 +133,8 @@ const DocumentosOrganismo = () => {
   const closeModal = () => {
     setValuedocs(null)
     setFrom(false)
-
   }
+
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
     return (
