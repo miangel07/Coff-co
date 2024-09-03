@@ -15,7 +15,7 @@ const Header = ({ color, contenido }) => {
                 <div className="flex lg:flex-1">
                     <figure className=" h-16 w-16 ">
                         <LazyLoadImage
-                            src={"../../../public/logo-sena-verde.jpg"}
+                            src={"/logo-sena-verde.jpg"}
                             className="h-full w-full cursor-pointer"
                             effect="opacity"
                             alt="logo-sena"
