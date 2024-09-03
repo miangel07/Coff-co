@@ -30,6 +30,7 @@
     "react-big-calendar": "^1.13.3",
     "react-burger-menu": "^3.0.9",
     "react-confirm-alert": "^3.0.6",
+    "react-doc-viewer": "^0.1.14",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.5",
     "react-hot-toast": "^2.4.1",

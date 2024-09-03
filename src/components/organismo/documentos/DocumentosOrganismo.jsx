@@ -20,13 +20,16 @@ import ModalOrganismo from "../Modal/ModalOrganismo";
 import { toast } from "react-toastify";
 import { confirmAlert } from 'react-confirm-alert';
 import { MdEditDocument } from "react-icons/md";
+import DocumentoEdit from "../../molecules/Formulario/DocumentoEdit";
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false)
+  const [showModal, setShowModal] = useState(false)
   const [showdocument, setShowdocument] = useState([])
   const [valuedocs, setValuedocs] = useState(null)
+  const [dataValue, setDataValue] = useState(null)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
@@ -77,6 +80,7 @@ const DocumentosOrganismo = () => {
     link.click();
 
   }
+
   const handleClick = async (doc) => {
     try {
       const id = doc.id_documentos
@@ -101,20 +105,21 @@ const DocumentosOrganismo = () => {
         ],
         closeOnClickOutside: true,
       });
-
       const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
       const data = { id: id, estado: nuevoEstado }
-
-
     } catch (error) {
       console.error(error)
     }
-
   };
+
   const hadleActualizar = (doc) => {
     setFrom(true)
     setValuedocs(doc)
+  }
 
+  const hadeleEditar = (doc) => {
+    setShowModal(true)
+    setDataValue(doc)
   }
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
@@ -123,8 +128,8 @@ const DocumentosOrganismo = () => {
   const closeModal = () => {
     setValuedocs(null)
     setFrom(false)
-
   }
+
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
     return (
@@ -137,8 +142,8 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full   flex flex-col  items-center">
-      <div className="w-full  flex flex-wrap justify-around   items-center">
+    <section className="w-full   flex flex-col gap-3 items-center">
+      <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
 
         <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
           Nuevo
@@ -150,24 +155,23 @@ const DocumentosOrganismo = () => {
             title={`${valuedocs ? 'Actualizar' : "Registrar"}`}
             visible={form}
           >
-
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
+          </ModalOrganismo>
+        }
+        {
+          showModal &&
+          <ModalOrganismo
+            closeModal={()=>setShowModal(false)}
+            title={`Editar Documentos`}
+            visible={true}
+          >
 
+            <DocumentoEdit closeModal={closeModal} valor={dataValue} />
 
 
 
           </ModalOrganismo>
         }
-        {/*  {
-          showdocument && <div >
-            <DocViewer
-              documents={showdocument}
-              pluginRenderers={DocViewerRenderers}
-             
-              style={{ height: 500 , width:500}}
-            />
-          </div>
-        } */}
         <div className="w-72 ">
           <SelectAtomo
             label={"Selecione el Tipo de Documento"}
@@ -222,7 +226,7 @@ const DocumentosOrganismo = () => {
                     <FaRegEye onClick={() => handleVerdocumento(doc.nombre_documento_version
                     )} className="cursor-pointer" size={"35px"} />
                     <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version)} />
-                    <FaRegEdit className="cursor-pointer" size={"30px"} />
+                    <FaRegEdit className="cursor-pointer" size={"30px"} onClick={() => hadeleEditar(doc)} />
                     <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />
                   </div>
 

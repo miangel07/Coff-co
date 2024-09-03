@@ -6,7 +6,7 @@ import { IoSearchOutline } from "react-icons/io5";
 
 const Search = ({ label, onchange, placeholder }) => {
     return (
-        <div className="w-full h-[110px]  px-8 rounded-2xl flex justify-center items-center bg-gradient-to-tr  text-white ">
+        <div className="w-full h-[110px]   px-8 rounded-2xl flex justify-center items-center bg-gradient-to-tr  text-white ">
             <Input
                 onChange={onchange}
                 label={`${label}`}

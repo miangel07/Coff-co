@@ -1,16 +1,22 @@
 import { Select, SelectItem } from "@nextui-org/react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
-  const trimmedValue = value ? String(value).trim() : "";
+ 
+  const trimmedValue = String(value || "").trim();
 
-  const selectedItem = data.find(item => String(item[items]).trim() === trimmedValue);
+  const selectedItem = useMemo(() => {
+    return data?.find(item => 
+      String(item[items]).trim() === trimmedValue || 
+      String(item[ValueItem]).trim() === trimmedValue
+    );
+  }, [data, items, ValueItem, trimmedValue]);
 
   useEffect(() => {
     if (selectedItem && String(selectedItem[items]).trim() !== trimmedValue) {
       onChange({ target: { value: selectedItem[items] } });
     }
-  }, [selectedItem, trimmedValue, onChange]);
+  }, [selectedItem, trimmedValue, onChange, items]);
 
   const selectedKey = selectedItem ? String(selectedItem[items]) : "";
 
@@ -20,17 +26,12 @@ const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
         <Select
           variant={"flat"}
           label={label}
-          value={selectedKey}
-          defaultSelectedKeys={selectedKey ? [selectedKey] : []} 
+          selectedKeys={selectedKey ? [selectedKey] : []}
           className="w-full"
           onChange={(e) => onChange({ target: { value: e.target.value } })}
         >
           {data?.map((item) => (
-            <SelectItem 
-              key={item[items]} 
-              value={item[items]} 
-              textValue={String(item[ValueItem])} 
-            >
+            <SelectItem key={String(item[items])} value={String(item[items])}>
               {item[ValueItem]}
             </SelectItem>
           ))}

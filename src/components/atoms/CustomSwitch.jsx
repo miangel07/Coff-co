@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
-import { Switch } from "@nextui-org/react";
+import React, { useState, useEffect } from 'react';
+import { Switch } from '@nextui-org/react';
 
-const CustomSwitch = ({ isSelected }) => {
-  const [selected, setSelected] = useState(isSelected);
-  
-  const handleChange = () => {
-    setSelected(prev => !prev);
-  };
+const CustomSwitch = ({ setisSelected, onChange }) => {
+
+  // const [isSelected, setIsSelected] = React.useState();
 
   return (
     <Switch
-      checked={selected}
-      onChange={handleChange}
+      isSelected={setisSelected}
+      onValueChange={onChange}
     />
   );
 };
