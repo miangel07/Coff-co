@@ -7,6 +7,7 @@ import Tbody from "../../molecules/table/Tbody";
 import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
 import { Spinner } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
+import { confirmAlert } from "react-confirm-alert";
 //Importaciones para el modal
 import { IoPersonAddOutline } from "react-icons/io5";
 import SelectAtomo from "../../atoms/Select";
@@ -32,7 +33,7 @@ const UsersPlantilla = () => {
   const {data,isLoading, refetch} = useGetUsuarioQuery()
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [actualizarEstado] = useActualizarEstadoMutation();
-  const [actualizarUsuario, { correcto, valores, problema, hayerror }]= useActualizarUsuarioMutation();
+  const [actualizarUsuario]= useActualizarUsuarioMutation();
   const [eliminarUsuario] = useEliminarUsuarioMutation();
 
   //MODAL 
@@ -70,15 +71,31 @@ const UsersPlantilla = () => {
     setUsuarioSeleccionado(usuario);
     setOpenModalActualizar(true);
   };
-
-  const handleSwitchChange = async (id_usuario, newState) => {
-    try {
-      await actualizarEstado(id_usuario).unwrap();
-      // Opcionalmente, puedes actualizar el estado local aquí si es necesario
-    } catch (error) {
-      console.error('Error al actualizar el estado:', error);
-    }
-  };
+    
+  //CAMBIAR EL ESTADO DEL USUARIO
+  const handleSwitchChange = async (id_usuario, nombre) => {
+    confirmAlert({
+      title: 'Confirmación',
+      message: `¿Cambiar el estado del usuario  ${nombre}?`,
+      buttons: [
+        {
+          label: 'Sí',
+          onClick: async () => {
+            try {
+              await actualizarEstado(id_usuario).unwrap();
+            } catch (error) {
+              console.error('Error al actualizar el estado:', error);
+            }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => toast('Operacion cancelada')
+        }
+      ],
+      closeOnClickOutside: true,
+    });
+  };  
 
   useEffect(() => {
     console.log("Usuario seleccionado en modal:", usuarioSeleccionado);
@@ -132,35 +149,6 @@ const UsersPlantilla = () => {
     }
   }, [isSuccess, isError, error, datos]);
 
-  //Para actualizar
-  useEffect(() => {
-    if (correcto) {
-      setsucess(valores?.message);
-      toast.success(valores?.message, {
-        duration: 5000,
-        position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
-        icon: <FcOk />,
-      });
-    }
-    
-
-    if (problema) {
-      console.log(hayerror);
-      toast.error(hayerror?.hayerror || "Ocurrió un error", {
-        duration: 5000,
-        position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
-      });
-    }
-  }, [correcto, problema, hayerror, valores]);
-
   // ESTADO DE CARGA DE LA TABLA 
   if(isLoading){
     return(
@@ -213,7 +201,7 @@ const UsersPlantilla = () => {
             <Tbody>
               {elementosActuales.length>0?(
                 elementosActuales.map((usuario)=>(
-                  <tr className="'hover:bg-slate-200" key={usuario.id_usuario}>
+                  <tr className="hover:bg-slate-200" key={usuario.id_usuario}>
                     <Td>{usuario.id_usuario}</Td>
                     <Td>{usuario.nombre}</Td>
                     <Td>{usuario.apellidos}</Td>
@@ -255,9 +243,9 @@ const UsersPlantilla = () => {
                     </div>
                     </Td>
                     <Td>
-                    <CustomSwitch
-                        isSelected={usuario.estado === 'activo'}
-                        onChange={(newState) => handleSwitchChange(usuario.id_usuario, newState)}
+                      <CustomSwitch
+                          setisSelected={usuario.estado === "activo"}
+                          onChange={() => handleSwitchChange(usuario.id_usuario, usuario.nombre)}
                       />
                       {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
                     </Td>

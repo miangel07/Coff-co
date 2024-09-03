@@ -58,12 +58,11 @@ export const usuariosSlice = createApi({
 
     actualizarEstado: build.mutation({
       query: (id) => ({
-        url: `/estado/${id}`,
+        url: `usuario/estado/${id}`,
         method: 'PUT',
       }),
       transformErrorResponse: (response, meta, arg) => {
         console.log("Respuesta completa de error:", response);
-        
         return {
           originalArg: arg,
           error: response?.data?.message || response?.statusText || "Error desconocido",
