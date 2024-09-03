@@ -17,7 +17,6 @@ import { Spinner } from '@nextui-org/react';
 dayjs.locale("es");
 
 function CalendarPlantilla() {
-    const [events, setEvents] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
     const { data, isLoading, isError, error } = useGetAlquilerQuery();
     const [postFormulario, { isSuccess, data: dataVariables, isError: variablesIsError, error: errorVariable }] = usePostFormularioMutation();
@@ -67,7 +66,7 @@ function CalendarPlantilla() {
 
 
         //data aca trae el evento que es la consula que ya trae esa info
-        setEvents([data, newEvent]);
+        setEvents([data]);
 
 
         closeModal();
@@ -117,49 +116,21 @@ function CalendarPlantilla() {
                 title="Registrar Evento"
                 logo={<CiCalendarDate />}
             >
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} className='flex gap-3 flex-col'>
                     {/* aca mete los valores estaticos del formulario ose los que no son variables */}
                     <div>
                     <InputAtomo
-                        type={items.servicio_nombre}
-                        placeholder={items.servicio_nombre}
-                        id={items.servicio_nombre}
-                        name={items.servicio_nombre}
+                        type={"text"}
+                        placeholder={" Ingrese el nombre del servicio"}
+                        id={"servicio_nombre"}
+                        name={"servicio_nombre"}
                         register={register}
                         erros={errors}
                     />
-                    <InputAtomo
-                        type={items.id_tipo_servicio}
-                        placeholder={items.id_tipo_servicio}
-                        id={items.id_tipo_servicio}
-                        name={items.id_tipo_servicio}
-                        register={register}
-                        erros={errors}
-                    />
-                    <InputAtomo
-                        type={items.id_precio}
-                        placeholder={items.id_precio}
-                        id={items.id_precio}
-                        name={items.id_precio}
-                        register={register}
-                        erros={errors}
-                    />
-                    <InputAtomo
-                        type={items.id_usuario}
-                        placeholder={items.id_usuario}
-                        id={items.id_usuario}
-                        name={items.id_usuario}
-                        register={register}
-                        erros={errors}
-                    />
-                    <InputAtomo
-                        type={items.id_ambiente}
-                        placeholder={items.id_ambiente}
-                        id={items.id_ambiente}
-                        name={items.id_ambiente}
-                        register={register}
-                        erros={errors}
-                    />
+                   {/* select tipo servicio */}
+                  {/* select de precios */}
+                   {/* select de usuarios */}
+                   {/* select de ambiente */}
                     </div>
                     {/* hasta aca */}
                     {isSuccess &&
