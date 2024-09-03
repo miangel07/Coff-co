@@ -2,30 +2,45 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import InputAtomo from '../../atoms/Input'
 import SelectAtomo from '../../atoms/Select'
-import { useCrearVariableMutation } from '../../../store/api/variables'
+import { useCrearVariableMutation, useEditarVariableMutation } from '../../../store/api/variables'
 import Mybutton from '../../atoms/Mybutton'
 import { toast } from "react-toastify";
 const VariablesFormulario = ({ closeModal, dataValue }) => {
     const [tipoDato, setTipoDato] = useState("")
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const [crearVariable, { isLoading, isError, error, data: dataResponse, isSuccess }] = useCrearVariableMutation()
+    const [editarVariable, { isLoading: isLoadingEdit, isError: isErrorEdit, error: errorEdit, data: dataResponseEdit, isSuccess: isSuccessEdit }] = useEditarVariableMutation()
+    console.log(dataValue.nombre)
+    const hadleEdit = async (data) => {
+        try {
+            if (data) {
+                await editarVariable({
+                    id: dataValue.idVariable,
+                    nombre: data.nombre,
+                    tipo_dato: tipoDato,
+                })
+            }
+        } catch (error) {
 
-    const hadleEdit = (data) => { }
+        }
+
+    }
     useEffect(() => {
         if (dataValue) {
-            setValue("nombre", dataValue.nombre)
+            reset({ nombre: dataValue.nombre })
             setTipoDato(dataValue.tipo_dato)
         } else {
             reset()
         }
 
-        if (isSuccess) {
-            toast.success(`${dataResponse?.menssage}`);
+        if (isSuccess || isSuccessEdit) {
+            toast.success(`${dataResponse?.menssage || dataResponseEdit?.menssage}`);
             closeModal()
         }
-    }, [dataValue, dataResponse, setValue, isSuccess]
+    }, [dataValue, dataResponse, setValue, isSuccess, isSuccessEdit]
 
     )
+    console.log(dataValue)
     const onsubmit = (data) => {
         console.log(data)
         try {
@@ -45,7 +60,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
         { value: "number", label: "Numeros" },
         { value: "data", label: "Fechas" },
     ];
-    if (isLoading) {
+    if (isLoading || isLoadingEdit) {
         return <div>Loading...</div>
     }
     return (

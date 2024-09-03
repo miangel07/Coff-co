@@ -17,12 +17,6 @@ export const VariablesApi = createApi({
                 url: "variables/listar",
                 method: "GET",
             }),
-            transformErrorResponse: (response, meta, arg) => {
-                return {
-                    originalArg: arg,
-                    error: response.data.message,
-                }
-            },
             providesTags: ['Variable']
         }),
         //crear variable
@@ -45,7 +39,7 @@ export const VariablesApi = createApi({
             query: (data) => ({
                 url: `variables/actualizar/${data.id}`,
                 method: "PUT",
-                body: datos,
+                body: data,
             }),
             transformErrorResponse: (response, meta, arg) => {
                 return {
@@ -53,6 +47,17 @@ export const VariablesApi = createApi({
                     error: response.data.message,
                 }
             },
+            invalidatesTags: ["Variable"],
+        }),
+        updateEstado: build.mutation({
+            query: (data) => ({
+                url: `variables/estado/${data.id}`,
+                method: "PUT",
+                body: data,
+            }),
+
+            invalidatesTags: ["Variable"],
+
         }),
         //eliminar variable
         eliminarVariable: build.mutation({
@@ -71,4 +76,4 @@ export const VariablesApi = createApi({
 
 })
 
-export const { useCrearVariableMutation, useEditarVariableMutation, useGetVariablesQuery, useEliminarVariableMutation } = VariablesApi
+export const { useCrearVariableMutation, useEditarVariableMutation, useGetVariablesQuery, useEliminarVariableMutation, useUpdateEstadoMutation } = VariablesApi
