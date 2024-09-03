@@ -11,7 +11,7 @@ const SelectAtomoActualizar = ({ data, label, onChange, items, ValueItem, value,
           placeholder={placeholder}
           value={"cc"} 
           className="w-full"
-          onChange={(e) => onChange(e.target.value)} 
+          onChange={onChange} 
         >
           {data.map((item) => (
             <SelectItem key={item[items]} value={item[items]}>
