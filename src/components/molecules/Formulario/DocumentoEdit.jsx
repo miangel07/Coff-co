@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+
 import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
@@ -9,12 +9,10 @@ import Label from '../../atoms/Label';
 import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
-import { useCrearDocumentoMutation } from '../../../store/api/documentos';
-import { useActualizarVersionMutation } from '../../../store/api/documentos';
+
 import { toast } from "react-toastify";
-
-
-const DocumentosFrom = ({ closeModal, valor }) => {
+import { useEffect, useState } from 'react';
+const DocumentoEdit = ({ valor, closeModal }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
@@ -23,24 +21,21 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const [servicio, setTipoServicio] = useState('')
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
-    const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento,
-        error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
-    const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
-        data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
-    useEffect(() => {
-        if (isSuccess) {
-            toast.success(`${dataResponse?.message}`);
-            closeModal()
-        }
-        if (isSuccessActualizarVersion) {
-            toast.success(`${dataResponseActualizarVersion?.message}`);
-            closeModal()
-        }
 
-    }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
+    /*  useEffect(() => {
+         if (isSuccess) {
+             toast.success(`${dataResponse?.message}`);
+             closeModal()
+         }
+         if (isSuccessActualizarVersion) {
+             toast.success(`${dataResponseActualizarVersion?.message}`);
+             closeModal()
+         }
+ 
+     }, [isSuccess, dataResponse, isSuccessActualizarVersion]); */
     useEffect(() => {
         if (valor) {
             reset({
@@ -51,8 +46,8 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 version: valor?.version,
             });
         }
-    }, [valor, reset ]);
-    
+    }, [valor, reset]);
+
 
 
 
@@ -94,48 +89,14 @@ const DocumentosFrom = ({ closeModal, valor }) => {
             console.log(error)
         }
     }
-    const hadleActualizar = async (data) => {
-        const DataForm = new FormData();
-        const idVersionProcessed = parseInt(valor.idversion);
-        console.log(idVersionProcessed)
 
-        DataForm.append('nombre', data.nombre);
-        DataForm.append('descripcion', data.descripcion);
-        DataForm.append('codigo', data.codigo_documentos);
-        DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('servicios', servicio);
-        DataForm.append('idVersion', idVersionProcessed);
-        DataForm.append('tipo_documento', dataInput);
-        DataForm.append('version', data.version);
-        DataForm.append('variables', JSON.stringify(ArryVariables));
-        DataForm.append('logos', JSON.stringify(logos));
-        DataForm.append('file', file);
-      
-
-        if (!logos || !file) {
-            toast.info('Todos los campos son obligatorios');
-            return;
-        }
-        try {
-            await actualizarVersion(
-                DataForm
-            );
-
-            reset()
-
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
-    if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto || loandActualizarVersion) {
+    if (isLoading || loandingLogos || TipoServicio || LoandVariables) {
         return <p>Loading...</p>;
     }
 
-    if (isError || tipoServicioError || isErrorDocumento || ErrorVariable || isErrorActualizarVersion) {
-        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
-            || ErrorActualizarVersion.message} </p>;
+    if (isError || tipoServicioError || ErrorVariable) {
+        return <p>Error: {error?.message || ErroTipo?.message || Error?.message
+        } </p>;
     }
 
 
@@ -144,10 +105,9 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
             <form
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
-                onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
             >
-               
-
+                
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
                         <Label>Nombre Del Documento</Label>
@@ -265,7 +225,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end  flex '>
-                    <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
+                    <Mybutton color={"primary"} type={'submit'} >Actualizar</Mybutton>
 
 
                 </div>
@@ -275,4 +235,4 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     );
 }
 
-export default DocumentosFrom
+export default DocumentoEdit

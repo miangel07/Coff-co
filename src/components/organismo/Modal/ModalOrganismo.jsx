@@ -9,16 +9,18 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
+import Logosímbolo from "../../atoms/Logosímbolo";
 
 
 const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
   return (
     <>
-      <Modal size={"4xl"} isOpen={visible} onClose={closeModal}>
-        <ModalContent >
+      <Modal size={"4xl"} isOpen={visible} onClose={closeModal} className=" max-h-full overflow-hidden ">
+        <ModalContent className=""  >
           {(onClose) => (
             <>
               <ModalHeader className="flex md:flex-row flex-col md:justify-between   flex-wrap   md:items-center gap-1">
+            <Logosímbolo/>
                 <div className=" md:pl-10   justify-center flex items-center">
                   {title}
                 </div>
@@ -26,8 +28,8 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
                   {logo}
                 </div>
               </ModalHeader>
-              <ModalBody >{children}</ModalBody>
-              <ModalFooter>
+              <ModalBody  >{children}</ModalBody>
+              <ModalFooter >
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cerrar
                 </Button>

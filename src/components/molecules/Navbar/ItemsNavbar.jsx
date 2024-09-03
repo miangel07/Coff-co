@@ -6,11 +6,14 @@ import { GoFileDirectoryFill, GoHomeFill } from "react-icons/go";
 import { GiCoffeeBeans } from "react-icons/gi";
 import { IoIosSettings } from "react-icons/io";
 import { BsHousesFill, BsFillFileBarGraphFill } from "react-icons/bs";
-import { FaCalendarAlt, FaUser } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+import { MdOutlineMiscellaneousServices } from "react-icons/md";
 import { TbReportMoney } from "react-icons/tb";
 import { ImExit } from "react-icons/im";
+import { IoIosApps } from "react-icons/io";
 import { BiSolidCoffeeBean } from "react-icons/bi";
-import { IoDocumentText } from "react-icons/io5"; // Asegúrate de usar el nombre correcto del icono
+import { IoDocumentText } from "react-icons/io5";
+import { link } from "@nextui-org/react";
 
 const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
@@ -33,82 +36,83 @@ const ItemsNavbar = ({ visiblite }) => {
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
-      icon: <GoHomeFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <GoHomeFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
-      icon: <GiCoffeeBeans className="w-5 h-5" />, // Tamaño ajustable
+      icon: <GiCoffeeBeans className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/servicios",
     },
     {
       label: `${visiblite ? "Documentos" : ""}`,
-      icon: <GoFileDirectoryFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <GoFileDirectoryFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/documentos",
     },
     {
       label: `${visiblite ? "Precios" : ""}`,
-      icon: <AiFillDollarCircle className="w-5 h-5" />, // Tamaño ajustable
+      icon: <AiFillDollarCircle className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/precios",
     },
     {
       label: `${visiblite ? "Ambientes" : ""}`,
-      icon: <BsHousesFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <BsHousesFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/ambientes",
     },
     {
       label: `${visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <IoDocumentText className="w-5 h-5" />, // Tamaño ajustable
+      icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Tipo de Servicios" : ""}`,
-      icon: <Icons img={"/maquina-de-cafe.png"}/>,
+      icon: <MdOutlineMiscellaneousServices className="w-5 h-5 xl:size-7 " />,
     },
     {
       label: `${visiblite ? "Muestras" : ""}`,
-      icon: <BiSolidCoffeeBean className="w-5 h-5" />, // Tamaño ajustable
+      icon: <BiSolidCoffeeBean className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Variables" : ""}`,
-      icon: <Icons img={"/variable.png"} />,
+      icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
+      link: "/varibles"
     },
     {
       label: `${visiblite ? "Configuraciones" : ""}`,
-      icon: <IoIosSettings className="w-5 h-5" />, // Tamaño ajustable
+      icon: <IoIosSettings className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       items: visiblite
         ? [
-            {
-              label: `${visiblite ? "Usuarios" : ""}`,
-              icon: "pi pi-users",
-              link: "/users",
-            },
-            {
-              label: `${visiblite ? "Ayuda" : ""}`,
-              icon: "pi-question-circle",
-            },
-            {
-              label: `${visiblite ? "Logos" : ""}`,
-              icon: "pi pi-image",
-            },
-          ]
+          {
+            label: `${visiblite ? "Usuarios" : ""}`,
+            icon: "pi pi-users",
+            link: "/users",
+          },
+          {
+            label: `${visiblite ? "Ayuda" : ""}`,
+            icon: "pi-question-circle",
+          },
+          {
+            label: `${visiblite ? "Logos" : ""}`,
+            icon: "pi pi-image",
+          },
+        ]
         : [],
     },
     {
       label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <FaCalendarAlt className="w-5 h-5" />, // Tamaño ajustable
+      icon: <FaCalendarAlt className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/alquiler",
     },
     {
       label: `${visiblite ? "Reportes" : ""}`,
-      icon: <BsFillFileBarGraphFill className="w-5 h-5" />, // Tamaño ajustable
+      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Facturas" : ""}`,
-      icon: <TbReportMoney className="w-5 h-5" />, // Tamaño ajustable
+      icon: <TbReportMoney className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit className="w-5 h-5" />, // Tamaño ajustable
+      icon: <ImExit className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
   ];
 
@@ -118,9 +122,8 @@ const ItemsNavbar = ({ visiblite }) => {
         {items.map((item, index) => (
           <div key={index}>
             <li
-              className={`flex items-center p-2 rounded-lg ${
-                location.pathname === item.link ? "bg-slate-400" : ""
-              }`}
+              className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-light-gray" : ""
+                }`}
               onClick={() => handleClick(index)}
             >
               <Link
@@ -138,9 +141,8 @@ const ItemsNavbar = ({ visiblite }) => {
                 {item.items?.map((subItem, subIndex) => (
                   <li
                     key={subIndex}
-                    className={`flex items-center p-3 mt-1 rounded-lg ${
-                      subItems === subIndex ? "bg-slate-400" : ""
-                    }`}
+                    className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-light-gray" : ""
+                      }`}
                     onClick={() => handleClickSubimitem(subIndex)}
                   >
                     <Link

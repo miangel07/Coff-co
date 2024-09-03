@@ -11,13 +11,17 @@ import AmbientesPlantilla from "./components/plantillas/ambientes/AmbientesPlant
 // import DashBoardPage from "./pages/dashBoardPage/DashBoardPage";
 import PreciosPage from "./pages/precios/PreciosPage";
 import UsersPages from "./pages/users/UsersPages";
+<<<<<<< HEAD
 import ServicioPage from "./pages/servicios/ServicioPage";
+=======
+import VariablePages from "./pages/variable/VariablePages";
+>>>>>>> master
 
 const App = () => {
   return (
     <>
       <ToastContainer
-        position="top-center"
+        position="top-right"
         autoClose={1000}
         hideProgressBar={false}
         closeOnClick
@@ -35,7 +39,12 @@ const App = () => {
         <Route path="/documentos" element={<DocumentosPage />}></Route>
         <Route path="/ambientes" element={<AmbientesPage />}></Route>
         <Route path="/precios" element={<PreciosPage/>}></Route>
+<<<<<<< HEAD
         <Route path="/servicios" element={<ServicioPage/>}></Route>
+=======
+        <Route path="/varibles" element={<VariablePages/>}></Route>
+
+>>>>>>> master
       </Routes>
     </>
   );

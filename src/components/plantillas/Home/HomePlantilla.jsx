@@ -1,62 +1,39 @@
 import React, { useState } from "react";
 import Carousel from "../../organismo/carousel/Carousel";
+import Card from "../../molecules/cards/Cards";
 
 const HomePlantilla = () => {
   return (
     <>
-      <div className="flex flex-row gap-3 h-full">
-        <div className="flex-1 bg-gray-200 p-4">
+      {/* contenedor padre */}
+      <div className="flex flex-row gap-3 bg-gray-100 h-full overflow-auto pr-4">
+        {/* contenedor 1 del carousel */}
+        <div className="flex-1 bg-gray-100 p-4">
           <Carousel />
         </div>
-        <div className="flex-1 bg-gray-300 space-y-11 justify-center items-center p-4">
-          <div className="collapse collapse-arrow bg-base-200">
-            <input type="radio" name="my-accordion-2" defaultChecked />
-            <div className="collapse-title text-xl font-medium">
-              Click to open this one and close others
-            </div>
-            <div className="collapse-content">
-              <p>hello</p>
-            </div>
-          </div>
-          <div className="collapse collapse-arrow bg-base-200">
-            <input type="radio" name="my-accordion-2" />
-            <div className="collapse-title text-xl font-medium">
-              Click to open this one and close others
-            </div>
-            <div className="collapse-content">
-              <p>hello</p>
-            </div>
-          </div>
-          <div className="collapse collapse-arrow bg-base-200">
-            <input type="radio" name="my-accordion-2" />
-            <div className="collapse-title text-xl font-medium">
-              Click to open this one and close others
-            </div>
-            <div className="collapse-content">
-              <p>hello</p>
-            </div>
-          </div>
+        {/* contenedor 2 */}
+        <div className="flex flex-1 items-center justify-center bg-gray-100">
+          <Card
+            imageSrc="/imagenes/gestionDocumental.jpg"
+            altText="Woman listening to music"
+            footerText="Gestion Documental"
+            buttonText="Ingresar"
+            imageClass="object-contain mx-auto"
+          />
         </div>
-        <div className="flex-1 bg-gray-400 p-4"></div>
+        {/* contenedor 3 */}
+        <div className="flex flex-1 items-center justify-center bg-gray-100">
+          <Card
+            imageSrc="/imagenes/escuela_nacional_del_cafe.png"
+            altText="Woman listening to music"
+            footerText="Servicios"
+            buttonText="Ingresar"
+            imageClass="object-contain mx-auto"
+          />
+        </div>
       </div>
     </>
   );
 };
 
 export default HomePlantilla;
-
-{
-  /* <>
-  <div className="bg-green-300 flex flex-col h-screen">
-    <div className="flex-1 p-4 overflow-auto">
-      <Carousel />
-    </div>
-    <div className="flex-1 flex items-center justify-center">
-      <h1>Contenedor 2</h1>
-    </div>
-    <div className="flex-1 flex items-center justify-center">
-      <h1>Contenedor 3</h1>
-    </div>
-  </div>
-</> */
-}

@@ -13,7 +13,7 @@ const DocumentosPage = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-x-hidden">
+      <div className="h-screen flex flex-col overflow-x-hidden ">
         <Header contenido={"Coffco"} />
         <div className="flex flex-grow">
           <div
@@ -23,7 +23,7 @@ const DocumentosPage = () => {
           >
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
-          <div className="w-full overflow-auto">
+          <div className="w-full  bg-gray-100">
             <Documentos/>
           </div>
         </div>
