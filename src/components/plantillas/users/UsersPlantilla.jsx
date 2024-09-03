@@ -42,9 +42,9 @@ const UsersPlantilla = () => {
     // Función para obtener los roles desde el backend
     const fetchRoles = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/rol/listar'); // Ajusta la URL según tu backend
+        const response = await fetch('http://localhost:3000/api/rol/listar'); 
         const data = await response.json();
-        setRoles(data); // Almacena los roles en el estado
+        setRoles(data);
       } catch (error) {
         console.error('Error al obtener los roles:', error);
       }
@@ -69,6 +69,11 @@ const UsersPlantilla = () => {
     setUsuarioSeleccionado(usuario);
     setOpenModalActualizar(true);
   };
+
+  useEffect(() => {
+    console.log("Usuario seleccionado en modal:", usuarioSeleccionado);
+    console.log("Valor actual de tipo_documento:", usuarioSeleccionado?.tipo_documento);
+  }, [usuarioSeleccionado]);
   
   const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
 
@@ -131,6 +136,7 @@ const UsersPlantilla = () => {
         icon: <FcOk />,
       });
     }
+    
 
     if (problema) {
       console.log(hayerror);
@@ -144,7 +150,6 @@ const UsersPlantilla = () => {
       });
     }
   }, [correcto, problema, hayerror, valores]);
-
 
   // ESTADO DE CARGA DE LA TABLA 
   if(isLoading){
@@ -166,13 +171,12 @@ const UsersPlantilla = () => {
   ];
 
   const documentoOptions = [
-    { value: "cc", label: "C.C" },
-    { value: "ti", label: "T.I" },
-    { value: "nit", label: "N.I.T" },
-    { value: "pasaporte", label: "Pasaporte" },
+    { value: "cc", label: "cc" },
+    { value: "ti", label: "ti" },
+    { value: "nit", label: "nit" },
+    { value: "pasaporte", label: "pasaporte" },
   ];
   
-
   return (
     <>
       <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
@@ -380,7 +384,8 @@ const UsersPlantilla = () => {
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
-              <InputAtomoActualizar
+
+              {/* <InputAtomoActualizar
                 register={register}
                 name={"password"}
                 errores={errors}
@@ -388,7 +393,7 @@ const UsersPlantilla = () => {
                 placeholder={"Ingrese la contraseña del usuario"}
                 type={"password"}
                 defaultValue={usuarioSeleccionado?.password || ""}
-              />
+              /> */}
 
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
@@ -407,19 +412,29 @@ const UsersPlantilla = () => {
                 items={"value"}
                 ValueItem={"label"}
                 placeholder={usuarioSeleccionado?.estado}
-                value={'inactivo'}
+                value={usuarioSeleccionado?.estado || ""}
               />
 
               <SelectAtomoActualizar
-                data={documentoOptions}
-                label={"Tipo Documento"}
-                onChange={(e) => setValue("tipo_documento", e.target.value)}
-                items={"value"}
-                ValueItem={"label"}
-                placeholder={usuarioSeleccionado?.tipo_documento}
-                value={usuarioSeleccionado?.tipo_documento || ""}
-              />
+              data={documentoOptions}
+              label={"Tipo Documento"}
+              onChange={(e) => setValue("tipo_documento", e.target.value)} 
+              items={"value"}
+              ValueItem={"label"}
+              placeholder={usuarioSeleccionado?.tipo_documento} 
+              value={usuarioSeleccionado?.tipo_documento || ""} />
 
+              {/* <SelectAtomoActualizar
+              data={documentoOptions}
+              label={"Tipo Documento"}
+              onChange={(e) => setValue("tipo_documento", e.target.value)} 
+              items={"value"}
+              ValueItem={"label"}
+              placeholder={usuarioSeleccionado?.tipo_documento} 
+              value={usuarioSeleccionado?.tipo_documento || ""} >
+                {(usuarioSeleccionado) => <SelectItem>{usuarioSeleccionado.tipo_documento}</SelectItem>}
+              </SelectAtomoActualizar> */}
+                
               <InputAtomoActualizar
                 register={register}
                 name={"numero_documento"}

@@ -16,7 +16,7 @@ export const usuariosSlice = createApi({
     //LISTAR
   getUsuario: build.query({
     query:()=>({
-      url:'http://localhost:3000/api/usuario/listar',
+      url:'/usuario/listar',
       method:'GET',
     }),
     providesTags:['usuarios']
@@ -25,7 +25,7 @@ export const usuariosSlice = createApi({
     //REGISTRAR
   registrarUsuario: build.mutation({
     query:(data)=>({
-      url:'http://localhost:3000/api/usuario/registrar',
+      url:'/usuario/registrar',
       method:'POST',
       body:data,
     }),
@@ -41,7 +41,7 @@ export const usuariosSlice = createApi({
     //ACTUALIZAR
     actualizarUsuario: build.mutation({
       query: ({ data, id }) => ({
-        url: `http://localhost:3000/api/usuario/actualizar/${id}`,
+        url: `/usuario/actualizar/${id}`,
         method: 'PUT',
         body: data,
       }),
@@ -59,7 +59,7 @@ export const usuariosSlice = createApi({
     //ELIMINAR
   eliminarUsuario:build.mutation({
     query:(id)=>({
-      url:`http://localhost:3000/api/usuario/eliminar/${id}`,
+      url:`/usuario/eliminar/${id}`,
       method:'DELETE',
     }),
     transformErrorResponse:(response,meta,arg)=>{
