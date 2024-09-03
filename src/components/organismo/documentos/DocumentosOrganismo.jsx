@@ -145,7 +145,7 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full   flex flex-col gap-3 items-center">
+    <section className="w-full  flex flex-col gap-3 ">
       <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
 
         <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
@@ -197,7 +197,7 @@ const DocumentosOrganismo = () => {
           <Filtro />
         </div>
       </div>
-      <div className="  w-full justify-center flex overflow-x-auto ">
+      <div className=" overflow-auto   ">
         <TableMolecula>
           <Thead>
             <Th>Id</Th>
