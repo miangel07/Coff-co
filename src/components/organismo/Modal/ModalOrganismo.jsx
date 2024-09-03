@@ -9,6 +9,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
+import Logosímbolo from "../../atoms/Logosímbolo";
 
 
 const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
@@ -19,6 +20,7 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
           {(onClose) => (
             <>
               <ModalHeader className="flex md:flex-row flex-col md:justify-between   flex-wrap   md:items-center gap-1">
+            <Logosímbolo/>
                 <div className=" md:pl-10   justify-center flex items-center">
                   {title}
                 </div>
