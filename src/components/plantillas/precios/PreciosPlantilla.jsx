@@ -236,7 +236,7 @@ const PreciosPlantilla = () => {
               ))
             ):(
               <tr>
-                <td colSpan={5} className='text-center'>
+                <td colSpan={6} className='text-center'>
                   <h1 className='text-2xl'><b>No hay datos</b></h1>
                 </td>
               </tr>
