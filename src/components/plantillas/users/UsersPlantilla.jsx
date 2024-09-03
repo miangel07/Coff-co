@@ -437,7 +437,7 @@ const UsersPlantilla = () => {
                 value={usuarioSeleccionado?.fk_idRol || ""}
               />
 
-              <SelectAtomoActualizar
+              {/* <SelectAtomo
                 data={estadoOptions}
                 label={"Estado"}
                 onChange={(e) => setValue("estado", e.target.value)}
@@ -445,9 +445,9 @@ const UsersPlantilla = () => {
                 ValueItem={"label"}
                 placeholder={usuarioSeleccionado?.estado}
                 value={usuarioSeleccionado?.estado || ""}
-              />
+              /> */}
 
-              <SelectAtomoActualizar
+              <SelectAtomo
               data={documentoOptions}
               label={"Tipo Documento"}
               onChange={(e) => setValue("tipo_documento", e.target.value)} 
