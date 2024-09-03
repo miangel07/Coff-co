@@ -429,17 +429,19 @@ const UsersPlantilla = () => {
 
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
-                label="Rol"
+                label={"Rol"}
+                items={"value"}
                 onChange={(e) => setValue("rol", e.target.value)}
                 placeholder={usuarioSeleccionado?.rol}
                 value={usuarioSeleccionado?.fk_idRol || ""}
               />
 
               <SelectAtomoActualizar
-                data={documentoOptions.map(doc => ({ value: doc.value, label: doc.label }))}
-                label="Tipo Documento"
-                onChange={(e) => setValue("tipo_documento", e.target.value)}
+                data={documentoOptions}
+                label={"Tipo Documento"}
+                items={"label"}
                 placeholder={usuarioSeleccionado?.tipo_documento}
+                onChange={(e) => setValue("tipo_documento", e.target.value)}
                 value={usuarioSeleccionado?.tipo_documento || ""}
               />
 
