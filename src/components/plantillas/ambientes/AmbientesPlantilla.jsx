@@ -1,168 +1,198 @@
-import React, { useState } from 'react';
-import Mybutton from '../../atoms/Mybutton';
-import TableMolecula from '../../molecules/table/TableMolecula';
-import Thead from '../../molecules/table/Thead';
-import Th from '../../atoms/Th';
-import Tbody from '../../molecules/table/Tbody';
-import Td from '../../atoms/Td';
-import { FaRegEdit } from 'react-icons/fa';
-import { useActualizarAmbienteMutation, useCrearAmbienteMutation, useEliminarAmbienteMutation, useGetAmbientesQuery } from '../../../store/api/ambientes/ambientesSlice';
-import { MdDelete } from 'react-icons/md';
-import ModalOrganismo from '../../organismo/Modal/ModalOrganismo';
-import Navbar from '../../molecules/Navbar/Navbar';
-import { Button, Spinner } from '@nextui-org/react';
+import React, { useState } from "react";
+import Mybutton from "../../atoms/Mybutton";
+import TableMolecula from "../../molecules/table/TableMolecula";
+import Thead from "../../molecules/table/Thead";
+import Th from "../../atoms/Th";
+import Tbody from "../../molecules/table/Tbody";
+import Td from "../../atoms/Td";
+import { FaRegEdit } from "react-icons/fa";
+import {
+  useActualizarAmbienteMutation,
+  useCrearAmbienteMutation,
+  useEliminarAmbienteMutation,
+  useGetAmbientesQuery,
+} from "../../../store/api/ambientes/ambientesSlice";
+import { MdDelete } from "react-icons/md";
+import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
+import { Spinner, Switch } from "@nextui-org/react";
 import { toast } from "react-toastify";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
-
-
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
+import { useForm } from "react-hook-form";
+import ToolTip from "../../molecules/toolTip/ToolTip";
 
 const AmbientesPlantilla = () => {
-
-  // Estado para la página actual y número de ítems por página__________________________________________________
+  // Estados que manejan la paginación de la tabla
   const [paginaActual, setPaginaActual] = useState(1);
-  const [itemsPorPagina] = useState(2);
-  //_____________________________________________________________________________________________________________
+  const itemsPorPagina = 4;
 
-  //Constantes para el manejo de métodos provenientes del slice de Redux._______________________________________
-  const { data, isLoading, isError, error } = useGetAmbientesQuery();
-  const [eliminarAmbiente] = useEliminarAmbienteMutation();
+  // Estados que manejan los slices para el CRUD de ambientes
+  const { data, isLoading, refetch } = useGetAmbientesQuery();
   const [crearAmbiente] = useCrearAmbienteMutation();
   const [actualizarAmbiente] = useActualizarAmbienteMutation();
-  //____________________________________________________________________________________________________________
+  const [eliminarAmbiente] = useEliminarAmbienteMutation();
 
-  //constantes para el manejo del modal, actualizacion y registro de ambientes__________________________________
+  // Estado que maneja la apertura del modal
   const [visible, setVisible] = useState(false);
+
+  // Estado que maneja el ambiente seleccionado
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState(null);
-  const [DatosDelFormulario, setDatosDelFormulario] = useState({ nombre_ambiente: '', estado: 'inactivo' });
-  //____________________________________________________________________________________________________________
 
-  //funcion que permite la eliminacion de un ambiente___________________________________________________________
-  // const handleEliminarAmbiente = async (id) => {
-  //   if (confirm('Estás seguro de que quieres eliminar este ambiente?')) {
-  //     try {
-  //       await eliminarAmbiente(id).unwrap();
-  //       // alert('Ambiente eliminado con éxito');
-  //     } catch (error) {
-  //       console.error('Error al eliminar el ambiente', error);
-  //       alert('Error al eliminar el ambiente');
-  //     }
-  //   }
-  // };
-  const handleEliminarAmbiente = (id) => {
-    confirmAlert({
-      title: 'Confirmación de eliminación',
-      message: '¿Estás seguro de que quieres eliminar este ambiente?',
-      buttons: [
-        {
-          label: 'Sí',
-          onClick: async () => {
-            try {
-              await eliminarAmbiente(id).unwrap();
-              // toast.success('Ambiente eliminado con éxito');
+  // Hook de formulario de react-hook-form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-            } catch (error) {
-              console.error('Error al eliminar el ambiente', error);
-              toast.error('Error al eliminar el ambiente');
-            }
-          }
-        },
-        {
-          label: 'No',
-          onClick: () => toast.info('Eliminación cancelada')
-        }
-      ],
-      closeOnClickOutside: true,
-    });
-  };
+  // Manejo del estado cargado
+  if (isLoading) {
+    return (
+      <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
+    );
+  }
 
-
-
-  //_______________________________________________________________________________________
-
-  // funcion que permite la apertura del modal y controla si hay un ambiente seleccionado
-  //para actualizar o es un nuevo ambiente a registrar_______________________________________
+  // Función que controla la apertura del modal
   const abrirModal = (ambiente) => {
     if (ambiente) {
       setAmbienteSeleccionado(ambiente);
-      setDatosDelFormulario({
+      reset({
         nombre_ambiente: ambiente.nombre_ambiente,
-        estado: ambiente.estado
+        estado: ambiente.estado,
       });
     } else {
       setAmbienteSeleccionado(null);
-      setDatosDelFormulario({
-        nombre_ambiente: '',
-        estado: 'inactivo'
+      reset({
+        nombre_ambiente: "",
+        estado: "activo",
       });
     }
     setVisible(true);
   };
 
-  //__________________________________________________________________________________________
+  // Función que cierra el modal
+  const cerrarModal = () => {
+    setVisible(false);
+    reset();
+  };
 
-  //funcion que cierra el modal______________________________________________________________
-  const cerrarModal = () => setVisible(false);
-  //_________________________________________________________________________________________
-
-  // funcion que permite agregar y actualizar un ambiente___________________________________
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Función que maneja el envío del formulario
+  const onSubmit = async (datos) => {
     try {
-      const payload = { nombre_ambiente: DatosDelFormulario.nombre_ambiente, estado: DatosDelFormulario.estado };
+      const payload = {
+        nombre_ambiente: datos.nombre_ambiente,
+        estado: "activo",
+      };
 
       if (ambienteSeleccionado) {
-        await actualizarAmbiente({ id: ambienteSeleccionado.idAmbiente, ...payload }).unwrap();
-        // alert('Ambiente actualizado con éxito');
+        await actualizarAmbiente({
+          id: ambienteSeleccionado.idAmbiente,
+          ...payload,
+        }).unwrap();
+        toast.success("Ambiente actualizado con éxito");
       } else {
         await crearAmbiente(payload).unwrap();
-        // alert('Ambiente registrado con éxito');
+        toast.success("Ambiente registrado con éxito");
       }
+
       cerrarModal();
+      refetch();
     } catch (error) {
-      console.error('Error al procesar la solicitud', error);
-      alert('Error al procesar la solicitud');
+      console.error("Error al procesar la solicitud", error);
+      toast.error("Error al procesar la solicitud");
     }
   };
 
-  if (isLoading) {
-    return (
-      <Spinner className='flex justify-center items-center h-screen bg-gray-100' />
-    );
-  }
+  // Maneja los cambios de estado desde el switch
+  const handleSwitchChange = (checked, id) => {
+    const nuevoEstado = checked ? "activo" : "inactivo";
+    const ambienteActual = data.find((ambiente) => ambiente.idAmbiente === id);
 
-  if (isError) {
-    toast.error('Error')
-    return (
-      <div className='flex justify-center items-center h-screen bg-gray-100'>
-        <p><b>ha ocurrido un error </b></p>
-      </div>
-    )
-  }
+    if (!ambienteActual) {
+      toast.error("Ambiente no encontrado");
+      return;
+    }
 
+    const payload = {
+      id: id,
+      nombre_ambiente: ambienteActual.nombre_ambiente,
+      estado: nuevoEstado,
+    };
 
-  // Calcular el número total de páginas basado en el número total de ítems
-  const totalPages = Math.ceil(data.length / itemsPorPagina);
+    actualizarAmbiente(payload)
+      .unwrap()
+      .then(() => {
+        toast.success("Estado del ambiente actualizado con éxito");
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el estado del ambiente", error);
+        toast.error("Error al actualizar el estado del ambiente");
+      });
+  };
 
-  // Obtener los ítems para la página actual
-  const datosPaginados = data.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
+  // Función para eliminar ambientes
+  const handleEliminarAmbiente = (id, nombre_ambiente) => {
+    confirmAlert({
+      title: (
+        <div>
+          <span>
+            <b>Confirmación de eliminación</b>
+          </span>
+        </div>
+      ),
+      message: (
+        <div>
+          ¿Estás seguro de que quieres eliminar el ambiente
+          <span style={{ color: "red", fontWeight: "bold" }}>
+            {" "}
+            {nombre_ambiente}
+          </span>
+          ?
+        </div>
+      ),
+      buttons: [
+        {
+          label: "Sí",
+          onClick: async () => {
+            try {
+              await eliminarAmbiente(id).unwrap();
+              toast.success("Ambiente eliminado con éxito");
+              refetch();
+            } catch (error) {
+              console.error("Error al eliminar el ambiente", error);
+              toast.error("Error al eliminar el ambiente");
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => toast.info("Eliminación cancelada"),
+        },
+      ],
+      closeOnClickOutside: true,
+    });
+  };
 
-
-
-
+  // Configuración para la paginación
+  const indiceUltimoItem = paginaActual * itemsPorPagina;
+  const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
+  const currentItems = data
+    ? data.slice(indicePrimerItem, indiceUltimoItem)
+    : [];
+  const totalPages = Math.ceil((data?.length || 0) / itemsPorPagina);
 
   return (
     <>
-      <div className='w-full h-screen flex flex-col gap-8'>
-        <div>
-          {/* <Navbar/> */}
-        </div>
-        <div className='pt-10 pl-20'>
-          <Mybutton color={'primary'} onClick={() => abrirModal(null)}>
-            Nuevo
+      <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
+        <div className="pt-10 pl-20">
+          <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
+            <b>Nuevo Ambiente</b>
           </Mybutton>
         </div>
-        <div className='w-full px-20'>
+        <div className="w-full px-20 h-auto overflow-y-auto">
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
@@ -171,74 +201,115 @@ const AmbientesPlantilla = () => {
               <Th>Acciones</Th>
             </Thead>
             <Tbody>
-              {data?.map((ambiente) => (
-                <tr className='hover:bg-slate-200' key={ambiente.idAmbiente}>
-                  <Td>{ambiente.idAmbiente}</Td>
-                  <Td>{ambiente.nombre_ambiente}</Td>
-                  <Td>{ambiente.estado}</Td>
-                  <Td>
-                    <div className='flex flex-row gap-6'>
-                      <MdDelete
-                        size={'35px'}
-                        onClick={() => handleEliminarAmbiente(ambiente.idAmbiente)}
-                        className='cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 '
-                      />
-                      <FaRegEdit
-                        size={"30px"}
-                        onClick={() => abrirModal(ambiente)}
-                        className='cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 '
-                      />
-                    </div>
-                  </Td>
+              {currentItems.length > 0 ? (
+                currentItems.map((ambiente) => (
+                  <tr className="hover:bg-slate-200" key={ambiente.idAmbiente}>
+                    <Td>{ambiente.idAmbiente}</Td>
+                    <Td>{ambiente.nombre_ambiente}</Td>
+                    <Td>
+                      <Switch
+                        color={
+                          ambiente.estado === "activo" ? "success" : "default"
+                        }
+                        isSelected={ambiente.estado === "activo"}
+                        onValueChange={(checked) =>
+                          handleSwitchChange(checked, ambiente.idAmbiente)
+                        }
+                      >
+                        {ambiente.estado}
+                      </Switch>
+                    </Td>
+                    <Td>
+                      <div className="flex flex-row gap-6">
+                        <ToolTip
+                          content="Eliminar"
+                          placement="left"
+                          icon={() => (
+                            <MdDelete
+                              size={"35px"}
+                              onClick={() =>
+                                handleEliminarAmbiente(
+                                  ambiente.idAmbiente,
+                                  ambiente.nombre_ambiente
+                                )
+                              }
+                              className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300"
+                            />
+                          )}
+                        />
+                        <ToolTip
+                          content="Actualizar"
+                          placement="right"
+                          icon={() => (
+                            <FaRegEdit
+                              size={"35px"}
+                              onClick={() => abrirModal(ambiente)}
+                              className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300"
+                            />
+                          )}
+                        />
+                      </div>
+                    </Td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="text-center">
+                    <h1 className="text-2xl">
+                      <b>No hay datos</b>
+                    </h1>
+                  </td>
                 </tr>
-              ))}
+              )}
             </Tbody>
           </TableMolecula>
         </div>
-      </div>
 
-      <div className='flex '>
+        <div className="flex justify-center mt-4">
+          <PaginationMolecula
+            total={totalPages}
+            initialPage={paginaActual}
+            onChange={(pagina) => setPaginaActual(pagina)}
+          />
+        </div>
+      </div>
+      <div className="flex">
         <ModalOrganismo
           visible={visible}
           closeModal={cerrarModal}
-          title={ambienteSeleccionado ? 'Actualizar ambiente' : 'Nuevo ambiente'}
-          onSubmit={handleSubmit}
+          // title={ambienteSeleccionado ? "Actualizar ambiente" : "Nuevo ambiente"}
+          onSubmit={handleSubmit(onSubmit)}
         >
-          <form onSubmit={handleSubmit}>
-            <div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col items-center"
+          >
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              {ambienteSeleccionado ? "Actualizar ambiente" : "Nuevo ambiente"}
+            </h2>
+            <div className="w-full max-w-xs">
               <input
                 type="text"
-                value={DatosDelFormulario.nombre_ambiente || ''}
-                onChange={(e) => setDatosDelFormulario({ ...DatosDelFormulario, nombre_ambiente: e.target.value })}
-                placeholder='Nombre del ambiente'
-                className="p-2 border border-gray-300 rounded"
+                {...register("nombre_ambiente", { required: true })}
+                placeholder="Nombre del ambiente"
+                className="p-2 border border-gray-300 rounded w-full"
               />
-
-              {ambienteSeleccionado && (
-                <div className="mt-4">
-                  <label className="mr-2">Estado:</label>
-                  <input
-                    className='cursor-pointer'
-                    type="checkbox"
-                    checked={DatosDelFormulario.estado === 'activo'}
-                    onChange={(e) =>
-                      setDatosDelFormulario({
-                        ...DatosDelFormulario,
-                        estado: e.target.checked ? 'activo' : 'inactivo',
-                      })
-                    }
-                  />
-                  <span className="ml-2">
-                    {DatosDelFormulario.estado === 'activo' ? 'activo' : 'inactivo'}
-                  </span>
-                </div>
+              {errors.nombre_ambiente && (
+                <p className="text-red-500 mt-2 text-center">
+                  <b>El nombre del ambiente es requerido</b>
+                </p>
               )}
+            </div>
+            <div className="flex justify-center mt-6">
+              <Mybutton type="submit" color="primary">
+                {ambienteSeleccionado ? "Actualizar" : "Registrar"}
+              </Mybutton>
             </div>
           </form>
         </ModalOrganismo>
       </div>
     </>
   );
-}
+};
 
 export default AmbientesPlantilla;

@@ -2,36 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox } from "@nextui-org/react";
 import PaginationMolecula from '../molecules/pagination/PaginationMolecula';
 
-const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
+const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value }) => {
     const [pages, setPages] = useState(1);
     const [dataArray, setDataArray] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // esto es para manejar el array que la peginacion 
-    const final = pages * cantidad;
-    const inicial = final - cantidad;
 
-    // Filtra los datos que se le pasan al componente y crea un nuevo array con los elementos que coinciden con la búsqueda.
-    const filteredData = data.filter(item =>
- 
-        item[items].toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    // calcula en numero de paginas que segun la cantidad de datos que se le pasa al componete 
-    const numeroPagina = Math.ceil(filteredData.length / cantidad);
-    const DataArrayPaginacion = filteredData.slice(inicial, final);
-    //cambia el numero de la pagina 
-    const handlePageChange = (page) => {
-        setPages(page);
-    };
-    //
-    // Maneja el cambio en el estado del checkbox. Agrega o elimina el valor del checkbox del array de datos seleccionados basado en si el checkbox está seleccionado o no.
+    useEffect(() => {
+        // Convierte 'value' en una lista de nombres separados por comas
+        const namesArray = value ? String(value).split(',').map(name => name.trim()) : [];
+
+        // Busca los valores correspondientes en los datos
+        if (data && namesArray.length > 0) {
+            const selectedValues = data
+                .filter(d => namesArray.includes(d[items]))
+                .map(d => d[valor]);
+
+            setDataArray(selectedValues);
+        }
+    }, [data, value, items, valor]);
+
+    // Maneja el cambio en el estado del checkbox
     const handleCheckbox = (value, isSelected) => {
-        // Actualiza el estado 'dataArray' basado en si el checkbox está seleccionado o no.
         setDataArray((prevDataArray) =>
-            // Si el checkbox está seleccionado ('isSelected' es true), agrega el valor al array de datos seleccionados.
             isSelected
-                ? [...prevDataArray, value] // Crea una copia del array previo y agrega el nuevo valor.
-                : prevDataArray.filter((v) => v !== value) // Si no está seleccionado, filtra el array previo eliminando el valor.
+                ? [...prevDataArray, value]
+                : prevDataArray.filter((v) => v !== value)
         );
     };
 
@@ -40,6 +36,24 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
             onDataChange(dataArray);
         }
     }, [dataArray, onDataChange]);
+
+    // Esto es para manejar el array que la paginación
+    const final = pages * cantidad;
+    const inicial = final - cantidad;
+
+    // Filtra los datos que se le pasan al componente y crea un nuevo array con los elementos que coinciden con la búsqueda.
+    const filteredData = data?.filter(item =>
+        item[items].toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Calcula el número de páginas que según la cantidad de datos que se le pasa al componente
+    const numeroPagina = Math.ceil(filteredData?.length / cantidad);
+    const DataArrayPaginacion = filteredData.slice(inicial, final);
+
+    // Cambia el número de la página
+    const handlePageChange = (page) => {
+        setPages(page);
+    };
 
     return (
         <div className='min-w-full '>
@@ -54,11 +68,11 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad }) => {
                 <div key={index}>
                     <Checkbox
                         size="md"
-                        //maneja la selecion del input
+                        // Maneja la selección del input
                         isSelected={dataArray.includes(item[valor])}
-                        //maneja el evento del click del checkbox y llama a la funcion handleCheckbox con el valor y el estado del checkbox seleccionado
+                        // Maneja el evento del click del checkbox y llama a la función handleCheckbox con el valor y el estado del checkbox seleccionado
                         onValueChange={(isSelected) => handleCheckbox(item[valor], isSelected)}
-                        value={item[valor]}
+                        value={item[valor] || []}
                         name={item[items]}
                     >
                         {item[items]}

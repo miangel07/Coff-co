@@ -1,33 +1,34 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
-import { GoFileDirectoryFill } from "react-icons/go";
+import { GoFileDirectoryFill, GoHomeFill } from "react-icons/go";
 import { GiCoffeeBeans } from "react-icons/gi";
 import { IoIosSettings } from "react-icons/io";
-import { BsHousesFill } from "react-icons/bs";
-import { GoHomeFill } from "react-icons/go";
-import { IoDocument } from "react-icons/io5";
+import { BsHousesFill, BsFillFileBarGraphFill } from "react-icons/bs";
 import { FaCalendarAlt } from "react-icons/fa";
-import { BsFillFileBarGraphFill } from "react-icons/bs";
+import { MdOutlineMiscellaneousServices } from "react-icons/md";
 import { TbReportMoney } from "react-icons/tb";
 import { ImExit } from "react-icons/im";
+import { IoIosApps } from "react-icons/io";
 import { BiSolidCoffeeBean } from "react-icons/bi";
-const ItemsNavbar = ({ visiblite }) => {
+import { IoDocumentText } from "react-icons/io5";
+import { link } from "@nextui-org/react";
 
+const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
   const [subItems, setSubitems] = useState(-1);
   const [subMenuVisible, setSubMenuVisible] = useState(false);
 
   const handleClick = (index) => {
     setItemsUser(index);
-    console.log(index);
-    if (index == 9 && items[index].label === "Configuraciones") {
+    if (index === 9 && items[index].label === "Configuraciones") {
       setSubMenuVisible(!subMenuVisible);
     } else {
       setSubMenuVisible(false);
     }
   };
+
   const handleClickSubimitem = (subIndex) => {
     setSubitems(subIndex);
   };
@@ -35,52 +36,55 @@ const ItemsNavbar = ({ visiblite }) => {
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
-      icon: <GoHomeFill size={"28px"} />,
+      icon: <GoHomeFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      link: "/home",
     },
     {
       label: `${visiblite ? "Servicios" : ""}`,
-      icon: <GiCoffeeBeans size={"28px"} />,
+      icon: <GiCoffeeBeans className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/servicios",
     },
     {
       label: `${visiblite ? "Documentos" : ""}`,
-      icon: <GoFileDirectoryFill size={"28px"} />,
+      icon: <GoFileDirectoryFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/documentos",
     },
     {
       label: `${visiblite ? "Precios" : ""}`,
-      icon: <AiFillDollarCircle size={"28px"} />,
-      link: '/precios'
+      icon: <AiFillDollarCircle className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      link: "/precios",
     },
     {
       label: `${visiblite ? "Ambientes" : ""}`,
-      icon: <BsHousesFill size={"28px"} />,
-      link: '/ambientes'
+      icon: <BsHousesFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      link: "/ambientes",
     },
     {
       label: `${visiblite ? "Tipo de Documentos" : ""}`,
-      icon: <IoDocument size={"28px"} />,
+      icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Tipo de Servicios" : ""}`,
-      icon: <Icons img={"/maquina-de-cafe.png"} />,
+      icon: <MdOutlineMiscellaneousServices className="w-5 h-5 xl:size-7 " />,
     },
     {
       label: `${visiblite ? "Muestras" : ""}`,
-      icon: <BiSolidCoffeeBean size={"28px"} />,
+      icon: <BiSolidCoffeeBean className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Variables" : ""}`,
-      icon: <Icons img={"/variable.png"} />,
+      icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
+      link: "/varibles"
     },
     {
       label: `${visiblite ? "Configuraciones" : ""}`,
-      icon: <IoIosSettings size={"28px"} />,
+      icon: <IoIosSettings className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       items: visiblite
         ? [
           {
             label: `${visiblite ? "Usuarios" : ""}`,
             icon: "pi pi-users",
+            link: "/users",
           },
           {
             label: `${visiblite ? "Ayuda" : ""}`,
@@ -95,20 +99,20 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
-      icon: <FaCalendarAlt size={"28px"} />,
+      icon: <FaCalendarAlt className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/alquiler",
     },
     {
       label: `${visiblite ? "Reportes" : ""}`,
-      icon: <BsFillFileBarGraphFill size={"28px"} />,
+      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Facturas" : ""}`,
-      icon: <TbReportMoney size={"28px"} />,
+      icon: <TbReportMoney className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit size={"28px"} />,
+      icon: <ImExit className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
   ];
 
@@ -117,41 +121,45 @@ const ItemsNavbar = ({ visiblite }) => {
       <ul className="w-full">
         {items.map((item, index) => (
           <div key={index}>
-            <Link to={item.link}>
-              <li
-                className={`flex items-center p-2 rounded-lg ${itemsUser === index ? "bg-slate-400" : ""
-                  }  `}
-                onClick={() => handleClick(index)}
+            <li
+              className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-light-gray" : ""
+                }`}
+              onClick={() => handleClick(index)}
+            >
+              <Link
+                to={item.link}
+                className="flex items-center space-x-2 w-full cursor-pointer"
               >
-                <div className="flex items-center space-x-2 w-full cursor-pointer">
-                  <div className="cursor-pointer">{item.icon}</div>
-                  <span className="cursor-pointer line-clamp-1">
-                    {item.label}
-                  </span>
-                </div>
-              </li>
-              {itemsUser == 9 && subMenuVisible && (
-                <ul className="pl-4 ">
-                  {item.items?.map((subItem, subIndex) => (
-                    <li
-                      key={subIndex}
-                      className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-slate-400" : ""
-                        }`}
-                      onClick={() => handleClickSubimitem(subIndex)}
+                <div className="cursor-pointer">{item.icon}</div>
+                <span className="cursor-pointer line-clamp-1">
+                  {item.label}
+                </span>
+              </Link>
+            </li>
+            {itemsUser === 9 && subMenuVisible && (
+              <ul className="pl-4">
+                {item.items?.map((subItem, subIndex) => (
+                  <li
+                    key={subIndex}
+                    className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-light-gray" : ""
+                      }`}
+                    onClick={() => handleClickSubimitem(subIndex)}
+                  >
+                    <Link
+                      to={subItem.link}
+                      className="flex items-center space-x-2 w-full cursor-pointer"
                     >
-                      <div className="flex items-center space-x-2 w-full cursor-pointer">
-                        <div className="cursor-pointer">
-                          <i className={subItem.icon}></i>
-                        </div>
-                        <span className="cursor-pointer line-clamp-1">
-                          {subItem.label}
-                        </span>
+                      <div className="cursor-pointer">
+                        <i className={subItem.icon}></i>
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </Link>
+                      <span className="cursor-pointer line-clamp-1">
+                        {subItem.label}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         ))}
       </ul>

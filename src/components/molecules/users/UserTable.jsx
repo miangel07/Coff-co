@@ -1,119 +1,115 @@
-import  { useState } from "react";
-import { Spinner } from "@nextui-org/react";
-import {
-  useGetusersQuery,
-  useDeleteUsersMutation,
-} from "../../../store/api/users";
-import { MdDeleteOutline } from "react-icons/md";
-import { FiEdit } from "react-icons/fi";
-import Th from "../../atoms/Th";
-import Td from "../../atoms/Td";
-import PaginationMolecula from "../pagination/PaginationMolecula";
-import toast from "react-hot-toast";
-
-import { FcOk } from "react-icons/fc";
+import React, { useEffect, useState } from 'react';
+import MUIDataTable from "mui-datatables";
+import { ThemeProvider } from "@mui/material";
+import { getMuiTheme } from "../table/UsersTable";
+import { options } from "../table/UsersTable";
+import styled from 'styled-components';
+import { useGetusersQuery } from "../../../store/api/users";
 
 const UserTable = () => {
-  const { data, isLoading, isError, error, refetch } = useGetusersQuery();
-  const [
-    deleteUsers,
-    {   isError: isErrorDalete, error: ErroDelete },
-  ] = useDeleteUsersMutation();
 
-  const [pages, setPage] = useState(1);
+  const { data } = useGetusersQuery();
 
-  const cantidadData = 7;
-  const final = pages * cantidadData;
-  const inicial = final - cantidadData;
-  const numeroPagina = Math.ceil(data?.length / cantidadData);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (isError) {
-    return <p className="text-red-400">{error.message}</p>;
-  }
-  const handlePageChange = (page) => {
-    setPage(page);
-  };
-  const Eliminar = async (id) => {
-    try {
-      if (window.confirm("¿Estás seguro de eliminar este usuario?")) {
-        const result = await deleteUsers(id).unwrap();
-        toast.success(result.message, {
-          duration: 5000,
-          position: "top-center",
-          style: {
-            background: "#333",
-            color: "#fff",
-          },
-          icon: <FcOk />,
-        });
-        refetch();
+  const columnas = [
+    {
+      name: "id_usuario",
+      label: "ID"
+    },
+    {
+      name: "nombre",
+      label: "NOMBRES"
+    },
+    {
+      name: "apellidos",
+      label: "APELLIDOS"
+    },
+    {
+      name: "correo_electronico",
+      label: "CORREO"
+    },
+    {
+      name: "telefono",
+      label: "TELEFONO"
+    },
+    {
+      name: "numero_documento",
+      label: "DOCUMENTO"
+    },
+    {
+      name: "tipo_documento",
+      label: "TIPO"
+    },
+    {
+      name: "estado",
+      label: "ESTADO"
+    },
+    {
+        name: "rol",
+        label: "ROL"
+    },
+    { 
+      name: "opciones", 
+      label: "EDITAR",
+      options: {
+          customBodyRenderLite: (dataIndex) => (
+              <button className='btnActualizar' onClick={() => editUsuario(usuarios[dataIndex])}> 
+                  <svg className='icon-default' xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                    </svg>
+                  <svg className='icon-hover' xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                  </svg>
+              </button>
+          ),
+          columns: false,
+          filter: false,
       }
-      if (isErrorDalete) {
-        console.error(ErroDelete);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const DataArray = data ? data.slice(inicial, final) : [];
-  const User = DataArray
-    ? DataArray.map((usuario) => (
-        <tr className="hover:bg-hover " key={usuario.id_usuario}>
-          <Td>{usuario.id_usuario}</Td>
-          <Td>{usuario.nombre_usuario}</Td>
-          <Td>{usuario.correo_electronico}</Td>
-          <Td>{usuario.telefono_usuario}</Td>
-          <Td>{usuario.rol_usuario}</Td>
-          <Td>{usuario.tipo_documento}</Td>
-          <Td>{usuario.numero_identificacion}</Td>
-          <Td>
-            <p className="flex-row flex  text-2xl text-left">
-              <FiEdit
-                className="hover:text-sena"
-                onClick={() => Editar(usuario.id_usuario)}
-              />
-              <MdDeleteOutline
-                className="hover:text-red-400"
-                onClick={() => Eliminar(usuario.id_usuario)}
-              />
-            </p>
-          </Td>
-        </tr>
-      ))
-    : null;
+  },
+];
 
   return (
-    <>
-      <div className="overflow-x-auto ">
-        <table className="min-w-full   divide-y  table cursor-pointer">
-          <thead>
-            <tr className="">
-              <Th>ID</Th>
-              <Th>Nombre</Th>
-              <Th>Correo</Th>
-              <Th>Telefono</Th>
-              <Th>Rol</Th>
-              <Th>Tipo de Identificación</Th>
-              <Th> Número de Identificación</Th>
-              <Th> Acciones</Th>
-            </tr>
-          </thead>
-          <tbody>{User}</tbody>
-        </table>
-      </div>
-      <div className="min-w-full  justify-center flex  mt-8">
-        <PaginationMolecula
-          initialPage={pages}
-          total={numeroPagina}
-          onChange={handlePageChange}
+    <StyledContainer>
+      <ThemeProvider theme={getMuiTheme()}>
+        <MUIDataTable
+          title={"Usuarios"}
+          data={data}
+          columns={columnas}
+          options={options}
         />
-      </div>
-    </>
+      </ThemeProvider>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  .btnActualizar{
+        background: none;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        height:30px;
+        width: 60px;
+        border-radius: 5px;
+        border: none;
+        .icon-default{
+            display: block;
+        }
+        .icon-hover{
+                display:none
+        }
+}
+
+.btnActualizar:hover{
+    border-radius: 100px;
+    background:rgba(128, 128, 128, 0.3);
+        .icon-default{
+            display: none;
+        }
+        .icon-hover{
+            display:block
+        }
+}
+`
 
 export default UserTable;
