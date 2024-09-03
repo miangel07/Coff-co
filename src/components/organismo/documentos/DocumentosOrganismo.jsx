@@ -120,7 +120,6 @@ const DocumentosOrganismo = () => {
 
   }
   const hadeleEditar = (doc) => {
-    console.log(doc)
     setShowModal(true)
     setDataValue(doc)
 
@@ -146,8 +145,8 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full   flex flex-col  items-center">
-      <div className="w-full  flex flex-wrap justify-around   items-center">
+    <section className="w-full   flex flex-col gap-3 items-center">
+      <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
 
         <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
           Nuevo
@@ -170,8 +169,8 @@ const DocumentosOrganismo = () => {
         {
           showModal &&
           <ModalOrganismo
-            closeModal={closeModal}
-            title={`hola`}
+            closeModal={()=>setShowModal(false)}
+            title={`Editar Documentos`}
             visible={true}
           >
 

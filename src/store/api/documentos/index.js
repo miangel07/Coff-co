@@ -6,7 +6,6 @@ export const docuentosApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
-            " Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             token: `${getCookie("authToken")}`,
         },
     }),
