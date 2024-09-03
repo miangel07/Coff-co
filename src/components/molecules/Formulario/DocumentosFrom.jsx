@@ -146,7 +146,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
                 onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
-                <h1 className='text-2xl font-bold mb-4 justify-center flex'>{valor ? "Formulario De Actualizacion " : "Formulario De Registro"}</h1>
+               
 
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
