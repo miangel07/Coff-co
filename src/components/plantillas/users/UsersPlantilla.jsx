@@ -429,12 +429,18 @@ const UsersPlantilla = () => {
 
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
-                label={"Rol"}
+                label="Rol"
                 onChange={(e) => setValue("rol", e.target.value)}
-                items={"value"}
-                ValueItem={"label"}
                 placeholder={usuarioSeleccionado?.rol}
                 value={usuarioSeleccionado?.fk_idRol || ""}
+              />
+
+              <SelectAtomoActualizar
+                data={documentoOptions.map(doc => ({ value: doc.value, label: doc.label }))}
+                label="Tipo Documento"
+                onChange={(e) => setValue("tipo_documento", e.target.value)}
+                placeholder={usuarioSeleccionado?.tipo_documento}
+                value={usuarioSeleccionado?.tipo_documento || ""}
               />
 
               {/* <SelectAtomo
@@ -446,15 +452,6 @@ const UsersPlantilla = () => {
                 placeholder={usuarioSeleccionado?.estado}
                 value={usuarioSeleccionado?.estado || ""}
               /> */}
-
-              <SelectAtomo
-              data={documentoOptions}
-              label={"Tipo Documento"}
-              onChange={(e) => setValue("tipo_documento", e.target.value)} 
-              items={"value"}
-              ValueItem={"label"}
-              placeholder={usuarioSeleccionado?.tipo_documento} 
-              value={usuarioSeleccionado?.tipo_documento || ""} />
 
               {/* <SelectAtomoActualizar
               data={documentoOptions}
