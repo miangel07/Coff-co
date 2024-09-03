@@ -120,7 +120,6 @@ const DocumentosOrganismo = () => {
 
   }
   const hadeleEditar = (doc) => {
-    console.log(doc)
     setShowModal(true)
     setDataValue(doc)
 
@@ -170,8 +169,8 @@ const DocumentosOrganismo = () => {
         {
           showModal &&
           <ModalOrganismo
-            closeModal={closeModal}
-            title={`hola`}
+            closeModal={()=>setShowModal(false)}
+            title={`Editar Documentos`}
             visible={true}
           >
 

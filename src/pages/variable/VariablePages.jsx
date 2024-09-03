@@ -7,6 +7,8 @@ import Navbar from '../../components/molecules/Navbar/Navbar'
 const VariablePages = () => {
     const [menuAbierto, setMenuAbierto] = useState(true);
 
+
+
     const toggleMenu = () => {
         setMenuAbierto(!menuAbierto);
     }

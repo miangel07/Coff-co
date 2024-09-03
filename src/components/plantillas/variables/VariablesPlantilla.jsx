@@ -11,14 +11,27 @@ import { FaRegEdit } from 'react-icons/fa'
 import Mybutton from '../../atoms/Mybutton'
 import { useForm } from 'react-hook-form'
 import VariablesFormulario from '../../molecules/Formulario/VariablesFormulario'
+import PaginationMolecula from '../../molecules/pagination/PaginationMolecula'
 const VariablesPlantilla = () => {
   const [showModal, setShowMdal] = useState(false)
+  const [pages, setPages] = useState(1);
   const { data: dataVariables, isLoading, isError, error } = useGetVariablesQuery()
 
 
   const handleModal = () => {
     setShowMdal(true);
   };
+
+  const cantidad = 4;
+const final = pages * cantidad;
+const inicial = final - cantidad;
+const handlePageChange = (page) => {
+  setPages(page);
+};
+
+const numeroPagina = Math.ceil(dataVariables?.length / cantidad);
+const DataArrayPaginacion = dataVariables?.slice(inicial, final);
+
   const closemodal = () => {
     setShowMdal(false);
   }
@@ -30,7 +43,7 @@ const VariablesPlantilla = () => {
 
 
   return (
-    <section className='w-full overflow-auto mt-5 gap-4 flex flex-wrap flex-col'>
+    <section className='w-full  mt-5 gap-4 flex flex-wrap flex-col'>
       <h2 className='text-2xl px-20 font-bold'>Variables</h2>
       <div className='px-20 '>
 
@@ -49,7 +62,7 @@ const VariablesPlantilla = () => {
         </ModalOrganismo>
 
       }
-      <div className='w-full px-20 h-auto overflow-y-auto '>
+      <div className='w-full px-20 overflow-x-auto '>
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
@@ -59,11 +72,11 @@ const VariablesPlantilla = () => {
             <Th>Acciones</Th>
           </Thead>
           <Tbody>
-            {dataVariables?.map((variable) => (
+            {DataArrayPaginacion?.map((variable) => (
               <tr key={variable.idVariable}>
                 <Td>{variable.idVariable}</Td>
                 <Td>{variable.nombre}</Td>
-                <Td>{variable.estado ? 'Activo' : 'Inactivo'}</Td>
+                <Td>{variable.estado}</Td>
                 <Td>{variable.tipo_dato}</Td>
 
                 <Td>
@@ -85,7 +98,15 @@ const VariablesPlantilla = () => {
 
 
         </TableMolecula>
+      
       </div>
+      <div className='flex justify-center mt-4'>
+          <PaginationMolecula
+            total={numeroPagina}
+            initialPage={pages}
+            onChange={handlePageChange}
+          />
+        </div>
     </section>
   )
 }
