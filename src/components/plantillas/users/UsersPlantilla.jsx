@@ -163,6 +163,7 @@ const UsersPlantilla = () => {
   const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
   //OPCIONES PARA LOS SELECT 
+
   const estadoOptions = [
     { value: "activo", label: "Activo" },
     { value: "inactivo", label: "Inactivo" }
@@ -431,7 +432,7 @@ const UsersPlantilla = () => {
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
                 label={"Rol"}
                 items={"value"}
-                onChange={(e) => setValue("rol", e.target.value)}
+                onChange={(e) => setValue("fk_idRol", e.target.value)}
                 placeholder={usuarioSeleccionado?.rol}
                 value={usuarioSeleccionado?.fk_idRol || ""}
               />
@@ -439,7 +440,7 @@ const UsersPlantilla = () => {
               <SelectAtomoActualizar
                 data={documentoOptions}
                 label={"Tipo Documento"}
-                items={"label"}
+                items={"value"}
                 placeholder={usuarioSeleccionado?.tipo_documento}
                 onChange={(e) => setValue("tipo_documento", e.target.value)}
                 value={usuarioSeleccionado?.tipo_documento || ""}
@@ -454,17 +455,6 @@ const UsersPlantilla = () => {
                 placeholder={usuarioSeleccionado?.estado}
                 value={usuarioSeleccionado?.estado || ""}
               /> */}
-
-              {/* <SelectAtomoActualizar
-              data={documentoOptions}
-              label={"Tipo Documento"}
-              onChange={(e) => setValue("tipo_documento", e.target.value)} 
-              items={"value"}
-              ValueItem={"label"}
-              placeholder={usuarioSeleccionado?.tipo_documento} 
-              value={usuarioSeleccionado?.tipo_documento || ""} >
-                {(usuarioSeleccionado) => <SelectItem>{usuarioSeleccionado.tipo_documento}</SelectItem>}
-              </SelectAtomoActualizar> */}
                 
               <InputAtomoActualizar
                 register={register}
