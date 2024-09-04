@@ -1,5 +1,5 @@
 import React from "react";
-import img from "../../../public/logo-sena-verde.jpg";
+import img from "/logo-sena-verde.jpg";
 
 const Logosímbolo = () => {
   return (

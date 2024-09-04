@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@nextui-org/react";
 
-const InputAtomo = ({ type, placeholder, id, name, erros, register }) => {
+const InputAtomo = ({ type, placeholder, id, name, erros , register }) => {
   return (
     <div className="w-full flex flex-col gap-4">
 
@@ -16,7 +16,7 @@ const InputAtomo = ({ type, placeholder, id, name, erros, register }) => {
 
 
       </div>
-      {erros[name] && <p className="text-amber-700">{erros[name].message}</p>}
+      {erros[name] && <p className="text-red-500">{erros[name].message}</p>}
     </div>
   );
 };
