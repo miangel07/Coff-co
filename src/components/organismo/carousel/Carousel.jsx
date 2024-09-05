@@ -1,143 +1,65 @@
-
-// const Carousel = () => {
-  
-
-//   return (
-//     <>
-//       <div className="carousel rounded-box w-96">
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
-//             className="w-full"
-//           />
-//         </div>
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp"
-//             className="w-full"
-//           />
-//         </div>
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.webp"
-//             className="w-full"
-//           />
-//         </div>
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.webp"
-//             className="w-full"
-//           />
-//         </div>
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.webp"
-//             className="w-full"
-//           />
-//         </div>
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.webp"
-//             className="w-full"
-//           />
-//         </div>
-//         <div className="carousel-item w-1/2">
-//           <img
-//             src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.webp"
-//             className="w-full"
-//           />
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Carousel;
-
-
-import { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 const Carousel = () => {
-  const carouselRef = useRef(null);
+  const [currentItem, setCurrentItem] = useState(0);
+  const items = [
+    {
+      src: "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp",
+      alt: "Image 1",
+    },
+    {
+      src: "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp",
+      alt: "Image 2",
+    },
+    {
+      src: "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp",
+      alt: "Image 3",
+    },
+    {
+      src: "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp",
+      alt: "Image 4",
+    },
+  ];
 
   useEffect(() => {
-    const carousel = carouselRef.current;
+    const interval = setInterval(() => {
+      setCurrentItem((prevItem) =>
+        prevItem === items.length - 1 ? 0 : prevItem + 1
+      );
+    }, 3000); // Cambia cada 3 segundos
 
-    if (carousel) {
-      // Establecer el intervalo para desplazar las imágenes
-      const interval = setInterval(() => {
-        // Mueve el carrusel una imagen a la vez
-        carousel.scrollBy({
-          left: carousel.clientWidth,
-          behavior: "smooth",
-        });
-
-        // Reinicia el carrusel al llegar al final
-        if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
-          carousel.scrollTo({ left: 0, behavior: "smooth" });
-        }
-      }, 3000); // Cambia la imagen cada 3 segundos
-
-      // Limpieza del intervalo al desmontar el componente
-      return () => clearInterval(interval);
-    }
-  }, []);
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
+  }, [items.length]);
 
   return (
-    <div
-      ref={carouselRef}
-      className="carousel rounded-box w-96 flex overflow-x-hidden"
-    >
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
-          className="w-full"
-          alt="Slide 1"
-        />
+    <>
+      <div className="carousel w-full">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className={`carousel-item w-full ${
+              index === currentItem ? "block" : "hidden"
+            }`}
+          >
+            <img src={item.src} alt={item.alt} className="w-full" />
+          </div>
+        ))}
       </div>
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp"
-          className="w-full"
-          alt="Slide 2"
-        />
+      <div className="flex w-full justify-center gap-2 py-2">
+        {items.map((_, index) => (
+          <a
+            key={index}
+            href={`#item${index + 1}`}
+            className={`btn btn-xs ${
+              index === currentItem ? "btn-active" : ""
+            }`}
+            onClick={() => setCurrentItem(index)}
+          >
+            {index + 1}
+          </a>
+        ))}
       </div>
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.webp"
-          className="w-full"
-          alt="Slide 3"
-        />
-      </div>
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.webp"
-          className="w-full"
-          alt="Slide 4"
-        />
-      </div>
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.webp"
-          className="w-full"
-          alt="Slide 5"
-        />
-      </div>
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.webp"
-          className="w-full"
-          alt="Slide 6"
-        />
-      </div>
-      <div className="carousel-item w-full flex-shrink-0">
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.webp"
-          className="w-full"
-          alt="Slide 7"
-        />
-      </div>
-    </div>
+    </>
   );
 };
 
