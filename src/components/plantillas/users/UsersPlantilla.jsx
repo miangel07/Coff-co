@@ -163,6 +163,7 @@ const UsersPlantilla = () => {
   const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
   //OPCIONES PARA LOS SELECT 
+
   const estadoOptions = [
     { value: "activo", label: "Activo" },
     { value: "inactivo", label: "Inactivo" }
@@ -430,11 +431,19 @@ const UsersPlantilla = () => {
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
                 label={"Rol"}
-                onChange={(e) => setValue("rol", e.target.value)}
                 items={"value"}
-                ValueItem={"label"}
+                onChange={(e) => setValue("fk_idRol", e.target.value)}
                 placeholder={usuarioSeleccionado?.rol}
                 value={usuarioSeleccionado?.fk_idRol || ""}
+              />
+
+              <SelectAtomoActualizar
+                data={documentoOptions}
+                label={"Tipo Documento"}
+                items={"value"}
+                placeholder={usuarioSeleccionado?.tipo_documento}
+                onChange={(e) => setValue("tipo_documento", e.target.value)}
+                value={usuarioSeleccionado?.tipo_documento || ""}
               />
 
               {/* <SelectAtomo
@@ -446,26 +455,6 @@ const UsersPlantilla = () => {
                 placeholder={usuarioSeleccionado?.estado}
                 value={usuarioSeleccionado?.estado || ""}
               /> */}
-
-              <SelectAtomo
-              data={documentoOptions}
-              label={"Tipo Documento"}
-              onChange={(e) => setValue("tipo_documento", e.target.value)} 
-              items={"value"}
-              ValueItem={"label"}
-              placeholder={usuarioSeleccionado?.tipo_documento} 
-              value={usuarioSeleccionado?.tipo_documento || ""} />
-
-              {/* <SelectAtomoActualizar
-              data={documentoOptions}
-              label={"Tipo Documento"}
-              onChange={(e) => setValue("tipo_documento", e.target.value)} 
-              items={"value"}
-              ValueItem={"label"}
-              placeholder={usuarioSeleccionado?.tipo_documento} 
-              value={usuarioSeleccionado?.tipo_documento || ""} >
-                {(usuarioSeleccionado) => <SelectItem>{usuarioSeleccionado.tipo_documento}</SelectItem>}
-              </SelectAtomoActualizar> */}
                 
               <InputAtomoActualizar
                 register={register}

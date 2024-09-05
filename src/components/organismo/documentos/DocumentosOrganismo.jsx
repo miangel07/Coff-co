@@ -168,8 +168,6 @@ const DocumentosOrganismo = () => {
 
             <DocumentoEdit closeModal={closeModal} valor={dataValue} />
 
-
-
           </ModalOrganismo>
         }
         <div className="w-72 ">
