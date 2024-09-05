@@ -23,10 +23,13 @@ import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { useGetTipoServicioQuery } from "../../../store/api/TipoServicio";
 import { useForm } from "react-hook-form";
 import ToolTip from "../../molecules/toolTip/ToolTip";
+import InputAtomo from "../../atoms/Input";
+import SelectAtomo from "../../atoms/Select";
 
 const PreciosPlantilla = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const itemsPorPagina = 4;
+  const [currentTipoServicio, setCurrentTipoServicio] = useState("");
 
   const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } =
     useGetTipoServicioQuery();
@@ -47,6 +50,7 @@ const PreciosPlantilla = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm();
 
   const totalPages = Math.ceil((dataPrecio?.length || 0) / itemsPorPagina);
@@ -65,6 +69,7 @@ const PreciosPlantilla = () => {
         precio: precio.precio,
         fk_idTipoServicio: precio.fk_idTipoServicio,
       });
+      setCurrentTipoServicio(precio.nombreServicio);
     } else {
       setPrecioSeleccionado(null);
       reset({
@@ -72,6 +77,7 @@ const PreciosPlantilla = () => {
         precio: "",
         fk_idTipoServicio: "",
       });
+      setCurrentTipoServicio("")
     }
     setVisible(true);
   };
@@ -79,6 +85,7 @@ const PreciosPlantilla = () => {
   const cerrarModal = () => {
     setVisible(false);
     reset();
+    setCurrentTipoServicio("")
   };
 
   const onSubmit = async (datosDelFormulario) => {
@@ -292,73 +299,37 @@ const PreciosPlantilla = () => {
             <h2 className="text-2xl font-bold mb-4 text-center">
               {precioSeleccionado ? "Actualizar Precio" : "Nuevo Precio"}
             </h2>
-            <div className="flex flex-col py-2 gap-2">
-              <input
+            <div className="flex flex-col py-6 gap-2">
+              <InputAtomo
                 type="text"
-                {...register("presentacion", { required: true })}
-                placeholder="Presentacion"
-                className="p-2 border border-gray-300 rounded"
+                id="presentacion"
+                name="presentacion"
+                placeholder="presentacion"
+                register={register}
+                erros={errors}
               />
-              {errors.presentacion && (
-                <p className="text-red-500 mt-2 text-center">
-                  <b>La presentacion es requerida</b>
-                </p>
-              )}
-
-              <input
+              <InputAtomo
                 type="number"
-                {...register("precio", { required: true })}
-                placeholder="Precio"
-                className="p-2 border border-gray-300 rounded"
+                id="precio"
+                name="precio"
+                placeholder="Ingrese el precio"
+                register={register}
+                erros={errors}
               />
-              {errors.precio && (
-                <p className="text-red-500 mt-2 text-center">
-                  <b>El precio es requerido</b>
-                </p>
-              )}
               <div>
-                {/* <select
-                  value={datosDelFormulario.fk_idTipoServicio || ""}
-                  onChange={(e) =>
-                    setDatosDelFormulario({
-                      ...datosDelFormulario,
-                      fk_idTipoServicio: e.target.value,
-                    })
-                  }
-                  className="p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Seleccion tipo servicio</option>
-                  {dataTipoServicio?.map((tiposervicio) => (
-                    <option
-                      key={tiposervicio.idTipoServicio}
-                      value={tiposervicio.idTipoServicio}
-                    >
-                      {tiposervicio.nombreServicio}
-                    </option>
-                  ))}
-                </select> */}
-
-                <select
-                  {...register("fk_idTipoServicio", {
-                    required: "Tipo de servicio requerido",
-                  })}
-                  className="p-2 border border-gray-300 rounded"
-                >
-                  <option value="">Selecciona un tipo de servicio</option>
-                  {dataTipoServicio?.map((tipoServicio) => (
-                    <option
-                      key={tipoServicio.idTipoServicio}
-                      value={tipoServicio.idTipoServicio}
-                    >
-                      {tipoServicio.nombreServicio}
-                    </option>
-                  ))}
-                </select>
-                {errors.fk_idTipoServicio && (
-                  <p className="text-red-500 mt-2 text-center">
-                    <b>Seleccione un tipo de servicio</b>
-                  </p>
-                )}
+                <div className="">
+                  <SelectAtomo
+                    data={dataTipoServicio}
+                    label="Tipo de servicio"
+                    onChange={(e) => {
+                      setValue("fk_idTipoServicio", e.target.value);
+                      setCurrentTipoServicio(e.target.value); 
+                    }}
+                    items="idTipoServicio"
+                    ValueItem="nombreServicio"
+                    value={currentTipoServicio}
+                  />
+                </div>
               </div>
             </div>
             <div className="flex justify-center mt-6">
