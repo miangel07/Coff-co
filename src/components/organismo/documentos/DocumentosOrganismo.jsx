@@ -1,7 +1,7 @@
 import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
 import { BiDownload } from "react-icons/bi";
-import SelectAtomo from "../../atoms/Select";
+import SelectDocumentos from "../../atoms/SelectDocumentos";
 import { useEffect, useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -181,7 +181,7 @@ const DocumentosOrganismo = () => {
           </ModalOrganismo>
         }
         <div className="w-72 ">
-          <SelectAtomo
+          <SelectDocumentos
             label={"Selecione el Tipo de Documento"}
             data={tipoData}
             onChange={(e) => SetDataInput(e.target.value)}

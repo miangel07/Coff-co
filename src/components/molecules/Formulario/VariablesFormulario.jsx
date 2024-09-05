@@ -58,7 +58,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     const TipoDatos = [
         { value: "text", label: "texto" },
         { value: "number", label: "Numeros" },
-        { value: "data", label: "Fechas" },
+        { value: "date", label: "Fechas" },
     ];
     if (isLoading || isLoadingEdit) {
         return <div>Loading...</div>

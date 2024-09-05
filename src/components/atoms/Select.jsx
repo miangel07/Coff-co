@@ -2,13 +2,13 @@ import { Select, SelectItem } from "@nextui-org/react";
 import { useEffect, useMemo } from "react";
 
 const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
- 
+
   const trimmedValue = String(value || "").trim();
 
 
   const selectedItem = useMemo(() => {
-    return data?.find(item => 
-      String(item[items]).trim() === trimmedValue || 
+    return data?.find(item =>
+      String(item[items]).trim() === trimmedValue ||
       String(item[ValueItem]).trim() === trimmedValue
     );
   }, [data, items, ValueItem, trimmedValue]);
