@@ -6,23 +6,21 @@
 //     <NextUICard
 //       isFooterBlurred
 //       radius="lg"
-//       className="object-contain mx-auto"
+//       className="w-auto mx-auto" 
 //     >
 //       <Image
 //         alt={altText}
-//         className="object-cover"
-//         height={200}
+//         className="object-cover w-full h-auto"
 //         src={imageSrc}
-//         width={200}
 //       />
 //       <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-//         <p className="text-sm text-black/80">{footerText}</p>
+//         <p className="text-lg text-black/80">{footerText}</p>
 //         <Button
 //           className="text-tiny text-white bg-black/20"
 //           variant="flat"
 //           color="default"
 //           radius="lg"
-//           size="sm"
+//           size="md"
 //           onClick={onButtonClick}
 //         >
 //           {buttonText}
@@ -35,6 +33,8 @@
 // export default Card;
 
 
+
+
 import React from "react";
 import { Card as NextUICard, CardFooter, Image, Button } from "@nextui-org/react";
 
@@ -43,21 +43,25 @@ const Card = ({ imageSrc, altText, footerText, buttonText, onButtonClick }) => {
     <NextUICard
       isFooterBlurred
       radius="lg"
-      className="w-auto mx-auto" // w-auto permite que la tarjeta sea tan ancha como su contenido
+      className="w-auto mx-auto"
     >
       <Image
         alt={altText}
         className="object-cover w-full h-auto"
         src={imageSrc}
       />
-      <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-        <p className="text-sm text-black/80">{footerText}</p>
+      <CardFooter 
+        className="flex flex-col sm:flex-row justify-between items-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-2 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
+      >
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-black/70">
+          {footerText}
+        </p>
         <Button
-          className="text-tiny text-white bg-black/20"
+          className="text-xs sm:text-sm md:text-base lg:text-lg text-white bg-sena"
           variant="flat"
-          color="default"
+          color="white"
           radius="lg"
-          size="sm"
+          size="md"
           onClick={onButtonClick}
         >
           {buttonText}
