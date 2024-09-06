@@ -161,7 +161,7 @@ const DocumentosOrganismo = () => {
         {
           showModal &&
           <ModalOrganismo
-            closeModal={()=>setShowModal(false)}
+            closeModal={() => setShowModal(false)}
             title={`Editar Documentos`}
             visible={true}
           >
@@ -187,7 +187,7 @@ const DocumentosOrganismo = () => {
           <Filtro />
         </div>
       </div>
-      <div className=" overflow-auto   ">
+      <div className=" w-full  h-auto overflow-y-auto">
         <TableMolecula>
           <Thead>
             <Th>Id</Th>
