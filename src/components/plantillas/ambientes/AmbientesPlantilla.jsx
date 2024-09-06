@@ -21,25 +21,21 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { useForm } from "react-hook-form";
 import ToolTip from "../../molecules/toolTip/ToolTip";
+import InputAtomo from "../../atoms/Input";
+
 
 const AmbientesPlantilla = () => {
-  // Estados que manejan la paginación de la tabla
   const [paginaActual, setPaginaActual] = useState(1);
   const itemsPorPagina = 4;
 
-  // Estados que manejan los slices para el CRUD de ambientes
   const { data, isLoading, refetch } = useGetAmbientesQuery();
   const [crearAmbiente] = useCrearAmbienteMutation();
   const [actualizarAmbiente] = useActualizarAmbienteMutation();
   const [eliminarAmbiente] = useEliminarAmbienteMutation();
 
-  // Estado que maneja la apertura del modal
   const [visible, setVisible] = useState(false);
-
-  // Estado que maneja el ambiente seleccionado
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState(null);
 
-  // Hook de formulario de react-hook-form
   const {
     register,
     handleSubmit,
@@ -47,14 +43,12 @@ const AmbientesPlantilla = () => {
     formState: { errors },
   } = useForm();
 
-  // Manejo del estado cargado
   if (isLoading) {
     return (
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
     );
   }
 
-  // Función que controla la apertura del modal
   const abrirModal = (ambiente) => {
     if (ambiente) {
       setAmbienteSeleccionado(ambiente);
@@ -72,13 +66,11 @@ const AmbientesPlantilla = () => {
     setVisible(true);
   };
 
-  // Función que cierra el modal
   const cerrarModal = () => {
     setVisible(false);
     reset();
   };
 
-  // Función que maneja el envío del formulario
   const onSubmit = async (datos) => {
     try {
       const payload = {
@@ -105,7 +97,6 @@ const AmbientesPlantilla = () => {
     }
   };
 
-  // Maneja los cambios de estado desde el switch
   const handleSwitchChange = (checked, id) => {
     const nuevoEstado = checked ? "activo" : "inactivo";
     const ambienteActual = data.find((ambiente) => ambiente.idAmbiente === id);
@@ -133,7 +124,6 @@ const AmbientesPlantilla = () => {
       });
   };
 
-  // Función para eliminar ambientes
   const handleEliminarAmbiente = (id, nombre_ambiente) => {
     confirmAlert({
       title: (
@@ -176,7 +166,6 @@ const AmbientesPlantilla = () => {
     });
   };
 
-  // Configuración para la paginación
   const indiceUltimoItem = paginaActual * itemsPorPagina;
   const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
   const currentItems = data
@@ -277,7 +266,6 @@ const AmbientesPlantilla = () => {
         <ModalOrganismo
           visible={visible}
           closeModal={cerrarModal}
-          // title={ambienteSeleccionado ? "Actualizar ambiente" : "Nuevo ambiente"}
           onSubmit={handleSubmit(onSubmit)}
         >
           <form
@@ -288,17 +276,14 @@ const AmbientesPlantilla = () => {
               {ambienteSeleccionado ? "Actualizar ambiente" : "Nuevo ambiente"}
             </h2>
             <div className="w-full max-w-xs">
-              <input
+              <InputAtomo
                 type="text"
-                {...register("nombre_ambiente", { required: true })}
+                id="nombre_ambiente"
+                name="nombre_ambiente"
                 placeholder="Nombre del ambiente"
-                className="p-2 border border-gray-300 rounded w-full"
+                register={register}
+                erros={errors}
               />
-              {errors.nombre_ambiente && (
-                <p className="text-red-500 mt-2 text-center">
-                  <b>El nombre del ambiente es requerido</b>
-                </p>
-              )}
             </div>
             <div className="flex justify-center mt-6">
               <Mybutton type="submit" color="primary">

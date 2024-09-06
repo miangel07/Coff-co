@@ -3,6 +3,7 @@ import Header from "../../components/molecules/layout/Header";
 import Footer from "../../components/molecules/Footer/Footer";
 import { useState } from "react";
 import Navbar from "../../components/molecules/Navbar/Navbar";
+
 const DocumentosPage = () => {
 
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -23,7 +24,7 @@ const DocumentosPage = () => {
           >
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
-          <div className="w-full  bg-gray-100">
+          <div className="w-full flex overflow-auto bg-gray-100">
             <Documentos/>
           </div>
         </div>

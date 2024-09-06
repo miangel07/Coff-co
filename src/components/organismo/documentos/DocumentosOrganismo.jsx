@@ -1,7 +1,7 @@
 import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
 import { BiDownload } from "react-icons/bi";
-import SelectAtomo from "../../atoms/Select";
+import SelectDocumentos from "../../atoms/SelectDocumentos";
 import { useEffect, useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -80,6 +80,7 @@ const DocumentosOrganismo = () => {
     link.click();
 
   }
+
   const handleClick = async (doc) => {
     try {
       const id = doc.id_documentos
@@ -104,25 +105,21 @@ const DocumentosOrganismo = () => {
         ],
         closeOnClickOutside: true,
       });
-
       const nuevoEstado = doc.estado_version === "activo" ? "inactivo" : "activo";
       const data = { id: id, estado: nuevoEstado }
-
-
     } catch (error) {
       console.error(error)
     }
-
   };
+
   const hadleActualizar = (doc) => {
     setFrom(true)
     setValuedocs(doc)
-
   }
+
   const hadeleEditar = (doc) => {
     setShowModal(true)
     setDataValue(doc)
-
   }
 
   const numeroPagina = Math.ceil(data?.length / cantidad);
@@ -131,8 +128,8 @@ const DocumentosOrganismo = () => {
   const closeModal = () => {
     setValuedocs(null)
     setFrom(false)
-
   }
+
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
     return (
@@ -158,30 +155,23 @@ const DocumentosOrganismo = () => {
             title={`${valuedocs ? 'Actualizar' : "Registrar"}`}
             visible={form}
           >
-
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
-
-
-
-
           </ModalOrganismo>
         }
         {
           showModal &&
           <ModalOrganismo
-            closeModal={()=>setShowModal(false)}
+            closeModal={() => setShowModal(false)}
             title={`Editar Documentos`}
             visible={true}
           >
 
             <DocumentoEdit closeModal={closeModal} valor={dataValue} />
 
-
-
           </ModalOrganismo>
         }
         <div className="w-72 ">
-          <SelectAtomo
+          <SelectDocumentos
             label={"Selecione el Tipo de Documento"}
             data={tipoData}
             onChange={(e) => SetDataInput(e.target.value)}
@@ -197,7 +187,7 @@ const DocumentosOrganismo = () => {
           <Filtro />
         </div>
       </div>
-      <div className=" overflow-auto   ">
+      <div className=" w-full  h-auto overflow-y-auto">
         <TableMolecula>
           <Thead>
             <Th>Id</Th>
