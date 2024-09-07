@@ -1,28 +1,74 @@
-import React from "react";
-import Mybutton from "../../atoms/Mybutton";
+// import React from "react";
+// import { Card as NextUICard, CardFooter, Image, Button } from "@nextui-org/react";
 
-const Cards = ({ title, span, icons }) => {
+// const Card = ({ imageSrc, altText, footerText, buttonText, onButtonClick }) => {
+//   return (
+//     <NextUICard
+//       isFooterBlurred
+//       radius="lg"
+//       className="w-auto mx-auto" 
+//     >
+//       <Image
+//         alt={altText}
+//         className="object-cover w-full h-auto"
+//         src={imageSrc}
+//       />
+//       <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+//         <p className="text-lg text-black/80">{footerText}</p>
+//         <Button
+//           className="text-tiny text-white bg-black/20"
+//           variant="flat"
+//           color="default"
+//           radius="lg"
+//           size="md"
+//           onClick={onButtonClick}
+//         >
+//           {buttonText}
+//         </Button>
+//       </CardFooter>
+//     </NextUICard>
+//   );
+// };
+
+// export default Card;
+
+
+
+
+import React from "react";
+import { Card as NextUICard, CardFooter, Image, Button } from "@nextui-org/react";
+
+const Card = ({ imageSrc, altText, footerText, buttonText, onButtonClick }) => {
   return (
-    <>
-      <div className="h-full w-full bg-slate-50 rounded-badge pl-2 pt-4 shadow-dark-lg cursor-pointer  transform hover:scale-y-105 hover:scale-x-105 transition duration-300 ">
-        <h1 className="text-2xl font-bold font-sans">{title}</h1>
-        <span className="font-calibri text-[23px]">{span}</span>
-        <div className="space-y-4 pt-2 flex justify-between flex-col ">
-          {icons.map((icon, index) => (
-            <div key={index} className="flex gap-2">
-              <div className="ml-4 text-3xl ">{icon.icon}</div>
-              <div className="text-[17px]  justify-center items-center">
-                {icon.description}
-              </div>
-            </div>
-          ))}
-          <div className="pl-4  pb-2">
-            <Mybutton>Empezar</Mybutton>
-          </div>
-        </div>
-      </div>
-    </>
+    <NextUICard
+      isFooterBlurred
+      radius="lg"
+      className="w-auto mx-auto"
+    >
+      <Image
+        alt={altText}
+        className="object-cover w-full h-auto"
+        src={imageSrc}
+      />
+      <CardFooter 
+        className="flex flex-col sm:flex-row justify-between items-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-2 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
+      >
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-black/70">
+          {footerText}
+        </p>
+        <Button
+          className="text-xs sm:text-sm md:text-base lg:text-lg text-white bg-sena"
+          variant="flat"
+          color="white"
+          radius="lg"
+          size="md"
+          onClick={onButtonClick}
+        >
+          {buttonText}
+        </Button>
+      </CardFooter>
+    </NextUICard>
   );
 };
 
-export default Cards;
+export default Card;

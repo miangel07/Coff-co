@@ -375,7 +375,7 @@ const UsersPlantilla = () => {
     {/* MODAL ACTUALIZAR*/}
     {openModalActualizar && (
     <ModalOrganismo
-      logo={<Logosímbolo />}
+      // logo={<Logosímbolo />}
       children={
         <UserFrom
           onsubmit={handleSubmit(onsubmitActualizar)}

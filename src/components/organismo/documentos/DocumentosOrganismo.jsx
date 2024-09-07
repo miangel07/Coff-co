@@ -1,7 +1,7 @@
 import Mybutton from "../../atoms/Mybutton";
 import Filtro from "../../molecules/documentos/Filtro";
 import { BiDownload } from "react-icons/bi";
-import SelectAtomo from "../../atoms/Select";
+import SelectDocumentos from "../../atoms/SelectDocumentos";
 import { useEffect, useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -142,7 +142,7 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full   flex flex-col gap-3 items-center">
+    <section className="w-full  flex flex-col gap-3 ">
       <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
 
         <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
@@ -161,7 +161,7 @@ const DocumentosOrganismo = () => {
         {
           showModal &&
           <ModalOrganismo
-            closeModal={()=>setShowModal(false)}
+            closeModal={() => setShowModal(false)}
             title={`Editar Documentos`}
             visible={true}
           >
@@ -171,7 +171,7 @@ const DocumentosOrganismo = () => {
           </ModalOrganismo>
         }
         <div className="w-72 ">
-          <SelectAtomo
+          <SelectDocumentos
             label={"Selecione el Tipo de Documento"}
             data={tipoData}
             onChange={(e) => SetDataInput(e.target.value)}
@@ -187,7 +187,7 @@ const DocumentosOrganismo = () => {
           <Filtro />
         </div>
       </div>
-      <div className="  w-full justify-center flex overflow-x-auto ">
+      <div className=" w-full  h-auto overflow-y-auto">
         <TableMolecula>
           <Thead>
             <Th>Id</Th>

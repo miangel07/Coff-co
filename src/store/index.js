@@ -12,7 +12,7 @@ import { ambientesApiSlice } from "./api/ambientes/ambientesSlice";
 import { ServicioApi } from "./api/servicio";
 import { preciosSlice } from "./api/precios/preciosSlice";
 import { usuariosSlice } from "./api/users";
-
+import { AlquilerApi } from "./api/alquilerLaboratorio";
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
@@ -24,7 +24,8 @@ export const store = configureStore({
     [ambientesApiSlice.reducerPath]: ambientesApiSlice.reducer,
     [ServicioApi.reducerPath]: ServicioApi.reducer,
     [preciosSlice.reducerPath]: preciosSlice.reducer,
-    [usuariosSlice.reducerPath]:usuariosSlice.reducer,
+    [AlquilerApi.reducerPath]: AlquilerApi.reducer,
+    [usuariosSlice.reducerPath]: usuariosSlice.reducer,
 
   },
 
@@ -41,6 +42,8 @@ export const store = configureStore({
       ambientesApiSlice.middleware,
       ServicioApi.middleware,
       preciosSlice.middleware,
+      AlquilerApi.middleware,
       usuariosSlice.middleware,
+
     ),
 });
