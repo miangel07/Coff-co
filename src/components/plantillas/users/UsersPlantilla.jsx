@@ -418,7 +418,7 @@ const UsersPlantilla = () => {
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
 
-              {/* <InputAtomoActualizar
+              <InputAtomoActualizar
                 register={register}
                 name={"password"}
                 errores={errors}
@@ -426,7 +426,7 @@ const UsersPlantilla = () => {
                 placeholder={"Ingrese la contraseña del usuario"}
                 type={"password"}
                 defaultValue={usuarioSeleccionado?.password || ""}
-              /> */}
+              />
 
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
