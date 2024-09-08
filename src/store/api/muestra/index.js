@@ -85,8 +85,7 @@ endpoints: (build) => ({
   }),
 });
 
-export const { usegetMuestrasQuery, useCrearAmbienteMutation,
-    useActualizarAmbienteMutation, useEliminarAmbienteMutation} = ambientesApiSlice;
+export const { useGetMuestrasQuery, usePostMuestraMutation, usePutMuestraMutation, useDeleteMuestraMutation } = muestraApiSlice
 
 
 

@@ -13,6 +13,7 @@ import PreciosPage from "./pages/precios/PreciosPage";
 import UsersPages from "./pages/users/UsersPages";
 import ServicioPage from "./pages/servicios/ServicioPage";
 import VariablePages from "./pages/variable/VariablePages";
+import MuestrasPage from "./pages/muestras/MuestrasPage";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/precios" element={<PreciosPage/>}></Route>
         <Route path="/servicios" element={<ServicioPage/>}></Route>
         <Route path="/varibles" element={<VariablePages/>}></Route>
+        <Route path="/muestras" element={<MuestrasPage/>}></Route>
 
       </Routes>
     </>
