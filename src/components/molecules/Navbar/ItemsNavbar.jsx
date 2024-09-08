@@ -33,6 +33,13 @@ const ItemsNavbar = ({ visiblite }) => {
     setSubitems(subIndex);
   };
 
+  const handleLogout = () => {
+    document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log('Token eliminado');
+    window.location.reload();
+  };
+  
+
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
@@ -112,58 +119,62 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-    },
+      icon: <ImExit className="w-5 h-5 xl:size-7" />,
+      link: "/"
+    }
   ];
 
   return (
-    <div className="flex justify-content-center">
-      <ul className="w-full">
-        {items.map((item, index) => (
-          <div key={index}>
-            <li
-              className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-light-gray" : ""
-                }`}
-              onClick={() => handleClick(index)}
-            >
-              <Link
-                to={item.link}
-                className="flex items-center space-x-2 w-full cursor-pointer"
+<div className="flex justify-content-center">
+  <ul className="w-full">
+    {items.map((item, index) => (
+      <div key={index}>
+        <li
+          className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-light-gray" : ""}`}
+          onClick={() => {
+            handleClick(index);
+            if (item.label === "Salir") {
+              handleLogout(); 
+            }
+          }}
+        >
+          <Link
+            to={item.link}
+            className="flex items-center space-x-2 w-full cursor-pointer"
+          >
+            <div className="cursor-pointer">{item.icon}</div>
+            <span className="cursor-pointer line-clamp-1">
+              {item.label}
+            </span>
+          </Link>
+        </li>
+        {itemsUser === 9 && subMenuVisible && (
+          <ul className="pl-4">
+            {item.items?.map((subItem, subIndex) => (
+              <li
+                key={subIndex}
+                className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-light-gray" : ""}`}
+                onClick={() => handleClickSubimitem(subIndex)}
               >
-                <div className="cursor-pointer">{item.icon}</div>
-                <span className="cursor-pointer line-clamp-1">
-                  {item.label}
-                </span>
-              </Link>
-            </li>
-            {itemsUser === 9 && subMenuVisible && (
-              <ul className="pl-4">
-                {item.items?.map((subItem, subIndex) => (
-                  <li
-                    key={subIndex}
-                    className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-light-gray" : ""
-                      }`}
-                    onClick={() => handleClickSubimitem(subIndex)}
-                  >
-                    <Link
-                      to={subItem.link}
-                      className="flex items-center space-x-2 w-full cursor-pointer"
-                    >
-                      <div className="cursor-pointer">
-                        <i className={subItem.icon}></i>
-                      </div>
-                      <span className="cursor-pointer line-clamp-1">
-                        {subItem.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-      </ul>
-    </div>
+                <Link
+                  to={subItem.link}
+                  className="flex items-center space-x-2 w-full cursor-pointer"
+                >
+                  <div className="cursor-pointer">
+                    <i className={subItem.icon}></i>
+                  </div>
+                  <span className="cursor-pointer line-clamp-1">
+                    {subItem.label}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    ))}
+  </ul>
+</div>
   );
 };
 

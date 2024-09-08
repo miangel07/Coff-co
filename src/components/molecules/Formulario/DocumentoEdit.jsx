@@ -107,11 +107,10 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className='text-2xl font-bold mb-4 justify-center flex'>Formulario De Actualizacion </h1>
-
+                
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
-                        <Label>Nombre Del Documento</Label>
+                        <Label>Nombre </Label>
                         <InputAtomo
                             register={register}
                             name={'nombre'}
@@ -122,7 +121,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Descripcion Del Documento</Label>
+                        <Label>Descripcion </Label>
                         <InputAtomo
                             register={register}
                             name={'descripcion'}
@@ -133,12 +132,12 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Codigo Del Documento</Label>
+                        <Label>Codigo </Label>
                         <InputAtomo
                             register={register}
                             name={'codigo_documentos'}
                             erros={errors}
-                            placeholder={"codigo del documentos"}
+                            placeholder={"codigo "}
                             id={'codigo_documentos'}
                             type={"text"}
                         />
@@ -164,7 +163,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Version Del Documento</Label>
+                        <Label>Version </Label>
                         <InputAtomo
                             register={register}
                             name={'version'}

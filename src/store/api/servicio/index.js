@@ -16,9 +16,25 @@ export const ServicioApi = createApi({
                 url: "servicios/listar",
                 method: "GET",
             }),
+            providesTags:['servicios']
 
         }),
+
+        // endpoint para traer variables de los documentos
+        postFormulario: build.mutation({
+            query: (datos) => (
+                console.log(datos),{
+                url: "servicios/variablesVersion",
+                method: "POST",
+                body: datos,
+            }),
+            invalidatesTags: ['servicios']
+
+            
+        })
+
+    
     })
 })
 
-export const { useGetServicioQuery } = ServicioApi;
+export const { useGetServicioQuery , usePostFormularioMutation} = ServicioApi;

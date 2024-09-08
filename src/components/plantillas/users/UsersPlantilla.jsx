@@ -375,7 +375,7 @@ const UsersPlantilla = () => {
     {/* MODAL ACTUALIZAR*/}
     {openModalActualizar && (
     <ModalOrganismo
-      logo={<Logosímbolo />}
+      // logo={<Logosímbolo />}
       children={
         <UserFrom
           onsubmit={handleSubmit(onsubmitActualizar)}
@@ -417,8 +417,8 @@ const UsersPlantilla = () => {
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
-
-              {/* <InputAtomoActualizar
+{/* 
+              <InputAtomoActualizar
                 register={register}
                 name={"password"}
                 errores={errors}

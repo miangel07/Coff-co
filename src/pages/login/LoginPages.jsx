@@ -1,11 +1,10 @@
 import React from "react";
-import LoginComponent from "../../components/molecules/login/LoginComponents";
-import LoginFooter from "../../components/organismo/LoginFooter";
+import LoginOrganism from "../../components/organismo/LoginOrganism.jsx";
 
 const LoginPages = () => {
   return (
     <div>
-      <LoginFooter />
+      <LoginOrganism/>
     </div>
   );
 };
