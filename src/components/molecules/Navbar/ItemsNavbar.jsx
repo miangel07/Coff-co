@@ -32,7 +32,7 @@ const ItemsNavbar = ({ visiblite }) => {
     { value: "es", label: "español" },
     { value: "en", label: "ingles" },
 
-]
+  ]
   const handleClickSubimitem = (subIndex) => {
     setSubitems(subIndex);
   };
@@ -42,7 +42,7 @@ const ItemsNavbar = ({ visiblite }) => {
     console.log('Token eliminado');
     window.location.reload();
   };
-  
+
 
   const items = [
     {
@@ -176,12 +176,12 @@ const ItemsNavbar = ({ visiblite }) => {
         ))}
       </ul>
       <SelectDocumentos
-        value={""}
+        value={localStorage.getItem("lenguague")}
         data={idioma}
         items={"value"}
         label={" Idioma"}
         ValueItem={"label"}
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e) => localStorage.setItem("lenguague", (e.target.value))}
       />
     </div>
   );

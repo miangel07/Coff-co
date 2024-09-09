@@ -2,7 +2,7 @@ import { useEffect, createContext, useState } from "react";
 import i18n from "../utils/Idioms";
 export const TraslateContex = createContext()
 
-export const TraslateProvider = ({ children }) => {
+export const TranslateProvider = ({ children }) => {
     const [language, setLanguage] = useState(() => {
         return localStorage.getItem("lenguague") || "es"
     })
