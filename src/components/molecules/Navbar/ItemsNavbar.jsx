@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -14,11 +14,14 @@ import { IoIosApps } from "react-icons/io";
 import { BiSolidCoffeeBean } from "react-icons/bi";
 import { IoDocumentText } from "react-icons/io5";
 import SelectDocumentos from '../../atoms/SelectDocumentos';
-
+import { useTranslation } from 'react-i18next'; //  <--------importan este para usar la traducioon Esteeeeee
+import { TraslateContex } from "../../../context/TranslationoContex";
 const ItemsNavbar = ({ visiblite }) => {
+  const { changeLanguage, language } = useContext(TraslateContex);
   const [itemsUser, setItemsUser] = useState(-1);
   const [subItems, setSubitems] = useState(-1);
   const [subMenuVisible, setSubMenuVisible] = useState(false);
+  const { t } = useTranslation(); // <--------aca ponen esto tal cual  no vallan a cambiar la letra asi lo usan con la "t"
 
   const handleClick = (index) => {
     setItemsUser(index);
@@ -32,7 +35,7 @@ const ItemsNavbar = ({ visiblite }) => {
     { value: "es", label: "español" },
     { value: "en", label: "ingles" },
 
-]
+  ]
   const handleClickSubimitem = (subIndex) => {
     setSubitems(subIndex);
   };
@@ -42,53 +45,53 @@ const ItemsNavbar = ({ visiblite }) => {
     console.log('Token eliminado');
     window.location.reload();
   };
-  
+
 
   const items = [
     {
-      label: `${visiblite ? "Home" : ""}`,
+      label: `${visiblite ? t("home") : ""}`,
       icon: <GoHomeFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/home",
     },
     {
-      label: `${visiblite ? "Servicios" : ""}`,
+      label: `${visiblite ? t("servicios") : ""}`,
       icon: <GiCoffeeBeans className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/servicios",
     },
     {
-      label: `${visiblite ? "Documentos" : ""}`,
+      label: `${visiblite ? t("documentos") : ""}`,
       icon: <GoFileDirectoryFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/documentos",
     },
     {
-      label: `${visiblite ? "Precios" : ""}`,
+      label: `${visiblite ? t("precios") : ""}`,
       icon: <AiFillDollarCircle className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/precios",
     },
     {
-      label: `${visiblite ? "Ambientes" : ""}`,
+      label: `${visiblite ? t("ambientes"): ""}`,
       icon: <BsHousesFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/ambientes",
     },
     {
-      label: `${visiblite ? "Tipo de Documentos" : ""}`,
+      label: `${visiblite ? t("tipoDocumentos") : ""}`,
       icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
-      label: `${visiblite ? "Tipo de Servicios" : ""}`,
+      label: `${visiblite ? t("tipoServicios") : ""}`,
       icon: <MdOutlineMiscellaneousServices className="w-5 h-5 xl:size-7 " />,
     },
     {
-      label: `${visiblite ? "Muestras" : ""}`,
+      label: `${visiblite ? t("muestras") : ""}`,
       icon: <BiSolidCoffeeBean className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
-      label: `${visiblite ? "Variables" : ""}`,
+      label: `${visiblite ? t("variables") : ""}`,
       icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
       link: "/varibles"
     },
     {
-      label: `${visiblite ? "Configuraciones" : ""}`,
+      label: `${visiblite ? t("configuraciones") : ""}`,
       icon: <IoIosSettings className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       items: visiblite
         ? [
@@ -109,20 +112,20 @@ const ItemsNavbar = ({ visiblite }) => {
         : [],
     },
     {
-      label: `${visiblite ? "Alquiler Del Laboratorio" : ""}`,
+      label: `${visiblite ? t("alquiler") : ""}`,
       icon: <FaCalendarAlt className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/alquiler",
     },
     {
-      label: `${visiblite ? "Reportes" : ""}`,
+      label: `${visiblite ? t("reportes") : ""}`,
       icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
-      label: `${visiblite ? "Facturas" : ""}`,
+      label: `${visiblite ? t("facturas") : ""}`,
       icon: <TbReportMoney className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
     },
     {
-      label: `${visiblite ? "Salir" : ""}`,
+      label: `${visiblite ? t("salir") : ""}`,
       icon: <ImExit className="w-5 h-5 xl:size-7" />,
       link: "/"
     }
@@ -181,7 +184,7 @@ const ItemsNavbar = ({ visiblite }) => {
         items={"value"}
         label={" Idioma"}
         ValueItem={"label"}
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e) => changeLanguage(e.target.value)}
       />
     </div>
   );
