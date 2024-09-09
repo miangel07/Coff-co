@@ -13,7 +13,7 @@ import { ImExit } from "react-icons/im";
 import { IoIosApps } from "react-icons/io";
 import { BiSolidCoffeeBean } from "react-icons/bi";
 import { IoDocumentText } from "react-icons/io5";
-import { link } from "@nextui-org/react";
+import SelectDocumentos from '../../atoms/SelectDocumentos';
 
 const ItemsNavbar = ({ visiblite }) => {
   const [itemsUser, setItemsUser] = useState(-1);
@@ -28,10 +28,21 @@ const ItemsNavbar = ({ visiblite }) => {
       setSubMenuVisible(false);
     }
   };
+  const idioma = [
+    { value: "es", label: "español" },
+    { value: "en", label: "ingles" },
 
+]
   const handleClickSubimitem = (subIndex) => {
     setSubitems(subIndex);
   };
+
+  const handleLogout = () => {
+    document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log('Token eliminado');
+    window.location.reload();
+  };
+  
 
   const items = [
     {
@@ -112,12 +123,13 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-    },
+      icon: <ImExit className="w-5 h-5 xl:size-7" />,
+      link: "/"
+    }
   ];
 
   return (
-    <div className="flex justify-content-center">
+    <div className="flex justify-content-center flex-col">
       <ul className="w-full">
         {items.map((item, index) => (
           <div key={index}>
@@ -163,6 +175,14 @@ const ItemsNavbar = ({ visiblite }) => {
           </div>
         ))}
       </ul>
+      <SelectDocumentos
+        value={""}
+        data={idioma}
+        items={"value"}
+        label={" Idioma"}
+        ValueItem={"label"}
+        onChange={(e) => console.log(e.target.value)}
+      />
     </div>
   );
 };
