@@ -12,13 +12,14 @@ import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
     const [logos, setlogos] = useState([])
+    const { t } = useTranslation();
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
@@ -150,34 +151,34 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
-                        <Label>Nombre </Label>
+                        <Label>{t("nombre")} </Label>
                         <InputAtomo
                             register={register}
                             name={'nombre'}
                             erros={errors}
-                            placeholder={"Nombre"}
+                            placeholder={t("nombre")}
                             id={'nombre'}
                             type={"text"}
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Descripcion </Label>
+                        <Label>{t("descripcion")} </Label>
                         <InputAtomo
                             register={register}
                             name={'descripcion'}
                             erros={errors}
-                            placeholder={"descripcion"}
+                            placeholder={t("descripcion")}
                             id={'descripcion'}
                             type={"text"}
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Codigo </Label>
+                        <Label>{t("Codigo")} </Label>
                         <InputAtomo
                             register={register}
                             name={'codigo_documentos'}
                             erros={errors}
-                            placeholder={"codigo s"}
+                            placeholder={t("Codigo")}
                             id={'codigo_documentos'}
                             type={"text"}
                         />
@@ -193,17 +194,17 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Fecha Emision</Label>
+                        <Label>{t('FechaEmision')}</Label>
                         <InputAtomo
                             register={register}
                             erros={errors}
                             type={'date'}
                             name={'fecha_emision'}
-                            placeholder={"Fecha De Emision"}
+                            placeholder={t('FechaEmision')}
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Version </Label>
+                        <Label>Version</Label>
                         <InputAtomo
                             register={register}
                             name={'version'}
@@ -214,7 +215,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Tipo De Documento</Label>
+                        <Label>{t("tipoDocumentos")}</Label>
                         <SelectDocumentos
                             value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
@@ -227,13 +228,13 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
                     {dataInput == 5 &&
                         <section className='flex w-[230px] h-[155px] flex-col '>
-                            <Label>Tipo De servicio</Label>
+                            <Label>{t("tipoServicios")}</Label>
                             <SelectDocumentos
                                 value={valor?.tipo_servicio || ""}
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
-                                label={"Seleccione El servicio"}
+                                label={t("selecioneTipoServicio")}
                                 onChange={(e) => setTipoServicio(e.target.value)}
                             />
                         </section>}
@@ -254,7 +255,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
                     <div className={`flex w-[230px] h-[155px] flex-col  `} >
-                        <Label>Cargar Archivo</Label>
+                        <Label>{t("cargarArchivo")}</Label>
                         <input
                             type="file"
                             name="file"
@@ -265,7 +266,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end  flex '>
-                    <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
+                    <Mybutton color={"primary"} type={'submit'} >{valor ? t("actualizar") : t("registrar")}</Mybutton>
 
 
                 </div>

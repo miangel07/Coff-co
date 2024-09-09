@@ -1,4 +1,4 @@
-import React, { useState ,useContext} from "react";
+import React, { useState, useContext } from "react";
 import Icons from "../../atoms/Icons";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -31,8 +31,8 @@ const ItemsNavbar = ({ visiblite }) => {
     }
   };
   const idioma = [
-    { value: "es", label: "español" },
-    { value: "en", label: "ingles" },
+    { value: "es", label: t("espanol") },
+    { value: "en", label: t("ingles") },
 
   ]
 
@@ -66,7 +66,7 @@ const ItemsNavbar = ({ visiblite }) => {
       link: "/precios",
     },
     {
-      label: `${visiblite ? t("ambientes"): ""}`,
+      label: `${visiblite ? t("ambientes") : ""}`,
       icon: <BsHousesFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/ambientes",
     },
@@ -134,7 +134,7 @@ const ItemsNavbar = ({ visiblite }) => {
         value={""}
         data={idioma}
         items={"value"}
-        label={" Idioma"}
+        label={t("idioma")}
         ValueItem={"label"}
         onChange={(e) => changeLanguage(e.target.value)}
       />
