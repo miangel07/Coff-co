@@ -19,7 +19,6 @@ import { TraslateContex } from "../../../context/TranslationoContex";
 const ItemsNavbar = ({ visiblite }) => {
   const { changeLanguage, language } = useContext(TraslateContex);
   const [itemsUser, setItemsUser] = useState(-1);
-  const [subItems, setSubitems] = useState(-1);
   const [subMenuVisible, setSubMenuVisible] = useState(false);
   const { t } = useTranslation(); // <--------aca ponen esto tal cual  no vallan a cambiar la letra asi lo usan con la "t"
 
@@ -36,9 +35,7 @@ const ItemsNavbar = ({ visiblite }) => {
     { value: "en", label: "ingles" },
 
   ]
-  const handleClickSubimitem = (subIndex) => {
-    setSubitems(subIndex);
-  };
+
 
   const handleLogout = () => {
     document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -91,27 +88,6 @@ const ItemsNavbar = ({ visiblite }) => {
       link: "/varibles"
     },
     {
-      label: `${visiblite ? t("configuraciones") : ""}`,
-      icon: <IoIosSettings className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-      items: visiblite
-        ? [
-          {
-            label: `${visiblite ? "Usuarios" : ""}`,
-            icon: "pi pi-users",
-            link: "/users",
-          },
-          {
-            label: `${visiblite ? "Ayuda" : ""}`,
-            icon: "pi-question-circle",
-          },
-          {
-            label: `${visiblite ? "Logos" : ""}`,
-            icon: "pi pi-image",
-          },
-        ]
-        : [],
-    },
-    {
       label: `${visiblite ? t("alquiler") : ""}`,
       icon: <FaCalendarAlt className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/alquiler",
@@ -151,30 +127,6 @@ const ItemsNavbar = ({ visiblite }) => {
                 </span>
               </Link>
             </li>
-            {itemsUser === 9 && subMenuVisible && (
-              <ul className="pl-4">
-                {item.items?.map((subItem, subIndex) => (
-                  <li
-                    key={subIndex}
-                    className={`flex items-center p-3 mt-1 rounded-lg ${subItems === subIndex ? "bg-light-gray" : ""
-                      }`}
-                    onClick={() => handleClickSubimitem(subIndex)}
-                  >
-                    <Link
-                      to={subItem.link}
-                      className="flex items-center space-x-2 w-full cursor-pointer"
-                    >
-                      <div className="cursor-pointer">
-                        <i className={subItem.icon}></i>
-                      </div>
-                      <span className="cursor-pointer line-clamp-1">
-                        {subItem.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
         ))}
       </ul>
