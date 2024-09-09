@@ -12,6 +12,9 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { PrimeReactProvider } from "primereact/api";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./utils/Idioms.jsx";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -20,7 +23,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <BrowserRouter>
           <CssBaseline />
           <PrimeReactProvider>
-            <App />
+            <I18nextProvider i18n={i18n}>
+              <App />
+            </I18nextProvider>
           </PrimeReactProvider>
           <Toaster />
         </BrowserRouter>
