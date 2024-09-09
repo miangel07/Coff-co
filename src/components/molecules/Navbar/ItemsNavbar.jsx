@@ -37,6 +37,13 @@ const ItemsNavbar = ({ visiblite }) => {
     setSubitems(subIndex);
   };
 
+  const handleLogout = () => {
+    document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log('Token eliminado');
+    window.location.reload();
+  };
+  
+
   const items = [
     {
       label: `${visiblite ? "Home" : ""}`,
@@ -116,8 +123,9 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? "Salir" : ""}`,
-      icon: <ImExit className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-    },
+      icon: <ImExit className="w-5 h-5 xl:size-7" />,
+      link: "/"
+    }
   ];
 
   return (
