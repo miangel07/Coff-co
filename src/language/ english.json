@@ -1,17 +1,17 @@
-{ 
-    
-    "home":"Home",
-    "servicios":"Services",
-    "documentos":"Documents",
-    "precios":"Prices",
-    "ambientes":"Environments",
-    "tipoDocumentos":"Type of documents",
-    "tipoServicios":"Type of Services",
-    "muestras":"Specimen",
-    "variables":"Variables",
-    "configuraciones":"Settings",
-    "alquiler":"Laboratory Rental",
-    "reportes":"Reports",
-    "facturas":"Invoices",
-    "salir":"Exit"
+{
+    "home": "Home",
+    "servicios": "Services",
+    "documentos": "Documents",
+    "precios": "Prices",
+    "ambientes": "Environments",
+    "tipoDocumentos": "Type of documents",
+    "tipoServicios": "Type of Services",
+    "muestras": "Specimen",
+    "variables": "Variables",
+    "configuraciones": "Settings",
+    "alquiler": "Laboratory Rental",
+    "reportes": "Reports",
+    "facturas": "Invoices",
+    "salir": "Exit",
+    "nuevo": "New"
 }
