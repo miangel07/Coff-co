@@ -13,5 +13,7 @@
     "reportes":"Reportes",
     "facturas":"Facturas",
     "salir":"Salir",
-    "nuevo":"Nuevo"
+    "nuevo":"Nuevo",
+    "estado":"Estado",
+    "nombre":"Nombre"
 }

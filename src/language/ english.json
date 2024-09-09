@@ -13,5 +13,8 @@
     "reportes": "Reports",
     "facturas": "Invoices",
     "salir": "Exit",
-    "nuevo": "New"
+    "nuevo": "New",
+    "estado":"State",
+    "nombre":"Name"
+
 }
