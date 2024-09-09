@@ -1,3 +1,16 @@
 {
-    "mensaje":"hola mundo"
+    "home":"Casa",
+    "servicios":"Servicios",
+    "documentos":"Documentos",
+    "precios":"Precios",
+    "ambientes":"Ambientes",
+    "tipoDocumentos":"Tipo de Documento",
+    "tipoServicios":"Tipo de Servicio",
+    "muestras":"Mustra",
+    "variables":"Variables",
+    "configuraciones":"Configuraciones",
+    "alquiler":"Alquiler de Laboratorio",
+    "reportes":"Reportes",
+    "facturas":"Facturas",
+    "salir":"Salir"
 }
