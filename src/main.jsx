@@ -17,6 +17,9 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./utils/Idioms.jsx";
 import { TranslateProvider } from "./context/TranslationoContex.jsx";
 
+
+//cambios Luisa en main
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <NextUIProvider>
