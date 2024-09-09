@@ -13,6 +13,9 @@ import { ServicioApi } from "./api/servicio";
 import { preciosSlice } from "./api/precios/preciosSlice";
 import { usuariosSlice } from "./api/users";
 import { AlquilerApi } from "./api/alquilerLaboratorio";
+import { muestraApiSlice } from "./api/muestra";
+import { fincaApiSlice } from "./api/fincas";
+
 export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
@@ -26,6 +29,8 @@ export const store = configureStore({
     [preciosSlice.reducerPath]: preciosSlice.reducer,
     [AlquilerApi.reducerPath]: AlquilerApi.reducer,
     [usuariosSlice.reducerPath]: usuariosSlice.reducer,
+    [muestraApiSlice.reducerPath]: muestraApiSlice.reducer,
+    [fincaApiSlice.reducerPath]: fincaApiSlice.reducer,
 
   },
 
@@ -44,6 +49,8 @@ export const store = configureStore({
       preciosSlice.middleware,
       AlquilerApi.middleware,
       usuariosSlice.middleware,
+      muestraApiSlice.middleware,
+      fincaApiSlice.middleware,
 
     ),
 });

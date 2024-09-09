@@ -98,7 +98,7 @@ const AmbientesPlantilla = () => {
   };
 
   const handleSwitchChange = (checked, id) => {
-    const nuevoEstado = checked ? "activo" : "inactivo";
+    C
     const ambienteActual = data.find((ambiente) => ambiente.idAmbiente === id);
 
     if (!ambienteActual) {
