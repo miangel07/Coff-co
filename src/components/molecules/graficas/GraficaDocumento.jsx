@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactEcharts from 'echarts-for-react';
 import { useGraficaQuery } from '../../../store/api/documentos';
+import { useTranslation } from 'react-i18next';
 const GraficaDocumento = () => {
+    const { t } = useTranslation();
+
     const { data, isLoading, isError, error } = useGraficaQuery();
 
     if (isLoading) return <p>Loading...</p>;
-    if (isError) return <p>No hay datos para graficar</p>;
+    if (isError) return <p>{t("errorGrafica")}</p>;
     const getOption = () => {
         return {
             tooltip: {
@@ -48,7 +51,7 @@ const GraficaDocumento = () => {
     return (
         <div>
             <h1>
-                Grafica de Documentos
+                {t("graficaDoscumento")}
             </h1>
             <ReactEcharts option={getOption()} style={{ height: '600px', width: '100%' }} />
         </div>

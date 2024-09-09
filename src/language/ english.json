@@ -14,7 +14,23 @@
     "facturas": "Invoices",
     "salir": "Exit",
     "nuevo": "New",
-    "estado":"State",
-    "nombre":"Name"
-
+    "estado": "State",
+    "nombre": "Name",
+    "graficaDoscumento": "Document Chart",
+    "errorGrafica": "There is no data to graph",
+    "Codigo": "code",
+    "Version": "verision",
+    "FechaVersion": "Version Date",
+    "FechaEmision": "Issue Date",
+    "acciones": "actions",
+    "selecioneTipoDocumento": "Select the Document Type",
+    "selecioneTipoServicio": "Select the service",
+    "registrar": "Register",
+    "actualizar": "Update",
+    "descripcion": "Description",
+    "cargarArchivo": "upload file",
+    "cerrar": "Close",
+    "idioma": "language",
+    "ingles": "English",
+    "espanol": "Spanish"
 }
