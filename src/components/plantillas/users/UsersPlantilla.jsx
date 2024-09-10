@@ -39,7 +39,7 @@ const UsersPlantilla = () => {
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
 
-  const [roles, setRoles] = useState([]); // Estado para almacenar los roles
+  const [roles, setRoles] = useState([]); 
 
   useEffect(() => {
       // Función para obtener los roles desde el backend
