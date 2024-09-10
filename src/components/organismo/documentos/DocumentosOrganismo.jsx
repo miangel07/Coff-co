@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { confirmAlert } from 'react-confirm-alert';
 import { MdEditDocument } from "react-icons/md";
 import DocumentoEdit from "../../molecules/Formulario/DocumentoEdit";
+import { useTranslation } from 'react-i18next';
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
@@ -28,6 +29,7 @@ const DocumentosOrganismo = () => {
   const [form, setFrom] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [showdocument, setShowdocument] = useState([])
+  const { t } = useTranslation();
   const [valuedocs, setValuedocs] = useState(null)
   const [dataValue, setDataValue] = useState(null)
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
@@ -134,9 +136,9 @@ const DocumentosOrganismo = () => {
   if (tipoError || isErrorEstado || isError) {
     return (
       <p>
-        Error: {errorTipo?.message || "Error al cargar los tipos de documentos"}
-        || Error: {errorEstado?.message || "Error al cambiar el estado del documento"}
-        || Error: {error?.message || "Error al cargar los documentos"}
+        {errorTipo?.message || "Error al cargar los tipos de documentos"}
+        ||{errorEstado?.message || "Error al cambiar el estado del documento"}
+        ||{error?.message || "Error al cargar los documentos"}
       </p>
     );
   }
@@ -146,13 +148,13 @@ const DocumentosOrganismo = () => {
       <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
 
         <Mybutton color={"primary"} type={"submit"} onClick={() => setFrom(true)}>
-          Nuevo
+          {t("nuevo")}
         </Mybutton>
         {
           form &&
           <ModalOrganismo
             closeModal={closeModal}
-            title={`${valuedocs ? 'Actualizar' : "Registrar"}`}
+            title={`${valuedocs ? t('actualizar') : t("registrar")}`}
             visible={form}
           >
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
@@ -162,7 +164,7 @@ const DocumentosOrganismo = () => {
           showModal &&
           <ModalOrganismo
             closeModal={() => setShowModal(false)}
-            title={`Editar Documentos`}
+            title={t(`actualizar`)}
             visible={true}
           >
 
@@ -172,7 +174,7 @@ const DocumentosOrganismo = () => {
         }
         <div className="w-72 ">
           <SelectDocumentos
-            label={"Selecione el Tipo de Documento"}
+            label={t("selecioneTipoDocumento")}
             data={tipoData}
             onChange={(e) => SetDataInput(e.target.value)}
             items={"nombreDocumento"}
@@ -191,14 +193,14 @@ const DocumentosOrganismo = () => {
         <TableMolecula>
           <Thead>
             <Th>Id</Th>
-            <Th>Codigo</Th>
-            <Th>Nombre</Th>
-            <Th>Version</Th>
-            <Th>Fecha De Version</Th>
-            <Th>Fecha Emision</Th>
-            <Th>Estado</Th>
-            <Th>Tipo De Documento</Th>
-            <Th>acciones</Th>
+            <Th>{t('Codigo')}</Th>
+            <Th>{t('nombre')}</Th>
+            <Th>{t('Version')}</Th>
+            <Th>{t("FechaVersion")}</Th>
+            <Th>{t("FechaEmision")}</Th>
+            <Th>{t("Estado")}</Th>
+            <Th>{t("tipoDocumentos")}</Th>
+            <Th>{t("acciones")}</Th>
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((doc) => (
