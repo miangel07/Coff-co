@@ -19,176 +19,147 @@ import InputAtomo from "../../atoms/Input";
 import { Select, SelectItem } from "@nextui-org/react";
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetUsuarioQuery } from "../../../store/api/users";
+import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
+
 
 import {
   useGetMuestrasQuery,
-  usePostMuestraMutation,
-  usePutMuestraMutation,
-  useDeleteMuestraMutation,
+  useUpdateEstadoMuestraMutation,
 } from "../../../store/api/muestra";
 
 const MuestrasPlantilla = () => {
-  const [paginaActual, setPaginaActual] = useState(1);
-  const itemsPorPagina = 4;
-
-  const [currentFinca, setCurrentFinca] = useState(null);
-  const [currentUsuarios, setCurrentUsuarios] = useState(null);
-
-  const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
-
-  const { data: dataUsuarios, isLoading: isLoadingUsuarios } =
-    useGetUsuarioQuery();
-
-  const { data, isLoading, refetch } = useGetMuestrasQuery();
-  const [crearMuestra] = usePostMuestraMutation();
-  const [actualizarMuestra] = usePutMuestraMutation();
-  const [eliminarMuestra] = useDeleteMuestraMutation();
-
-  const [visible, setVisible] = useState(false);
-  const [muestraSeleccionada, setMuestraSeleccionada] = useState(null);
-
+  const [showModal, setShowModal] = useState(false);
+  const [datosDelFormulario, setDatosDelFormulario] = useState("");
+  const [pages, setPages] = useState(1);
   const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-    setValue,
-  } = useForm();
-  if (isLoading || isLoadingFincas || isLoadingUsuarios) {
-    return (
-      <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
-    );
+    data: dataMuestras,
+    isLoading,
+    isError,
+    error,
+  } = useGetMuestrasQuery();
+  const [
+    updateEstado,
+    { isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio },
+  ] = useUpdateEstadoMuestraMutation();
+
+  const handleModal = () => {
+    setShowModal(true);
+  };
+
+  const cantidad = 4;
+  const final = pages * cantidad;
+  const inicial = final - cantidad;
+  const handlePageChange = (page) => {
+    setPages(page);
+  };
+
+  const numeroPagina = Math.ceil((dataMuestras?.length || 0) / cantidad);
+  const DataArrayPaginacion = dataMuestras
+    ? dataMuestras?.slice(inicial, final)
+    : [];
+  const handleEdit = (muestra) => {
+    setDatosDelFormulario(muestra);
+    setShowModal(true);
+  };
+
+  const closemodal = () => {
+    setDatosDelFormulario("");
+    setShowModal(false);
+  };
+  const handleSwitchChange = (checked, id) => {
+    try {
+      updateEstado({
+        id: id,
+        estado: checked ? "terminado" : "pendiente",
+      });
+    } catch (error) {
+      console.error("Error al procesar la solicitud", error);
+    }
+  };
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
-  const abrirModal = (muestra) => {
-    if (muestra) {
-      setMuestraSeleccionada(muestra);
-      reset({
-        cantidadEntrada: muestra.cantidadEntrada,
-        finca: muestra.finca,
-        fecha_muestra: muestra.fecha_muestra,
-        codigo_muestra: muestra.codigo_muestra,
-        usuario: muestra.usuario,
-      });
-    } else {
-      setMuestraSeleccionada(null);
-      reset({
-        cantidadEntrada: "",
-        finca: "",
-        fecha_muestra: "",
-        codigo_muestra: "",
-        usuario: "",
-        estado: "terminado",
-      });
-    }
-    setVisible(true);
-  };
-
-  const cerrarModal = () => {
-    setVisible(false);
-    reset();
-  };
-
-  const onSubmit = async (datos) => {
-    try {
-      const payload = {
-        cantidadEntrada: datos.cantidadEntrada,
-        fk_id_finca: currentFinca,
-        fecha_muestra: datos.fecha_muestra,
-        codigo_muestra: datos.codigo_muestra,
-        fk_id_usuarios: currentUsuarios,
-        estado: "pendiente",
-      };
-  
-      if (muestraSeleccionada) {
-        // Actualizar muestra existente
-        await actualizarMuestra({ ...payload, id: muestraSeleccionada.id_muestra }).unwrap();
-        toast.success("Muestra actualizada con éxito");
-      } else {
-        // Crear nueva muestra
-        await crearMuestra(payload).unwrap();
-        toast.success("Muestra registrada con éxito");
-      }
-  
-      cerrarModal();
-      refetch();
-    } catch (error) {
-      console.error("Error al crear/actualizar muestra:", error);
-      toast.error("Error al crear/actualizar muestra");
-    }
-  };
-  
-
-  const handleSwitchChange = (checked, id) => {
-    const nuevoEstado = checked ? "terminado" : "pendiente";
-    const muestraActual = data.find((muestra) => muestra.id_muestra === id);
-  
-    if (!muestraActual) {
-      toast.error("Muestra no encontrada");
-      return;
-    }
-  
-    const payload = {
-      id: id,
-      cantidadEntrada: muestraActual.cantidadEntrada,
-      finca: muestraActual.finca,
-      fecha_muestra: muestraActual.fecha_muestra,
-      codigo_muestra: muestraActual.codigo_muestra,
-      usuario: muestraActual.usuario,
-      estado: nuevoEstado,
-    };
-  
-    console.log("Actualizar muestra con payload:", payload);
-  
-    actualizarMuestra(payload)
-      .unwrap()
-      .then(() => {
-        toast.success("Muestra actualizada con éxito");
-        refetch();
-      })
-      .catch((error) => {
-        console.error("Error al actualizar la muestra", error);
-        toast.error("Error al actualizar la muestra");
-      });
-  };
-  
-
-  const handleEliminarMuestra = (id, codigo_muestra) => {
-    confirmAlert({
-      title: "Confirmación de eliminación",
-      message: `¿Estás seguro de que quieres eliminar la muestra ${codigo_muestra}?`,
-      buttons: [
-        {
-          label: "Sí",
-          onClick: async () => {
-            try {
-              await eliminarMuestra(id);
-              toast.success("Muestra eliminada con éxito");
-              refetch();
-            } catch (error) {
-              console.error("Error al eliminar la muestra", error);
-              toast.error("Error al eliminar la muestra");
-            }
-          },
-        },
-        {
-          label: "No",
-          onClick: () => toast.info("Eliminación cancelada"),
-        },
-      ],
-      closeOnClickOutside: true,
-    });
-  };
-
-  const indiceUltimoItem = paginaActual * itemsPorPagina;
-  const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
-  const currentItems = data
-    ? data.slice(indicePrimerItem, indiceUltimoItem)
-    : [];
-  const totalPages = Math.ceil((data?.length || 0) / itemsPorPagina);
-
   return (
-    <>
+    <section className="w-full  mt-5 gap-4 flex flex-wrap flex-col">
+      <h2 className="text-2xl px-20 font-bold">Muestras</h2>
+      <div className="px-20 ">
+        <Mybutton color={"primary"} onClick={handleModal}>
+          Nuevo
+        </Mybutton>
+      </div>
+      {showModal && (
+        <ModalOrganismo
+          title={"Registrar Nueva Muestra"}
+          visible={showModal}
+          closeModal={closemodal}
+        >
+          <MuestrasFormulario
+            dataValue={datosDelFormulario}
+            closeModal={closemodal}
+          />
+        </ModalOrganismo>
+      )}
+      <div className="w-full px-20 overflow-x-auto ">
+        <TableMolecula>
+          <Thead>
+              <Th>ID</Th>
+              <Th>Código</Th>
+              <Th>Cantidad</Th>
+              <Th>Fecha</Th>
+              <Th>Finca</Th>
+              <Th>Usuario</Th>
+              <Th>Estado</Th>
+              <Th>Acciones</Th>
+          </Thead>
+          <Tbody>
+            {DataArrayPaginacion?.map((muestra) => (
+              <tr key={muestra.id_muestra}>
+                <Td>{muestra.id_muestra}</Td>
+                    <Td>{muestra.codigo_muestra}</Td>
+                    <Td>{muestra.cantidadEntrada}</Td>
+                    <Td>{muestra.fecha_muestra}</Td>
+                    <Td>{muestra.finca}</Td>
+                    <Td>{muestra.usuario}</Td>
+                <Td>
+                  <Switch
+                    color={muestra.estado === "terminado" ? "success" : "default"}
+                    isSelected={muestra.estado === "terminado"}
+                    onValueChange={(checked) =>
+                      handleSwitchChange(checked, muestra.id_muestra)
+                    }
+                  >
+                    {muestra.estado}
+                  </Switch>
+                </Td>
+
+                <Td>
+                  <div className=" gap-3 flex flex-graw">
+                    <FaRegEdit
+                      className="cursor-pointer"
+                      size={"30px"}
+                      onClick={() => handleEdit(muestra)}
+                    />
+                  </div>
+                </Td>
+              </tr>
+            ))}
+          </Tbody>
+        </TableMolecula>
+      </div>
+      <div className="flex justify-center mt-4">
+        <PaginationMolecula
+          total={numeroPagina}
+          initialPage={pages}
+          onChange={handlePageChange}
+        />
+      </div>
+    </section>
+  );
+};
+
+export default MuestrasPlantilla;
+/* <>
       <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
         <div className="pt-10 pl-20">
           <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
@@ -357,8 +328,4 @@ const MuestrasPlantilla = () => {
           </form>
         </ModalOrganismo>
       </div>
-    </>
-  );
-};
-
-export default MuestrasPlantilla;
+    </> */

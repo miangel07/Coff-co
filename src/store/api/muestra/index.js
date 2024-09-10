@@ -65,6 +65,18 @@ endpoints: (build) => ({
       invalidatesTags:['Muestras']
     }),
 
+
+    //cambiar el estado de la muestra
+    updateEstadoMuestra: build.mutation({
+      query: (data) => ({
+          url: `muestra/estado/${data.id}`,
+          method: "PUT",
+          body: data,
+      }),
+
+      invalidatesTags: ["Muestras"],
+
+  }),
     //eliminar muestra
     deleteMuestra: build.mutation({
       query:(id)=>({
@@ -85,7 +97,7 @@ endpoints: (build) => ({
   }),
 });
 
-export const { useGetMuestrasQuery, usePostMuestraMutation, usePutMuestraMutation, useDeleteMuestraMutation } = muestraApiSlice
+export const { useGetMuestrasQuery, usePostMuestraMutation, usePutMuestraMutation, useDeleteMuestraMutation, useUpdateEstadoMuestraMutation  } = muestraApiSlice
 
 
 
