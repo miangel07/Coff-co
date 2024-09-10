@@ -16,8 +16,7 @@ import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { useForm } from "react-hook-form";
 import ToolTip from "../../molecules/toolTip/ToolTip";
 import InputAtomo from "../../atoms/Input";
-import SelectAtomo from "../../atoms/Select";
-
+import { Select, SelectItem } from "@nextui-org/react";
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetUsuarioQuery } from "../../../store/api/users";
 
@@ -32,14 +31,13 @@ const MuestrasPlantilla = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const itemsPorPagina = 4;
 
-  const [currentFincas, setCurrentFincas] = useState("")
-  const [currentUsuarios, setCurrentUsuarios] = useState("")
+  const [currentFinca, setCurrentFinca] = useState(null);
+  const [currentUsuarios, setCurrentUsuarios] = useState(null);
 
-  const { data: dataFincas, isLoading: isLoadingFincas } =
-  useGetFincasQuery();
+  const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
 
   const { data: dataUsuarios, isLoading: isLoadingUsuarios } =
-  useGetUsuarioQuery();
+    useGetUsuarioQuery();
 
   const { data, isLoading, refetch } = useGetMuestrasQuery();
   const [crearMuestra] = usePostMuestraMutation();
@@ -54,7 +52,8 @@ const MuestrasPlantilla = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm()
+    setValue,
+  } = useForm();
   if (isLoading || isLoadingFincas || isLoadingUsuarios) {
     return (
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
@@ -66,19 +65,19 @@ const MuestrasPlantilla = () => {
       setMuestraSeleccionada(muestra);
       reset({
         cantidadEntrada: muestra.cantidadEntrada,
-        fk_id_finca: muestra.fk_id_finca,
+        finca: muestra.finca,
         fecha_muestra: muestra.fecha_muestra,
         codigo_muestra: muestra.codigo_muestra,
-        fk_id_usuarios: muestra.fk_id_usuarios,
+        usuario: muestra.usuario,
       });
     } else {
       setMuestraSeleccionada(null);
       reset({
         cantidadEntrada: "",
-        fk_id_finca: "",
+        finca: "",
         fecha_muestra: "",
         codigo_muestra: "",
-        fk_id_usuarios: "",
+        usuario: "",
         estado: "terminado",
       });
     }
@@ -94,31 +93,34 @@ const MuestrasPlantilla = () => {
     try {
       const payload = {
         cantidadEntrada: datos.cantidadEntrada,
-        fk_id_finca: datos.fk_id_finca,
+        fk_id_finca: currentFinca,
         fecha_muestra: datos.fecha_muestra,
         codigo_muestra: datos.codigo_muestra,
-        fk_id_usuarios: datos.fk_id_usuarios,
+        fk_id_usuarios: currentUsuarios,
         estado: "pendiente",
       };
+  
       if (muestraSeleccionada) {
-        await actualizarMuestra({
-          id: muestraSeleccionada.id_muestra,
-          ...payload,
-        }).unwrap();
+        // Actualizar muestra existente
+        await actualizarMuestra({ ...payload, id: muestraSeleccionada.id_muestra }).unwrap();
         toast.success("Muestra actualizada con éxito");
       } else {
-        await crearMuestra (payload).unwrap();
+        // Crear nueva muestra
+        await crearMuestra(payload).unwrap();
         toast.success("Muestra registrada con éxito");
       }
+  
       cerrarModal();
       refetch();
     } catch (error) {
       console.error("Error al crear/actualizar muestra:", error);
       toast.error("Error al crear/actualizar muestra");
     }
-  }
+  };
+  
+
   const handleSwitchChange = (checked, id) => {
-    const nuevoEstado = checked? "terminado" : "pendiente";
+    const nuevoEstado = checked ? "terminado" : "pendiente";
     const muestraActual = data.find((muestra) => muestra.id_muestra === id);
   
     if (!muestraActual) {
@@ -129,18 +131,20 @@ const MuestrasPlantilla = () => {
     const payload = {
       id: id,
       cantidadEntrada: muestraActual.cantidadEntrada,
-      fk_id_finca: muestraActual.fk_id_finca,
+      finca: muestraActual.finca,
       fecha_muestra: muestraActual.fecha_muestra,
       codigo_muestra: muestraActual.codigo_muestra,
-      fk_id_usuarios: muestraActual.fk_id_usuarios,
+      usuario: muestraActual.usuario,
       estado: nuevoEstado,
     };
+  
+    console.log("Actualizar muestra con payload:", payload);
   
     actualizarMuestra(payload)
       .unwrap()
       .then(() => {
         toast.success("Muestra actualizada con éxito");
-        refetch(); 
+        refetch();
       })
       .catch((error) => {
         console.error("Error al actualizar la muestra", error);
@@ -148,18 +152,19 @@ const MuestrasPlantilla = () => {
       });
   };
   
+
   const handleEliminarMuestra = (id, codigo_muestra) => {
     confirmAlert({
-      title: "Confirmación de eliminación",  // Cambiado a string
-      message: `¿Estás seguro de que quieres eliminar la muestra ${codigo_muestra}?`,  // Cambiado a string
+      title: "Confirmación de eliminación",
+      message: `¿Estás seguro de que quieres eliminar la muestra ${codigo_muestra}?`,
       buttons: [
         {
           label: "Sí",
           onClick: async () => {
             try {
-              await eliminarMuestra(id);  // Ya no usas unwrap()
+              await eliminarMuestra(id);
               toast.success("Muestra eliminada con éxito");
-              refetch();  // Refresca los datos después de eliminar
+              refetch();
             } catch (error) {
               console.error("Error al eliminar la muestra", error);
               toast.error("Error al eliminar la muestra");
@@ -174,8 +179,6 @@ const MuestrasPlantilla = () => {
       closeOnClickOutside: true,
     });
   };
-  
-  
 
   const indiceUltimoItem = paginaActual * itemsPorPagina;
   const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
@@ -183,15 +186,6 @@ const MuestrasPlantilla = () => {
     ? data.slice(indicePrimerItem, indiceUltimoItem)
     : [];
   const totalPages = Math.ceil((data?.length || 0) / itemsPorPagina);
-
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -222,7 +216,7 @@ const MuestrasPlantilla = () => {
                     <Td>{muestra.cantidadEntrada}</Td>
                     <Td>{muestra.fecha_muestra}</Td>
                     <Td>{muestra.finca}</Td>
-                    <Td>{muestra.usuario}</Td>  
+                    <Td>{muestra.usuario}</Td>
                     <Td>
                       <Switch
                         color={
@@ -231,10 +225,8 @@ const MuestrasPlantilla = () => {
                         isSelected={muestra.estado === "terminado"}
                         onValueChange={(checked) =>
                           handleSwitchChange(
-                            checked, 
+                            checked,
                             muestra.id_muestra,
-                            dataFincas.id_finca,
-                            dataUsuarios.id_usuarios
                           )
                         }
                       >
@@ -276,7 +268,7 @@ const MuestrasPlantilla = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="text-center">
+                  <td colSpan={8} className="text-center">
                     <h1 className="text-2xl">
                       <b>No hay datos</b>
                     </h1>
@@ -286,7 +278,7 @@ const MuestrasPlantilla = () => {
             </Tbody>
           </TableMolecula>
         </div>
-  
+
         <div className="flex justify-center mt-4">
           <PaginationMolecula
             total={totalPages}
@@ -296,11 +288,7 @@ const MuestrasPlantilla = () => {
         </div>
       </div>
       <div className="flex">
-        <ModalOrganismo
-          visible={visible}
-          closeModal={cerrarModal}
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <ModalOrganismo visible={visible} closeModal={cerrarModal}>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col items-center w-full max-w-lg mx-auto p-6"
@@ -310,51 +298,58 @@ const MuestrasPlantilla = () => {
             </h2>
             <div className="flex flex-col py-4 gap-4 w-full">
               <InputAtomo
-                type="text"
-                id="codigo_muestra"
-                name="codigo_muestra"
-                placeholder="Código de la muestra"
+                type={"text"}
+                id={"codigo_muestra"}
+                name={"codigo_muestra"}
+                placeholder={"Código de la muestra"}
                 register={register}
                 erros={errors}
               />
               <InputAtomo
-                type="number"
-                id="cantidadEntrada"
-                name="cantidadEntrada"
+                type={"number"}
+                id={"cantidadEntrada"}
+                name={"cantidadEntrada"}
                 placeholder="Cantidad de entrada"
                 register={register}
                 erros={errors}
               />
+
               <InputAtomo
-                type="date"
-                id="fecha_muestra"
-                name="fecha_muestra"
+                type={"date"}
+                id={"fecha_muestra"}
+                name={"fecha_muestra"}
                 register={register}
                 erros={errors}
               />
-              <div  className="flex flex-col sm:flex-row sm:gap-4">
-              <SelectAtomo
-                data={dataFincas}
-                label="Finca"
-                onChange={(e) => {
-                  setValue("fk_id_finca", e.target.value);
-                  setCurrentFincas(e.target.value); 
-                }}
-                items="id_finca"
-                ValueItem="nombre_finca"
-                value={currentFincas}
-              />
-              <SelectAtomo
-                data={dataUsuarios}
-                label="Usuario"
-                onChange={(e) => {
-                  setValue("fk_id_usuarios", e.target.value);
-                  setCurrentUsuarios(e.target.value); 
-                }}
-                items="id_usuarios"
-                ValueItem="nombre"
-                value={currentUsuarios}
-              />
+              <div className="flex flex-col sm:flex-row sm:gap-4">
+                <Select
+                  isRequired
+                  variant={"flat"}
+                  label={"usuario"}
+                  className="w-full"
+                  onChange={(e) =>
+                    setCurrentUsuarios(parseInt(e.target.value))
+                  }
+                >
+                  {dataUsuarios.map((items) => (
+                    <SelectItem key={items.id_usuario} value={items.id_usuario}>
+                      {items.nombre}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <Select
+                  isRequired
+                  variant={"flat"}
+                  label={"finca"}
+                  className="w-full"
+                  onChange={(e) => setCurrentFinca(parseInt(e.target.value))}
+                >
+                  {dataFincas.map((items) => (
+                    <SelectItem key={items.id_finca} value={items.id_finca}>
+                      {items.nombre_finca}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
             </div>
             <div className="flex justify-center mt-6">
@@ -367,6 +362,6 @@ const MuestrasPlantilla = () => {
       </div>
     </>
   );
-}
+};
 
-export default MuestrasPlantilla
+export default MuestrasPlantilla;
