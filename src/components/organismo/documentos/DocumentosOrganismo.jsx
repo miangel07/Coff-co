@@ -29,6 +29,7 @@ const DocumentosOrganismo = () => {
   const [form, setFrom] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [showdocument, setShowdocument] = useState([])
+  const [isChecked, setIsChecked] = useState(true);
   const { t } = useTranslation();
   const [valuedocs, setValuedocs] = useState(null)
   const [dataValue, setDataValue] = useState(null)
@@ -48,19 +49,19 @@ const DocumentosOrganismo = () => {
     }
 
   }, [isSuccess])
-
-
   const cantidad = 6;
   const final = pages * cantidad;
   const inicial = final - cantidad;
-
   const filteredData = data && data.length > 0
     ? data.filter((item) => {
+      const isCheck = isChecked ? "activo" : "inactivo"
+
+      const estadoVersionMatch = item.estado_version === isCheck
       const tipoDocumentoMatch = dataInput === "" ||
         (item.tipo_documento && item.tipo_documento.toLowerCase() === dataInput.toLowerCase());
       const nombreDocumentoMatch = searchTerm === "" ||
         (item.nombre_documento && item.nombre_documento.toLowerCase().includes(searchTerm.toLowerCase()));
-      return tipoDocumentoMatch && nombreDocumentoMatch;
+      return tipoDocumentoMatch && nombreDocumentoMatch && estadoVersionMatch
     })
     : [];
   ;
@@ -123,7 +124,6 @@ const DocumentosOrganismo = () => {
     setShowModal(true)
     setDataValue(doc)
   }
-
   const numeroPagina = Math.ceil(data?.length / cantidad);
   const DataArrayPaginacion = filteredData.slice(inicial, final);
 
@@ -186,7 +186,18 @@ const DocumentosOrganismo = () => {
           <Search label={"Search"} placeholder={"Buscar..."} onchange={(e) => setSearchTerm(e.target.value)} />
         </div>
         <div>
-          <Filtro />
+          <Switch
+            color={
+              isChecked ? "success" : "default"
+            }
+            isSelected={isChecked}
+            onValueChange={(checked) =>
+              setIsChecked(checked)
+            }
+          >
+            {t("estado")}
+
+          </Switch>
         </div>
       </div>
       <div className=" w-full  h-auto overflow-y-auto">
@@ -214,8 +225,8 @@ const DocumentosOrganismo = () => {
                 <Td>
                   <Switch
                     color={doc.estado_version === "activo" ? "primary" : "default"}
-                    isSelected={doc.estado_version}
-                    onClick={() => handleClick(doc)}
+                    isSelected={doc.estado_version === "activo"}
+                    onValueChange={() => handleClick(doc)}
                   >
                     {doc.estado_version}
                   </Switch>
@@ -245,6 +256,7 @@ const DocumentosOrganismo = () => {
           onChange={handlePageChange}
         />
       </div>
+
     </section>
   );
 };

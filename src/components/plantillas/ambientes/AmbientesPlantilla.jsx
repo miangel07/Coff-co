@@ -253,7 +253,6 @@ const AmbientesPlantilla = () => {
             </Tbody>
           </TableMolecula>
         </div>
-
         <div className="flex justify-center mt-4">
           <PaginationMolecula
             total={totalPages}
