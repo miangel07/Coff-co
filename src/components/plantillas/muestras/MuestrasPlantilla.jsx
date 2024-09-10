@@ -218,20 +218,17 @@ const MuestrasPlantilla = () => {
                     <Td>{muestra.finca}</Td>
                     <Td>{muestra.usuario}</Td>
                     <Td>
-                      <Switch
-                        color={
-                          muestra.estado === "terminado" ? "success" : "default"
-                        }
-                        isSelected={muestra.estado === "terminado"}
-                        onValueChange={(checked) =>
-                          handleSwitchChange(
-                            checked,
-                            muestra.id_muestra,
-                          )
-                        }
-                      >
-                        {muestra.estado}
-                      </Switch>
+                    <Switch
+                    color={
+                      muestra.estado === "terminado" ? "success" : "default"
+                    }
+                    isSelected={muestra.estado === "terminado"}
+                    onValueChange={(checked) =>
+                      handleSwitchChange(checked, muestra.id_muestra, dataFincas.id_finca, dataUsuarios.id_usuario)
+                    }
+                  >
+                    {muestra.estado}
+                  </Switch>
                     </Td>
                     <Td>
                       <div className="flex flex-row gap-6">
