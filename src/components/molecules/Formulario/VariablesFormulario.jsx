@@ -41,7 +41,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
           tipo_dato: tipoDato,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     if (dataValue) {
@@ -57,21 +57,27 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     }
   }, [dataValue, dataResponse, setValue, isSuccess, isSuccessEdit]);
   console.log(dataValue);
-  const onsubmit = (data) => {
+  const onsubmit = async (data) => {
     console.log(data);
     try {
+      if (!tipoDato) {
+
+        toast.error("El tipo de dato es obligatorio");
+      }
       if (data) {
-        crearVariable({
+        await crearVariable({
           nombre: data.nombre,
           tipo_dato: tipoDato,
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error al crear la variable");
+    }
   };
   const TipoDatos = [
     { value: "text", label: "texto" },
     { value: "number", label: "Numeros" },
-    { value: "data", label: "Fechas" },
+    { value: "date", label: "Fechas" },
   ];
   if (isLoading || isLoadingEdit) {
     return <div>Loading...</div>;

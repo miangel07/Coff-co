@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
-import SelectAtomo from '../../atoms/Select';
+import SelectDocumentos from '../../atoms/SelectDocumentos';
 import { useGetVariablesQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
@@ -51,8 +51,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 version: valor?.version,
             });
         }
-    }, [valor, reset ]);
-    
+    }, [valor, reset]);
 
 
 
@@ -94,6 +93,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
             console.log(error)
         }
     }
+
     const hadleActualizar = async (data) => {
         const DataForm = new FormData();
         const idVersionProcessed = parseInt(valor.idversion);
@@ -110,7 +110,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-      
+
 
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
@@ -146,11 +146,11 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
                 onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
-               
+
 
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
-                        <Label>Nombre Del Documento</Label>
+                        <Label>Nombre </Label>
                         <InputAtomo
                             register={register}
                             name={'nombre'}
@@ -161,7 +161,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Descripcion Del Documento</Label>
+                        <Label>Descripcion </Label>
                         <InputAtomo
                             register={register}
                             name={'descripcion'}
@@ -172,12 +172,12 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Codigo Del Documento</Label>
+                        <Label>Codigo </Label>
                         <InputAtomo
                             register={register}
                             name={'codigo_documentos'}
                             erros={errors}
-                            placeholder={"codigo del documentos"}
+                            placeholder={"codigo s"}
                             id={'codigo_documentos'}
                             type={"text"}
                         />
@@ -203,7 +203,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Version Del Documento</Label>
+                        <Label>Version </Label>
                         <InputAtomo
                             register={register}
                             name={'version'}
@@ -215,21 +215,21 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        {<SelectAtomo
+                        <SelectDocumentos
                             value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
                             label={"Tipo Documento"}
                             onChange={(e) => SetDataInput(e.target.value)}
-                        />}
+                        />
                     </div>
 
                     {dataInput == 5 &&
                         <section className='flex w-[230px] h-[155px] flex-col '>
                             <Label>Tipo De servicio</Label>
-                            <SelectAtomo
-                                value={valor?.tipo_servicio}
+                            <SelectDocumentos
+                                value={valor?.tipo_servicio || ""}
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
