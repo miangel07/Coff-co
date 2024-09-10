@@ -36,6 +36,7 @@ const LoginComponent = () => {
     if (isSuccess) {
       setLoginSuccessful(true);
       console.log("Sesion Iniciada");
+      window.location.reload();
       navigation("/home");
     }
   }, [isSuccess]);

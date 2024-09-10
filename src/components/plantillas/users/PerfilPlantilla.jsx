@@ -1,0 +1,286 @@
+import React, { useState, useEffect } from "react";
+import { parseJwt } from "../../../utils/ValidarLogin";
+import styled from 'styled-components'
+
+//icons
+import { MdEdit } from "react-icons/md";
+import { PiIdentificationBadgeThin, PiBriefcaseThin, PiEnvelopeSimpleThin, PiPhoneThin, PiUserThin, PiUserGearThin, PiPasswordThin, PiTrendUpDuotone } from "react-icons/pi";
+import { useGetUsuarioIdQuery } from "../../../store/api/users";
+
+const PerfilPlantilla = () => {
+    const [usuario, setUsuario] = useState(null); // Cambia [] a null
+
+    // Función para obtener el valor de una cookie por nombre
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // OBTENER ID DEL USUARIO A TRAVÉS DEL TOKEN DESDE LAS COOKIES
+    useEffect(() => {
+        let token = getCookie('Token');
+        if (token) {
+            let decodedToken = parseJwt(token);
+            const usuario = decodedToken.Usuario[0];
+            if (usuario) {
+                const id_usuario = usuario.id_usuario;
+                setUsuario(id_usuario);
+            } else {
+                console.error('No se encontró el id_usuario en el token');
+            }
+        } else {
+            console.error('Token no encontrado en las cookies');
+        }
+    }, []); 
+
+    const { data, error, isLoading } = useGetUsuarioIdQuery(usuario, {
+        skip: !usuario, 
+    });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error occurred: {error.message}</div>;
+
+    return (
+        <>
+            <Contenedor>
+                <div className='cont-item'>
+                    {data && data.map(user => (
+                        <div key={user.id_usuario} className='cont-prin'>
+                            <div className='card-content'>
+                                <div className='content-info-up'>
+                                    <h1>Información</h1>
+                                    <button onClick={"nada"} className='btn-edit'>
+                                        <MdEdit className='icon-edit' />
+                                    </button>
+                                </div>
+                                <div className='cont-data'>
+                                    <div className='datos-info'>
+                                        <p className='user-info-name'>Nombre Completo</p>
+                                        <p>{user.nombre}</p>
+                                    </div>
+                                    <PiUserThin className='icon-arrow' />
+                                </div>
+                                <hr />
+                                <div className='cont-data'>
+                                    <div className='datos-info'>
+                                        <p className='user-info-name'>Identificación</p>
+                                        <p>{user.numero_documento}</p>
+                                    </div>
+                                    <PiIdentificationBadgeThin className='icon-arrow' />
+                                </div>
+                                <hr />
+                                <div className='cont-data'>
+                                    <div className='datos-info'>
+                                        <p className='user-info-name'>Telefono</p>
+                                        <p>{user.telefono}</p>
+                                    </div>
+                                    <PiPhoneThin className='icon-arrow' />
+                                </div>
+                                <hr />
+                                <div className='cont-data'>
+                                    <div className='datos-info'>
+                                        <p className='user-info-name'>Correo</p>
+                                        <p>{user.correo_electronico}</p>
+                                    </div>
+                                    <PiEnvelopeSimpleThin className='icon-arrow' />
+                                </div>
+                                <hr />
+                                <div className='cont-data'>
+                                    <div className='datos-info'>
+                                        <p className='user-info-name'>Rol</p>
+                                        <p>{user.rol}</p>
+                                    </div>
+                                    <PiBriefcaseThin className='icon-arrow' />
+                                </div>
+                                <hr />
+                                <div className='cont-data-estado'>
+                                    <div className='datos-info'>
+                                        <p className='user-info-name'>Estado</p>
+                                        <p>{user.estado}</p>
+                                    </div>
+                                    <PiUserGearThin className='icon-arrow' />
+                                </div>
+                            </div>
+                            <div className='content-mini'>
+                                <div className='card-content-mini'>
+                                    <div className='title-infoP'>
+                                        <h1>Contraseña</h1>
+                                    </div>
+                                    <button onClick={() => { setConfirmarContraseñaModal(true) }} className='cont-data-password'>
+                                        <div>
+                                            <p className='password-hide'>••••••••</p>
+                                            <p className='descrip-pass'>Cambia tu contraseña</p>
+                                        </div>
+                                        <PiPasswordThin className='icon-arrow' />
+                                    </button>
+                                </div>
+                                <div className='card-content-mini'>
+                                    <div className='title-infoP'>
+                                        <h1>Imagen de perfil</h1>
+                                    </div>
+                                    <button onClick={() => { setCambiarImagenModal(true) }} className='cont-img-info'>
+                                        <p className='descrip-img'>Cambiar Imagen</p>
+                                        <img src={"nada"} alt="imagen" />
+                                    </button>
+                                </div>
+                            </div>
+                            {data.tipo_usuario === 'instructor' &&
+                                <div className='content-mini'>
+                                    <div className='card-content-firma'>
+                                        <div className='title-infoP'>
+                                            <h1>Firma</h1>
+                                        </div>
+                                        <button onClick={() => { setCambiarFirmaModal(true); }} className='cont-img-info-firma'>
+                                            <p className='descrip-img'>Cambiar Firma</p>
+                                            <img src={`${endpoint}public/firma/${firmashow}`} alt="imagen" />
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    ))}
+                </div>
+            </Contenedor>
+        </>
+    );
+};
+
+const Contenedor = styled.div`
+    .cont-item{
+        background: linear-gradient(to bottom, #c8c8c846, #e9e9e9a9, #ffffffad);
+        border-radius: 15px 15px 0 0;
+        padding-top: 15px;
+    }
+    .cont-prin{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 85vh;
+        overflow-y: scroll;
+    }
+    .card-content{
+        width: 60vw;
+        height: auto;
+        border: 1px #b4b4b488 solid;
+        border-radius: 10px;
+        background-color: white;
+    }
+    .content-info-up{
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+    h1{
+        font-size: 1.3em;
+    }
+    .btn-edit{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 40px;
+        font-size: 1.3em;
+        transition: all 300ms;
+    }
+    .btn-edit:hover{
+        background-color: #c7c7c769;
+    }
+    .cont-data, .cont-data-estado{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+    }
+    .cont-data:hover{
+        background-color: #d0d0d040;
+    }
+    .cont-data-estado:hover{
+        border-radius: 0 0 10px 10px;
+        background-color: #d0d0d040;
+    }
+    .datos-info{
+        display: flex;
+        align-items: center;
+    }
+    .user-info-name{
+        width: 200px;
+        font-size: 0.8em;
+    }
+    .icon-arrow{
+        font-size: 1.4em;
+    }
+    .content-mini{
+        display: flex;
+        gap: 2vw;
+        margin-top: 15px;
+    }
+    .card-content-mini{
+        width: 29vw;
+        height: auto;
+        border: 1px #b4b4b488 solid;
+        border-radius: 10px;
+        background-color: white;
+    }
+    .title-infoP{
+        padding: 20px;
+    }
+    .cont-data-password{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        .password-hide{
+            display: flex;
+        }
+        .descrip-pass{
+            font-size: 0.8em;
+        }
+    }
+    .cont-data-password:hover{
+        background-color: #d0d0d040;
+    }
+    .cont-img-info{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px 10px 10px;
+        img{
+            height: 70px;
+            width: 70px;
+            border-radius: 50px;
+        }
+    }
+    .cont-img-info:hover{
+        background-color: #d0d0d040;
+        border-radius: 0 0 10px 10px;
+    }
+    .descrip-img{
+        font-size: 0.8em;
+    }
+    .card-content-firma{
+        width: 60vw;
+        height: auto;
+        border: 1px #b4b4b488 solid;
+        border-radius: 10px;
+        background-color: white;
+    }
+    .cont-img-info-firma{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px 10px 10px;
+        img{
+            height: 70px;
+        }
+    }
+    .cont-img-info-firma:hover{
+        background-color: #d0d0d040;
+    }
+`
+
+export default PerfilPlantilla;
