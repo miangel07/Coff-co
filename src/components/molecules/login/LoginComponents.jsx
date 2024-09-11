@@ -15,7 +15,7 @@ const LoginComponent = () => {
   const [loginUser, { isSuccess, isError, error }] = useLoginUserMutation();
   const navigation = useNavigate();
   /*{} -> query's
-   * [] -> mutation's*/
+  * [] -> mutation's*/
 
   const {
     handleSubmit,

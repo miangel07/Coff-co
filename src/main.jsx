@@ -14,19 +14,15 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { PrimeReactProvider } from "primereact/api";
 
-
-//cambios Luisa en main
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <NextUIProvider>
       <Provider store={store}>
         <BrowserRouter>
           <CssBaseline />
-          <PrimeReactProvider>
-            <ValidarLogin/>
-            {/* <App /> */}
-          </PrimeReactProvider>
+            <PrimeReactProvider>
+              <ValidarLogin/>
+            </PrimeReactProvider>
           <Toaster />
         </BrowserRouter>
       </Provider>

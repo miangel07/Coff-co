@@ -36,7 +36,7 @@ export const usuariosSlice = createApi({
         error: response?.data?.message || response?.statusText || "Error desconocido",
       };
     },
-    invalidatesTags: ['usuarios'],
+    providesTags:['usuarios']
   }),
 
     //REGISTRAR
