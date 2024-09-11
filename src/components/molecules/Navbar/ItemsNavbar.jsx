@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import Icons from "../../atoms/Icons";
+import { FaUsers } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { GoFileDirectoryFill, GoHomeFill } from "react-icons/go";
@@ -39,7 +39,7 @@ const ItemsNavbar = ({ visiblite }) => {
 
   const handleLogout = () => {
     document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    console.log('Token eliminado');
+    console.log('Sesion Finalizada');
     window.location.reload();
   };
 
@@ -86,6 +86,11 @@ const ItemsNavbar = ({ visiblite }) => {
       label: `${visiblite ? t("variables") : ""}`,
       icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
       link: "/varibles"
+    },
+    {
+      label: `${visiblite ? t("usuarios") : ""}`,
+      icon: <FaUsers className="w-5 h-5 xl:size-7 " />,
+      link: "/users"
     },
     {
       label: `${visiblite ? t("alquiler") : ""}`,

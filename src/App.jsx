@@ -11,6 +11,8 @@ import AmbientesPlantilla from "./components/plantillas/ambientes/AmbientesPlant
 // import DashBoardPage from "./pages/dashBoardPage/DashBoardPage";
 import PreciosPage from "./pages/precios/PreciosPage";
 import UsersPages from "./pages/users/UsersPages";
+import Perfil from "./pages/users/Perfil";
+import Logos from "./pages/logos/LogosPage";
 import ServicioPage from "./pages/servicios/ServicioPage";
 import VariablePages from "./pages/variable/VariablePages";
 
@@ -38,6 +40,8 @@ const App = () => {
         <Route path="/precios" element={<PreciosPage/>}></Route>
         <Route path="/servicios" element={<ServicioPage/>}></Route>
         <Route path="/varibles" element={<VariablePages/>}></Route>
+        <Route path="/perfil" element={<Perfil/>}></Route>
+        <Route path="/logos" element={<Logos/>}></Route>
       </Routes>
     </>
   );

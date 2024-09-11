@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UsersPlantilla from "../../components/plantillas/users/UsersPlantilla";
 import Header from "../../components/molecules/layout/Header";
+import DropDownMenu from "../../components/molecules/users/DropDownMenu";
 import Navbar from "../../components/molecules/Navbar/Navbar";
 import Footer from "../../components/molecules/Footer/Footer";
 
@@ -15,7 +16,7 @@ const UsersPages = () => {
   return (
     <>
       <div className="h-screen flex flex-col overflow-x-hidden">
-        <Header contenido={"Coffco"} />
+        <Header  />
         <div className="flex flex-grow">
           <div
             className={`transition-all duration-300 ease-in-out ${
