@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Page, Document, Text, Image } from "@react-pdf/renderer";
 import GraficaImages from "../../molecules/graficas/GraficaImages";
+
 
 /* const styles = StyleSheet.create({
   page: {
@@ -16,21 +17,20 @@ import GraficaImages from "../../molecules/graficas/GraficaImages";
   },
 }); */
 
-const PdfDocuments = () => {
-  const [imagen, setImagen] = useState();
+const PdfDocuments = ({ imageData }) => {
 
-  const onExport = (img) => {
-    setImagen(img);
-  };
 
-  console.log(imagen);
+
   return (
     <>
-      <GraficaImages onExport={onExport} />
       <Document>
         <Page>
           <Text>hola</Text>
-          <Image src={imagen} />
+          {
+            imageData &&
+            <Image src={imageData} style={{ width: "600px", height: "auto" }} />
+          }
+
         </Page>
       </Document>
     </>
