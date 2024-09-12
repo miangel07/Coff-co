@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import ReactEcharts from "echarts-for-react";
 
 
-const GraficaImages = ({ onExport, configuraciones, height, width }) => {
+const GraficaImages = ({ onExport, configuraciones,width ,height}) => {
   const chartRef = useRef(null);
 
   const getOption = () => {
@@ -14,7 +14,7 @@ const GraficaImages = ({ onExport, configuraciones, height, width }) => {
       const chartInstance = chartRef.current.getEchartsInstance();
       const imgBase64 = chartInstance.getDataURL({
         type: 'png',
-        pixelRatio: 2,
+        pixelRatio: 4,
         backgroundColor: '#fff'
       });
       if (typeof onExport === "function") {

@@ -13,8 +13,8 @@ import { ImExit } from "react-icons/im";
 import { IoIosApps } from "react-icons/io";
 import { BiSolidCoffeeBean } from "react-icons/bi";
 import { IoDocumentText } from "react-icons/io5";
-import SelectDocumentos from '../../atoms/SelectDocumentos';
-import { useTranslation } from 'react-i18next'; //  <--------importan este para usar la traducioon Esteeeeee
+import SelectDocumentos from "../../atoms/SelectDocumentos";
+import { useTranslation } from "react-i18next"; //  <--------importan este para usar la traducioon Esteeeeee
 import { TraslateContex } from "../../../context/TranslationoContex";
 const ItemsNavbar = ({ visiblite }) => {
   const { changeLanguage, language } = useContext(TraslateContex);
@@ -34,15 +34,13 @@ const ItemsNavbar = ({ visiblite }) => {
   const idioma = [
     { value: "es", label: t("espanol") },
     { value: "en", label: t("ingles") },
-
-  ]
+  ];
 
   const handleLogout = () => {
-    document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    console.log('Sesion Finalizada');
+    document.cookie = "Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    console.log("Sesion Finalizada");
     window.location.reload();
   };
-
 
   const items = [
     {
@@ -85,12 +83,12 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? t("variables") : ""}`,
       icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
-      link: "/varibles"
+      link: "/varibles",
     },
     {
       label: `${visiblite ? t("usuarios") : ""}`,
       icon: <FaUsers className="w-5 h-5 xl:size-7 " />,
-      link: "/users"
+      link: "/users",
     },
     {
       label: `${visiblite ? t("alquiler") : ""}`,
@@ -103,13 +101,14 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? t("facturas") : ""}`,
-      icon: <TbReportMoney className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: <TbReportMoney className="w-5 h-5 xl:size-7" />,
+      link: "/facturas",
     },
     {
       label: `${visiblite ? t("salir") : ""}`,
       icon: <ImExit className="w-5 h-5 xl:size-7" />,
-      link: "/"
-    }
+      link: "/",
+    },
   ];
 
   return (
@@ -118,14 +117,15 @@ const ItemsNavbar = ({ visiblite }) => {
         {items.map((item, index) => (
           <div key={index}>
             <li
-              className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-light-gray" : ""
-                }`}
-               onClick={() => {
-                  handleClick(index);
-                  if (item.label === "Salir") {
-                    handleLogout(); 
-                  }
-               }}
+              className={`flex items-center p-2 rounded-lg ${
+                location.pathname === item.link ? "bg-light-gray" : ""
+              }`}
+              onClick={() => {
+                handleClick(index);
+                if (item.label === "Salir") {
+                  handleLogout();
+                }
+              }}
             >
               <Link
                 to={item.link}
