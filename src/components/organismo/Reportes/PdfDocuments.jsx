@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
-import { Page, Document, Text, Image } from "@react-pdf/renderer";
+import { Page, Document, Text, Image, StyleSheet} from "@react-pdf/renderer";
 import GraficaImages from "../../molecules/graficas/GraficaImages";
 
 
-/* const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   page: {
     backgroundColor: "#E4E4E4",
     color: "red",
@@ -13,9 +13,10 @@ import GraficaImages from "../../molecules/graficas/GraficaImages";
   },
   image: {
     width: "100%",
-    height: "50%",
+    height: "400px",
+    backgroundColor: "red",
   },
-}); */
+});
 
 const PdfDocuments = ({ imageData }) => {
 
@@ -28,7 +29,7 @@ const PdfDocuments = ({ imageData }) => {
           <Text>hola</Text>
           {
             imageData &&
-            <Image src={imageData} style={{ width: "600px", height: "auto" }} />
+            <Image src={imageData} style={styles.image} />
           }
 
         </Page>

@@ -3,7 +3,7 @@ import GraficaDocumento from "../../molecules/graficas/GraficaDocumento";
 import GraficaImages from "../../molecules/graficas/GraficaImages";
 import DocumentosOrganismo from "../../organismo/documentos/DocumentosOrganismo";
 import PdfDocuments from "../../organismo/Reportes/PdfDocuments";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { useGraficaQuery } from "../../../store/api/documentos";
 const Documentos = () => {
   const [imageData, setImageData] = useState([]);
@@ -71,9 +71,11 @@ const Documentos = () => {
               )
             }
           </PDFDownloadLink>
-          <div className="hidden">
+    
 
-            <GraficaImages onExport={handleExportImage} configuraciones={configuraciones} height={"400px"} width={"100%"} />
+          <div className="">
+
+            <GraficaImages onExport={handleExportImage} configuraciones={configuraciones} height={'400px'} width={"100%"} />
           </div>
           <GraficaDocumento />
         </div>
