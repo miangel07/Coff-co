@@ -17,8 +17,10 @@ import { useGetUsuarioQuery } from "../../../store/api/users";
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [currentFinca, setCurrentFinca] = useState(null);
   const [currentUsuarios, setCurrentUsuarios] = useState(null);
+  const [dataInput, SetDataInput] = useState("");
+  const [usuario, setUsuario] = useState('')
 
-  const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
+  const { data: dataFincas, isLoading: isLoadingFincas,  isError: FincaError, error: ErrorMuestra } = useGetFincasQuery();
 
   const { data: dataUsuarios, isLoading: isLoadingUsuarios } =
     useGetUsuarioQuery();
@@ -54,7 +56,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
           fechaMuestra: data.fechaMuestra,
           codigoMuestra: data.codigoMuestra,
           fk_id_finca: data.fk_id_finca,
-          fk_id_usuarios: data.fk_id_usuarios,
+          usuario: data.usuario,
           estado: data.estado,
         });
       }
@@ -66,7 +68,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
       reset({ fechaMuestra: dataValue.fechaMuestra });
       reset({ codigoMuestra: dataValue.codigoMuestra });
       reset({ fk_id_finca: dataValue.fk_id_finca });
-      reset({ fk_id_usuarios: dataValue.fk_id_usuarios });
+      reset({ usuario: dataValue.usuario });
       reset({ estado: dataValue.estado });
     } else {
       reset();
@@ -88,8 +90,8 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
           cantidadEntrada: data.cantidadEntrada,
           fechaMuestra: data.fechaMuestra,
           codigoMuestra: data.codigoMuestra,
-          fk_id_finca: data.fk_id_finca,
-          fk_id_usuarios: data.fk_id_usuarios,
+          fincas: data.fk_id_finca,
+          usuario: data.usuario,
           estado: data.estado,
         });
       }
@@ -133,6 +135,48 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             register={register}
             erros={errors}
           />
+          <div className="flex flex-col sm:flex-row sm:gap-4">
+          {dataInput == 5 &&
+                        <section className='flex w-[230px] h-[155px] flex-col '>
+                      
+                            <SelectDocumentos
+                                value={dataValue?.usuario || ""}
+                                ValueItem={"nombre"}
+                                data={nombre}
+                                items={"id_usuario"}
+                                label={"selecioneUsuario"}
+                                onChange={(e) => setUsuario(e.target.value)}
+                            />
+                        </section>}
+
+
+            {/* <Select
+              isRequired
+              variant={"flat"}
+              label={"usuario"}
+              className="w-full"
+              onChange={(e) => setCurrentUsuarios(parseInt(e.target.value))}
+            >
+              {dataUsuarios.map((items) => (
+                <SelectItem key={items.id_usuario} value={items.id_usuario}>
+                  {items.nombre}
+                </SelectItem>
+              ))}
+            </Select>
+            <Select
+              isRequired
+              variant={"flat"}
+              label={"finca"}
+              className="w-full"
+              onChange={(e) => setCurrentFinca(parseInt(e.target.value))}
+            >
+              {dataFincas.map((items) => (
+                <SelectItem key={items.id_finca} value={items.id_finca}>
+                  {items.nombre_finca}
+                </SelectItem>
+              ))}
+            </Select> */}
+          </div>
 
         </div>
         <div className="flex w-[230px] mt-10 flex-col ">
