@@ -71,7 +71,7 @@ const Documentos = () => {
               )
             }
           </PDFDownloadLink>
-          <div className="hidden">
+          <div className="">
 
             <GraficaImages onExport={handleExportImage} configuraciones={configuraciones} height={"400px"} width={"100%"} />
           </div>

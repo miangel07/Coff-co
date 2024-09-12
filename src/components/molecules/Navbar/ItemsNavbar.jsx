@@ -30,12 +30,12 @@ const ItemsNavbar = ({ visiblite }) => {
       setSubMenuVisible(false);
     }
   };
+
   const idioma = [
     { value: "es", label: t("espanol") },
     { value: "en", label: t("ingles") },
 
   ]
-
 
   const handleLogout = () => {
     document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -120,7 +120,12 @@ const ItemsNavbar = ({ visiblite }) => {
             <li
               className={`flex items-center p-2 rounded-lg ${location.pathname === item.link ? "bg-light-gray" : ""
                 }`}
-              onClick={() => handleClick(index)}
+               onClick={() => {
+                  handleClick(index);
+                  if (item.label === "Salir") {
+                    handleLogout(); 
+                  }
+               }}
             >
               <Link
                 to={item.link}
