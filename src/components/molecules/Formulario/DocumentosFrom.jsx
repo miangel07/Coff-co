@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
-import SelectAtomo from '../../atoms/Select';
+import SelectDocumentos from '../../atoms/SelectDocumentos';
 import { useGetVariablesQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
@@ -12,13 +12,14 @@ import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
     const [logos, setlogos] = useState([])
+    const { t } = useTranslation();
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
@@ -51,8 +52,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 version: valor?.version,
             });
         }
-    }, [valor, reset ]);
-    
+    }, [valor, reset]);
 
 
 
@@ -94,6 +94,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
             console.log(error)
         }
     }
+
     const hadleActualizar = async (data) => {
         const DataForm = new FormData();
         const idVersionProcessed = parseInt(valor.idversion);
@@ -110,7 +111,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-      
+
 
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
@@ -146,38 +147,38 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
                 onSubmit={handleSubmit(valor ? hadleActualizar : onSubmit)}
             >
-               
+
 
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
-                        <Label>Nombre Del Documento</Label>
+                        <Label>{t("nombre")} </Label>
                         <InputAtomo
                             register={register}
                             name={'nombre'}
                             erros={errors}
-                            placeholder={"Nombre"}
+                            placeholder={t("nombre")}
                             id={'nombre'}
                             type={"text"}
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Descripcion Del Documento</Label>
+                        <Label>{t("descripcion")} </Label>
                         <InputAtomo
                             register={register}
                             name={'descripcion'}
                             erros={errors}
-                            placeholder={"descripcion"}
+                            placeholder={t("descripcion")}
                             id={'descripcion'}
                             type={"text"}
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Codigo Del Documento</Label>
+                        <Label>{t("Codigo")} </Label>
                         <InputAtomo
                             register={register}
                             name={'codigo_documentos'}
                             erros={errors}
-                            placeholder={"codigo del documentos"}
+                            placeholder={t("Codigo")}
                             id={'codigo_documentos'}
                             type={"text"}
                         />
@@ -193,17 +194,17 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Fecha Emision</Label>
+                        <Label>{t('FechaEmision')}</Label>
                         <InputAtomo
                             register={register}
                             erros={errors}
                             type={'date'}
                             name={'fecha_emision'}
-                            placeholder={"Fecha De Emision"}
+                            placeholder={t('FechaEmision')}
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Version Del Documento</Label>
+                        <Label>Version</Label>
                         <InputAtomo
                             register={register}
                             name={'version'}
@@ -214,26 +215,26 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Tipo De Documento</Label>
-                        {<SelectAtomo
+                        <Label>{t("tipoDocumentos")}</Label>
+                        <SelectDocumentos
                             value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
                             label={"Tipo Documento"}
                             onChange={(e) => SetDataInput(e.target.value)}
-                        />}
+                        />
                     </div>
 
                     {dataInput == 5 &&
                         <section className='flex w-[230px] h-[155px] flex-col '>
-                            <Label>Tipo De servicio</Label>
-                            <SelectAtomo
-                                value={valor?.tipo_servicio}
+                            <Label>{t("tipoServicios")}</Label>
+                            <SelectDocumentos
+                                value={valor?.tipo_servicio || ""}
                                 ValueItem={"nombreServicio"}
                                 data={TpoServicio}
                                 items={"idTipoServicio"}
-                                label={"Seleccione El servicio"}
+                                label={t("selecioneTipoServicio")}
                                 onChange={(e) => setTipoServicio(e.target.value)}
                             />
                         </section>}
@@ -254,7 +255,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
                     <div className={`flex w-[230px] h-[155px] flex-col  `} >
-                        <Label>Cargar Archivo</Label>
+                        <Label>{t("cargarArchivo")}</Label>
                         <input
                             type="file"
                             name="file"
@@ -265,7 +266,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     </div>
                 </section>
                 <div className='w-full justify-end  flex '>
-                    <Mybutton color={"primary"} type={'submit'} >{valor ? "Actualizar" : "Registrar"}</Mybutton>
+                    <Mybutton color={"primary"} type={'submit'} >{valor ? t("actualizar") : t("registrar")}</Mybutton>
 
 
                 </div>

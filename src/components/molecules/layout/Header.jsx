@@ -1,9 +1,11 @@
 import React from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Logosímbolo from '../../atoms/Logosímbolo';
+
 
 
 const Header = ({ color, contenido }) => {
+  
+
     return (
         <header
             className={`inset-x-0 top-0 shadow-lg h-16 md:px-8 sm:px-8 max-sm:px-8 ${color} z-50`}
@@ -21,7 +23,9 @@ const Header = ({ color, contenido }) => {
                             alt="logo-sena"
                         />
                     </figure>
-                    <div className="flex justify-center items-center font-semibold ml-2">Coffco</div>
+                    <div className="flex  w-[200px] justify-center items-center font-semibold ml-2">
+                     
+                    </div>
                 </div>
                 {contenido}
             </nav>

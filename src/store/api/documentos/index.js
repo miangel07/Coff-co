@@ -91,6 +91,7 @@ export const docuentosApi = createApi({
 
 
         }),
+
         CambioEstado: build.mutation({
             query: (data) => (
                 console.log(data),
@@ -125,9 +126,16 @@ export const docuentosApi = createApi({
                 };
             },
             invalidatesTags: ["Documentos"],
+        }),
+        grafica: build.query({
+            query: () => ({
+                url: "documentos/grafica",
+                method: "GET",
+            }),
+            providesTags: ["Documentos"],
         })
 
     })
 })
 
-export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation, useCambioEstadoMutation, useActualizarVersionMutation } = docuentosApi
+export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation, useCambioEstadoMutation, useActualizarVersionMutation,useGraficaQuery } = docuentosApi

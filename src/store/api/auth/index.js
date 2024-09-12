@@ -12,6 +12,7 @@ export const authApi = createApi({
   endpoints: (build) => ({
     /*Mutation son: POST, PUT, PATCH, DELETE*/
     /* Query son: GET, SET */
+
     loginUser: build.mutation({
       query: (data) => ({
         url: `auth/login`,
@@ -19,8 +20,8 @@ export const authApi = createApi({
         body: data,
       }),
       transformResponse(baseQueryReturnValue) {
-        /*     setCookie("user", JSON.stringify(baseQueryReturnValue.user), 30); */
-        setCookie("authToken", baseQueryReturnValue.token, 30);
+        /*setCookie("user", JSON.stringify(baseQueryReturnValue.user), 30); */
+        setCookie("Token", baseQueryReturnValue.token, 30);
       },
       transformErrorResponse: (response, arg) => {
         return {
@@ -29,6 +30,7 @@ export const authApi = createApi({
         };
       },
     }),
+
     getList: build.query({
       query: () => ({
         url: `user/list`,
@@ -38,6 +40,7 @@ export const authApi = createApi({
         },
       }),
     }),
+
   }),
 });
 
