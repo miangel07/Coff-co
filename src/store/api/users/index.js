@@ -89,6 +89,23 @@ export const usuariosSlice = createApi({
       invalidatesTags: ['usuarios'],
     }),
 
+    //ACTUALIZAR CONTRASEÑA (EN MI PERFIL)
+    actualizarContra: build.mutation({
+      query: ({data, id}) => ({
+        url: `usuario/contra/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      transformErrorResponse: (response, meta, arg) => {
+        console.log("Respuesta completa de error:", response);
+        return {
+          originalArg: arg,
+          error: response?.data?.message || response?.statusText || "Error desconocido",
+        };
+      },
+      invalidatesTags: ['usuarios'],
+    }),
+
     //ELIMINAR
    eliminarUsuario:build.mutation({
     query:(id)=>({
@@ -108,4 +125,4 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery,useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation} = usuariosSlice
+export const {useGetUsuarioQuery,useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice

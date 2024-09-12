@@ -1,18 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import ValidarLogin from "./utils/ValidarLogin.jsx";
-import { Provider } from "react-redux";
-import { store } from "./store";
-import { BrowserRouter } from "react-router-dom";
+// import ValidarLogin from "./utils/ValidarLogin.jsx";
+import { PrimeReactProvider } from "primereact/api";
 import { NextUIProvider } from "@nextui-org/react";
-import "./index.css";
-import { Toaster } from "react-hot-toast";
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import { CssBaseline } from "@mui/material";
+import { Provider } from "react-redux";
+import { Toaster } from "react-hot-toast";
+import { store } from "./store";
+
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { PrimeReactProvider } from "primereact/api";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,7 +23,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <BrowserRouter>
           <CssBaseline />
             <PrimeReactProvider>
-              <ValidarLogin/>
+              <AuthProvider>
+                <App/>
+                {/* <ValidarLogin/> */}
+              </AuthProvider>
             </PrimeReactProvider>
           <Toaster />
         </BrowserRouter>
