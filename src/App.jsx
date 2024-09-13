@@ -32,9 +32,9 @@ const App = () => {
       />
 
       <Routes>
-        <Route path="/*" element={<HomePages />}></Route>
-        <Route path="/login" element={<LoginPages />}></Route>
-        <Route path="/users" element={<UsersPages />}></Route>
+        <Route path="/*" element={<LoginPages/>}></Route>
+        <Route path="/home" element={<HomePages/>}></Route>
+        <Route path="/users" element={<UsersPages/>}></Route>
         <Route path="/alquiler" element={<CalendarPages />}></Route>
         <Route path="/documentos" element={<DocumentosPage />}></Route>
         <Route path="/ambientes" element={<AmbientesPage />}></Route>
