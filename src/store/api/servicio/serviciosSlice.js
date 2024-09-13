@@ -20,10 +20,21 @@ export const servicioApiSlice = createApi({
             providesTags:['servicios']
         }),
 
-
-
-
-
+        // obtener Variables
+        obtenerVariablesParaServicio:build.mutation({
+            query:(data)=>({
+                url:'servicios/getvariables',
+                method:'POST',
+                body:data
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['servicios']
+        }),
 
         //eliminar servicio
         eliminarServicio:build.mutation({
@@ -61,4 +72,4 @@ export const servicioApiSlice = createApi({
     })
 })
 
-export const { useGetServicioQuery, useEliminarServicioMutation, useActualizarEstadoServicioMutation } = servicioApiSlice;
+export const { useGetServicioQuery, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation} = servicioApiSlice;
