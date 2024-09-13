@@ -107,7 +107,7 @@ import { useForm, Controller } from "react-hook-form";
 const ComponenteSelectServicio = () => {
   const [tipoServicioActual, setTipoServicioActual] = useState("");
   const [variables, setVariables] = useState([]);
-
+console.log('Estado que trae variables: ',variables)
   // Trae los datos de los tipos de servicios
   const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } = useGetTipoServicioQuery();
   // Trae los datos de ambientes, muestras, precios y usuarios
@@ -228,7 +228,7 @@ const ComponenteSelectServicio = () => {
             )}
           />
 
-          <InputAtomo
+          {/* <InputAtomo
             type="number"
             placeholder="Cantidad de Salida"
             id="cantidad_salida"
@@ -244,7 +244,7 @@ const ComponenteSelectServicio = () => {
             name="fecha_fin"
             register={register}
             erros={errors}
-          />
+          /> */}
 
           <Controller
             name="estado"
@@ -275,11 +275,10 @@ const ComponenteSelectServicio = () => {
             }}
           />
 
-
 {variables.length > 0 && (
         <div className='mt-4'>
-          {variables.map((variable, index) => (
-            <div key={index} className="mb-4">
+          {variables.map((variable, idVariable) => (
+            <div key={idVariable} className="mb-4">
               {/* Utiliza el InputAtomo para cada variable */}
               <InputAtomo
                 type={variable.variable_tipo_dato === 'number' ? 'number' : 'text'}
