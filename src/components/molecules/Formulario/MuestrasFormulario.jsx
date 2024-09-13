@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import SelectAtomo from "../../atoms/Select";
@@ -15,26 +15,23 @@ import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetUsuarioQuery } from "../../../store/api/users";
 
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
-  const [currentFinca, setCurrentFinca] = useState(null);
-  const [currentUsuarios, setCurrentUsuarios] = useState(null);
-  const [dataInput, SetDataInput] = useState("");
-  const [usuario, setUsuario] = useState('')
+  const { data: dataUsuarios, isLoading: isLoadingUsuarios } = useGetUsuarioQuery();
+  const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
 
-  const { data: dataFincas, isLoading: isLoadingFincas,  isError: FincaError, error: ErrorMuestra } = useGetFincasQuery();
-
-  const { data: dataUsuarios, isLoading: isLoadingUsuarios } =
-    useGetUsuarioQuery();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
     setValue,
+    watch,
   } = useForm();
+
   const [
     crearMuestra,
     { isLoading, isError, error, data: dataResponse, isSuccess },
   ] = usePostMuestraMutation();
+
   const [
     editarMuestra,
     {
@@ -45,53 +42,33 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
       isSuccess: isSuccessEdit,
     },
   ] = usePutMuestraMutation();
-  console.log(dataValue.cantidadEntrada);
 
-  const handleEdit = async (data) => {
+  const usuarioValue = watch("fk_id_usuarios");
+  const fincaValue = watch("fk_id_finca");
+
+  const handleSelectChange = (field) => (e) => {
+    setValue(field, e.target.value);
+  };
+
+  const onSubmit = async (data) => {
     try {
-      if (data) {
+      if (dataValue) {
         await editarMuestra({
           id: dataValue.id_muestra,
           cantidadEntrada: data.cantidadEntrada,
-          fechaMuestra: data.fechaMuestra,
+          fecha_muestra: data.fecha_muestra,
           codigoMuestra: data.codigoMuestra,
           fk_id_finca: data.fk_id_finca,
-          usuario: data.usuario,
+          fk_id_usuarios: data.fk_id_usuarios,
           estado: data.estado,
         });
-      }
-    } catch (error) {}
-  };
-  useEffect(() => {
-    if (dataValue) {
-      reset({ cantidadEntrada: dataValue.cantidadEntrada });
-      reset({ fechaMuestra: dataValue.fechaMuestra });
-      reset({ codigoMuestra: dataValue.codigoMuestra });
-      reset({ fk_id_finca: dataValue.fk_id_finca });
-      reset({ usuario: dataValue.usuario });
-      reset({ estado: dataValue.estado });
-    } else {
-      reset();
-    }
-    if (isSuccess || isSuccessEdit) {
-      toast.success(`${dataResponse?.menssage || dataResponseEdit?.menssage}`);
-      closeModal();
-    }
-  }, [dataValue, dataResponse, setValue, isSuccess, isSuccessEdit]);
-  console.log(dataValue);
-
-  const onSubmit = async (data) => {
-    console.log(data);
-    try {
-      if (dataValue) {
-        await handleEdit(data);
       } else {
         await crearMuestra({
           cantidadEntrada: data.cantidadEntrada,
-          fechaMuestra: data.fechaMuestra,
+          fecha_muestra: data.fecha_muestra,
           codigoMuestra: data.codigoMuestra,
-          fincas: data.fk_id_finca,
-          usuario: data.usuario,
+          fk_id_finca: data.fk_id_finca,
+          fk_id_usuarios: data.fk_id_usuarios,
           estado: data.estado,
         });
       }
@@ -100,87 +77,68 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
       console.log(error);
     }
   };
-  if (isLoading || isLoadingEdit) {
+
+  if (isLoading || isLoadingEdit || isLoadingUsuarios || isLoadingFincas) {
     return <div>Loading...</div>;
   }
 
   return (
-    <section className="w-full overflow-auto justify-center items-center flex">
-      <form
-        onSubmit={handleSubmit(dataValue ? handleEdit : onsubmit)}
-        className="  flex flex-col  justify-between "
-      >
-        <div className="flex w-[230px] h-[155px]   flex-col gap-5">
+    <section className="w-full flex justify-center items-center">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full max-w-lg p-4">
+        {/* Inputs */}
+        <div className="flex flex-col gap-4">
           <InputAtomo
-            type={"text"}
-            id={"codigo_muestra"}
-            name={"codigo_muestra"}
-            placeholder={"Código de la muestra"}
+            type="text"
+            id="codigo_muestra"
+            name="codigo_muestra"
+            placeholder="Código de la muestra"
             register={register}
             erros={errors}
           />
           <InputAtomo
-            type={"number"}
-            id={"cantidadEntrada"}
-            name={"cantidadEntrada"}
+            type="number"
+            id="cantidadEntrada"
+            name="cantidadEntrada"
             placeholder="Cantidad de entrada"
             register={register}
             erros={errors}
           />
-
           <InputAtomo
-            type={"date"}
-            id={"fecha_muestra"}
-            name={"fecha_muestra"}
+            type="date"
+            id="fecha_muestra"
+            name="fecha_muestra"
+            placeholder="Fecha Muestra"
             register={register}
             erros={errors}
           />
-          <div className="flex flex-col sm:flex-row sm:gap-4">
-          {dataInput == 5 &&
-                        <section className='flex w-[230px] h-[155px] flex-col '>
-                      
-                            <SelectDocumentos
-                                value={dataValue?.usuario || ""}
-                                ValueItem={"nombre"}
-                                data={nombre}
-                                items={"id_usuario"}
-                                label={"selecioneUsuario"}
-                                onChange={(e) => setUsuario(e.target.value)}
-                            />
-                        </section>}
-
-
-            {/* <Select
-              isRequired
-              variant={"flat"}
-              label={"usuario"}
-              className="w-full"
-              onChange={(e) => setCurrentUsuarios(parseInt(e.target.value))}
-            >
-              {dataUsuarios.map((items) => (
-                <SelectItem key={items.id_usuario} value={items.id_usuario}>
-                  {items.nombre}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              isRequired
-              variant={"flat"}
-              label={"finca"}
-              className="w-full"
-              onChange={(e) => setCurrentFinca(parseInt(e.target.value))}
-            >
-              {dataFincas.map((items) => (
-                <SelectItem key={items.id_finca} value={items.id_finca}>
-                  {items.nombre_finca}
-                </SelectItem>
-              ))}
-            </Select> */}
-          </div>
-
         </div>
-        <div className="flex w-[230px] mt-10 flex-col ">
-          <Mybutton type={"onsubmit"} color={"primary"}>
+
+        {/* Selects (Usuario y Finca) en una fila */}
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Select para Usuarios (fk_id_usuarios) */}
+          <SelectAtomo
+            label="Selecciona un Usuario"
+            data={dataUsuarios}
+            onChange={handleSelectChange("fk_id_usuarios")}
+            items="id_usuario"
+            ValueItem="nombre"
+            value={usuarioValue}
+          />
+
+          {/* Select para Fincas (fk_id_finca) */}
+          <SelectAtomo
+            label="Selecciona una Finca"
+            data={dataFincas}
+            onChange={handleSelectChange("fk_id_finca")}
+            items="id_finca"
+            ValueItem="nombre_finca"
+            value={fincaValue}
+          />
+        </div>
+
+        {/* Botón debajo de los selects */}
+        <div className="flex justify-center mt-4">
+          <Mybutton type="submit" color="primary">
             {dataValue ? "Actualizar" : "Registrar"}
           </Mybutton>
         </div>
@@ -190,31 +148,3 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
 };
 
 export default MuestrasFormulario;
-          {/* <div className="flex flex-col sm:flex-row sm:gap-4">
-            <Select
-              isRequired
-              variant={"flat"}
-              label={"usuario"}
-              className="w-full"
-              onChange={(e) => setCurrentUsuarios(parseInt(e.target.value))}
-            >
-              {dataUsuarios.map((items) => (
-                <SelectItem key={items.id_usuario} value={items.id_usuario}>
-                  {items.nombre}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              isRequired
-              variant={"flat"}
-              label={"finca"}
-              className="w-full"
-              onChange={(e) => setCurrentFinca(parseInt(e.target.value))}
-            >
-              {dataFincas.map((items) => (
-                <SelectItem key={items.id_finca} value={items.id_finca}>
-                  {items.nombre_finca}
-                </SelectItem>
-              ))}
-            </Select>
-          </div> */}
