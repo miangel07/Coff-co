@@ -417,7 +417,7 @@ const UsersPlantilla = () => {
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
-{/* 
+              {/* 
               <InputAtomoActualizar
                 register={register}
                 name={"password"}
@@ -474,8 +474,8 @@ const UsersPlantilla = () => {
       closeModal={closeModalActualizar}
     />
 
-      )}
-      {/* FIN MODAL ACTUALIZAR*/}
+    )}
+    {/* FIN MODAL ACTUALIZAR*/}
       </div>
     </>
   );
