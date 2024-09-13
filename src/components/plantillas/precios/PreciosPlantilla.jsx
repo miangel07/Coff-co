@@ -29,7 +29,7 @@ import SelectAtomo from "../../atoms/Select";
 const PreciosPlantilla = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const itemsPorPagina = 4;
-  const [currentTipoServicio, setCurrentTipoServicio] = useState("");
+  const [tipoServicioActual, setTipoServicioActual] = useState("");
 
   const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } =
     useGetTipoServicioQuery();
@@ -69,7 +69,7 @@ const PreciosPlantilla = () => {
         precio: precio.precio,
         fk_idTipoServicio: precio.fk_idTipoServicio,
       });
-      setCurrentTipoServicio(precio.nombreServicio);
+      setTipoServicioActual(precio.nombreServicio);
     } else {
       setPrecioSeleccionado(null);
       reset({
@@ -77,7 +77,7 @@ const PreciosPlantilla = () => {
         precio: "",
         fk_idTipoServicio: "",
       });
-      setCurrentTipoServicio("")
+      setTipoServicioActual("")
     }
     setVisible(true);
   };
@@ -85,7 +85,7 @@ const PreciosPlantilla = () => {
   const cerrarModal = () => {
     setVisible(false);
     reset();
-    setCurrentTipoServicio("")
+    setTipoServicioActual("")
   };
 
   const onSubmit = async (datosDelFormulario) => {
@@ -323,11 +323,11 @@ const PreciosPlantilla = () => {
                     label="Tipo de servicio"
                     onChange={(e) => {
                       setValue("fk_idTipoServicio", e.target.value);
-                      setCurrentTipoServicio(e.target.value); 
+                      setTipoServicioActual(e.target.value); 
                     }}
                     items="idTipoServicio"
                     ValueItem="nombreServicio"
-                    value={currentTipoServicio}
+                    value={tipoServicioActual}
                   />
                 </div>
               </div>
@@ -345,3 +345,4 @@ const PreciosPlantilla = () => {
 };
 
 export default PreciosPlantilla;
+
