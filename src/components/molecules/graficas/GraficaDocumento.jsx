@@ -4,7 +4,6 @@ import { useGraficaQuery } from '../../../store/api/documentos';
 import { useTranslation } from 'react-i18next';
 const GraficaDocumento = () => {
     const { t } = useTranslation();
-
     const { data, isLoading, isError, error } = useGraficaQuery();
 
     if (isLoading) return <p>Loading...</p>;
