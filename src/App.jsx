@@ -15,6 +15,7 @@ import ServicioPage from "./pages/servicios/ServicioPage";
 import VariablePages from "./pages/variable/VariablePages";
 import MuestrasPage from "./pages/muestras/MuestrasPage";
 import FacturasPlantilla from "./components/plantillas/facturas/FacturasPlantilla";
+import LoginPages from "./pages/login/LoginPages";
 const App = () => {
   return (
     <>
@@ -30,9 +31,9 @@ const App = () => {
       />
 
       <Routes>
-        {/* <Route path="/" element={<LoginPages />}></Route> */}
         <Route path="/*" element={<HomePages />}></Route>
-        <Route path="/users" element={<UsersPages />}></Route>
+        <Route path="/login" element={<LoginPages />}></Route>
+        <Route path="/users" element={<UsersPages/>}></Route>
         <Route path="/alquiler" element={<CalendarPages />}></Route>
         <Route path="/documentos" element={<DocumentosPage />}></Route>
         <Route path="/ambientes" element={<AmbientesPage />}></Route>
