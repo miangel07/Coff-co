@@ -31,7 +31,9 @@ const PerfilPlantilla = () => {
         let token = getCookie('Token');
         if (token) {
             let decodedToken = parseJwt(token);
-            const usuario = decodedToken.Usuario[0];
+            const usuario = decodedToken.Usuario;
+            console.log(decodedToken)
+            console.log(usuario)
             if (usuario) {
                 const id_usuario = usuario.id_usuario;
                 setUsuario(id_usuario);
