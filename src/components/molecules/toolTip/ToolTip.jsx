@@ -12,7 +12,7 @@ const ToolTip = ({ content = "I am a tooltip", placement = "right", icon: IconCo
           "before:bg-neutral-400 dark:before:bg-white",
         ],
         content: [
-          "py-2 px-4 shadow-xl",
+          "py-1 px-1 shadow-xl",
           "text-black bg-gradient-to-br from-white to-neutral-400",
         ],
       }}

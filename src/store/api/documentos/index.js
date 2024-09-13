@@ -72,25 +72,7 @@ export const docuentosApi = createApi({
             },
             invalidatesTags: ["getDocumentos"],
         }),
-        //eliminar documento
-        eliminarDocumento: build.mutation({
-            query: (id) => ({
-                url: `documento/eliminar/${id}`,
-                method: "DELETE",
-                headers: {
-                    token: `${getCookie("authToken")}`,
-                },
-            }),
-            transformErrorResponse: (response, meta, arg) => {
-                return {
-                    originalArg: arg,
-                    error: response.data.message,
-                };
-            },
-            invalidatesTags: ["getDocumentos"],
-
-
-        }),
+        
 
         CambioEstado: build.mutation({
             query: (data) => (
@@ -138,4 +120,4 @@ export const docuentosApi = createApi({
     })
 })
 
-export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useEliminarDocumentoMutation, useCambioEstadoMutation, useActualizarVersionMutation,useGraficaQuery } = docuentosApi
+export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useCambioEstadoMutation, useActualizarVersionMutation,useGraficaQuery } = docuentosApi

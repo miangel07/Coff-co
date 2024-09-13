@@ -3,25 +3,17 @@ import ItemsNavbar from "./ItemsNavbar";
 import { LuArrowLeftCircle, LuArrowRightCircle } from "react-icons/lu";
 
 const Navbar = () => {
-  const [menuAbierto, setMenuAbierto] = useState(true);
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuAbierto((prevMenuAbierto) => !prevMenuAbierto);
+  // Función para abrir el menú al pasar el mouse
+  const handleMouseEnter = () => {
+    setMenuAbierto(true);
   };
 
-  const icons = menuAbierto ? (
-    <LuArrowLeftCircle
-      onClick={toggleMenu}
-      size={20}
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-110 lg:size-7"
-    />
-  ) : (
-    <LuArrowRightCircle
-      onClick={toggleMenu}
-      size={20}
-      className="cursor-pointer transform transition-transform duration-300 hover:scale-125 lg:size-7"
-    />
-  );
+  // Función para cerrar el menú al quitar el mouse
+  const handleMouseLeave = () => {
+    setMenuAbierto(false);
+  };
 
   return (
     <>
@@ -29,14 +21,9 @@ const Navbar = () => {
         className={`top-0 left-0 h-full text-black transition-all duration-300 ease-in-out ${
           menuAbierto ? "w-64 md:w-48 lg:w-64" : "w-16 md:w-12 lg:w-16"
         }`}
+        onMouseEnter={handleMouseEnter} // Abre el menú al pasar el mouse
+        onMouseLeave={handleMouseLeave} // Cierra el menú al quitar el mouse
       >
-        <div
-          className={`p-3 text-black transition-all duration-100 ease-in-out flex ${
-            menuAbierto ? "justify-end" : "justify-center"
-          }`}
-        >
-          {icons}
-        </div>
         <section className="flex-grow">
           <ItemsNavbar visiblite={menuAbierto} />
         </section>
@@ -46,4 +33,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

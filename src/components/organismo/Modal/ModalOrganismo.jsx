@@ -7,12 +7,13 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
 } from "@nextui-org/react";
 import Logosímbolo from "../../atoms/Logosímbolo";
+import { useTranslation } from 'react-i18next';
 
 
 const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
+  const { t } = useTranslation();
   return (
     <>
       <Modal size={"4xl"} isOpen={visible} onClose={closeModal} className=" max-h-full overflow-hidden ">
@@ -31,7 +32,7 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
               <ModalBody  >{children}</ModalBody>
               <ModalFooter >
                 <Button color="danger" variant="light" onPress={onClose}>
-                  Cerrar
+                 {t("cerrar")}
                 </Button>
               </ModalFooter>
             </>
