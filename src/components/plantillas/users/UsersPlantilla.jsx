@@ -417,8 +417,8 @@ const UsersPlantilla = () => {
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
-
-              {/* <InputAtomoActualizar
+{/* 
+              <InputAtomoActualizar
                 register={register}
                 name={"password"}
                 errores={errors}
