@@ -20,7 +20,7 @@ const Header = ({ color }) => {
     const handleLogout = () => {
         document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         console.log('Sesion Finalizada');
-        window.location.reload();
+        navigate("/")
     };
 
     const handleMenuClick = (menu) => {
