@@ -21,7 +21,24 @@ export const usuariosSlice = createApi({
     }),
     providesTags:['usuarios']
   }),
-   
+
+  // LISTAR ID
+  getUsuarioId: build.query({
+    query: (id) => ({
+      url: `/usuario/listarid/${id}`,
+      method: 'GET',
+    }),
+    transformErrorResponse: (response, meta, arg) => {
+      console.log("Respuesta completa de error:", response);
+      
+      return {
+        originalArg: arg,
+        error: response?.data?.message || response?.statusText || "Error desconocido",
+      };
+    },
+    providesTags:['usuarios']
+  }),
+
     //REGISTRAR
   registrarUsuario: build.mutation({
     query:(data)=>({
@@ -56,10 +73,28 @@ export const usuariosSlice = createApi({
       invalidatesTags: ['usuarios'],
     }),
 
+    //ACTUALIZAR ESTADO ('ACTIVO' 'INACTIVO')
     actualizarEstado: build.mutation({
       query: (id) => ({
         url: `usuario/estado/${id}`,
         method: 'PUT',
+      }),
+      transformErrorResponse: (response, meta, arg) => {
+        console.log("Respuesta completa de error:", response);
+        return {
+          originalArg: arg,
+          error: response?.data?.message || response?.statusText || "Error desconocido",
+        };
+      },
+      invalidatesTags: ['usuarios'],
+    }),
+
+    //ACTUALIZAR CONTRASEÑA (EN MI PERFIL)
+    actualizarContra: build.mutation({
+      query: ({data, id}) => ({
+        url: `usuario/contra/${id}`,
+        method: 'PUT',
+        body: data,
       }),
       transformErrorResponse: (response, meta, arg) => {
         console.log("Respuesta completa de error:", response);
@@ -90,4 +125,4 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation} = usuariosSlice
+export const {useGetUsuarioQuery,useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice

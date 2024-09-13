@@ -19,9 +19,12 @@ export const authApi = createApi({
         method: "POST",
         body: data,
       }),
-      transformResponse(baseQueryReturnValue) {
-        /*setCookie("user", JSON.stringify(baseQueryReturnValue.user), 30); */
-        setCookie("Token", baseQueryReturnValue.token, 30);
+      transformResponse: (response) => {
+        setCookie("Token", response.token, 30);
+        return {
+          token: response.token,
+          usuario: response.Usuario_Logeado
+        };
       },
       transformErrorResponse: (response, arg) => {
         return {
@@ -29,7 +32,7 @@ export const authApi = createApi({
           error: response?.data?.message,
         };
       },
-    }),
+    }),   
 
     getList: build.query({
       query: () => ({
