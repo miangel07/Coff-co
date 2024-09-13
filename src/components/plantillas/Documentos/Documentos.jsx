@@ -8,7 +8,6 @@ const Documentos = () => {
     <>
       <div className=" w-full px-10 flex flex-col ">
         <DocumentosOrganismo />
-
       </div>
     </>
   );
