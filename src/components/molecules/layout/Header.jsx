@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext";
+import Cookies from 'js-cookie';
 import usuarioImagen from "../../../../public/usuario.png";
 
 const Header = ({ color }) => {
@@ -11,14 +13,18 @@ const Header = ({ color }) => {
     const imgRef = useRef();
     const navigate = useNavigate();
 
+    const { cerrarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
+
     window.addEventListener("click", (e) => {
         if (e.target !== menuRef.current && e.target !== imgRef.current) {
             setOpen(false);
         }
     });
 
+    //Se llama a la funcion cerrar sesion del contexto que se encarga de eliminar la informacion del usuario con sesion iniciada
     const handleLogout = () => {
-        document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        cerrarSesion();
+        Cookies.remove("Token")
         console.log('Sesion Finalizada');
         navigate("/")
     };

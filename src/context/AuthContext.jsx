@@ -1,24 +1,31 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [authData, setAuthData] = useState(null);
+  const [authData, setAuthData] = useState(() => {
+    const cookieData = Cookies.get('UsuarioContext');
+    return cookieData ? JSON.parse(cookieData) : null;
+  });
 
+  // Función para iniciar sesión y guardar los datos tanto en el estado como en la cookie
   const iniciarSesion = (data) => {
     setAuthData(data);  
-    //PARA VER LOS DATOS GUARDADOS EN EL CONTEXTO 
-      //Aqui se ven desde la consola, formateados
-      console.log(data)
-    //PRUEBA PARA VER COMO SE VEN EN UNA COOKIE (Aqui no se formatean los datos)
+    console.table("Datos enviados al contexto:", JSON.stringify(data, null, 2));
     Cookies.set('UsuarioContext', JSON.stringify(data), { expires: 1 }); 
   };
 
+  // Función para eliminar el contexto cuando se cierra la sesion
   const cerrarSesion = () => {
     setAuthData(null);
-    removeCookie("Token");  // Opcional: para eliminar la cookie
+    Cookies.remove('UsuarioContext');  
   };
+
+  useEffect(() => {
+    // Ver los datos guardados en el contexto cada vez que authData cambia
+    console.log("Datos guardados en el contexto de Autentificación:", authData);
+  }, [authData]);
 
   return (
     <AuthContext.Provider value={{ authData, iniciarSesion, cerrarSesion }}>
@@ -26,3 +33,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+

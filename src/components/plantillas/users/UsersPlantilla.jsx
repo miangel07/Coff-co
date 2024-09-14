@@ -8,7 +8,8 @@ import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarU
 import { Spinner } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+
 //Importaciones para el modal
 import { IoPersonAddOutline } from "react-icons/io5";
 import SelectAtomo from "../../atoms/Select";
@@ -72,7 +73,7 @@ const UsersPlantilla = () => {
     setOpenModalActualizar(true);
   };
     
-  //CAMBIAR EL ESTADO DEL USUARIO
+  //CAMBIAR EL ESTADO DEL USUARIOf
   const handleSwitchChange = async (id_usuario, nombre) => {
     confirmAlert({
       title: 'Confirmación',
@@ -83,6 +84,7 @@ const UsersPlantilla = () => {
           onClick: async () => {
             try {
               await actualizarEstado(id_usuario).unwrap();
+              toast.success("Estado actualizado con éxito");
             } catch (error) {
               console.error('Error al actualizar el estado:', error);
             }
@@ -90,7 +92,7 @@ const UsersPlantilla = () => {
         },
         {
           label: 'No',
-          onClick: () => toast('Operacion cancelada')
+          onClick: () => toast.warn('Operacion cancelada')
         }
       ],
       closeOnClickOutside: true,
@@ -108,6 +110,7 @@ const UsersPlantilla = () => {
   const onsubmit = (data) => {
     registrarUsuario(data);
     reset();
+    toast.success("Usuario registrado con éxito");
     setOpenModal(false);
   };
 
@@ -116,6 +119,7 @@ const UsersPlantilla = () => {
     if (usuarioSeleccionado) {
       console.log("valores enviados:", valores);
       actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario });
+      toast.success("Usuario actualizado con éxito");
       reset();
       setOpenModalActualizar(false);
     }
