@@ -152,7 +152,7 @@ const LogosPlantilla = () => {
     // CONTROL DE PAGINAS DE LA TABLA
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
-    const elementosActuales = data ? data.slice(indicePrimerItem,indiceUltimoItem):[]
+    const elementosActuales = data ? data.data.slice(indicePrimerItem,indiceUltimoItem):[]
     const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
     return(
