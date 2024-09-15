@@ -40,8 +40,8 @@ const UsersPlantilla = () => {
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
 
+  //ROLES
   const [roles, setRoles] = useState([]); 
-
   useEffect(() => {
       // Función para obtener los roles desde el backend
       const fetchRoles = async () => {
@@ -61,11 +61,11 @@ const UsersPlantilla = () => {
   const [openModalActualizar, setOpenModalActualizar] = useState(false);
   const [sucess, setsucess] = useState("");
 
-    //Modal registrar
+  //MODAL REGISTRAR
   const handleClick = () => {setOpenModal(true);};
   const closeModal = () => {setOpenModal(false);reset()};
 
-    //Modal Actualizar
+  //MODAL ACTUALIZAR
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const handleClickActualizar = (usuario) => {
     console.log("Usuario seleccionado:", usuario); 
@@ -73,7 +73,7 @@ const UsersPlantilla = () => {
     setOpenModalActualizar(true);
   };
     
-  //CAMBIAR EL ESTADO DEL USUARIOf
+  //CAMBIAR EL ESTADO DEL USUARIO
   const handleSwitchChange = async (id_usuario, nombre) => {
     confirmAlert({
       title: 'Confirmación',
@@ -480,7 +480,7 @@ const UsersPlantilla = () => {
 
     )}
     {/* FIN MODAL ACTUALIZAR*/}
-      </div>
+    </div>
     </>
   );
 };
