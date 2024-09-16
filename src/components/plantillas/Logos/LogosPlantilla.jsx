@@ -143,6 +143,7 @@ const LogosPlantilla = () => {
         <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
         )
     }
+    
 
     const estadoOptions = [
         { value: "activo", label: "Activo" },
