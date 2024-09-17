@@ -100,7 +100,7 @@ export const usuariosSlice = createApi({
         console.log("Respuesta completa de error:", response);
         return {
           originalArg: arg,
-          error: response?.data?.message || response?.statusText || "Error desconocido",
+          error: response.data.message || "Error desconocido",
         };
       },
       invalidatesTags: ['usuarios'],
