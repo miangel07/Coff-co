@@ -13,7 +13,6 @@
 // import { usePostFormularioMutation } from '../../../store/api/servicio';
 // import { Spinner } from '@nextui-org/react';
 
-
 // dayjs.locale("es");
 
 // function CalendarPlantilla() {
@@ -29,10 +28,6 @@
 
 //     console.log(data)
 
-
-
-
-
 //     if (isLoading) return <Spinner />;
 //     if (isError) return <div>Error: {error.message}</div>;
 //     const handleClick = async () => {
@@ -46,7 +41,6 @@
 //                 data
 //             )
 
-
 //         } catch (e) {
 //             console.log(e)
 //         }
@@ -54,20 +48,13 @@
 //     };
 //     console.log("data", dataVariables)
 
-
-
-
-
 //     const closeModal = () => setModalVisible(false);
-
 
 //     const onSubmit = (data) => {
 //         console.log("hola", data)
 
-
 //         //data aca trae el evento que es la consula que ya trae esa info
 //         setEvents([data]);
-
 
 //         closeModal();
 //     };
@@ -152,7 +139,6 @@
 
 //                     }
 
-
 //                     <div className="flex justify-end mt-4">
 //                         <Mybutton type="submit" color={"primary"}>
 //                             Registrar Evento
@@ -166,15 +152,14 @@
 
 // export default CalendarPlantilla;
 
-
-import React from 'react'
+import React from "react";
 
 const CalendarPlantilla = () => {
   return (
     <>
-     <h1>soy calendario</h1> 
+      <h1>soy calendario</h1>
     </>
-  )
-}
+  );
+};
 
-export default CalendarPlantilla
+export default CalendarPlantilla;

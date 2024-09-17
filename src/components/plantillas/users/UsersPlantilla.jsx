@@ -39,7 +39,7 @@ const UsersPlantilla = () => {
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
 
-  const [roles, setRoles] = useState([]); // Estado para almacenar los roles
+  const [roles, setRoles] = useState([]); 
 
   useEffect(() => {
       // Función para obtener los roles desde el backend
@@ -417,7 +417,7 @@ const UsersPlantilla = () => {
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
-{/* 
+              {/* 
               <InputAtomoActualizar
                 register={register}
                 name={"password"}
@@ -474,8 +474,8 @@ const UsersPlantilla = () => {
       closeModal={closeModalActualizar}
     />
 
-      )}
-      {/* FIN MODAL ACTUALIZAR*/}
+    )}
+    {/* FIN MODAL ACTUALIZAR*/}
       </div>
     </>
   );

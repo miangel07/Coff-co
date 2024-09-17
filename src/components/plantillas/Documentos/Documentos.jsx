@@ -6,11 +6,10 @@ const Documentos = () => {
     <>
       <div className=" w-full px-10 flex flex-col ">
         <DocumentosOrganismo />
-        <div className="w-full px-10  ">
+        <div>
           <GraficaDocumento />
         </div>
       </div>
-
     </>
   );
 };
