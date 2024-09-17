@@ -8,7 +8,8 @@ import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarU
 import { Spinner } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+
 //Importaciones para el modal
 import { IoPersonAddOutline } from "react-icons/io5";
 import SelectAtomo from "../../atoms/Select";
@@ -39,8 +40,8 @@ const UsersPlantilla = () => {
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
 
+  //ROLES
   const [roles, setRoles] = useState([]); 
-
   useEffect(() => {
       // Función para obtener los roles desde el backend
       const fetchRoles = async () => {
@@ -60,11 +61,11 @@ const UsersPlantilla = () => {
   const [openModalActualizar, setOpenModalActualizar] = useState(false);
   const [sucess, setsucess] = useState("");
 
-    //Modal registrar
+  //MODAL REGISTRAR
   const handleClick = () => {setOpenModal(true);};
   const closeModal = () => {setOpenModal(false);reset()};
 
-    //Modal Actualizar
+  //MODAL ACTUALIZAR
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const handleClickActualizar = (usuario) => {
     console.log("Usuario seleccionado:", usuario); 
@@ -83,6 +84,7 @@ const UsersPlantilla = () => {
           onClick: async () => {
             try {
               await actualizarEstado(id_usuario).unwrap();
+              toast.success("Estado actualizado con éxito");
             } catch (error) {
               console.error('Error al actualizar el estado:', error);
             }
@@ -90,7 +92,7 @@ const UsersPlantilla = () => {
         },
         {
           label: 'No',
-          onClick: () => toast('Operacion cancelada')
+          onClick: () => toast.warn('Operacion cancelada')
         }
       ],
       closeOnClickOutside: true,
@@ -108,6 +110,7 @@ const UsersPlantilla = () => {
   const onsubmit = (data) => {
     registrarUsuario(data);
     reset();
+    toast.success("Usuario registrado con éxito");
     setOpenModal(false);
   };
 
@@ -116,6 +119,7 @@ const UsersPlantilla = () => {
     if (usuarioSeleccionado) {
       console.log("valores enviados:", valores);
       actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario });
+      toast.success("Usuario actualizado con éxito");
       reset();
       setOpenModalActualizar(false);
     }
@@ -476,7 +480,7 @@ const UsersPlantilla = () => {
 
     )}
     {/* FIN MODAL ACTUALIZAR*/}
-      </div>
+    </div>
     </>
   );
 };

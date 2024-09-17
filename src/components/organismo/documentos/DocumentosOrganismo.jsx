@@ -37,7 +37,7 @@ const DocumentosOrganismo = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
-
+console.log(data)
 
   const handlePageChange = (page) => {
     setPages(page);
@@ -45,7 +45,6 @@ const DocumentosOrganismo = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success(`${dataEstado?.message}`);
-
     }
 
   }, [isSuccess])
@@ -65,6 +64,7 @@ const DocumentosOrganismo = () => {
     })
     : [];
   ;
+  
 
   const handleVerdocumento = (doc) => {
     const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
@@ -131,6 +131,10 @@ const DocumentosOrganismo = () => {
     setValuedocs(null)
     setFrom(false)
   }
+  const closeModalEdit = () => {
+
+    setShowModal(false)
+  }
 
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
@@ -168,7 +172,7 @@ const DocumentosOrganismo = () => {
             visible={true}
           >
 
-            <DocumentoEdit closeModal={closeModal} valor={dataValue} />
+            <DocumentoEdit closeModalEdit={closeModalEdit} valor={dataValue} />
 
           </ModalOrganismo>
         }

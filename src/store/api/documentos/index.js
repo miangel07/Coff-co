@@ -42,14 +42,15 @@ export const docuentosApi = createApi({
         }),
         //actualizar documento
         actualizarDocumento: build.mutation({
-            query: (datos) => ({
-                url: `documentos/actualizar/${datos.id}`,
-                method: "PUT",
-                body: data,
-                headers: {
-                    token: `${getCookie("authToken")}`,
-                },
-            }),
+            query: (data) => (
+                console.log("DATA",data), {
+                    url: `documentos/actualizar/${data.get('id_documentos')}`,
+                    method: "PUT",
+                    body: data,
+                    headers: {
+                        token: `${getCookie("authToken")}`,
+                    },
+                }),
             transformErrorResponse: (response, meta, arg) => {
                 return {
                     originalArg: arg,
@@ -70,9 +71,9 @@ export const docuentosApi = createApi({
                     error: response.data.message,
                 };
             },
-            invalidatesTags: ["getDocumentos"],
+            invalidatesTags: ["Documentos"],
         }),
-        
+
 
         CambioEstado: build.mutation({
             query: (data) => (
@@ -120,4 +121,4 @@ export const docuentosApi = createApi({
     })
 })
 
-export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useCambioEstadoMutation, useActualizarVersionMutation,useGraficaQuery } = docuentosApi
+export const { useGetDocumentosQuery, useCrearDocumentoMutation, useActualizarDocumentoMutation, useCambioEstadoMutation, useActualizarVersionMutation, useGraficaQuery } = docuentosApi

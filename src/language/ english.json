@@ -32,5 +32,6 @@
     "cerrar": "Close",
     "idioma": "language",
     "ingles": "English",
-    "espanol": "Spanish"
+    "espanol": "Spanish",
+    "tipoEntrada": "Select input or output"
 }
