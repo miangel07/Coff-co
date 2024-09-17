@@ -16,7 +16,7 @@ const ModalOrganismo = ({ visible, closeModal, title, logo, children }) => {
   const { t } = useTranslation();
   return (
     <>
-      <Modal size={"4xl"} isOpen={visible} onClose={closeModal} className=" max-h-full overflow-hidden ">
+      <Modal size={"4xl"} isOpen={visible} onClose={closeModal} className=" max-h-full overflow-y-auto ">
         <ModalContent className=""  >
           {(onClose) => (
             <>

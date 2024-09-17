@@ -71,10 +71,12 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? t("tipoDocumentos") : ""}`,
       icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      link: "/tipodocumento"
     },
     {
       label: `${visiblite ? t("tipoServicios") : ""}`,
       icon: <MdOutlineMiscellaneousServices className="w-5 h-5 xl:size-7 " />,
+      link: "/tiposervicio"
     },
     {
       label: `${visiblite ? t("muestras") : ""}`,

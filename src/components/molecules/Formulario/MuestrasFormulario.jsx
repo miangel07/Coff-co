@@ -1,23 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import SelectAtomo from "../../atoms/Select";
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
-// importando los metodos del form
 import {
   usePostMuestraMutation,
   usePutMuestraMutation,
 } from "../../../store/api/muestra";
-
-// importando los datos de las llaves foraneas
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetUsuarioQuery } from "../../../store/api/users";
 
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
-  const { data: dataUsuarios, isLoading: isLoadingUsuarios } = useGetUsuarioQuery();
-  const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
-
+  const { data: dataUsuarios, isLoading: isLoadingUsuarios, isError: UsuarioError } = useGetUsuarioQuery();
+  const { data: dataFincas, isLoading: isLoadingFincas, isError: FincaError } = useGetFincasQuery();
+  
   const {
     register,
     handleSubmit,
@@ -27,53 +24,53 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
     watch,
   } = useForm();
 
-  const [
-    crearMuestra,
-    { isLoading, isError, error, data: dataResponse, isSuccess },
-  ] = usePostMuestraMutation();
+  const [crearMuestra, { isLoading, isError, data: dataResponse, isSuccess }] = usePostMuestraMutation();
+  const [editarMuestra, { isLoading: isLoadingEdit, isError: isErrorEdit, data: dataResponseEdit, isSuccess: isSuccessEdit }] = usePutMuestraMutation();
+  
+  // Ref para asegurar que el efecto solo se ejecute una vez
+  const hasNotified = useRef(false);
 
-  const [
-    editarMuestra,
-    {
-      isLoading: isLoadingEdit,
-      isError: isErrorEdit,
-      error: ErrorEdit,
-      data: dataResponseEdit,
-      isSuccess: isSuccessEdit,
-    },
-  ] = usePutMuestraMutation();
+  useEffect(() => {
+    if (dataValue) {
+      // Reset form with initial values from dataValue
+      reset({
+        codigo_muestra: dataValue.codigo_muestra,
+        cantidadEntrada: dataValue.cantidadEntrada,
+        fecha_muestra: dataValue.fecha_muestra,
+        fk_id_finca: dataValue.fk_id_finca,
+        fk_id_usuarios: dataValue.fk_id_usuarios,
+        estado: dataValue.estado,
+      });
 
-  const usuarioValue = watch("fk_id_usuarios");
-  const fincaValue = watch("fk_id_finca");
+      // Asegurarse de que los valores de los selectores se inicialicen correctamente
+      setValue("fk_id_finca", dataValue.fk_id_finca);
+      setValue("fk_id_usuarios", dataValue.fk_id_usuarios);
+    } else {
+      reset();
+    }
 
-  const handleSelectChange = (field) => (e) => {
-    setValue(field, e.target.value);
-  };
+    if ((isSuccess || isSuccessEdit) && !hasNotified.current) {
+      toast.success(`${dataResponse?.message || dataResponseEdit?.message}`);
+      hasNotified.current = true; // Marcar como notificado
+      closeModal();
+    } else if ((isError || isErrorEdit) && !hasNotified.current) {
+      toast.error("Error al procesar la muestra");
+      hasNotified.current = true; // Marcar como notificado
+    }
+  }, [dataValue, isSuccess, isSuccessEdit, isError, isErrorEdit, reset, closeModal, dataResponse, dataResponseEdit, setValue]);
 
   const onSubmit = async (data) => {
     try {
       if (dataValue) {
         await editarMuestra({
           id: dataValue.id_muestra,
-          cantidadEntrada: data.cantidadEntrada,
-          fecha_muestra: data.fecha_muestra,
-          codigoMuestra: data.codigoMuestra,
-          fk_id_finca: data.fk_id_finca,
-          fk_id_usuarios: data.fk_id_usuarios,
-          estado: data.estado,
+          ...data
         });
       } else {
-        await crearMuestra({
-          cantidadEntrada: data.cantidadEntrada,
-          fecha_muestra: data.fecha_muestra,
-          codigoMuestra: data.codigoMuestra,
-          fk_id_finca: data.fk_id_finca,
-          fk_id_usuarios: data.fk_id_usuarios,
-          estado: data.estado,
-        });
+        await crearMuestra(data);
       }
     } catch (error) {
-      toast.error("Error al crear la muestra");
+      toast.error("Error al guardar la muestra");
       console.log(error);
     }
   };
@@ -119,20 +116,20 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
           <SelectAtomo
             label="Selecciona un Usuario"
             data={dataUsuarios}
-            onChange={handleSelectChange("fk_id_usuarios")}
+            onChange={(e) => setValue("fk_id_usuarios", e.target.value)}
             items="id_usuario"
             ValueItem="nombre"
-            value={usuarioValue}
+            value={watch("fk_id_usuarios")} // Use `watch` to ensure value is synced
           />
 
           {/* Select para Fincas (fk_id_finca) */}
           <SelectAtomo
             label="Selecciona una Finca"
             data={dataFincas}
-            onChange={handleSelectChange("fk_id_finca")}
+            onChange={(e) => setValue("fk_id_finca", e.target.value)}
             items="id_finca"
             ValueItem="nombre_finca"
-            value={fincaValue}
+            value={watch("fk_id_finca")} // Use `watch` to ensure value is synced
           />
         </div>
 
