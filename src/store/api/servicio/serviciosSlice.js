@@ -7,7 +7,7 @@ export const servicioApiSlice = createApi({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({
@@ -35,6 +35,25 @@ export const servicioApiSlice = createApi({
             },
             invalidatesTags:['servicios']
         }),
+
+        //registrar servicio
+        registrarServicio:build.mutation({
+            query:(data)=>({
+                url:'servicios/registrarser',
+                method:'POST',
+                body:data,
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['servicios']
+        }),
+
+
+
 
         //eliminar servicio
         eliminarServicio:build.mutation({
@@ -72,4 +91,4 @@ export const servicioApiSlice = createApi({
     })
 })
 
-export const { useGetServicioQuery, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation} = servicioApiSlice;
+export const { useGetServicioQuery, useRegistrarServicioMutation, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation} = servicioApiSlice;
