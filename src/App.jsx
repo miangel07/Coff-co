@@ -14,8 +14,9 @@ import Logos from "./pages/logos/LogosPage";
 import ServicioPage from "./pages/servicios/ServicioPage";
 import VariablePages from "./pages/variable/VariablePages";
 import MuestrasPage from "./pages/muestras/MuestrasPage";
-import FacturasPlantilla from "./components/plantillas/facturas/FacturasPlantilla";
+
 import LoginPages from "./pages/login/LoginPages";
+import FacturasPages from "./pages/Facturas/FacturasPages";
 const App = () => {
   return (
     <>
@@ -42,7 +43,7 @@ const App = () => {
         <Route path="/varibles" element={<VariablePages />}></Route>
         <Route path="/perfil" element={<Perfil />}></Route>
         <Route path="/logos" element={<Logos />}></Route>
-        <Route path="/facturas" element={<FacturasPlantilla />}></Route>
+        <Route path="/facturas" element={<FacturasPages />}></Route>
         <Route path="/muestras" element={<MuestrasPage />}></Route>
       </Routes>
     </>
