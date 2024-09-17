@@ -16,11 +16,15 @@ import { IoDocumentText } from "react-icons/io5";
 import SelectDocumentos from "../../atoms/SelectDocumentos";
 import { useTranslation } from "react-i18next"; //  <--------importan este para usar la traducioon Esteeeeee
 import { TraslateContex } from "../../../context/TranslationoContex";
+import { AuthContext } from "../../../context/AuthContext";
+import Cookies from 'js-cookie';
+
 const ItemsNavbar = ({ visiblite }) => {
   const { changeLanguage, language } = useContext(TraslateContex);
   const [itemsUser, setItemsUser] = useState(-1);
   const [subMenuVisible, setSubMenuVisible] = useState(false);
   const { t } = useTranslation(); // <--------aca ponen esto tal cual  no vallan a cambiar la letra asi lo usan con la "t"
+  const { cerrarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
 
   const handleClick = (index) => {
     setItemsUser(index);
@@ -36,10 +40,11 @@ const ItemsNavbar = ({ visiblite }) => {
     { value: "en", label: t("ingles") },
   ];
 
+  //Se llama a la funcion cerrar sesion del contexto que se encarga de eliminar la informacion del usuario con sesion iniciada
   const handleLogout = () => {
-    document.cookie = 'Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    cerrarSesion();
+    Cookies.remove("Token")
     console.log('Sesion Finalizada');
-    // window.location.reload();
   };
 
   const items = [
@@ -108,7 +113,7 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? t("salir") : ""}`,
       icon: <ImExit className="w-5 h-5 xl:size-7" />,
-      link: "/login"
+      link: "/"
     }
   ];
 

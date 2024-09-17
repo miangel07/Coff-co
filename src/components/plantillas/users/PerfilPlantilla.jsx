@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { MdEdit } from "react-icons/md";
 import { PiIdentificationBadgeThin, PiBriefcaseThin, PiEnvelopeSimpleThin, PiPhoneThin, PiUserThin, PiUserGearThin, PiPasswordThin, PiTrendUpDuotone, PiUserBold } from "react-icons/pi";
 import { useGetUsuarioIdQuery, useActualizarUsuarioMutation, useActualizarContraMutation } from "../../../store/api/users";
+//ALERTAS
+import { toast } from "react-toastify";
 //MODAL
 import { useForm } from "react-hook-form";
 import SelectAtomoActualizar from "../../atoms/SelectActualizar";
@@ -31,7 +33,9 @@ const PerfilPlantilla = () => {
         let token = getCookie('Token');
         if (token) {
             let decodedToken = parseJwt(token);
-            const usuario = decodedToken.Usuario[0];
+            const usuario = decodedToken.Usuario;
+            console.log(decodedToken)
+            console.log(usuario)
             if (usuario) {
                 const id_usuario = usuario.id_usuario;
                 setUsuario(id_usuario);
@@ -80,16 +84,26 @@ const PerfilPlantilla = () => {
         if (usuarioSeleccionado) {
         console.log("valores enviados:", valores);
         actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario });
+        //ALERTAS PARA ACTUALIZACION DE INFORMACION
+        toast.success("Perfil actualizado con éxito");
         reset();
         setOpenModalActualizar(false);
         }
     };
-    const onsubmitActualizarContra = (valores) => {
+
+    const onsubmitActualizarContra = async (valores) => {
         if (usuarioSeleccionado) {
-        console.log("valores enviados:", valores);
-        actualizarContraseña({ data: valores, id: usuarioSeleccionado.id_usuario });
-        reset();
-        setOpenModalActualizarContra(false);
+            console.log("valores enviados:", valores);
+            //ALERTAS DE ERROR Y DE ACTUALIZACION CORRECTA
+            try {
+                await actualizarContraseña({ data: valores, id: usuarioSeleccionado.id_usuario }).unwrap();
+                toast.success("Contraseña actualizada con éxito");
+            } catch (error) {
+                const mensajedeError = error?.error || "Error al actualizar la contraseña";
+                toast.error(mensajedeError);
+            }
+            reset();
+            setOpenModalActualizarContra(false);
         }
     };
 
