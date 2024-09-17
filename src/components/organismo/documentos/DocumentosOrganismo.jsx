@@ -66,11 +66,11 @@ console.log(data)
   ;
   
 
-  const handleVerdocumento = (doc) => {
+/*   const handleVerdocumento = (doc) => {
     const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
     setShowdocument([{ uri: url }]);
 
-  }
+  } */
   const handledescargar = (doc) => {
     const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
 
@@ -238,8 +238,7 @@ console.log(data)
                 <Td>{doc.tipo_documento}</Td>
                 <Td>
                   <div className=" flex flex-row gap-3 justify-between">
-                    <FaRegEye onClick={() => handleVerdocumento(doc.nombre_documento_version
-                    )} className="cursor-pointer" size={"35px"} />
+                   
                     <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version)} />
                     <FaRegEdit className="cursor-pointer" size={"30px"} onClick={() => hadeleEditar(doc)} />
                     <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />
