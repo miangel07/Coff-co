@@ -45,7 +45,6 @@ const DocumentosOrganismo = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success(`${dataEstado?.message}`);
-
     }
 
   }, [isSuccess])

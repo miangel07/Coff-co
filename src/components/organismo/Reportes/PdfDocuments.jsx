@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Page, Document, Text, Image, StyleSheet} from "@react-pdf/renderer";
-import GraficaImages from "../../molecules/graficas/GraficaImages";
+import { Page, Document, Text, Image, StyleSheet } from "@react-pdf/renderer";
+
 
 
 const styles = StyleSheet.create({
@@ -18,19 +18,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const PdfDocuments = ({ imageData }) => {
-
+const PdfDocuments = ({ data }) => {
+  console.log(data)
 
 
   return (
     <>
       <Document>
         <Page>
-          <Text>hola</Text>
-          {
-            imageData &&
-            <Image src={imageData} style={styles.image} />
-          }
+          <Text>{data.codigo_muestra}</Text>
+
 
         </Page>
       </Document>
