@@ -29,9 +29,7 @@ import { useGetMuestrasQuery } from "../../../store/api/muestra";
 import { useGetPreciosQuery } from "../../../store/api/precios/preciosSlice";
 import { useGetUsuarioQuery } from "../../../store/api/users";
 
-
 const ServiciosPlantilla = () => {
-
   //   //acceso al contexto de autenticacion
   const { authData } = useContext(AuthContext);
 
@@ -42,14 +40,13 @@ const ServiciosPlantilla = () => {
   } = useGetServicioQuery();
 
   //   // Trae los datos de los tipos de servicios
-  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } =useGetTipoServicioQuery();
+  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } =
+    useGetTipoServicioQuery();
 
-//   // Slice que permite la obtencion de las variables
+  //   // Slice que permite la obtencion de las variables
   const [obtenerVariables] = useObtenerVariablesParaServicioMutation();
-//   //Slice que permite el registro de un servicio
+  //   //Slice que permite el registro de un servicio
   const [registrarServicio] = useRegistrarServicioMutation();
-
-
 
   //   // Trae los datos de ambientes, muestras, precios y usuarios
   const { data: dataAmbientes } = useGetAmbientesQuery();
@@ -63,7 +60,7 @@ const ServiciosPlantilla = () => {
     setValue,
     register,
     handleSubmit,
-    control,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -78,7 +75,7 @@ const ServiciosPlantilla = () => {
     ? dataServicios.slice(indicePrimerItem, indiceUltimoItem)
     : [];
 
-    //estados para el manejo de la informacion de los select
+  //estados para el manejo de la informacion de los select
   const [tipoServicioActual, setTipoServicioActual] = useState("");
   const [variables, setVariables] = useState([]);
   // console.log("variables: ", variables);
@@ -86,7 +83,7 @@ const ServiciosPlantilla = () => {
   const [muestraActual, setMuestraActual] = useState("");
   const [precioActual, setPrecioActual] = useState("");
   const [modalVisible, SetModalVisible] = useState(false);
-  
+  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
 
   if (isLoadingServicios) {
     return (
@@ -94,7 +91,7 @@ const ServiciosPlantilla = () => {
     );
   }
 
-    // Función que maneja el cambio de selección en el select
+  // Función que maneja el cambio de selección en el select
   const manejadorobtencionTipoServicio = async (e) => {
     const idTipoServicio = e.target.value;
     setTipoServicioActual(idTipoServicio);
@@ -109,17 +106,35 @@ const ServiciosPlantilla = () => {
     }
   };
 
-
-  const abrirModal = () => {
-    if(servicio){
-
+  const abrirModal = (servicio) => {
+    if (servicio) {
+      setServicioSeleccionado(servicio);
+      // reset({
+      //   nombre: servicio.nombre,
+      //   setTipoServicioActual(servicio.fk_idTipoServicio),
+      //   fk_idAmbiente: servicio.idAmbiente,
+      //   fk_idMuestra: servicio.id_muestra,
+      //   fk_idPrecio: servicio.idPrecio,
+      //   fk_idUsuarios: authData.usuario.id,
+      // });
+    } else {
+      setServicioSeleccionado(null);
+      reset({
+        nombre: "",
+        fk_idTipoServicio: "",
+        fk_idAmbiente: "",
+        fk_idMuestra: "",
+        fk_idPrecio: "",
+        fk_idUsuarios: "",
+      });
+      refetch()
     }
     SetModalVisible(true);
   };
 
   const cerrarModal = () => {
     SetModalVisible(false);
-    reset()
+    reset();
   };
 
   const onSubmit = async (datosDelFormulario) => {
@@ -151,13 +166,12 @@ const ServiciosPlantilla = () => {
     try {
       await registrarServicio(payload).unwrap();
       toast.success("Datos enviados con éxito!");
-      cerrarModal()
-      refetch()
+      cerrarModal();
+      refetch();
     } catch (error) {
       toast.error("Error al enviar los datos: " + error.message);
     }
   };
-
 
   const manejadorCambioEstadoSwitch = (checked, id, nombre) => {
     console.log(nombre);
@@ -237,6 +251,7 @@ const ServiciosPlantilla = () => {
               <Th>Fecha</Th>
               <Th>Nombre ambiente</Th>
               <Th>Codigo muestra</Th>
+              <Th>Precio servicio</Th>
               <Th>Encargado</Th>
               <Th>Rol</Th>
               <Th>Estado</Th>
@@ -255,23 +270,34 @@ const ServiciosPlantilla = () => {
                     <Td>{servicio.fecha}</Td>
                     <Td>{servicio.nombre_ambiente}</Td>
                     <Td>{servicio.codigo_muestra}</Td>
+                    <Td>{servicio.precio}</Td>
                     <Td>{servicio.nombre_completo_usuario}</Td>
                     <Td>{servicio.rol_usuario}</Td>
-                    <Switch
-                      color={
-                        servicio.estado === "en proceso" ? "success" : "default"
-                      }
-                      isSelected={servicio.estado === "en proceso"}
-                      onValueChange={(checked) =>
-                        manejadorCambioEstadoSwitch(
-                          checked,
-                          servicio.id_servicios,
-                          servicio.nombre
-                        )
-                      }
-                    >
-                      {servicio.estado}
-                    </Switch>
+                    <Td>
+                      {" "}
+                      <Switch
+                        color={
+                          servicio.estado === "en proceso"
+                            ? "success"
+                            : "default"
+                        }
+                        isSelected={servicio.estado === "en proceso"}
+                        onValueChange={(checked) =>
+                          manejadorCambioEstadoSwitch(
+                            checked,
+                            servicio.id_servicios,
+                            servicio.nombre
+                          )
+                        }
+                      >
+                        {servicio.estado}
+                      </Switch>
+                    </Td>
+                    <Td>
+                      <Mybutton onClick={() => abrirModal(servicio)}>
+                        Editar
+                      </Mybutton>
+                    </Td>
                   </tr>
                 ))
               ) : (
@@ -335,17 +361,6 @@ const ServiciosPlantilla = () => {
                 }}
               />
 
-              <SelectAtomo
-                data={dataPrecios}
-                label="Selecciona Precio"
-                items="idPrecio"
-                ValueItem="precio"
-                value={precioActual}
-                onChange={(e) => {
-                  setValue("idPrecio", e.target.value);
-                  setPrecioActual(e.target.value);
-                }}
-              />
             </div>
 
             {/* contenedor del select y el mapeo para mostrar variables */}
