@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
-import { useCrearTipoDocumentoMutation, useActualizarTipoDocumentoMutation } from "../../../store/api/tipoDocumentos";
+import { useCrearTipoDocumentoMutation, useActualizarTipoDocumentoMutation } from "../../../store/api/TipoDocumentos";
 
 const TipoDocumentoFormulario = ({ closeModal, dataValue }) => {
   const {
