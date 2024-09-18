@@ -9,13 +9,15 @@ import Label from '../../atoms/Label';
 import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
-
+import { useActualizarDocumentoMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useEffect, useState } from 'react';
-const DocumentoEdit = ({ valor, closeModal }) => {
+import SelectAtomoActualizar from '../../atoms/SelectActualizar';
+const DocumentoEdit = ({ valor, closeModalEdit }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
+    const [entradaSalida, setEntradaSalida] = useState("");
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
@@ -24,18 +26,17 @@ const DocumentoEdit = ({ valor, closeModal }) => {
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
+    const [actualizarVersion, { isLoading: loandActualizar, isError: isErrorActualizar, error: ErrorActualizar,
+        data: dataResponseActualizar, isSuccess: isSuccessActualizar }] = useActualizarDocumentoMutation()
+    console.log(valor)
+    useEffect(() => {
+        if (isSuccessActualizar) {
+            toast.success(`${dataResponseActualizar?.message}`);
+            closeModalEdit()
+        }
 
-    /*  useEffect(() => {
-         if (isSuccess) {
-             toast.success(`${dataResponse?.message}`);
-             closeModal()
-         }
-         if (isSuccessActualizarVersion) {
-             toast.success(`${dataResponseActualizarVersion?.message}`);
-             closeModal()
-         }
- 
-     }, [isSuccess, dataResponse, isSuccessActualizarVersion]); */
+
+    }, [isSuccessActualizar, dataResponseActualizar]);
     useEffect(() => {
         if (valor) {
             reset({
@@ -48,7 +49,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
         }
     }, [valor, reset]);
 
-
+console.log(entradaSalida);
 
 
     const onDataChangeVersiones = (data) => {
@@ -62,27 +63,28 @@ const DocumentoEdit = ({ valor, closeModal }) => {
     }
     const onSubmit = async (data) => {
         const DataForm = new FormData();
+     
 
         DataForm.append('nombre', data.nombre);
+        DataForm.append('id_documentos', valor.id_documentos);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
+        DataForm.append('nombre_documento_version', valor.nombre_documento_version);
+        DataForm.append('idVersion', valor.idversion);
+        DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('version', data.version);
         DataForm.append('variables', JSON.stringify(ArryVariables));
-        DataForm.append('logos', JSON.stringify(logos));
-        DataForm.append('file', file);
-        if (!logos || !file) {
-            toast.info('Todos los campos son obligatorios');
-            return;
-        }
-        try {
-            await crearDocumento(
-                DataForm
-            );
+        if (file) {
+            DataForm.append('file', file);
+          }
 
-            reset()
+
+        try {
+            await actualizarVersion(DataForm)
 
 
         } catch (error) {
@@ -90,15 +92,18 @@ const DocumentoEdit = ({ valor, closeModal }) => {
         }
     }
 
-    if (isLoading || loandingLogos || TipoServicio || LoandVariables) {
+    if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandActualizar) {
         return <p>Loading...</p>;
     }
 
-    if (isError || tipoServicioError || ErrorVariable) {
+    if (isError || tipoServicioError || ErrorVariable || isErrorActualizar) {
         return <p>Error: {error?.message || ErroTipo?.message || Error?.message
         } </p>;
     }
-
+    const datosEntrada = [
+        { value: "entrada", label: "entrada" },
+        { value: "salida", label: "Salida" },
+    ];
 
     return (
         <div className='w-full flex flex-col max-h-full  '>
@@ -107,7 +112,7 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                 className='w-full max-w-4xl md:rounded-xl  max-h-full   flex flex-col '
                 onSubmit={handleSubmit(onSubmit)}
             >
-                
+
                 <section className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6'>
                     <div className='flex w-[230px] h-[155px] flex-col '>
                         <Label>Nombre </Label>
@@ -186,29 +191,38 @@ const DocumentoEdit = ({ valor, closeModal }) => {
                     </div>
 
                     {dataInput == 5 &&
-                        <section className='flex w-[230px] h-[155px] flex-col '>
-                            <Label>Tipo De servicio</Label>
-                            <SelectAtomo
-                                value={valor?.tipo_servicio}
-                                ValueItem={"nombreServicio"}
-                                data={TpoServicio}
-                                items={"idTipoServicio"}
-                                label={"Seleccione El servicio"}
-                                onChange={(e) => setTipoServicio(e.target.value)}
-                            />
-                        </section>}
+                        <>
+
+                            <section className='flex w-[230px] h-[155px] flex-col '>
+                                <Label>Tipo De servicio</Label>
+                                <SelectAtomo
+                                    value={valor?.tipo_servicio}
+                                    ValueItem={"nombreServicio"}
+                                    data={TpoServicio}
+                                    items={"idTipoServicio"}
+                                    label={"Seleccione El servicio"}
+                                    onChange={(e) => setTipoServicio(e.target.value)}
+                                />
+                            </section>
 
 
-                    {dataInput == 5 && <div className='w-full h-[20px]'>
-                        <CheckboxAtomo
-                            value={valor?.variables}
-                            data={varibles}
-                            items={"nombre"}
-                            valor={"idVariable"}
-                            onDataChange={onDataChangeVersiones}
-                            cantidad={6}
-                        />
-                    </div>}
+                            <div className='w-full h-[20px]'>
+                                <CheckboxAtomo
+                                    value={valor?.variables}
+                                    data={varibles}
+                                    items={"nombre"}
+                                    valor={"idVariable"}
+                                    onDataChange={onDataChangeVersiones}
+                                    cantidad={6}
+                                />
+                            </div>
+                            <div className=' w-[230px] h-[20px]'>
+                                <Label></Label>
+                                <SelectAtomoActualizar value={valor?.entrada_salida || ""} ValueItem={"label"} data={datosEntrada}
+                                    items={"value"} label={"Selecione el Tipo "} onChange={(e) => setEntradaSalida(e.target.value)} placeholder={""} />
+                            </div>
+                        </>
+                    }
 
 
 
