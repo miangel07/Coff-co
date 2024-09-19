@@ -113,7 +113,8 @@ const ItemsNavbar = ({ visiblite }) => {
     },
     {
       label: `${visiblite ? t("reportes") : ""}`,
-      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />,
+      link:"/reportes" // Tamaño ajustable
     },
   ];
 

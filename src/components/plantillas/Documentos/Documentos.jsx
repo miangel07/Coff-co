@@ -1,4 +1,3 @@
-import GraficaDocumento from "../../molecules/graficas/GraficaDocumento";
 import DocumentosOrganismo from "../../organismo/documentos/DocumentosOrganismo";
 
 const Documentos = () => {
@@ -6,7 +5,7 @@ const Documentos = () => {
     <>
       <div className=" w-full px-10 flex flex-col ">
         <DocumentosOrganismo />
-        
+     
       </div>
     </>
   );

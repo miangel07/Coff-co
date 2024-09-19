@@ -74,7 +74,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('version', data.version);
@@ -105,7 +104,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('idVersion', idVersionProcessed);
         DataForm.append('tipo_documento', dataInput);
@@ -140,10 +138,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
             || ErrorActualizarVersion.message} </p>;
     }
-    const datosEntrada = [
-        { value: "entrada", label: "entrada" },
-        { value: "salida", label: "Salida" },
-    ];
+
     /* 'entrada', 'salida' */
     return (
         <div className='w-full flex flex-col max-h-full  '>
@@ -257,12 +252,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                                 />
                             </div>
                            
-                            <div className=' w-[230px] h-[20px]'>
-                                <Label>{t("tipoEntrada")}</Label>
-                                <SelectAtomoActualizar value={valor?.entrada_salida || ""} ValueItem={"label"} data={datosEntrada}
-                                    items={"value"} label={"Selecione el Tipo "} onChange={(e) => setEntradaSalida(e.target.value)} placeholder={""} />
-                            </div>
-
                         </>
 
                     }
