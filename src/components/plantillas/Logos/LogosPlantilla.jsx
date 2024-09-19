@@ -9,6 +9,7 @@ import { Spinner } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
+import { FaRegEye } from "react-icons/fa";
 
 //Importaciones para el modal
 import { IoAtCircle } from "react-icons/io5";
@@ -44,6 +45,7 @@ const LogosPlantilla = () => {
     //Abrir modal
     const [openModal, setOpenModal] = useState(false);
     const [openModalActualizar, setOpenModalActualizar] = useState(false);
+    const [openLogoModal, setOpenLogoModal] = useState(false);
     const [sucess, setsucess] = useState("");
 
     //MODAL REGISTRAR
@@ -57,6 +59,12 @@ const LogosPlantilla = () => {
         setLogoSeleccionado(logo);
         setOpenModalActualizar(true);
     };
+
+    const handleClickLogo = (logo) => {
+      console.log("Logo seleccionado:", logo); 
+      setLogoSeleccionado(logo);
+      setOpenLogoModal(true);
+  };
     
     //CAMBIAR EL ESTADO DEL LOGO
     const handleSwitchChange = async (id, nombre) => {
@@ -87,55 +95,62 @@ const LogosPlantilla = () => {
     useEffect(() => {
         console.log("Logo seleccionado en modal:", logoSeleccionado);
     }, [logoSeleccionado]);
-      
-      const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
     
-      //SUBMIT REGISTRAR
-      const onsubmit = (data) => {
-        registrarLogo(data);
+    const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
+    const closeLogoModal = () => {setOpenLogoModal(false);};
+  
+    //SUBMIT REGISTRAR
+    const onsubmit = (data) => {
+      const formData = new FormData();
+      formData.append("file", data.file[0]);
+      formData.append("nombre", data.nombre);
+  
+      registrarLogo(formData);
+      reset();
+      toast.success("Logo registrado con éxito");
+      setOpenModal(false);
+    };    
+
+    //SUBMIT ACTUALIZAR
+    const onsubmitActualizar = (valores) => {
+      if (logoSeleccionado) {
+        const formData = new FormData();
+        formData.append("file", valores.file[0]);
+        formData.append("nombre", valores.nombre);
+        actualizarLogo({ data: formData, id: logoSeleccionado.idLogos });
+        toast.success("Logo actualizado con éxito");
         reset();
-        toast.success("Logo registrado con éxito");
-        setOpenModal(false);
-      };
+        setOpenModalActualizar(false);
+      }
+    };
     
-      //SUBMIT ACTUALIZAR
-      const onsubmitActualizar = (valores) => {
-        if (logoSeleccionado) {
-          console.log("valores enviados:", valores);
-          actualizarLogo({ data: valores, id: logoSeleccionado.idLogos });
-          toast.success("Logo actualizado con éxito");
-          reset();
-          setOpenModalActualizar(false);
-        }
-      };
-      
-      //Para registrar
-      useEffect(() => {
-        if (isSuccess) {
-          setsucess(datos?.message);
-          toast.success(datos?.message, {
-            duration: 5000,
-            position: "top-center",
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-            icon: <FcOk />,
-          });
-        }
-    
-        if (isError) {
-          console.log(error);
-          toast.error(error?.error || "Ocurrió un error", {
-            duration: 5000,
-            position: "top-center",
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-          });
-        }
-      }, [isSuccess, isError, error, datos]);
+    //Para registrar
+    useEffect(() => {
+      if (isSuccess) {
+        setsucess(datos?.message);
+        toast.success(datos?.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+      }
+  
+      if (isError) {
+        console.log(error);
+        toast.error(error?.error || "Ocurrió un error", {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    }, [isSuccess, isError, error, datos]);
 
     // ESTADO DE CARGA DE LA TABLA 
     if(isLoading){
@@ -168,7 +183,8 @@ const LogosPlantilla = () => {
           <Thead>
             <Th>ID</Th>
             <Th>Nombre</Th>
-            <Th>Ruta</Th>
+            {/* <Th>Ruta</Th> */}
+            <Th>Logo</Th>
             <Th>Editar</Th>
             <Th>Estado</Th>
           </Thead>
@@ -178,7 +194,11 @@ const LogosPlantilla = () => {
                 <tr className="hover:bg-slate-200" key={logo.idLogos}>
                   <Td>{logo.idLogos}</Td>
                   <Td>{logo.nombre}</Td>
-                  <Td>{logo.ruta}</Td>
+                  <Td>
+                  <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
+                  </Td>
+                  {/* <Td>{logo.ruta}</Td> */}
+                  {/* <Td><FaRegEye className="cursor-pointer" onClick={() => setOpenLogoModal(true)} /></Td> */}
                   <Td>
                   <div className="flex  items-center space-x-4">
                     
@@ -260,20 +280,12 @@ const LogosPlantilla = () => {
                 />
                 <InputAtomo
                   register={register}
-                  name={"ruta"}
+                  name={"file"}
                   erros={errors}
-                  id={"ruta"}
-                  placeholder={"Ingrese la ruta de el logo"}
-                  type={"text"}
+                  id={"file"}
+                  placeholder={"Selecciona tu logo"}
+                  type={"file"}
                 />
-                {/* <SelectAtomo
-                  data={estadoOptions} 
-                  label={"Estado"} 
-                  onChange={(e) => setValue("estado", e.target.value)} 
-                  items={"value"} 
-                  ValueItem={"label"} 
-                  value={watch("estado")} 
-                /> */}
                 </>
               }
             />
@@ -303,15 +315,17 @@ const LogosPlantilla = () => {
                 type={"text"}
                 defaultValue={logoSeleccionado?.nombre || ""}
               />
+
               <InputAtomoActualizar
-                register={register}
-                name={"ruta"}
-                errores={errors}
-                id={"ruta"}
-                placeholder={"Ingrese la ruta del logo"}
-                type={"text"}
-                defaultValue={logoSeleccionado?.ruta || ""}
+                  register={register}
+                  name={"file"}
+                  errores={errors}
+                  id={"file"}
+                  placeholder={"Selecciona tu nuevo logo"}
+                  type={"file"}
+                  defaultValue={logoSeleccionado?.ruta || ""}
               />
+
             </>
           }
         />
@@ -323,6 +337,21 @@ const LogosPlantilla = () => {
 
     )}
     {/* FIN MODAL ACTUALIZAR*/}
+
+    {/* MODAL LOGO*/}
+    {openLogoModal && (
+    <ModalOrganismo 
+      // logo={<Logosímbolo />}
+      children={
+        <img className="object-cover w-auto h-auto" src={`http://localhost:3000/public/logos/${logoSeleccionado.ruta}`} alt="Logo" />
+      }
+      visible={true}
+      title={"Logo"}
+      closeModal={closeLogoModal}
+    />
+
+    )}
+    {/* FIN MODAL LOGO*/}
     </div>
     )
 };
