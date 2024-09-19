@@ -10,9 +10,10 @@ export const TipoDocumento = createApi({
             token: `${getCookie("authToken")}`,
         },
     }),
+
     endpoints: (build) => ({
         //listar Tipo documentos
-        getTipoDocumentos: build.query({
+        GetTipoDocumentos: build.query({
             query: () => ({
                 url: "tipodocumento/listar",
                 method: "GET",
@@ -20,10 +21,11 @@ export const TipoDocumento = createApi({
                     token: `${getCookie("authToken")}`,
                 },
             }),
-
+            providesTags: ['TipoDocumento']
         }),
+
         //crear Tipo documento
-        crearTipoDocumento: build.mutation({
+        CrearTipoDocumento: build.mutation({
             query: (data) => ({
                 url: "tipodocumento/registrar",
                 method: "POST",
@@ -32,47 +34,43 @@ export const TipoDocumento = createApi({
                     token: `${getCookie("authToken")}`,
                 },
             }),
-            transformErrorResponse: (response, meta, arg) => {
-                return {
-                    originalArg: arg,
-                    error: response.data.message,
-                };
-            },
-            invalidatesTags: ["getTipoDocumentos"],
+            transformErrorResponse: (response) => ({
+                error: response.data.message,
+            }),
+            invalidatesTags: ["TipoDocumento"],
         }),
+
         //actualizar Tipo documento
-        actualizarTipoDocumento: build.mutation({
-            query: (datos) => ({
-                url: `tipodocumento/actualizar/${datos.id}`,
+        ActualizarTipoDocumento: build.mutation({
+            query: (data) => ({
+                url: `tipodocumento/actualizar/${data.id}`,
                 method: "PUT",
                 body: data,
                 headers: {
                     token: `${getCookie("authToken")}`,
                 },
             }),
-            transformErrorResponse: (response, meta, arg) => {
-                return {
-                    originalArg: arg,
-                    error: response.data.message,
-                };
-            },
-            invalidatesTags: ["getTipoDocumentos"],
-        }),
-        //buscar Tipo documento
-        buscarTipoDocumento: build.query({
-            query: (id) => ({
-                url: `tipodocumento/listarid/${id}`,
-                method: "GET",
+            transformErrorResponse: (response) => ({
+                error: response.data.message,
             }),
-            transformErrorResponse: (response, meta, arg) => {
-                return {
-                    originalArg: arg,
-                    error: response.data.message,
-                };
-            },
+            invalidatesTags: ["TipoDocumento"],
         }),
+
+        //cambiar el estado del tipoDocumento
+        UpdateEstadoTipoDocumento: build.mutation({
+            query: (data) => ({
+                url: `tipodocumento/estado/${data.id}`,
+                method: "PUT",
+                body: { estado: data.estado }, // Asegúrate de enviar el estado en el cuerpo
+                headers: {
+                    token: `${getCookie("authToken")}`,
+                },
+            }),
+            invalidatesTags: ["TipoDocumento"],
+        }),
+
         //eliminar Tipo documento
-        eliminarTipoDocumento: build.mutation({
+        EliminarTipoDocumento: build.mutation({
             query: (id) => ({
                 url: `tipodocumento/eliminar/${id}`,
                 method: "DELETE",
@@ -80,20 +78,18 @@ export const TipoDocumento = createApi({
                     token: `${getCookie("authToken")}`,
                 },
             }),
-            transformErrorResponse: (response, meta, arg) => {
-                return {
-                    originalArg: arg,
-                    error: response.data.message,
-                };
-            },
-            invalidatesTags: ["getTipoDocumentos"],
-
-
+            transformErrorResponse: (response) => ({
+                error: response.data.message,
+            }),
+            invalidatesTags: ["TipoDocumento"],
         }),
+    }),
+});
 
-    })
-})
-
-export const { useActualizarTipoDocumentoMutation, useBuscarTipoDocumentoQuery,
-    useCrearTipoDocumentoMutation, useEliminarTipoDocumentoMutation, useGetTipoDocumentosQuery
-} = TipoDocumento
+export const {
+    useActualizarTipoDocumentoMutation,
+    useCrearTipoDocumentoMutation,
+    useEliminarTipoDocumentoMutation,
+    useGetTipoDocumentosQuery,
+    useUpdateEstadoTipoDocumentoMutation
+} = TipoDocumento;
