@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
@@ -13,17 +13,17 @@ import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
-import SelectAtomoActualizar from '../../atoms/SelectActualizar';
+import { useValidarServcioDocumentoMutation } from '../../../store/api/TipoServicio';
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
-    const [entradaSalida, setEntradaSalida] = useState("");
     const [logos, setlogos] = useState([])
     const { t } = useTranslation();
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
+    const [mensajeServicio, setMensajeServicio] = useState(false)
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
     const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento,
@@ -33,6 +33,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
     const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
         data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
+    const [validarServicioDocumento, { isError: isErrorValidarServicioDocumento, error: ErrorValidarServicioDocumento, data: dataResponseValidarServicioDocumento, isSuccess: succesTipoServicio }] = useValidarServcioDocumentoMutation()
     useEffect(() => {
         if (isSuccess) {
             toast.success(`${dataResponse?.message}`);
@@ -42,8 +43,22 @@ const DocumentosFrom = ({ closeModal, valor }) => {
             toast.success(`${dataResponseActualizarVersion?.message}`);
             closeModal()
         }
+        const validarServicio = async () => {
 
-    }, [isSuccess, dataResponse, isSuccessActualizarVersion]);
+            if (servicio && !valor) {
+                const response = await validarServicioDocumento({ "idTipoServicio": servicio }).unwrap()
+                setMensajeServicio(response.message == true ? false : true)
+
+
+            }
+        }
+
+        validarServicio();
+
+
+
+
+    }, [isSuccess, dataResponse, isSuccessActualizarVersion, servicio]);
     useEffect(() => {
         if (valor) {
             reset({
@@ -67,21 +82,29 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const HanderEnviar = (e) => {
         setFile(e.target.files[0]);
     }
+
+
     const onSubmit = async (data) => {
+
         const DataForm = new FormData();
 
         DataForm.append('nombre', data.nombre);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('version', data.version);
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
+
+
         if (!logos || !file) {
+            toast.info('Todos los campos son obligatorios');
+            return;
+        }
+        if (dataInput == 5 && mensajeServicio != false) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
@@ -105,7 +128,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('idVersion', idVersionProcessed);
         DataForm.append('tipo_documento', dataInput);
@@ -119,6 +141,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
             toast.info('Todos los campos son obligatorios');
             return;
         }
+
         try {
             await actualizarVersion(
                 DataForm
@@ -132,6 +155,8 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         }
 
     }
+    console.log(mensajeServicio)
+
     if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto || loandActualizarVersion) {
         return <p>Loading...</p>;
     }
@@ -140,10 +165,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
             || ErrorActualizarVersion.message} </p>;
     }
-    const datosEntrada = [
-        { value: "entrada", label: "entrada" },
-        { value: "salida", label: "Salida" },
-    ];
+
     /* 'entrada', 'salida' */
     return (
         <div className='w-full flex flex-col max-h-full  '>
@@ -243,11 +265,14 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                                     label={t("selecioneTipoServicio")}
                                     onChange={(e) => setTipoServicio(e.target.value)}
                                 />
+                                {succesTipoServicio && <p className='text-red-500'>{dataResponseValidarServicioDocumento.message}</p>}
 
 
                             </section>
                             <div className='w-full h-[20px]'>
                                 <CheckboxAtomo
+
+                                    disable={mensajeServicio}
                                     value={valor?.variables}
                                     data={varibles}
                                     items={"nombre"}
@@ -255,12 +280,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                                     onDataChange={onDataChangeVersiones}
                                     cantidad={6}
                                 />
-                            </div>
-                           
-                            <div className=' w-[230px] h-[20px]'>
-                                <Label>{t("tipoEntrada")}</Label>
-                                <SelectAtomoActualizar value={valor?.entrada_salida || ""} ValueItem={"label"} data={datosEntrada}
-                                    items={"value"} label={"Selecione el Tipo "} onChange={(e) => setEntradaSalida(e.target.value)} placeholder={""} />
                             </div>
 
                         </>

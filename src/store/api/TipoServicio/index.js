@@ -65,6 +65,16 @@ export const TipoServicioApi = createApi({
             }),
             invalidatesTags: ["TipoServicio"],
         }),
+        validarServcioDocumento: build.mutation({
+            query: (data) => (
+                console.log(data), {
+                    url: `tipoServicio/validarTiposervicio`,
+                    method: "POST",
+                    body: data,
+
+                }),
+            invalidatesTags: ["TipoServicio"],
+        })
 
 
 
@@ -72,4 +82,4 @@ export const TipoServicioApi = createApi({
 });
 
 export const { useGetTipoServicioQuery, usePostTipoServicioMutation,
-    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation } = TipoServicioApi;
+    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, useValidarServcioDocumentoMutation } = TipoServicioApi;
