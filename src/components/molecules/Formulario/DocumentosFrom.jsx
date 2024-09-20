@@ -13,13 +13,11 @@ import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
-import SelectAtomoActualizar from '../../atoms/SelectActualizar';
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
-    const [entradaSalida, setEntradaSalida] = useState("");
     const [logos, setlogos] = useState([])
     const { t } = useTranslation();
     const [dataInput, SetDataInput] = useState("");
