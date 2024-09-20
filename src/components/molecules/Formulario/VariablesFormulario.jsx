@@ -10,6 +10,7 @@ import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 const VariablesFormulario = ({ closeModal, dataValue }) => {
   const [tipoDato, setTipoDato] = useState("");
+  const [unidadadMedida, setUnidadMedida] = useState("");
   const {
     register,
     handleSubmit,
@@ -31,7 +32,6 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
       isSuccess: isSuccessEdit,
     },
   ] = useEditarVariableMutation();
-  console.log(dataValue.nombre);
   const hadleEdit = async (data) => {
     try {
       if (data) {
@@ -39,13 +39,16 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
           id: dataValue.idVariable,
           nombre: data.nombre,
           tipo_dato: tipoDato,
+          UnidadMedida:unidadadMedida
+          
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     if (dataValue) {
       reset({ nombre: dataValue.nombre });
+      setUnidadMedida(dataValue.UnidadMedida);
       setTipoDato(dataValue.tipo_dato);
     } else {
       reset();
@@ -61,13 +64,13 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     console.log(data);
     try {
       if (!tipoDato) {
-
         toast.error("El tipo de dato es obligatorio");
       }
       if (data) {
         await crearVariable({
           nombre: data.nombre,
           tipo_dato: tipoDato,
+          UnidadMedida:unidadadMedida
         });
       }
     } catch (error) {
@@ -79,6 +82,11 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     { value: "number", label: "Numeros" },
     { value: "date", label: "Fechas" },
   ];
+  const UnidadadMedidas = [
+    { value: "Lb", label: "Libras" },
+    { value: "Kg", label: "Kilogramos" },
+    { value: "N/A", label: "N/A" },
+  ];
   if (isLoading || isLoadingEdit) {
     return <div>Loading...</div>;
   }
@@ -87,7 +95,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     <section className="w-full overflow-auto  justify-center items-center flex">
       <form
         onSubmit={handleSubmit(dataValue ? hadleEdit : onsubmit)}
-        className="  flex flex-col  justify-between "
+        className="  flex flex-col  justify-between gap-16"
       >
         <div className="flex w-[230px] h-[155px]   flex-col gap-5 ">
           <InputAtomo
@@ -105,6 +113,14 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
             label={"Seleccione El Tipo de Dato"}
             ValueItem={"label"}
             onChange={(e) => setTipoDato(e.target.value)}
+          />
+          <SelectAtomo
+            value={unidadadMedida}
+            data={UnidadadMedidas}
+            items={"value"}
+            label={"Selecione la unidad de medida"}
+            ValueItem={"label"}
+            onChange={(e) => setUnidadMedida(e.target.value)}
           />
         </div>
         <div className="flex w-[230px]  flex-col ">
