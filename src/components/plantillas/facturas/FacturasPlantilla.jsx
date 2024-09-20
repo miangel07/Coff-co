@@ -8,10 +8,9 @@ import Td from "../../atoms/Td";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { useGeneraFacturaMutation } from "../../../store/api/factura";
 import { toast } from "react-toastify";
-import { pdf } from '@react-pdf/renderer';
+import { pdf } from "@react-pdf/renderer";
 import Facturapdf from "../../organismo/Reportes/Facturapdf";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
-
 
 const FacturasPlantilla = () => {
   const [datosFactura, setDatosDelFormulario] = useState([]);
@@ -20,26 +19,27 @@ const FacturasPlantilla = () => {
   const [generaFactura, { isLoading: isLoadingFactura, isSuccess, data: dataFactura }] = useGeneraFacturaMutation();
 
   const handleFactura = async (codigo) => {
+    console.log(codigo);
     try {
       const response = await generaFactura({ codigo });
       setDatosDelFormulario(response.data);
     } catch (error) {
-      toast.error('Error al generar la factura');
+      toast.error("Error al generar la factura");
     }
   };
 
-  console.log(datosFactura)
+  console.log(datosFactura);
   useEffect(() => {
     const downloadPDF = async () => {
       if (datosFactura.length > 0) {
         const blob = await pdf(<Facturapdf data={datosFactura[0]} />).toBlob();
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = `factura_${datosFactura[0].codigo_muestra}.pdf`;
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link)
-        setDatosDelFormulario([])
+        document.body.removeChild(link);
+        setDatosDelFormulario([]);
       }
     };
 
