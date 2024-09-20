@@ -37,7 +37,7 @@ const DocumentosOrganismo = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [CambioEstado, { isSuccess, isLoading: loandEstado, isError: isErrorEstado, error: errorEstado, data: dataEstado }] = useCambioEstadoMutation()
   const { data: tipoData, isLoading: Tipo, isError: tipoError, error: errorTipo } = useGetTipoDocumentosQuery();
-
+console.log(data)
 
   const handlePageChange = (page) => {
     setPages(page);
@@ -64,12 +64,13 @@ const DocumentosOrganismo = () => {
     })
     : [];
   ;
+  
 
-  const handleVerdocumento = (doc) => {
+/*   const handleVerdocumento = (doc) => {
     const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
     setShowdocument([{ uri: url }]);
 
-  }
+  } */
   const handledescargar = (doc) => {
     const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
 
@@ -130,6 +131,10 @@ const DocumentosOrganismo = () => {
     setValuedocs(null)
     setFrom(false)
   }
+  const closeModalEdit = () => {
+
+    setShowModal(false)
+  }
 
   if (isLoading || Tipo || loandEstado) return <p>Loading...</p>;
   if (tipoError || isErrorEstado || isError) {
@@ -167,7 +172,7 @@ const DocumentosOrganismo = () => {
             visible={true}
           >
 
-            <DocumentoEdit closeModal={closeModal} valor={dataValue} />
+            <DocumentoEdit closeModalEdit={closeModalEdit} valor={dataValue} />
 
           </ModalOrganismo>
         }
@@ -233,8 +238,7 @@ const DocumentosOrganismo = () => {
                 <Td>{doc.tipo_documento}</Td>
                 <Td>
                   <div className=" flex flex-row gap-3 justify-between">
-                    <FaRegEye onClick={() => handleVerdocumento(doc.nombre_documento_version
-                    )} className="cursor-pointer" size={"35px"} />
+                   
                     <BiDownload className="cursor-pointer" size={"30px"} onClick={() => handledescargar(doc.nombre_documento_version)} />
                     <FaRegEdit className="cursor-pointer" size={"30px"} onClick={() => hadeleEditar(doc)} />
                     <MdEditDocument onClick={() => hadleActualizar(doc)} className="cursor-pointer" size={"30px"} />

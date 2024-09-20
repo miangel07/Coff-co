@@ -17,7 +17,7 @@ import SelectDocumentos from "../../atoms/SelectDocumentos";
 import { useTranslation } from "react-i18next"; //  <--------importan este para usar la traducioon Esteeeeee
 import { TraslateContex } from "../../../context/TranslationoContex";
 import { AuthContext } from "../../../context/AuthContext";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const ItemsNavbar = ({ visiblite }) => {
   const { changeLanguage, language } = useContext(TraslateContex);
@@ -43,8 +43,8 @@ const ItemsNavbar = ({ visiblite }) => {
   //Se llama a la funcion cerrar sesion del contexto que se encarga de eliminar la informacion del usuario con sesion iniciada
   const handleLogout = () => {
     cerrarSesion();
-    Cookies.remove("Token")
-    console.log('Sesion Finalizada');
+    Cookies.remove("Token");
+    console.log("Sesion Finalizada");
   };
 
   const items = [
@@ -54,15 +54,21 @@ const ItemsNavbar = ({ visiblite }) => {
       link: "/home",
     },
     {
-      label: `${visiblite ? t("servicios") : ""}`,
-      icon: <GiCoffeeBeans className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-      link: "/servicios",
+      label: `${visiblite ? t("tipoDocumentos") : ""}`,
+      icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      link: "/tipodocumento",
     },
     {
       label: `${visiblite ? t("documentos") : ""}`,
       icon: <GoFileDirectoryFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/documentos",
     },
+    {
+      label: `${visiblite ? t("variables") : ""}`,
+      icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
+      link: "/varibles",
+    },
+
     {
       label: `${visiblite ? t("precios") : ""}`,
       icon: <AiFillDollarCircle className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
@@ -73,28 +79,21 @@ const ItemsNavbar = ({ visiblite }) => {
       icon: <BsHousesFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
       link: "/ambientes",
     },
-    {
-      label: `${visiblite ? t("tipoDocumentos") : ""}`,
-      icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-    },
+
     {
       label: `${visiblite ? t("tipoServicios") : ""}`,
       icon: <MdOutlineMiscellaneousServices className="w-5 h-5 xl:size-7 " />,
+      link: "/tiposervicio",
     },
     {
       label: `${visiblite ? t("muestras") : ""}`,
       icon: <BiSolidCoffeeBean className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
-      link: "/muestras"
+      link: "/muestras",
     },
     {
-      label: `${visiblite ? t("variables") : ""}`,
-      icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
-      link: "/varibles",
-    },
-    {
-      label: `${visiblite ? t("usuarios") : ""}`,
-      icon: <FaUsers className="w-5 h-5 xl:size-7 " />,
-      link: "/users",
+      label: `${visiblite ? t("servicios") : ""}`,
+      icon: <GiCoffeeBeans className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      link: "/servicios",
     },
     {
       label: `${visiblite ? t("alquiler") : ""}`,
@@ -102,19 +101,21 @@ const ItemsNavbar = ({ visiblite }) => {
       link: "/alquiler",
     },
     {
-      label: `${visiblite ? t("reportes") : ""}`,
-      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      label: `${visiblite ? t("usuarios") : ""}`,
+      icon: <FaUsers className="w-5 h-5 xl:size-7 " />,
+      link: "/users",
     },
+
     {
       label: `${visiblite ? t("facturas") : ""}`,
       icon: <TbReportMoney className="w-5 h-5 xl:size-7" />,
       link: "/facturas",
     },
     {
-      label: `${visiblite ? t("salir") : ""}`,
-      icon: <ImExit className="w-5 h-5 xl:size-7" />,
-      link: "/"
-    }
+      label: `${visiblite ? t("reportes") : ""}`,
+      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />,
+      link:"/reportes" // Tamaño ajustable
+    },
   ];
 
   return (
