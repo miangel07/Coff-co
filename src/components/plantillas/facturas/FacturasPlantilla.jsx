@@ -10,11 +10,13 @@ import { useGeneraFacturaMutation } from "../../../store/api/factura";
 import { toast } from "react-toastify";
 import { pdf } from '@react-pdf/renderer';
 import Facturapdf from "../../organismo/Reportes/Facturapdf";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 
 
 const FacturasPlantilla = () => {
   const [datosFactura, setDatosDelFormulario] = useState([]);
   const { data, isLoading, isError, error } = useGetMuestrasQuery();
+  const [pages, setPages] = useState(1);
   const [generaFactura, { isLoading: isLoadingFactura, isSuccess, data: dataFactura }] = useGeneraFacturaMutation();
 
   const handleFactura = async (codigo) => {
@@ -48,6 +50,17 @@ const FacturasPlantilla = () => {
     return <p>Loading...</p>;
   }
 
+  const cantidad = 4;
+  const final = pages * cantidad;
+  const inicial = final - cantidad;
+  const handlePageChange = (page) => {
+    setPages(page);
+  };
+  const numeroPagina = Math.ceil((data?.length || 0) / cantidad);
+  const DataArrayPaginacion = data
+    ? data?.slice(inicial, final)
+    : [];
+
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20  font-bold">Factura</h2>
@@ -64,7 +77,7 @@ const FacturasPlantilla = () => {
             <Th>Acciones</Th>
           </Thead>
           <Tbody>
-            {data?.map((muestra) => (
+            {DataArrayPaginacion?.map((muestra) => (
               <tr key={muestra.id_muestra}>
                 <Td>{muestra.id_muestra}</Td>
                 <Td>{muestra.codigo_muestra}</Td>
@@ -85,6 +98,11 @@ const FacturasPlantilla = () => {
           </Tbody>
         </TableMolecula>
       </div>
+      <PaginationMolecula
+        total={numeroPagina}
+        initialPage={pages}
+        onChange={handlePageChange}
+      />
     </section>
   );
 };
