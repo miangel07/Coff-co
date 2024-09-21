@@ -93,6 +93,7 @@ const VariablesPlantilla = () => {
             <Th>ID</Th>
             <Th>Nombre</Th>
             <Th>Tipo de Dato</Th>
+            <Th>Unidad de medida</Th>
             <Th>Estado</Th>
             <Th>Acciones</Th>
           </Thead>
@@ -102,6 +103,7 @@ const VariablesPlantilla = () => {
                 <Td>{variable.idVariable}</Td>
                 <Td>{variable.nombre}</Td>
                 <Td>{variable.tipo_dato}</Td>
+                <Td>{variable.UnidadMedida}</Td>
                 <Td>
                   <Switch
                     color={variable.estado === "activo" ? "success" : "default"}
