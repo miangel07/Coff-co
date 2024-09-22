@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useGetTipoDocumentosQuery, 
-  useUpdateEstadoTipoDocumentoMutation } from "../../../store/api/tipoDocumentos";
+  useUpdateEstadoTipoDocumentoMutation } from "../../../store/api/TipoDocumentos";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Tbody from "../../molecules/table/Tbody";
 import Thead from "../../molecules/table/Thead";
