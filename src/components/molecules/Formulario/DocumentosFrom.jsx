@@ -13,11 +13,13 @@ import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import SelectAtomoActualizar from '../../atoms/SelectActualizar';
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
+    const [entradaSalida, setEntradaSalida] = useState("");
     const [logos, setlogos] = useState([])
     const { t } = useTranslation();
     const [dataInput, SetDataInput] = useState("");
@@ -72,6 +74,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('version', data.version);
@@ -98,12 +101,11 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const hadleActualizar = async (data) => {
         const DataForm = new FormData();
         const idVersionProcessed = parseInt(valor.idversion);
-        console.log(idVersionProcessed)
-
         DataForm.append('nombre', data.nombre);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
+        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('idVersion', idVersionProcessed);
         DataForm.append('tipo_documento', dataInput);
@@ -138,8 +140,11 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
             || ErrorActualizarVersion.message} </p>;
     }
-
-
+    const datosEntrada = [
+        { value: "entrada", label: "entrada" },
+        { value: "salida", label: "Salida" },
+    ];
+    /* 'entrada', 'salida' */
     return (
         <div className='w-full flex flex-col max-h-full  '>
 
@@ -227,30 +232,40 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     </div>
 
                     {dataInput == 5 &&
-                        <section className='flex w-[230px] h-[155px] flex-col '>
-                            <Label>{t("tipoServicios")}</Label>
-                            <SelectDocumentos
-                                value={valor?.tipo_servicio || ""}
-                                ValueItem={"nombreServicio"}
-                                data={TpoServicio}
-                                items={"idTipoServicio"}
-                                label={t("selecioneTipoServicio")}
-                                onChange={(e) => setTipoServicio(e.target.value)}
-                            />
-                        </section>}
+                        <>
+                            <section className='flex w-[230px] h-[155px] flex-col '>
+                                <Label>{t("tipoServicios")}</Label>
+                                <SelectDocumentos
+                                    value={valor?.tipo_servicio || ""}
+                                    ValueItem={"nombreServicio"}
+                                    data={TpoServicio}
+                                    items={"idTipoServicio"}
+                                    label={t("selecioneTipoServicio")}
+                                    onChange={(e) => setTipoServicio(e.target.value)}
+                                />
 
 
-                    {dataInput == 5 && <div className='w-full h-[20px]'>
-                        <CheckboxAtomo
-                            value={valor?.variables}
-                            data={varibles}
-                            items={"nombre"}
-                            valor={"idVariable"}
-                            onDataChange={onDataChangeVersiones}
-                            cantidad={6}
-                        />
-                    </div>}
+                            </section>
+                            <div className='w-full h-[20px]'>
+                                <CheckboxAtomo
+                                    value={valor?.variables}
+                                    data={varibles}
+                                    items={"nombre"}
+                                    valor={"idVariable"}
+                                    onDataChange={onDataChangeVersiones}
+                                    cantidad={6}
+                                />
+                            </div>
+                           
+                            <div className=' w-[230px] h-[20px]'>
+                                <Label>{t("tipoEntrada")}</Label>
+                                <SelectAtomoActualizar value={valor?.entrada_salida || ""} ValueItem={"label"} data={datosEntrada}
+                                    items={"value"} label={"Selecione el Tipo "} onChange={(e) => setEntradaSalida(e.target.value)} placeholder={""} />
+                            </div>
 
+                        </>
+
+                    }
 
 
 

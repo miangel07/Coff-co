@@ -14,9 +14,11 @@ import Logos from "./pages/logos/LogosPage";
 import ServicioPage from "./pages/servicios/ServicioPage";
 import VariablePages from "./pages/variable/VariablePages";
 import MuestrasPage from "./pages/muestras/MuestrasPage";
-
+import TipoDocumentoPage from "./pages/tipoDocumento/tipoDocumentoPage";
 import LoginPages from "./pages/login/LoginPages";
 import FacturasPages from "./pages/Facturas/FacturasPages";
+import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
+import ReportesPages from "./pages/reportes/ReportesPages";
 const App = () => {
   return (
     <>
@@ -45,6 +47,9 @@ const App = () => {
         <Route path="/logos" element={<Logos />}></Route>
         <Route path="/facturas" element={<FacturasPages />}></Route>
         <Route path="/muestras" element={<MuestrasPage />}></Route>
+        <Route path="/Tipodocumento" element={<TipoDocumentoPage />}></Route>
+        <Route path="/tiposervicio" element={<TipoServicioPage />}></Route>
+        <Route path="/reportes" element={<ReportesPages />}></Route>
       </Routes>
     </>
   );
