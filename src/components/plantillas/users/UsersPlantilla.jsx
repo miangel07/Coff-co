@@ -3,12 +3,15 @@ import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Tbody from "../../molecules/table/Tbody";
+import Search from "../../atoms/Search";
+import { useTranslation } from 'react-i18next';
 import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
 import { Spinner } from "@nextui-org/react";
-import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
+import { Switch } from "@nextui-org/react";
 
 //Importaciones para el modal
 import { IoPersonAddOutline } from "react-icons/io5";
@@ -36,6 +39,11 @@ const UsersPlantilla = () => {
   const [actualizarEstado] = useActualizarEstadoMutation();
   const [actualizarUsuario]= useActualizarUsuarioMutation();
   const [eliminarUsuario] = useEliminarUsuarioMutation();
+
+  //FILTRO DE DATOS
+  const { t } = useTranslation();
+  const [busqueda, setBusqueda] = useState('')
+  const [filtroEstado, setFiltroEstado] = useState(true);
 
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
@@ -160,14 +168,21 @@ const UsersPlantilla = () => {
     )
   }
 
+  const filtrodeDatos = data && data.length > 0 ? data.filter((usuario) => {
+    const filtroestado = filtroEstado ? "activo" : "inactivo"
+    const nombreUsuario = busqueda === "" ||
+      (usuario.nombre && usuario.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+    const usuarioEstado = usuario.estado === filtroestado
+    return usuarioEstado && nombreUsuario
+  }) : []
+
   // CONTROL DE PAGINAS DE LA TABLA
   const indiceUltimoItem = paginaActual * itemsPorPagina
   const indicePrimerItem = indiceUltimoItem - itemsPorPagina
-  const elementosActuales = data ? data.slice(indicePrimerItem,indiceUltimoItem):[]
+  const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
   const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
   //OPCIONES PARA LOS SELECT 
-
   const estadoOptions = [
     { value: "activo", label: "Activo" },
     { value: "inactivo", label: "Inactivo" }
@@ -185,9 +200,23 @@ const UsersPlantilla = () => {
     <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
 
     {/* TABLA */}
+    <div className="flex justify-center items-center space-x-64">
       <div className="pt-10 pl-20">
         <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
       </div>
+      <div className="w-[550px] pt-10 pl-20">
+          <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
+      </div>
+      <div className="pt-10 pl-20">
+          <Switch
+            color={filtroEstado ? "success" : "default"}
+            isSelected={filtroEstado}
+            onValueChange={(checked) =>setFiltroEstado(checked)}>
+            {t("estado")}
+          </Switch>
+        </div>
+      </div>
+      
       <div className="w-full px-20 h-auto overflow-y-auto">
         <TableMolecula lassName="w-full">
           <Thead>
