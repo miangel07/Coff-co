@@ -27,12 +27,10 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [crearMuestra, { isLoading, isError, data: dataResponse, isSuccess }] = usePostMuestraMutation();
   const [editarMuestra, { isLoading: isLoadingEdit, isError: isErrorEdit, data: dataResponseEdit, isSuccess: isSuccessEdit }] = usePutMuestraMutation();
   
-  // Ref para asegurar que el efecto solo se ejecute una vez
   const hasNotified = useRef(false);
 
   useEffect(() => {
     if (dataValue) {
-      // Reset form with initial values from dataValue
       reset({
         codigo_muestra: dataValue.codigo_muestra,
         cantidadEntrada: dataValue.cantidadEntrada,
@@ -40,9 +38,11 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
         fk_id_finca: dataValue.fk_id_finca,
         fk_id_usuarios: dataValue.fk_id_usuarios,
         estado: dataValue.estado,
+        altura: dataValue.altura,          
+        variedad: dataValue.variedad,      
+        observaciones: dataValue.observaciones, 
       });
 
-      // Asegurarse de que los valores de los selectores se inicialicen correctamente
       setValue("fk_id_finca", dataValue.fk_id_finca);
       setValue("fk_id_usuarios", dataValue.fk_id_usuarios);
     } else {
@@ -51,11 +51,11 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
 
     if ((isSuccess || isSuccessEdit) && !hasNotified.current) {
       toast.success(`${dataResponse?.message || dataResponseEdit?.message}`);
-      hasNotified.current = true; // Marcar como notificado
+      hasNotified.current = true;
       closeModal();
     } else if ((isError || isErrorEdit) && !hasNotified.current) {
       toast.error("Error al procesar la muestra");
-      hasNotified.current = true; // Marcar como notificado
+      hasNotified.current = true;
     }
   }, [dataValue, isSuccess, isSuccessEdit, isError, isErrorEdit, reset, closeModal, dataResponse, dataResponseEdit, setValue]);
 
@@ -82,13 +82,13 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   return (
     <section className="w-full flex justify-center items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 w-full max-w-lg p-4">
-        {/* Inputs */}
-        <div className="flex flex-col gap-4">
+        {/* Inputs en filas de 3 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <InputAtomo
             type="text"
             id="codigo_muestra"
             name="codigo_muestra"
-            placeholder="Código de la muestra"
+            placeholder="Código"
             register={register}
             erros={errors}
           />
@@ -96,7 +96,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             type="number"
             id="cantidadEntrada"
             name="cantidadEntrada"
-            placeholder="Cantidad de entrada"
+            placeholder="Cantidad (Kg)"
             register={register}
             erros={errors}
           />
@@ -108,28 +108,49 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             register={register}
             erros={errors}
           />
+          <InputAtomo
+            type="number"
+            id="altura"
+            name="altura"
+            placeholder="Altura (en metros)"
+            register={register}
+            erros={errors}
+          />
+          <InputAtomo
+            type="text"
+            id="variedad"
+            name="variedad"
+            placeholder="Variedad"
+            register={register}
+            erros={errors}
+          />
+          <InputAtomo
+            type="text"
+            id="observaciones"
+            name="observaciones"
+            placeholder="Observaciones"
+            register={register}
+            erros={errors}
+          />
         </div>
 
         {/* Selects (Usuario y Finca) en una fila */}
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Select para Usuarios (fk_id_usuarios) */}
           <SelectAtomo
             label="Selecciona un Usuario"
             data={dataUsuarios}
             onChange={(e) => setValue("fk_id_usuarios", e.target.value)}
             items="id_usuario"
             ValueItem="nombre"
-            value={watch("fk_id_usuarios")} // Use `watch` to ensure value is synced
+            value={watch("fk_id_usuarios")}
           />
-
-          {/* Select para Fincas (fk_id_finca) */}
           <SelectAtomo
             label="Selecciona una Finca"
             data={dataFincas}
             onChange={(e) => setValue("fk_id_finca", e.target.value)}
             items="id_finca"
             ValueItem="nombre_finca"
-            value={watch("fk_id_finca")} // Use `watch` to ensure value is synced
+            value={watch("fk_id_finca")}
           />
         </div>
 
