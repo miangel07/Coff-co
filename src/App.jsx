@@ -21,7 +21,8 @@ import FacturasPages from "./pages/Facturas/FacturasPages";
 import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
 
@@ -51,6 +52,17 @@ const App = () => {
 
   return (
     <>
+          <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        pauseOnFocusLoss
+        theme="dark"
+      />
+
       <Routes>
         
         {/* RUTAS SI LA SESION NO ESTA INICIADA */}
@@ -77,7 +89,7 @@ const App = () => {
               <Route path="/ambientes" element={<AmbientesPage />} />
               <Route path="/precios" element={<PreciosPage />} />
               <Route path="/servicios" element={<ServicioPage />} />
-              <Route path="/varibles" element={<VariablePages />} />
+              <Route path="/variables" element={<VariablePages />} />
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/logos" element={<Logos />} />
               <Route path="/facturas" element={<FacturasPages />} />
@@ -96,7 +108,7 @@ const App = () => {
               <Route path="/users" element={<UsersPages />} />
               <Route path="/alquiler" element={<CalendarPages />} />
               <Route path="/facturas" element={<FacturasPages />} />
-              <Route path="/varibles" element={<VariablePages />} />
+              <Route path="/variables" element={<VariablePages />} />
               <Route path="/Tipodocumento" element={<TipoDocumentoPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/muestras" element={<MuestrasPage />} />
@@ -114,7 +126,7 @@ const App = () => {
               <Route path="/Tipodocumento" element={<TipoDocumentoPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/muestras" element={<MuestrasPage />} />
-              <Route path="/varibles" element={<VariablePages />} />
+              <Route path="/variables" element={<VariablePages />} />
               <Route path="/perfil" element={<Perfil />} />
             </>
           )}
