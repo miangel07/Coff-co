@@ -74,6 +74,16 @@ export const TipoServicioApi = createApi({
 
                 }),
             invalidatesTags: ["TipoServicio"],
+        }),
+        TipoServicioActivo: build.query({
+            query: () => (
+                {
+                    url: `tipoServicio/listarActivo`,
+                    method: "GET",
+                   
+
+                }),
+            invalidatesTags: ["TipoServicio"],
         })
 
 
@@ -82,4 +92,4 @@ export const TipoServicioApi = createApi({
 });
 
 export const { useGetTipoServicioQuery, usePostTipoServicioMutation,
-    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, useValidarServcioDocumentoMutation } = TipoServicioApi;
+    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, useValidarServcioDocumentoMutation,useTipoServicioActivoQuery } = TipoServicioApi;
