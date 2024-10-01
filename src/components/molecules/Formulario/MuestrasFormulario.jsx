@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import SelectAtomo from "../../atoms/Select";
@@ -10,10 +10,12 @@ import {
 } from "../../../store/api/muestra";
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetUsuarioQuery } from "../../../store/api/users";
+import { useGetTipoServicioQuery } from "../../../store/api/TipoServicio";
 
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const { data: dataUsuarios, isLoading: isLoadingUsuarios, isError: UsuarioError } = useGetUsuarioQuery();
   const { data: dataFincas, isLoading: isLoadingFincas, isError: FincaError } = useGetFincasQuery();
+  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio, isError: TipoServicioError } = useGetTipoServicioQuery(); 
   
   const {
     register,
@@ -29,6 +31,9 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   
   const hasNotified = useRef(false);
 
+  // Estado para controlar la visibilidad del input de código externo
+  const [mostrarCodigoExterno, setMostrarCodigoExterno] = useState(false);
+
   useEffect(() => {
     if (dataValue) {
       reset({
@@ -40,11 +45,14 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
         estado: dataValue.estado,
         altura: dataValue.altura,          
         variedad: dataValue.variedad,      
-        observaciones: dataValue.observaciones, 
+        observaciones: dataValue.observaciones,
+        codigoExterno: dataValue.codigoExterno,
+        fk_id_tipo_servicio: dataValue.fk_id_tipo_servicio, 
       });
 
       setValue("fk_id_finca", dataValue.fk_id_finca);
       setValue("fk_id_usuarios", dataValue.fk_id_usuarios);
+      setValue("fk_idTipoServicio", dataValue.fk_idTipo_servicio); 
     } else {
       reset();
     }
@@ -74,8 +82,9 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
       console.log(error);
     }
   };
+  
 
-  if (isLoading || isLoadingEdit || isLoadingUsuarios || isLoadingFincas) {
+  if (isLoading || isLoadingEdit || isLoadingUsuarios || isLoadingFincas || isLoadingTipoServicio) {
     return <div>Loading...</div>;
   }
 
@@ -132,9 +141,28 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             register={register}
             erros={errors}
           />
+
+          {/* Botón para mostrar/ocultar el input de código externo */}
+          <div className="flex items-center">
+            <Mybutton type="button" onClick={() => setMostrarCodigoExterno(!mostrarCodigoExterno)}>
+              {mostrarCodigoExterno ? "Ocultar Código Externo" : "Agregar Código Externo"}
+            </Mybutton>
+          </div>
+
+          {/* Input de código externo (solo visible si mostrarCodigoExterno es true) */}
+          {mostrarCodigoExterno && (
+            <InputAtomo
+              type="text"
+              id="codigoExterno"
+              name="codigoExterno"
+              placeholder="Código Externo (si aplica)"
+              register={register}
+              erros={errors}
+            />
+          )}
         </div>
 
-        {/* Selects (Usuario y Finca) en una fila */}
+        {/* Selects (Usuario, Finca, Tipo de Servicio) en una fila */}
         <div className="flex flex-col md:flex-row gap-4">
           <SelectAtomo
             label="Selecciona un Usuario"
@@ -151,6 +179,14 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             items="id_finca"
             ValueItem="nombre_finca"
             value={watch("fk_id_finca")}
+          />
+          <SelectAtomo
+            label="Selecciona un Tipo de Servicio" // Nuevo select para TipoServicio
+            data={dataTipoServicio}
+            onChange={(e) => setValue("fk_idTipoServicio", e.target.value)}
+            items="idTipoServicio"
+            ValueItem="nombreServicio"
+            value={watch("fk_idTipoServicio")}
           />
         </div>
 

@@ -10,6 +10,7 @@ import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { Switch } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
+import FincaFormulario from "../../molecules/Formulario/FincaFormulario"; // Importar el nuevo formulario
 
 import {
   useGetMuestrasQuery,
@@ -18,6 +19,7 @@ import {
 
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showFincaModal, setShowFincaModal] = useState(false); // Estado para el modal de finca
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
   
@@ -26,6 +28,10 @@ const MuestrasPlantilla = () => {
 
   const handleModal = () => {
     setShowModal(true);
+  };
+
+  const handleFincaModal = () => {
+    setShowFincaModal(true); // Mostrar modal de finca
   };
 
   const cantidad = 4;
@@ -50,6 +56,10 @@ const MuestrasPlantilla = () => {
     setShowModal(false);
   };
 
+  const closeFincaModal = () => {
+    setShowFincaModal(false); // Cerrar modal de finca
+  };
+
   const handleSwitchChange = (checked, id) => {
     try {
       updateEstado({
@@ -68,11 +78,15 @@ const MuestrasPlantilla = () => {
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">Muestras</h2>
-      <div className="px-20">
+      <div className="px-20 flex gap-4">
         <Mybutton color={"primary"} onClick={handleModal}>
           Nuevo
         </Mybutton>
+        <Mybutton color={"secondary"} onClick={handleFincaModal}> {/* Botón para abrir el modal de finca */}
+          Agregar Finca
+        </Mybutton>
       </div>
+
       {showModal && (
         <ModalOrganismo
           title={"Registrar Nueva Muestra"}
@@ -85,6 +99,17 @@ const MuestrasPlantilla = () => {
           />
         </ModalOrganismo>
       )}
+
+      {showFincaModal && ( // Modal para agregar nueva finca
+        <ModalOrganismo
+          title={"Agregar Nueva Finca"}
+          visible={showFincaModal}
+          closeModal={closeFincaModal}
+        >
+          <FincaFormulario closeModal={closeFincaModal} />
+        </ModalOrganismo>
+      )}
+
       <div className="w-full px-20 overflow-x-auto">
         <TableMolecula>
           <Thead>
@@ -94,6 +119,7 @@ const MuestrasPlantilla = () => {
             <Th>Fecha</Th>
             <Th>Finca</Th>
             <Th>Usuario</Th>
+            <Th>Tipo Servicio</Th>
             <Th>Estado</Th>
             <Th>Altura</Th>
             <Th>Variedad</Th>
@@ -109,6 +135,7 @@ const MuestrasPlantilla = () => {
                 <Td>{muestra.fecha_muestra}</Td>
                 <Td>{muestra.finca}</Td>
                 <Td>{muestra.usuario}</Td>
+                <Td>{muestra.fk_idTipoServicio}</Td>
                 <Td>
                   <Switch
                     color={muestra.estado === "terminado" ? "success" : "default"}
@@ -120,9 +147,9 @@ const MuestrasPlantilla = () => {
                     {muestra.estado}
                   </Switch>
                 </Td>
-                <Td>{muestra.altura}</Td> {/* Nueva variable: altura */}
-                <Td>{muestra.variedad}</Td> {/* Nueva variable: variedad */}
-                <Td>{muestra.observaciones}</Td> {/* Nueva variable: observaciones */}
+                <Td>{muestra.altura}</Td> 
+                <Td>{muestra.variedad}</Td> 
+                <Td>{muestra.observaciones}</Td> 
                 <Td>
                   <div className="gap-3 flex flex-grow">
                     <FaRegEdit
