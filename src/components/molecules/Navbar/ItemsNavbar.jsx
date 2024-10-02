@@ -66,7 +66,7 @@ const ItemsNavbar = ({ visiblite }) => {
     {
       label: `${visiblite ? t("variables") : ""}`,
       icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
-      link: "/varibles",
+      link: "/variables",
     },
 
     {

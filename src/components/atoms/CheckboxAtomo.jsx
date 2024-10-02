@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox } from "@nextui-org/react";
 import PaginationMolecula from '../molecules/pagination/PaginationMolecula';
 
-const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value }) => {
+const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value, disable }) => {
     const [pages, setPages] = useState(1);
     const [dataArray, setDataArray] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
 
     useEffect(() => {
+        if (disable) {
+            setDataArray([]);
+        }
         // Convierte 'value' en una lista de nombres separados por comas
         const namesArray = value ? String(value).split(',').map(name => name.trim()) : [];
 
@@ -20,7 +23,7 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value }) =>
 
             setDataArray(selectedValues);
         }
-    }, [data, value, items, valor]);
+    }, [data, value, items, valor, disable]);
 
     // Maneja el cambio en el estado del checkbox
     const handleCheckbox = (value, isSelected) => {
@@ -35,7 +38,8 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value }) =>
         if (onDataChange) {
             onDataChange(dataArray);
         }
-    }, [dataArray, onDataChange]);
+
+    }, [dataArray, onDataChange, disable]);
 
     // Esto es para manejar el array que la paginación
     const final = pages * cantidad;
@@ -68,6 +72,7 @@ const CheckboxAtomo = ({ data, valor, items, onDataChange, cantidad, value }) =>
                 <div key={index}>
                     <Checkbox
                         size="md"
+                        isDisabled={disable ? disable : false}
                         // Maneja la selección del input
                         isSelected={dataArray.includes(item[valor])}
                         // Maneja el evento del click del checkbox y llama a la función handleCheckbox con el valor y el estado del checkbox seleccionado

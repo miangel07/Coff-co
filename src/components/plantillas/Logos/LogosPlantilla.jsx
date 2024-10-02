@@ -4,11 +4,15 @@ import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
+import Search from "../../atoms/Search";
 import { useGetLogosQuery, useRegistrarLogoMutation, useActualizarLogoMutation, useActualizarEstadoMutation} from "../../../store/api/logos";
 import { Spinner } from "@nextui-org/react";
-import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
+import { Switch } from "@nextui-org/react";
+import { useTranslation } from 'react-i18next';
+// import { FaRegEye } from "react-icons/fa";
 
 //Importaciones para el modal
 import { IoAtCircle } from "react-icons/io5";
@@ -32,18 +36,23 @@ const LogosPlantilla = () => {
     const itemsPorPagina = 7
 
      // FUNCIONES CRUD
-    const {data,isLoading, refetch} = useGetLogosQuery()
-    //Faltan  
+    const {data,isLoading} = useGetLogosQuery()
     const [registrarLogo, { isSuccess, datos, isError, error }] = useRegistrarLogoMutation();
     const [actualizarEstado] = useActualizarEstadoMutation();
     const [actualizarLogo]= useActualizarLogoMutation();
 
+    //FILTRO DE DATOS
+    const { t } = useTranslation();
+    const [busqueda, setBusqueda] = useState('')
+    const [filtroEstado, setFiltroEstado] = useState(true);
+
      //MODAL 
-    const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
+    const {handleSubmit, register, formState: { errors },reset,} = useForm();
 
     //Abrir modal
     const [openModal, setOpenModal] = useState(false);
     const [openModalActualizar, setOpenModalActualizar] = useState(false);
+    const [openLogoModal, setOpenLogoModal] = useState(false);
     const [sucess, setsucess] = useState("");
 
     //MODAL REGISTRAR
@@ -56,6 +65,12 @@ const LogosPlantilla = () => {
         console.log("Logo seleccionado:", logo); 
         setLogoSeleccionado(logo);
         setOpenModalActualizar(true);
+    };
+
+    const handleClickLogo = (logo) => {
+      console.log("Logo seleccionado:", logo); 
+      setLogoSeleccionado(logo);
+      setOpenLogoModal(true);
     };
     
     //CAMBIAR EL ESTADO DEL LOGO
@@ -87,55 +102,62 @@ const LogosPlantilla = () => {
     useEffect(() => {
         console.log("Logo seleccionado en modal:", logoSeleccionado);
     }, [logoSeleccionado]);
-      
-      const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
     
-      //SUBMIT REGISTRAR
-      const onsubmit = (data) => {
-        registrarLogo(data);
+    const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
+    const closeLogoModal = () => {setOpenLogoModal(false);};
+  
+    //SUBMIT REGISTRAR
+    const onsubmit = (data) => {
+      const formData = new FormData();
+      formData.append("file", data.file[0]);
+      formData.append("nombre", data.nombre);
+  
+      registrarLogo(formData);
+      reset();
+      toast.success("Logo registrado con éxito");
+      setOpenModal(false);
+    };    
+
+    //SUBMIT ACTUALIZAR
+    const onsubmitActualizar = (valores) => {
+      if (logoSeleccionado) {
+        const formData = new FormData();
+        formData.append("file", valores.file[0]);
+        formData.append("nombre", valores.nombre);
+        actualizarLogo({ data: formData, id: logoSeleccionado.idLogos });
+        toast.success("Logo actualizado con éxito");
         reset();
-        toast.success("Logo registrado con éxito");
-        setOpenModal(false);
-      };
+        setOpenModalActualizar(false);
+      }
+    };
     
-      //SUBMIT ACTUALIZAR
-      const onsubmitActualizar = (valores) => {
-        if (logoSeleccionado) {
-          console.log("valores enviados:", valores);
-          actualizarLogo({ data: valores, id: logoSeleccionado.idLogos });
-          toast.success("Logo actualizado con éxito");
-          reset();
-          setOpenModalActualizar(false);
-        }
-      };
-      
-      //Para registrar
-      useEffect(() => {
-        if (isSuccess) {
-          setsucess(datos?.message);
-          toast.success(datos?.message, {
-            duration: 5000,
-            position: "top-center",
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-            icon: <FcOk />,
-          });
-        }
-    
-        if (isError) {
-          console.log(error);
-          toast.error(error?.error || "Ocurrió un error", {
-            duration: 5000,
-            position: "top-center",
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-          });
-        }
-      }, [isSuccess, isError, error, datos]);
+    //Para registrar
+    useEffect(() => {
+      if (isSuccess) {
+        setsucess(datos?.message);
+        toast.success(datos?.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+      }
+  
+      if (isError) {
+        console.log(error);
+        toast.error(error?.error || "Ocurrió un error", {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    }, [isSuccess, isError, error, datos]);
 
     // ESTADO DE CARGA DE LA TABLA 
     if(isLoading){
@@ -143,32 +165,54 @@ const LogosPlantilla = () => {
         <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
         )
     }
-    
 
     const estadoOptions = [
         { value: "activo", label: "Activo" },
         { value: "inactivo", label: "Inactivo" }
     ];
 
+    const filtrodeDatos = data && data.data.length > 0 ? data.data.filter((logo) => {
+      const filtroestado = filtroEstado ? "activo" : "inactivo"
+      const nombreLogo = busqueda === "" ||
+        (logo.nombre && logo.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+      const logoEstado = logo.estado === filtroestado
+      return logoEstado && nombreLogo
+    }) : []
+
     // CONTROL DE PAGINAS DE LA TABLA
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
-    const elementosActuales = data ? data.data.slice(indicePrimerItem,indiceUltimoItem):[]
+    const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
     const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
     return(
     <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100"> 
 
     {/* TABLA */}
+      
+      <div className="flex justify-center items-center space-x-64">
       <div className="pt-10 pl-20">
         <Mybutton onClick={handleClick} color={"primary"}>Nuevo Logo<IoAtCircle/></Mybutton>
+      </div>
+      <div className="w-[550px] pt-10 pl-20">
+          <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
+      </div>
+      <div className="pt-10 pl-20">
+          <Switch
+            color={filtroEstado ? "success" : "default"}
+            isSelected={filtroEstado}
+            onValueChange={(checked) =>setFiltroEstado(checked)}>
+            {t("estado")}
+          </Switch>
+        </div>
       </div>
       <div className="w-full px-20 h-auto overflow-y-auto">
         <TableMolecula lassName="w-full">
           <Thead>
             <Th>ID</Th>
             <Th>Nombre</Th>
-            <Th>Ruta</Th>
+            {/* <Th>Ruta</Th> */}
+            <Th>Logo</Th>
             <Th>Editar</Th>
             <Th>Estado</Th>
           </Thead>
@@ -178,7 +222,10 @@ const LogosPlantilla = () => {
                 <tr className="hover:bg-slate-200" key={logo.idLogos}>
                   <Td>{logo.idLogos}</Td>
                   <Td>{logo.nombre}</Td>
-                  <Td>{logo.ruta}</Td>
+                  <Td>
+                  <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
+                  </Td>
+                  {/* <Td>{logo.ruta}</Td> */}
                   <Td>
                   <div className="flex  items-center space-x-4">
                     
@@ -260,20 +307,12 @@ const LogosPlantilla = () => {
                 />
                 <InputAtomo
                   register={register}
-                  name={"ruta"}
+                  name={"file"}
                   erros={errors}
-                  id={"ruta"}
-                  placeholder={"Ingrese la ruta de el logo"}
-                  type={"text"}
+                  id={"file"}
+                  placeholder={"Selecciona tu logo"}
+                  type={"file"}
                 />
-                {/* <SelectAtomo
-                  data={estadoOptions} 
-                  label={"Estado"} 
-                  onChange={(e) => setValue("estado", e.target.value)} 
-                  items={"value"} 
-                  ValueItem={"label"} 
-                  value={watch("estado")} 
-                /> */}
                 </>
               }
             />
@@ -303,15 +342,17 @@ const LogosPlantilla = () => {
                 type={"text"}
                 defaultValue={logoSeleccionado?.nombre || ""}
               />
+
               <InputAtomoActualizar
-                register={register}
-                name={"ruta"}
-                errores={errors}
-                id={"ruta"}
-                placeholder={"Ingrese la ruta del logo"}
-                type={"text"}
-                defaultValue={logoSeleccionado?.ruta || ""}
+                  register={register}
+                  name={"file"}
+                  errores={errors}
+                  id={"file"}
+                  placeholder={"Selecciona tu nuevo logo"}
+                  type={"file"}
+                  defaultValue={logoSeleccionado?.ruta || ""}
               />
+
             </>
           }
         />
@@ -323,6 +364,21 @@ const LogosPlantilla = () => {
 
     )}
     {/* FIN MODAL ACTUALIZAR*/}
+
+    {/* MODAL LOGO*/}
+    {openLogoModal && (
+    <ModalOrganismo 
+      // logo={<Logosímbolo />}
+      children={
+        <img className="object-cover w-auto h-auto" src={`http://localhost:3000/public/logos/${logoSeleccionado.ruta}`} alt="Logo" />
+      }
+      visible={true}
+      title={"Logo"}
+      closeModal={closeLogoModal}
+    />
+
+    )}
+    {/* FIN MODAL LOGO*/}
     </div>
     )
 };
