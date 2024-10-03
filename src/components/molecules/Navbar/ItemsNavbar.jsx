@@ -135,7 +135,7 @@ const ItemsNavbar = ({ visiblite }) => {
                     </>
                     }
                   </div>
-                  <span className="text-base">{item.label}</span>
+                  <span className="text-base line-clamp-1">{item.label}</span>
                 </div>
               </Link>
             </li>
