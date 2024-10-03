@@ -6,7 +6,7 @@ import SelectDocumentos from '../../atoms/SelectDocumentos';
 import { useGetVariablesQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
-import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
+import { useTipoServicioActivoQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
@@ -31,7 +31,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
-    const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
+    const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useTipoServicioActivoQuery();
     const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
         data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
     const [validarServicioDocumento, { isError: isErrorValidarServicioDocumento, error: ErrorValidarServicioDocumento, data: dataResponseValidarServicioDocumento, isSuccess: succesTipoServicio }] = useValidarServcioDocumentoMutation()

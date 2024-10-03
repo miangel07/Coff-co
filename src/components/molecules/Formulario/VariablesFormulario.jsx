@@ -86,6 +86,8 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     { value: "Lb", label: "Libras" },
     { value: "Kg", label: "Kilogramos" },
     { value: "N/A", label: "N/A" },
+    { value: "G", label: "Gramos" },
+    { value: "%", label: "Porcentaje" },
   ];
   if (isLoading || isLoadingEdit) {
     return <div>Loading...</div>;
