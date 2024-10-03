@@ -3,15 +3,22 @@ import ReportesGrafica from '../../molecules/graficas/ReportesGrafica'
 import GraficaRadar from '../../molecules/graficas/GraficaRadar'
 import Mybutton from '../../atoms/Mybutton'
 import ModalOrganismo from '../../organismo/Modal/ModalOrganismo'
-import RepotePdf from '../../organismo/Reportes/ReportePdf'
+
+import { usePostRepoteTipoServcioQuery } from '../../../store/api/reportes'
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
+import MyDocument from '../../organismo/Reportes/ReportePdf'
 
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
+  const { data, isLoading, isError } = usePostRepoteTipoServcioQuery();
   const handleReporte = (e) => {
     e.preventDefault();
     const data = e.target.elements.plantilla.value;
     console.log('Reporte generado', data)
 
+  }
+  if (isLoading) {
+    return <p>Cargando...</p>
   }
   return (
     <>
@@ -27,7 +34,20 @@ const ReportesPlantillas = () => {
               </select>
               <Mybutton type='submit' color='primary'>Generar Reporte</Mybutton>
 
-              <RepotePdf />
+              <div>
+                <PDFDownloadLink document={<MyDocument />} fileName="tabla-ejemplo.pdf">
+                  {({ loading }) => (loading ? 'Generando PDF...' : 'Descargar PDF')}
+                </PDFDownloadLink>
+
+
+                <PDFViewer className='w-full h-screen'>
+                  {data && <MyDocument valor={data} />}
+                </PDFViewer>
+
+
+
+
+              </div>
             </form>
           </ModalOrganismo>
         }
