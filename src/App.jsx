@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { parseJwt } from "./utils/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
+import { ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Cookies from 'js-cookie';
 
 import HomePages from "./pages/Home/HomePages";
@@ -51,6 +53,17 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        pauseOnFocusLoss
+        theme="dark"
+      />
+      
       <Routes>
         
         {/* RUTAS SI LA SESION NO ESTA INICIADA */}
