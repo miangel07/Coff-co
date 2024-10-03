@@ -124,10 +124,7 @@ const ItemsNavbar = ({ visiblite }) => {
         {itemsFiltrados.map((item, index) => {
           const iconoSeleccionado = location.pathname === item.link;
           return (
-            <li
-              key={index}
-              className={`flex items-center m-0.5 p-2 rounded-lg ${iconoSeleccionado ? "bg-light-gray" : "hover:bg-light-gray"}`}
-            >
+            <li key={index} className={`flex items-center m-0.5 p-2 rounded-lg ${iconoSeleccionado ? "bg-light-gray" : "hover:bg-light-gray"}`}>
               <Link to={item.link} className="flex items-center w-full cursor-pointer">
                 <div className="group cursor-pointer flex items-center ml-1.5 space-x-2">
                   <div className="group">
