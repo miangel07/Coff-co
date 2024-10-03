@@ -20,6 +20,7 @@
     "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.7.5",
+    "bootstrap-icons": "^1.11.3",
     "coffco": "file:",
     "dayjs": "^1.11.12",
     "echarts": "^5.5.1",
