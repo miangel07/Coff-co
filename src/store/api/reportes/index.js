@@ -22,7 +22,13 @@ export const repotesApi = createApi({
                 method: "GET",
             }),
         }),
+         postRepoteTipoServcio: build.query({
+            query: () => ({
+                url: `/reportes/listar`,
+                method: "GET",
+            }),
+        }), 
     }),
 })
 
-export const { useGetReporteQuery } = repotesApi;
+export const { useGetReporteQuery ,usePostRepoteTipoServcioQuery} = repotesApi;
