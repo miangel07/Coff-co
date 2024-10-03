@@ -26,9 +26,7 @@ const Navbar = () => {
         <ItemsNavbar visiblite={menuAbierto} />
       </section>
     </div>
-  </>
-  
-  );
+  </>  );
 };
 
 export default Navbar;
