@@ -62,6 +62,7 @@ const PreciosPlantilla = () => {
   }
 
   const abrirModal = (precio) => {
+    console.log('precio cargado al editar: ',precio)
     if (precio) {
       setPrecioSeleccionado(precio);
       reset({

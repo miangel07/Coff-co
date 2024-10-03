@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { parseJwt } from "./utils/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
+import { ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Cookies from 'js-cookie';
-
 import HomePages from "./pages/Home/HomePages";
 import CalendarPages from "./pages/Calendar/CalendarPages";
 import DocumentosPage from "./pages/documentos/DocumentosPage";
@@ -21,8 +22,7 @@ import FacturasPages from "./pages/Facturas/FacturasPages";
 import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
 
@@ -52,7 +52,7 @@ const App = () => {
 
   return (
     <>
-          <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={1000}
         hideProgressBar={false}
@@ -62,7 +62,7 @@ const App = () => {
         pauseOnFocusLoss
         theme="dark"
       />
-
+      
       <Routes>
         
         {/* RUTAS SI LA SESION NO ESTA INICIADA */}

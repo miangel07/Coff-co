@@ -1,151 +1,146 @@
 import React, { useState, useContext } from "react";
-import { FaUsers } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { AiFillDollarCircle } from "react-icons/ai";
-import { GoFileDirectoryFill, GoHomeFill } from "react-icons/go";
-import { GiCoffeeBeans } from "react-icons/gi";
-import { IoIosSettings } from "react-icons/io";
-import { BsHousesFill, BsFillFileBarGraphFill } from "react-icons/bs";
-import { FaCalendarAlt } from "react-icons/fa";
-import { MdOutlineMiscellaneousServices } from "react-icons/md";
-import { TbReportMoney } from "react-icons/tb";
-import { ImExit } from "react-icons/im";
-import { IoIosApps } from "react-icons/io";
-import { BiSolidCoffeeBean } from "react-icons/bi";
-import { IoDocumentText } from "react-icons/io5";
 import SelectDocumentos from "../../atoms/SelectDocumentos";
-import { useTranslation } from "react-i18next"; //  <--------importan este para usar la traducioon Esteeeeee
+
 import { TraslateContex } from "../../../context/TranslationoContex";
 import { AuthContext } from "../../../context/AuthContext";
-import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next"; //Importacion para cambio de idioma
+import { Link } from "react-router-dom";
 
 const ItemsNavbar = ({ visiblite }) => {
-  const { changeLanguage, language } = useContext(TraslateContex);
-  const [itemsUser, setItemsUser] = useState(-1);
-  const [subMenuVisible, setSubMenuVisible] = useState(false);
-  const { t } = useTranslation(); // <--------aca ponen esto tal cual  no vallan a cambiar la letra asi lo usan con la "t"
-  const { cerrarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
 
-  const handleClick = (index) => {
-    setItemsUser(index);
-    if (index === 9 && items[index].label === "Configuraciones") {
-      setSubMenuVisible(!subMenuVisible);
-    } else {
-      setSubMenuVisible(false);
-    }
-  };
+  //IDIOMA
+  const { changeLanguage, language } = useContext(TraslateContex);
+  const { t } = useTranslation(); //Aca ponen esto tal cual no vayan a cambiar la letra, lo usan con la "t"
 
   const idioma = [
     { value: "es", label: t("espanol") },
     { value: "en", label: t("ingles") },
   ];
 
-  //Se llama a la funcion cerrar sesion del contexto que se encarga de eliminar la informacion del usuario con sesion iniciada
-  const handleLogout = () => {
-    cerrarSesion();
-    Cookies.remove("Token");
-    console.log("Sesion Finalizada");
-  };
+  //ROL DEL USUARIO
+  const { authData } = useContext(AuthContext); 
+  const Rol = authData?.usuario.rol
 
+  // ITEMS Y FILTRADO
   const items = [
     {
-      label: `${visiblite ? t("home") : ""}`,
-      icon: <GoHomeFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-house",
+      iconFill: "bi-house-fill",
+      label: visiblite ? t("home") : "",
       link: "/home",
+      roles: ["administrador", "encargado", "operario", "cliente"],
     },
     {
-      label: `${visiblite ? t("tipoDocumentos") : ""}`,
-      icon: <IoDocumentText className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-file-earmark-break",
+      iconFill: "bi-file-earmark-break-fill",
+      label: visiblite ? t("tipoDocumentos") : "",
       link: "/tipodocumento",
+      roles: ["administrador", "encargado", "operario"],
     },
     {
-      label: `${visiblite ? t("documentos") : ""}`,
-      icon: <GoFileDirectoryFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-folder",
+      iconFill: "bi-folder-fill",
+      label: visiblite ? t("documentos") : "",
       link: "/documentos",
+      roles: ["administrador", "encargado", "operario"],
     },
     {
-      label: `${visiblite ? t("variables") : ""}`,
-      icon: <IoIosApps className="w-5 h-5 xl:size-7 " />,
+      icon: "bi-layers",
+      iconFill: "bi-layers-fill",
+      label: visiblite ? t("variables") : "",
       link: "/variables",
+      roles: ["administrador", "encargado", "operario"],
     },
-
     {
-      label: `${visiblite ? t("precios") : ""}`,
-      icon: <AiFillDollarCircle className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-coin",
+      iconFill: "bi-coin",
+      label: visiblite ? t("precios") : "",
       link: "/precios",
+      roles: ["administrador", "encargado", "operario"],
     },
     {
-      label: `${visiblite ? t("ambientes") : ""}`,
-      icon: <BsHousesFill className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-houses",
+      iconFill: "bi-houses-fill",
+      label: visiblite ? t("ambientes") : "",
       link: "/ambientes",
+      roles: ["administrador", "encargado", "operario"],
     },
-
     {
-      label: `${visiblite ? t("tipoServicios") : ""}`,
-      icon: <MdOutlineMiscellaneousServices className="w-5 h-5 xl:size-7 " />,
+      icon: "bi-nut",
+      iconFill: "bi-nut-fill",
+      label: visiblite ? t("tipoServicios") : "",
       link: "/tiposervicio",
+      roles: ["administrador", "encargado", "operario"],
     },
     {
-      label: `${visiblite ? t("muestras") : ""}`,
-      icon: <BiSolidCoffeeBean className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-cup-hot",
+      iconFill: "bi-cup-hot-fill",
+      label: visiblite ? t("muestras") : "",
       link: "/muestras",
+      roles: ["administrador", "encargado", "operario"],
     },
     {
-      label: `${visiblite ? t("servicios") : ""}`,
-      icon: <GiCoffeeBeans className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-handbag",
+      iconFill: "bi-handbag-fill",
+      label: visiblite ? t("servicios") : "",
       link: "/servicios",
+      roles: ["administrador", "encargado"],
     },
     {
-      label: `${visiblite ? t("alquiler") : ""}`,
-      icon: <FaCalendarAlt className="w-5 h-5 xl:size-7" />, // Tamaño ajustable
+      icon: "bi-calendar",
+      iconFill: "bi-calendar-fill",
+      label: visiblite ? t("alquiler") : "",
       link: "/alquiler",
+      roles: ["administrador", "encargado"],
     },
     {
-      label: `${visiblite ? t("usuarios") : ""}`,
-      icon: <FaUsers className="w-5 h-5 xl:size-7 " />,
+      icon: "bi-people",
+      iconFill: "bi-people-fill",
+      label: visiblite ? t("usuarios") : "",
       link: "/users",
+      roles: ["administrador", "encargado"],
     },
-
     {
-      label: `${visiblite ? t("facturas") : ""}`,
-      icon: <TbReportMoney className="w-5 h-5 xl:size-7" />,
+      icon: "bi-clipboard-check",
+      iconFill: "bi-clipboard-check-fill",
+      label: visiblite ? t("facturas") : "",
       link: "/facturas",
+      roles: ["administrador", "encargado"],
     },
     {
-      label: `${visiblite ? t("reportes") : ""}`,
-      icon: <BsFillFileBarGraphFill className="w-5 h-5 xl:size-7" />,
-      link:"/reportes" // Tamaño ajustable
-    },
+      icon: "bi-file-bar-graph",
+      iconFill: "bi-file-bar-graph-fill",
+      label: visiblite ? t("reportes") : "",
+      link: "/reportes",
+      roles: ["administrador", "encargado"],
+    }
   ];
+
+  const itemsFiltrados = items.filter(item => item.roles.includes(Rol));
 
   return (
     <div className="flex justify-content-center flex-col">
       <ul className="w-full">
-        {items.map((item, index) => (
-          <div key={index}>
-            <li
-              className={`flex items-center p-2 rounded-lg ${
-                location.pathname === item.link ? "bg-light-gray" : ""
-              }`}
-              onClick={() => {
-                handleClick(index);
-                if (item.label === "Salir") {
-                  handleLogout();
-                }
-              }}
-            >
-              <Link
-                to={item.link}
-                className="flex items-center space-x-2 w-full cursor-pointer"
-              >
-                <div className="cursor-pointer">{item.icon}</div>
-                <span className="cursor-pointer line-clamp-1">
-                  {item.label}
-                </span>
+        {itemsFiltrados.map((item, index) => {
+          const iconoSeleccionado = location.pathname === item.link;
+          return (
+            <li key={index} className={`flex items-center m-0.5 p-2 rounded-lg ${iconoSeleccionado ? "bg-light-gray" : "hover:bg-light-gray"}`}>
+              <Link to={item.link} className="flex items-center w-full cursor-pointer">
+                <div className="group cursor-pointer flex items-center ml-1.5 space-x-2">
+                  <div className="group">
+                    {iconoSeleccionado ? ( <i className={`${iconoSeleccionado ? item.iconFill : item.icon} text-2xl`}></i> ) :
+                    <>
+                    <i className={`bi ${item.icon} icon-default block group-hover:hidden text-2xl`}></i>
+                    <i className={`bi ${item.iconFill} icon-hover hidden group-hover:block text-2xl`}></i> 
+                    </>
+                    }
+                  </div>
+                  <span className="text-base line-clamp-1">{item.label}</span>
+                </div>
               </Link>
             </li>
-          </div>
-        ))}
+          );
+        })}
       </ul>
       <SelectDocumentos
         value={""}
