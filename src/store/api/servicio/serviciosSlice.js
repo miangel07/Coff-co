@@ -20,7 +20,7 @@ export const servicioApiSlice = createApi({
             providesTags:['servicios']
         }),
 
-        // obtener Variables
+        // obtener Variables para registrar servicio
         obtenerVariablesParaServicio:build.mutation({
             query:(data)=>({
                 url:'servicios/getvariables',
@@ -35,6 +35,23 @@ export const servicioApiSlice = createApi({
             },
             invalidatesTags:['servicios']
         }),
+
+        // obtener variables para actualizacion de servicio
+        obtenerVariablesParaActualizarServicio:build.mutation({
+            query:(data)=>({
+                url:'servicios/getvariablesupdate',
+                method:'POST',
+                body:data
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['servicios']
+        }),
+
 
         //registrar servicio
         registrarServicio:build.mutation({
@@ -51,6 +68,12 @@ export const servicioApiSlice = createApi({
             },
             invalidatesTags:['servicios']
         }),
+
+        // actualizarServicio:build.mutation({
+        //     query:(data)=>({
+        //         url:``
+        //     })
+        // }),
 
 
 
@@ -91,4 +114,4 @@ export const servicioApiSlice = createApi({
     })
 })
 
-export const { useGetServicioQuery, useRegistrarServicioMutation, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation} = servicioApiSlice;
+export const { useGetServicioQuery, useRegistrarServicioMutation, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation,useObtenerVariablesParaActualizarServicioMutation} = servicioApiSlice;
