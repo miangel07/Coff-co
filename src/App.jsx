@@ -5,7 +5,6 @@ import { AuthContext } from "./context/AuthContext";
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from 'js-cookie';
-
 import HomePages from "./pages/Home/HomePages";
 import CalendarPages from "./pages/Calendar/CalendarPages";
 import DocumentosPage from "./pages/documentos/DocumentosPage";
@@ -23,8 +22,7 @@ import FacturasPages from "./pages/Facturas/FacturasPages";
 import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
 
