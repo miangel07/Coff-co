@@ -17,7 +17,6 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
-    const [entradaSalida, setEntradaSalida] = useState("");
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
@@ -49,7 +48,6 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
         }
     }, [valor, reset]);
 
-console.log(entradaSalida);
 
 
     const onDataChangeVersiones = (data) => {
@@ -63,14 +61,13 @@ console.log(entradaSalida);
     }
     const onSubmit = async (data) => {
         const DataForm = new FormData();
-     
+
 
         DataForm.append('nombre', data.nombre);
         DataForm.append('id_documentos', valor.id_documentos);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('nombre_documento_version', valor.nombre_documento_version);
@@ -80,7 +77,7 @@ console.log(entradaSalida);
         DataForm.append('variables', JSON.stringify(ArryVariables));
         if (file) {
             DataForm.append('file', file);
-          }
+        }
 
 
         try {
@@ -100,10 +97,7 @@ console.log(entradaSalida);
         return <p>Error: {error?.message || ErroTipo?.message || Error?.message
         } </p>;
     }
-    const datosEntrada = [
-        { value: "entrada", label: "entrada" },
-        { value: "salida", label: "Salida" },
-    ];
+
 
     return (
         <div className='w-full flex flex-col max-h-full  '>
@@ -216,11 +210,7 @@ console.log(entradaSalida);
                                     cantidad={6}
                                 />
                             </div>
-                            <div className=' w-[230px] h-[20px]'>
-                                <Label></Label>
-                                <SelectAtomoActualizar value={valor?.entrada_salida || ""} ValueItem={"label"} data={datosEntrada}
-                                    items={"value"} label={"Selecione el Tipo "} onChange={(e) => setEntradaSalida(e.target.value)} placeholder={""} />
-                            </div>
+
                         </>
                     }
 
