@@ -35,7 +35,7 @@ const ReportesPlantillas = () => {
               <Mybutton type='submit' color='primary'>Generar Reporte</Mybutton>
 
               <div>
-                <PDFDownloadLink document={<MyDocument />} fileName="tabla-ejemplo.pdf">
+                <PDFDownloadLink document={data && <MyDocument valor={data} />} fileName="tabla-ejemplo.pdf">
                   {({ loading }) => (loading ? 'Generando PDF...' : 'Descargar PDF')}
                 </PDFDownloadLink>
 
