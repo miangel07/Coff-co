@@ -49,9 +49,9 @@ const ReportesPlantillas = () => {
         {
           <ModalOrganismo visible={show} closeModal={() => setShow(false)}>
             <form onSubmit={handleSubmit(handleReporte)} className='flex  flex-col justify-center items-center'>
-              <label>Seleccione la plantilla</label>
+              <label className=' font-sans font-medium'>Reporte segun tipo servicio y Muestra</label>
 
-              <div className='w-[320px] flex flex-col gap-5 justify-center items-center'>
+              <div className='w-[320px] flex flex-col mt-4 gap-5 justify-center items-center'>
 
                 <SelectDocumentos
                   label={"Selecione el Tipo de servicio"}
