@@ -231,7 +231,7 @@ const MyDocument = ({ valor }) => {
 
     }
   }, [valor]);
-console.log(logos[1]?.item || "");
+  console.log(logos[1]?.item || "");
 
   return (
     <Document>
@@ -239,19 +239,19 @@ console.log(logos[1]?.item || "");
         <View style={styles.table} fixed>
           <View style={styles.tableRow}>
             <View style={styles.tableColimg}>
-            <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[0]?.item || ""}`} />
+              <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[0]?.item || ""}`} />
             </View>
             <View style={styles.tableCol1}>
               <Text style={styles.text}>Centro de Gestión y Desarrollo Sostenible Surcolombiano Escuela Nacional de la Calidad del Café</Text>
             </View>
             <View style={styles.tableColimg}>
-            <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[1]?.item || ""}`} />
+              <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[1]?.item || ""}`} />
             </View>
           </View>
 
           <View style={styles.tableRow}>
             <View style={styles.tableColimg}>
-            <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[2]?.item || ""}`} />
+              <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[2]?.item || ""}`} />
             </View>
             <View style={styles.tableCol1}>
               <Text style={styles.textinforme}>Informe  {valor ? valor[0].nombreServicio : ""}</Text>
@@ -321,19 +321,19 @@ console.log(logos[1]?.item || "");
         <View style={styles.table} fixed>
           <View style={styles.tableRow}>
             <View style={styles.tableColimg}>
-              <Image style={styles.img} src={"/logo-sena-verde.jpg"} />
+              <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[0]?.item || ""}`} />
             </View>
             <View style={styles.tableCol1}>
               <Text style={styles.text}>Centro de Gestión y Desarrollo Sostenible Surcolombiano Escuela Nacional de la Calidad del Café</Text>
             </View>
             <View style={styles.tableColimg}>
-              <Text style={styles.tableCell}>Fila 1, Columna 3</Text>
+              <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[1]?.item || ""}`} />
             </View>
           </View>
 
           <View style={styles.tableRow}>
             <View style={styles.tableColimg}>
-              <Image style={styles.img} src={"/imagenes/escuela_nacional_del_cafe.png"} />
+              <Image style={styles.img} src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logos[2]?.item || ""}`} />
             </View>
             <View style={styles.tableCol1}>
               <Text style={styles.textinforme}>Informe  {valor ? valor[0].nombreServicio : ""}</Text>

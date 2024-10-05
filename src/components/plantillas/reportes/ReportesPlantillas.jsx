@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { Spinner } from "@nextui-org/react";
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
+  const [excel, setExcel] = useState(false)
   const [TipoServicio, SetTipoServicio] = useState("")
   const { data, isLoading, isError } = useGetTipoServicioQuery();
   const { data: tipoServicio, isLoading: tipoLoading, isError: tipoError } = useGetTipoServicioQuery();
@@ -91,12 +92,32 @@ const ReportesPlantillas = () => {
           </ModalOrganismo>
         }
         <section>
+
           <h2 className='text-2xl font-bold'>Reporte de Servicios</h2>
-          <Mybutton color={"primary"} onClick={() => setShow(true)}>
-            Generar Repote
-          </Mybutton>
+          <div className='flex flex-row gap-3'>
+            <Mybutton color={"primary"} onClick={() => setShow(true)}>
+              Generar Repote Pdf
+            </Mybutton>
+            <Mybutton color={"primary"} onClick={() => setExcel(true)}>
+              Generar Repote Excel
+            </Mybutton>
+
+          </div>
+          {excel &&
+            <ModalOrganismo visible={excel} closeModal={() => setExcel(false)}>
+              <h2>Reporte Excel</h2>
+              {/* aca mete un componente y en ese componete va lo del reporte de excel solo pone el componente con la logica
+              no valla hacer todo aca  */}
+
+            </ModalOrganismo>
+          }
+
+
+
+
 
         </section>
+
       </header>
       <section className=' gap-6 flex flex-col bg-white '>
         <ReportesGrafica />
