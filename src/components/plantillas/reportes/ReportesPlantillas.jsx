@@ -1,53 +1,92 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReportesGrafica from '../../molecules/graficas/ReportesGrafica'
 import GraficaRadar from '../../molecules/graficas/GraficaRadar'
 import Mybutton from '../../atoms/Mybutton'
 import ModalOrganismo from '../../organismo/Modal/ModalOrganismo'
-
-import { usePostRepoteTipoServcioQuery } from '../../../store/api/reportes'
+import SelectDocumentos from '../../atoms/SelectDocumentos'
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import MyDocument from '../../organismo/Reportes/ReportePdf'
-
+import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio'
+import { usePostRepoteTipoServcioMutation } from '../../../store/api/reportes'
+import { useForm } from 'react-hook-form'
+import InputAtomo from '../../atoms/Input'
+import { toast } from "react-toastify";
+import { Spinner } from "@nextui-org/react";
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
-  const { data, isLoading, isError } = usePostRepoteTipoServcioQuery();
-  const handleReporte = (e) => {
-    e.preventDefault();
-    const data = e.target.elements.plantilla.value;
-    console.log('Reporte generado', data)
+  const [TipoServicio, SetTipoServicio] = useState("")
+  const { data, isLoading, isError } = useGetTipoServicioQuery();
+  const { data: tipoServicio, isLoading: tipoLoading, isError: tipoError } = useGetTipoServicioQuery();
+  const [postReporteTipoServicio, { isSuccess, data: dataReporte, isError: errorReporte, error }] = usePostRepoteTipoServcioMutation();
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
+  const handleReporte = (data) => {
+
+    postReporteTipoServicio(
+      {
+        "muestra": data.muestra,
+        "TipoServicio": TipoServicio,
+      }
+    )
+    console.log("dataa", TipoServicio, data);
 
   }
-  if (isLoading) {
+  useEffect(() => {
+    if (errorReporte) {
+      toast.error(error.error)
+    }
+
+
+  }, [errorReporte, error])
+  if (isLoading && tipoLoading) {
     return <p>Cargando...</p>
   }
+  console.log(dataReporte)
+
   return (
     <>
       <header className='bg-white w-full '>
         {
           <ModalOrganismo visible={show} closeModal={() => setShow(false)}>
-            <form onSubmit={handleReporte}>
+            <form onSubmit={handleSubmit(handleReporte)} className='flex  flex-col justify-center items-center'>
               <label>Seleccione la plantilla</label>
-              <select name='plantilla'>
-                <option value='1'>Plantilla 1</option>
-                <option value='2'>Plantilla 2</option>
-                <option value='3'>Plantilla 3</option>
-              </select>
-              <Mybutton type='submit' color='primary'>Generar Reporte</Mybutton>
 
-              <div>
-                <PDFDownloadLink document={<MyDocument />} fileName="tabla-ejemplo.pdf">
-                  {({ loading }) => (loading ? 'Generando PDF...' : 'Descargar PDF')}
-                </PDFDownloadLink>
+              <div className='w-[320px] flex flex-col gap-5 justify-center items-center'>
 
-
-                <PDFViewer className='w-full h-screen'>
-                  {data && <MyDocument valor={data} />}
-                </PDFViewer>
-
-
-
-
+                <SelectDocumentos
+                  label={"Selecione el Tipo de servicio"}
+                  data={tipoServicio}
+                  onChange={(e) => SetTipoServicio(e.target.value)}
+                  items={"idTipoServicio"}
+                  ValueItem={"nombreServicio"}
+                />
+                <InputAtomo register={register} name={"muestra"} erros={errors} placeholder={"Codigo Muestra"} type={"text"} id={"muestra"} />
+                <Mybutton color={""} type={"submit"}>Generar Reporte</Mybutton>
               </div>
+              <div className='w-full  justify-center flex flex-col'>
+
+                {
+                  isSuccess && (
+                    <>
+
+                      <PDFDownloadLink document={<MyDocument valor={dataReporte} />} fileName={`Reporte de muestra-${dataReporte[0]?.codigo_muestra || ""}.pdf`}>
+                        {({ loading }) => (loading ? <Spinner /> : <Mybutton type='submit' color='primary'>Descargar PDF</Mybutton>)}
+                      </PDFDownloadLink>
+
+
+
+
+                      <PDFViewer className='w-full h-screen'>
+                        <MyDocument valor={dataReporte} />
+                      </PDFViewer>
+                    </>
+
+
+                  )
+                }
+              </div>
+
+
+
             </form>
           </ModalOrganismo>
         }
