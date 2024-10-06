@@ -2,9 +2,13 @@ import React from 'react'
 import ReactEcharts from 'echarts-for-react';
 import { useGraficaQuery } from '../../../store/api/documentos';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import Mybutton from '../../atoms/Mybutton';
+
 const GraficaDocumento = () => {
     const { t } = useTranslation();
     const { data, isLoading, isError, error } = useGraficaQuery();
+    const navigate = useNavigate();
 
     if (isLoading) return <p>Loading...</p>;
     if (isError) return <p>{t("errorGrafica")}</p>;
@@ -17,6 +21,7 @@ const GraficaDocumento = () => {
                 top: '5%',
                 left: 'center'
             },
+           
             series: [
                 {
                     name: 'Informacion',
@@ -29,8 +34,9 @@ const GraficaDocumento = () => {
                         borderWidth: 2
                     },
                     label: {
-                        show: false,
-                        position: 'center'
+                        show: true,
+                        position: 'outside',
+                        formatter: '{b}: {c}',
                     },
                     emphasis: {
                         label: {
@@ -40,7 +46,7 @@ const GraficaDocumento = () => {
                         }
                     },
                     labelLine: {
-                        show: false
+                        show: true
                     },
                     data: data.data
                 }
@@ -48,11 +54,10 @@ const GraficaDocumento = () => {
         };
     };
     return (
-        <div>
-            <h1>
-                {t("graficaDoscumento")}
-            </h1>
+        <div className='flex flex-col   items-center' onClick={() => navigate("/documentos")}>
+            <p className='font-sans font-medium' >Gestion Documental</p>
             <ReactEcharts option={getOption()} style={{ height: '600px', width: '100%' }} />
+
         </div>
     )
 }

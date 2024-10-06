@@ -217,15 +217,17 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full  flex flex-col gap-3 ">
-      <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
+    <section className="w-full  flex flex-col gap-3">
+      <div className="w-full mt-4  flex flex-wrap justify-between items-center p-4 rounded-lg shadow-md">
         <Mybutton
           color={"primary"}
           type={"submit"}
           onClick={() => setFrom(true)}
+          className="mb-2"
         >
           {t("nuevo")}
         </Mybutton>
+
         {form && (
           <ModalOrganismo
             closeModal={closeModal}
@@ -235,6 +237,7 @@ const DocumentosOrganismo = () => {
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
           </ModalOrganismo>
         )}
+
         {showModal && (
           <ModalOrganismo
             closeModal={() => setShowModal(false)}
@@ -244,7 +247,8 @@ const DocumentosOrganismo = () => {
             <DocumentoEdit closeModalEdit={closeModalEdit} valor={dataValue} />
           </ModalOrganismo>
         )}
-        <div className="w-72 ">
+
+        <div className="flex items-center mb-2 w-72">
           <SelectDocumentos
             label={t("selecioneTipoDocumento")}
             data={tipoData}
@@ -253,14 +257,16 @@ const DocumentosOrganismo = () => {
             ValueItem={"nombreDocumento"}
           />
         </div>
-        <div className="w-[550px]">
+
+        <div className="flex items-center mb-2 w-full max-w-[550px]">
           <Search
-            label={"Search"}
+            label={""}
             placeholder={"Buscar..."}
             onchange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div>
+
+        <div className="flex items-center mb-2">
           <Switch
             color={isChecked ? "success" : "default"}
             isSelected={isChecked}
@@ -270,6 +276,7 @@ const DocumentosOrganismo = () => {
           </Switch>
         </div>
       </div>
+
       <div className=" w-full  h-auto overflow-y-auto">
         <TableMolecula>
           <Thead>

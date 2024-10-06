@@ -12,7 +12,7 @@ import { useGetLogosQuery } from '../../../store/api/logos';
 import { useActualizarDocumentoMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useEffect, useState } from 'react';
-import SelectAtomoActualizar from '../../atoms/SelectActualizar';
+import SelectDocumentos from '../../atoms/SelectDocumentos';
 const DocumentoEdit = ({ valor, closeModalEdit }) => {
 
     const [file, setFile] = useState(null);
@@ -78,7 +78,10 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
         if (file) {
             DataForm.append('file', file);
         }
-
+        if (logos.length > 3 || logos.length < 3) {
+            toast.info('Lo siento tienes que ingresar 3 logos');
+            return;
+        }
 
         try {
             await actualizarVersion(DataForm)
@@ -174,14 +177,14 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        {<SelectAtomo
+                        <SelectDocumentos
                             value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
                             label={"Tipo Documento"}
                             onChange={(e) => SetDataInput(e.target.value)}
-                        />}
+                        />
                     </div>
 
                     {dataInput == 5 &&
@@ -189,12 +192,12 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
 
                             <section className='flex w-[230px] h-[155px] flex-col '>
                                 <Label>Tipo De servicio</Label>
-                                <SelectAtomo
-                                    value={valor?.tipo_servicio}
+                                <SelectDocumentos
+                                    value={valor?.tipo_servicio || ""}
                                     ValueItem={"nombreServicio"}
                                     data={TpoServicio}
                                     items={"idTipoServicio"}
-                                    label={"Seleccione El servicio"}
+                                    label={"selecione TipoServicio"}
                                     onChange={(e) => setTipoServicio(e.target.value)}
                                 />
                             </section>

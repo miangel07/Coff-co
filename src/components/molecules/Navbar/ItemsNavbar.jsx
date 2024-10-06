@@ -8,14 +8,10 @@ import { Link } from "react-router-dom";
 
 const ItemsNavbar = ({ visiblite }) => {
 
-  //IDIOMA
-  const { changeLanguage, language } = useContext(TraslateContex);
+
   const { t } = useTranslation(); //Aca ponen esto tal cual no vayan a cambiar la letra, lo usan con la "t"
 
-  const idioma = [
-    { value: "es", label: t("espanol") },
-    { value: "en", label: t("ingles") },
-  ];
+
 
   //ROL DEL USUARIO
   const { authData } = useContext(AuthContext); 
@@ -142,14 +138,7 @@ const ItemsNavbar = ({ visiblite }) => {
           );
         })}
       </ul>
-      <SelectDocumentos
-        value={""}
-        data={idioma}
-        items={"value"}
-        label={t("idioma")}
-        ValueItem={"label"}
-        onChange={(e) => changeLanguage(e.target.value)}
-      />
+    
     </div>
   );
 };
