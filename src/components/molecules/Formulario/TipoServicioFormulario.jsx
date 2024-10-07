@@ -19,7 +19,10 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
 
   useEffect(() => {
     if (dataValue) {
-      reset({ nombreServicio: dataValue.nombreServicio });
+      reset({ 
+        nombreServicio: dataValue.nombreServicio,
+        codigoTipoServicio: dataValue.codigoTipoServicio
+      });
     } else {
       reset();
     }
@@ -35,9 +38,9 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
   const onSubmit = async (data) => {
     try {
       if (dataValue) {
-        await actualizarTipoServicio({ id: dataValue.idTipoServicio, nombreServicio: data.nombreServicio });
+        await actualizarTipoServicio({ id: dataValue.idTipoServicio, nombreServicio: data.nombreServicio, codigoTipoServicio: data.codigoTipoServicio });
       } else {
-        await crearTipoServicio({ nombreServicio: data.nombreServicio });
+        await crearTipoServicio({ nombreServicio: data.nombreServicio, codigoTipoServicio: data.codigoTipoServicio });
       }
     } catch (error) {
       toast.error("Error al guardar el tipo de servicio");
@@ -62,6 +65,14 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
             register={register}
             type={"text"}
             id={"nombreServicio"}
+          />
+          <InputAtomo
+            name={"codigoTipoServicio"}
+            erros={errors}
+            placeholder={"Código del servicio"}
+            register={register}
+            type={"text"}
+            id={"codigoTipoServicio"}
           />
         </div>
         <div className="flex justify-center">

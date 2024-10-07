@@ -17,6 +17,8 @@ import { muestraApiSlice } from "./api/muestra";
 import { fincaApiSlice } from "./api/fincas";
 import { facturasApi } from "./api/factura";
 import { municipioApiSlice } from "./api/municipio";
+import { repotesApi } from "./api/reportes";
+
 
 export const store = configureStore({
   reducer: {
@@ -35,11 +37,12 @@ export const store = configureStore({
     [fincaApiSlice.reducerPath]: fincaApiSlice.reducer,
     [facturasApi.reducerPath]: facturasApi.reducer,
     [municipioApiSlice.reducerPath]: municipioApiSlice.reducer,
-
+    [repotesApi.reducerPath]: repotesApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
+      immutableCheck: false,
       serializableCheck: false,
     }).concat(
       authApi.middleware,
@@ -57,6 +60,7 @@ export const store = configureStore({
       fincaApiSlice.middleware,
       facturasApi.middleware,
       municipioApiSlice.middleware,
+      repotesApi.middleware,
 
     ),
 });

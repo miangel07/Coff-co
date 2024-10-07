@@ -50,7 +50,14 @@ const FincaFormulario = ({ closeModal }) => {
             register={register}
             erros={errors}
           />
-
+          <InputAtomo
+            type="text"
+            id="vereda"
+            name="vereda"
+            placeholder="Nombre de la Vereda"
+            register={register}
+            erros={errors}
+          />
           <SelectAtomo
             label="Selecciona un Municipio"
             data={dataMunicipios}
