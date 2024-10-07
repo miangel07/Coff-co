@@ -62,6 +62,5 @@ export const store = configureStore({
       facturasApi.middleware,
       repotesApi.middleware,
       CambioPasswordApi.middleware,
-
     ),
 });

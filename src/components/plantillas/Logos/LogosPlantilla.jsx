@@ -37,7 +37,7 @@ const LogosPlantilla = () => {
 
      // FUNCIONES CRUD
     const {data,isLoading} = useGetLogosQuery()
-    const [registrarLogo, { isSuccess, datos, isError, error }] = useRegistrarLogoMutation();
+    const [registrarLogo] = useRegistrarLogoMutation();
     const [actualizarEstado] = useActualizarEstadoMutation();
     const [actualizarLogo]= useActualizarLogoMutation();
 
@@ -46,8 +46,8 @@ const LogosPlantilla = () => {
     const [busqueda, setBusqueda] = useState('')
     const [filtroEstado, setFiltroEstado] = useState(true);
 
-     //MODAL 
-    const {handleSubmit, register, formState: { errors },reset,} = useForm();
+    //MODAL 
+    const {handleSubmit, register, formState: { errors }, reset} = useForm();
 
     //Abrir modal
     const [openModal, setOpenModal] = useState(false);
@@ -107,19 +107,52 @@ const LogosPlantilla = () => {
     const closeLogoModal = () => {setOpenLogoModal(false);};
   
     //SUBMIT REGISTRAR
-    const onsubmit = (data) => {
-      const formData = new FormData();
-      console.log(data.file[0].type); 
+    // const onsubmit = (data) => {
+    //   const formData = new FormData();
+    //   console.log(data.file[0].type); 
       
-      formData.append("file", data.file[0]);
-      formData.append("nombre", data.nombre);
+    //   formData.append("file", data.file[0]);
+    //   formData.append("nombre", data.nombre);
     
-      registrarLogo(formData);
+    //   registrarLogo(formData).unwrap();
+    //   reset();
+    //   setOpenModal(false);
+    // };
+     
+    const onsubmit = async (data) => {
+      const formData = new FormData();
+      formData.append('file', data.file[0]);
+      formData.append('nombre', data.nombre);
+    
+      try {
+        const response = await registrarLogo(formData).unwrap(); 
+        setsucess(response.message); 
+    
+        toast.success(response.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error(error.error || "Ocurrió un error", {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    
       reset();
       setOpenModal(false);
     };
-     
-
+    
     //SUBMIT ACTUALIZAR
     const onsubmitActualizar = (valores) => {
       if (logoSeleccionado) {
@@ -133,33 +166,35 @@ const LogosPlantilla = () => {
       }
     };
     
-    //Para registrar
-    useEffect(() => {
-      if (isSuccess) {
-        console.log("HOLABIENPEPE")
-        setsucess(datos?.message);
-        toast.success(datos?.message || "Logo registrado", {
-          duration: 5000,
-          position: "top-center",
-          style: {
-            background: "#333",
-            color: "#fff",
-          },
-          icon: <FcOk />,
-        });
-      }
-  
-      if (isError) {
-        toast.error(error?.error || "Ocurrió un error", {
-          duration: 5000,
-          position: "top-center",
-          style: {
-            background: "#333",
-            color: "#fff",
-          },
-        });
-      }
-    }, [isSuccess, isError, error, datos]);
+    // useEffect(() => {
+    //   if (isSuccess) {
+    //     // console.log(datos?.message); 
+    //     setsucess(datos?.message);
+    
+    //     toast.success(datos?.message, {
+    //       duration: 5000,
+    //       position: "top-center",
+    //       style: {
+    //         background: "#333",
+    //         color: "#fff",
+    //       },
+    //       icon: <FcOk />,
+    //     });
+    //   }
+    
+    //   if (isError) {
+    //     console.log("Error:", error?.error || "Ocurrió un error");
+    
+    //     toast.error(error?.error || "Ocurrió un error", {
+    //       duration: 5000,
+    //       position: "top-center",
+    //       style: {
+    //         background: "#333",
+    //         color: "#fff",
+    //       },
+    //     });
+    //   }
+    // }, [isSuccess, isError, error, datos]);
 
     // ESTADO DE CARGA DE LA TABLA 
     if(isLoading){
@@ -191,7 +226,6 @@ const LogosPlantilla = () => {
     <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100"> 
 
     {/* TABLA */}
-      
       <div className="flex justify-center items-center space-x-64">
       <div className="pt-10 pl-20">
         <Mybutton onClick={handleClick} color={"primary"}>Nuevo Logo<IoAtCircle/></Mybutton>
@@ -316,8 +350,7 @@ const LogosPlantilla = () => {
                   type={"file"}
                 />
                 </>
-              }
-            />
+              }/>
           }
           visible={true}
           title={"Registro de Logo"}
