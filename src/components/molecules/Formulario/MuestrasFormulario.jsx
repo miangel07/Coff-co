@@ -213,6 +213,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             />
           </div>
         )}
+        
 
         {/* Botón final para registrar/actualizar */}
         <div className="flex justify-center mt-4">
