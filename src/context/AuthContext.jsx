@@ -18,7 +18,9 @@ export const AuthProvider = ({ children }) => {
 
   // Función para eliminar el contexto cuando se cierra la sesion
   const cerrarSesion = () => {
+    console.log('Sesion Finalizada');
     setAuthData(null);
+    Cookies.remove("Token")
     Cookies.remove('UsuarioContext');  
   };
 
