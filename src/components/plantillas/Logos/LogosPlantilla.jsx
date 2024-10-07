@@ -109,14 +109,16 @@ const LogosPlantilla = () => {
     //SUBMIT REGISTRAR
     const onsubmit = (data) => {
       const formData = new FormData();
+      console.log(data.file[0].type); 
+      
       formData.append("file", data.file[0]);
       formData.append("nombre", data.nombre);
-  
+    
       registrarLogo(formData);
       reset();
-      toast.success("Logo registrado con éxito");
       setOpenModal(false);
-    };    
+    };
+     
 
     //SUBMIT ACTUALIZAR
     const onsubmitActualizar = (valores) => {
@@ -134,8 +136,9 @@ const LogosPlantilla = () => {
     //Para registrar
     useEffect(() => {
       if (isSuccess) {
+        console.log("HOLABIENPEPE")
         setsucess(datos?.message);
-        toast.success(datos?.message, {
+        toast.success(datos?.message || "Logo registrado", {
           duration: 5000,
           position: "top-center",
           style: {
@@ -147,7 +150,6 @@ const LogosPlantilla = () => {
       }
   
       if (isError) {
-        console.log(error);
         toast.error(error?.error || "Ocurrió un error", {
           duration: 5000,
           position: "top-center",

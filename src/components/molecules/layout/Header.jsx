@@ -109,11 +109,7 @@ const Header = ({ color }) => {
                                 </ul>
                             </div>)}
                     </div>
-
-
                 </nav>
-
-
             </header>
         </>
     );
