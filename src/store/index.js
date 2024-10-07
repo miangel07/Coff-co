@@ -17,6 +17,7 @@ import { muestraApiSlice } from "./api/muestra";
 import { fincaApiSlice } from "./api/fincas";
 import { facturasApi } from "./api/factura";
 import { repotesApi } from "./api/reportes";
+import { CambioPasswordApi } from "./api/cambioPassword";
 
 
 export const store = configureStore({
@@ -36,6 +37,7 @@ export const store = configureStore({
     [fincaApiSlice.reducerPath]: fincaApiSlice.reducer,
     [facturasApi.reducerPath]: facturasApi.reducer,
     [repotesApi.reducerPath]: repotesApi.reducer,
+    [CambioPasswordApi.reducerPath]: CambioPasswordApi.reducer,
 
   },
 
@@ -59,6 +61,7 @@ export const store = configureStore({
       fincaApiSlice.middleware,
       facturasApi.middleware,
       repotesApi.middleware,
+      CambioPasswordApi.middleware,
 
     ),
 });
