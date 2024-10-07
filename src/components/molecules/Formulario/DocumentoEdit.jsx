@@ -12,12 +12,11 @@ import { useGetLogosQuery } from '../../../store/api/logos';
 import { useActualizarDocumentoMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useEffect, useState } from 'react';
-import SelectAtomoActualizar from '../../atoms/SelectActualizar';
+import SelectDocumentos from '../../atoms/SelectDocumentos';
 const DocumentoEdit = ({ valor, closeModalEdit }) => {
 
     const [file, setFile] = useState(null);
     const [ArryVariables, setArryVariables] = useState(null);
-    const [entradaSalida, setEntradaSalida] = useState("");
     const [logos, setlogos] = useState([])
     const [dataInput, SetDataInput] = useState("");
     const [servicio, setTipoServicio] = useState('')
@@ -49,7 +48,6 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
         }
     }, [valor, reset]);
 
-console.log(entradaSalida);
 
 
     const onDataChangeVersiones = (data) => {
@@ -63,14 +61,13 @@ console.log(entradaSalida);
     }
     const onSubmit = async (data) => {
         const DataForm = new FormData();
-     
+
 
         DataForm.append('nombre', data.nombre);
         DataForm.append('id_documentos', valor.id_documentos);
         DataForm.append('descripcion', data.descripcion);
         DataForm.append('codigo', data.codigo_documentos);
         DataForm.append('fecha_emision', data.fecha_emision);
-        DataForm.append('entrada_salida', entradaSalida);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
         DataForm.append('nombre_documento_version', valor.nombre_documento_version);
@@ -80,8 +77,11 @@ console.log(entradaSalida);
         DataForm.append('variables', JSON.stringify(ArryVariables));
         if (file) {
             DataForm.append('file', file);
-          }
-
+        }
+        if (logos.length > 3 || logos.length < 3) {
+            toast.info('Lo siento tienes que ingresar 3 logos');
+            return;
+        }
 
         try {
             await actualizarVersion(DataForm)
@@ -100,10 +100,7 @@ console.log(entradaSalida);
         return <p>Error: {error?.message || ErroTipo?.message || Error?.message
         } </p>;
     }
-    const datosEntrada = [
-        { value: "entrada", label: "entrada" },
-        { value: "salida", label: "Salida" },
-    ];
+
 
     return (
         <div className='w-full flex flex-col max-h-full  '>
@@ -180,14 +177,14 @@ console.log(entradaSalida);
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Tipo De Documento</Label>
-                        {<SelectAtomo
+                        <SelectDocumentos
                             value={valor?.tipo_documento}
                             ValueItem={"nombreDocumento"}
                             data={data}
                             items={"idTipoDocumento"}
                             label={"Tipo Documento"}
                             onChange={(e) => SetDataInput(e.target.value)}
-                        />}
+                        />
                     </div>
 
                     {dataInput == 5 &&
@@ -195,12 +192,12 @@ console.log(entradaSalida);
 
                             <section className='flex w-[230px] h-[155px] flex-col '>
                                 <Label>Tipo De servicio</Label>
-                                <SelectAtomo
-                                    value={valor?.tipo_servicio}
+                                <SelectDocumentos
+                                    value={valor?.tipo_servicio || ""}
                                     ValueItem={"nombreServicio"}
                                     data={TpoServicio}
                                     items={"idTipoServicio"}
-                                    label={"Seleccione El servicio"}
+                                    label={"selecione TipoServicio"}
                                     onChange={(e) => setTipoServicio(e.target.value)}
                                 />
                             </section>
@@ -216,11 +213,7 @@ console.log(entradaSalida);
                                     cantidad={6}
                                 />
                             </div>
-                            <div className=' w-[230px] h-[20px]'>
-                                <Label></Label>
-                                <SelectAtomoActualizar value={valor?.entrada_salida || ""} ValueItem={"label"} data={datosEntrada}
-                                    items={"value"} label={"Selecione el Tipo "} onChange={(e) => setEntradaSalida(e.target.value)} placeholder={""} />
-                            </div>
+
                         </>
                     }
 

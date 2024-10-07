@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import Cookies from 'js-cookie';
 import usuarioImagen from "../../../../public/usuario.png";
+import SelectDocumentos from "../../atoms/SelectDocumentos";
+import { TraslateContex } from "../../../context/TranslationoContex";
+import { useTranslation } from "react-i18next";
+import { MdOutlineGTranslate } from "react-icons/md";
+
 
 const Header = ({ color }) => {
 
@@ -24,21 +29,25 @@ const Header = ({ color }) => {
             setOpen(false);
         }
     });
+    const idioma = [
+        { value: "en", label: t("ingles") },
+        { value: "es", label: t("espanol") },
+    ];
 
     //OPCIONES DEL MENU Y NAVEGACION
     const Menus = ["Mi perfil", "Logos", "Ayuda", "Salir"];
     const handleMenuClick = (menu) => {
-        setOpen(false); 
+        setOpen(false);
 
         switch (menu) {
             case "Mi perfil":
-                navigate("/perfil"); 
+                navigate("/perfil");
                 break;
             case "Logos":
-                navigate("/logos"); 
+                navigate("/logos");
                 break;
             case "Ayuda":
-                navigate("/ayuda"); 
+                navigate("/ayuda");
                 break;
             case "Salir":
                 handleLogout();
@@ -67,7 +76,17 @@ const Header = ({ color }) => {
                         </div>
                     </div>
 
-                    {/* Menu Dropeable */}
+                    <div className="w-[200px]">
+                        <SelectDocumentos
+                            value={""}
+                            data={idioma}
+                            items={"value"}
+                            label={<MdOutlineGTranslate size={28} />}
+                            ValueItem={"label"}
+                            onChange={(e) => changeLanguage(e.target.value)}
+                        />
+                    </div>
+
                     <div className="relative">
                         <i  ref={imgRef}
                             onClick={() => setOpen(!open)}
@@ -87,7 +106,9 @@ const Header = ({ color }) => {
                                 </ul>
                             </div>)}
                     </div>
+
                 </nav>
+
             </header>
         </>
     );
