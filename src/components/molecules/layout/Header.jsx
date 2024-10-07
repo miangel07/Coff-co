@@ -22,6 +22,8 @@ const Header = ({ color }) => {
 
     //MANEJO DE CIERRE Y APERTURA DEL MENU DE PERFIL
     const [open, setOpen] = useState(false);
+    const { t } = useTranslation();
+    const { changeLanguage, language } = useContext(TraslateContex);
     const menuRef = useRef();
     const imgRef = useRef();
     window.addEventListener("click", (e) => {
@@ -37,6 +39,7 @@ const Header = ({ color }) => {
     //OPCIONES DEL MENU Y NAVEGACION
     const Menus = ["Mi perfil", "Logos", "Ayuda", "Salir"];
     const handleMenuClick = (menu) => {
+        setOpen(false);
         setOpen(false);
 
         switch (menu) {
@@ -107,7 +110,9 @@ const Header = ({ color }) => {
                             </div>)}
                     </div>
 
+
                 </nav>
+
 
             </header>
         </>
