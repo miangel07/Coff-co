@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useLoginUserMutation } from "../../../store/api/auth/index.js";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import Mybutton from "../../atoms/Mybutton.jsx";
 import Input from "../../atoms/Input.jsx";
@@ -21,9 +21,9 @@ const LoginComponent = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await loginUser(data).unwrap();  
+      const response = await loginUser(data).unwrap();
       if (response) {
-        iniciarSesion(response);  
+        iniciarSesion(response);
         setLoginSuccessful(true);
         console.log("Sesión Iniciada");
         navigate("/home");
@@ -32,7 +32,7 @@ const LoginComponent = () => {
       console.error("Error al iniciar sesión:", error);
     }
   };
-  
+
 
   const errorLogin = isError ? (
     <p className="text-red-400 font-calibri">{error.error}</p>
@@ -72,15 +72,12 @@ const LoginComponent = () => {
                   erros={errors}
                 />
                 <label className="label">
-                  <a
-                    className="label-text-alt link link-hover"
-                    style={{ color: "#586E26" }}
-                  >
+                  <Link to="/password" className="label-text-alt link link-hover">
                     <Label>Registrarse</Label>
-                  </a>
-                  <a href="#" className="label-text-alt link link-hover">
-                    <Label>¿Olvido su Contraseña?</Label>
-                  </a>
+                  </Link>
+                  <Link to="/password" className="label-text-alt link link-hover ">
+                    <Label >¿Olvido su Contraseña?</Label>
+                  </Link>
                 </label>
               </div>
               <div className="form-control">
