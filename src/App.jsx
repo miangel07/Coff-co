@@ -73,13 +73,13 @@ const App = () => {
         {!sesionExistente && (
           <>
             <Route path="/*" element={<LoginPages />}></Route>
-            <Route path="/login" element={<LoginPages />}></Route>
+            {/* <Route path="/login" element={<LoginPages />}></Route> */}
           </>
         )}
 
         {/* RUTAS PROTEGIDAS (ESTADO DE SESION VERDADERO) */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/login" element={<Navigate to="/" />} />
+          {/* <Route path="/login" element={<Navigate to="/"/>} /> */}
           <Route path="/*" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePages />} />
 

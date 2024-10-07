@@ -9,7 +9,6 @@ import { TraslateContex } from "../../../context/TranslationoContex";
 import { useTranslation } from "react-i18next";
 import { MdOutlineGTranslate } from "react-icons/md";
 
-
 const Header = ({ color }) => {
 
     const { cerrarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
