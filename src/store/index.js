@@ -65,6 +65,5 @@ export const store = configureStore({
       municipioApiSlice.middleware,
       repotesApi.middleware,
       CambioPasswordApi.middleware,
-
     ),
 });
