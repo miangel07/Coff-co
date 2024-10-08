@@ -89,6 +89,7 @@ const TipoServicioPlantilla = () => {
           <Thead>
             <Th>ID</Th>
             <Th>Nombre del Servicio</Th>
+            <Th>Código del Servicio</Th>
             <Th>Estado</Th>
             <Th>Acciones</Th>
           </Thead>
@@ -97,6 +98,7 @@ const TipoServicioPlantilla = () => {
               <tr key={TipoServicio.idTipoServicio}>
                 <Td>{TipoServicio.idTipoServicio}</Td>
                 <Td>{TipoServicio.nombreServicio}</Td>
+                <Td>{TipoServicio.codigoTipoServicio}</Td>
                 <Td>
                   <Switch
                     color={TipoServicio.estado === "activo" ? "success" : "default"}
