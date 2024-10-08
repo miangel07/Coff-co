@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 export const AuthContext = createContext();
@@ -18,7 +19,9 @@ export const AuthProvider = ({ children }) => {
 
   // Función para eliminar el contexto cuando se cierra la sesion
   const cerrarSesion = () => {
+    console.log('Sesion Finalizada');
     setAuthData(null);
+    Cookies.remove("Token")
     Cookies.remove('UsuarioContext');  
   };
 

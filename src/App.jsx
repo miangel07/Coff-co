@@ -2,10 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { parseJwt } from "./utils/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
-import { ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from 'js-cookie';
-
 import HomePages from "./pages/Home/HomePages";
 import CalendarPages from "./pages/Calendar/CalendarPages";
 import DocumentosPage from "./pages/documentos/DocumentosPage";
@@ -23,18 +22,18 @@ import FacturasPages from "./pages/Facturas/FacturasPages";
 import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import RecuperarPasswordPage from "./pages/recuperarpassword/RecuperarPasswordPage";
+
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
 
   //ROL DE LA SESION
-    //Uso del contexto de autentificacion para obtener el rol del usuario que inicio sesion y asi mismo asignar sus rutas
-  const { authData } = useContext(AuthContext); 
+  //Uso del contexto de autentificacion para obtener el rol del usuario que inicio sesion y asi mismo asignar sus rutas
+  const { authData } = useContext(AuthContext);
   const Rol = authData?.usuario.rol
 
   //ESTADO DE LA SESION
-    // Esta constante se encargara de obtener el token y verificar su validez, guardara esto en sesionExistente y mas adelante en el enrutado dara acceso a unas rutas u otras dependiendo de la validez
+  // Esta constante se encargara de obtener el token y verificar su validez, guardara esto en sesionExistente y mas adelante en el enrutado dara acceso a unas rutas u otras dependiendo de la validez
   const estadoSesion = () => {
     const token = Cookies.get('Token');
     const SesionValida = token && parseJwt(token)?.exp * 1000 > Date.now();
@@ -42,14 +41,14 @@ const App = () => {
   };
 
   //VERIFICAR ESTADO DE SESION
-    //Este useEffect se encarga de verificar constantemente el estado de la sesion, junto con la cookie que resguarda al token, ya que esta llamndo a la funcion estadoSesion, esto es  para asegurar que el sistema sea accesible siempre y cuando haya una sesion valida, verificando esto cada segundo.
+  //Este useEffect se encarga de verificar constantemente el estado de la sesion, junto con la cookie que resguarda al token, ya que esta llamndo a la funcion estadoSesion, esto es  para asegurar que el sistema sea accesible siempre y cuando haya una sesion valida, verificando esto cada segundo.
   useEffect(() => {
-    estadoSesion(); 
+    estadoSesion();
     const handleEstado = () => {
       estadoSesion();
     };
-    const interval = setInterval(handleEstado, 1000); 
-    return () => clearInterval(interval); 
+    const interval = setInterval(handleEstado, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -64,24 +63,27 @@ const App = () => {
         pauseOnFocusLoss
         theme="dark"
       />
-      
+
       <Routes>
-        
+
         {/* RUTAS SI LA SESION NO ESTA INICIADA */}
+        <Route>
+          <Route path="/password" element={<RecuperarPasswordPage />} />
+        </Route>
         {!sesionExistente && (
           <>
-            <Route path="/*" element={<LoginPages/>}></Route>
-            <Route path="/login" element={<LoginPages/>}></Route>
+            <Route path="/*" element={<LoginPages />}></Route>
+            {/* <Route path="/login" element={<LoginPages />}></Route> */}
           </>
         )}
 
         {/* RUTAS PROTEGIDAS (ESTADO DE SESION VERDADERO) */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/login" element={<Navigate to="/" />} />
+          {/* <Route path="/login" element={<Navigate to="/"/>} /> */}
           <Route path="/*" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePages />} />
-        
-        {/* RUTAS DEPENDIENDO DEL ROL */}
+
+          {/* RUTAS DEPENDIENDO DEL ROL */}
 
           {Rol === "administrador" && (
             <>
