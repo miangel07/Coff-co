@@ -60,6 +60,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
     }, [isSuccess, dataResponse, isSuccessActualizarVersion, servicio]);
+    console.log(logos)
     useEffect(() => {
         if (valor) {
             reset({
@@ -70,7 +71,8 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 version: valor?.version,
             });
         }
-    }, [valor, reset]);
+
+    }, [valor, reset, logos]);
 
 
 
@@ -83,8 +85,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const HanderEnviar = (e) => {
         setFile(e.target.files[0]);
     }
-
-    console.log(varibles)
     const onSubmit = async (data) => {
 
         const DataForm = new FormData();
@@ -103,7 +103,10 @@ const DocumentosFrom = ({ closeModal, valor }) => {
             toast.info('Para poder Regisitrar un documento de servicio tecnologicos es necesario ingresar varibles');
             return;
         }
-
+        if (logos.length > 3 || logos.length < 3) {
+            toast.info('Lo siento tienes que ingresar 3 logos');
+            return;
+        }
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
@@ -144,12 +147,15 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-
-        console.log(ArryVariables)
+        if (logos.length > 3 || logos.length < 3) {
+            toast.info('Lo siento tienes que ingresar 3 logos');
+            return;
+        }
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
+
         if (dataInput == 5 && !ArryVariables) {
             toast.info('Lo siento no puedes actualizar una version sin asignarle Varibles');
             return;
@@ -298,11 +304,11 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                                     ) : <div className='w-[230px] h-[155px]  justify-center flex flex-col'>
                                         <p className=' text-red-400 font-semibold'>No hay Varibles Disponibles</p>
                                         <Link to="/variables">
-                                        
-                                        
-                                        <Mybutton color={"primary"}>
-                                            Agregar Variables
-                                        </Mybutton>
+
+
+                                            <Mybutton color={"primary"}>
+                                                Agregar Variables
+                                            </Mybutton>
                                         </Link>
                                     </div>
                                 }

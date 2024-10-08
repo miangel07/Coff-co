@@ -4,19 +4,19 @@ const Carousel = () => {
   const [currentItem, setCurrentItem] = useState(0);
   const items = [
     {
-      src: "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp",
+      src: "/imagenes/carrousel1.png",
       alt: "Image 1",
     },
     {
-      src: "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp",
+      src: "/imagenes/carrousel2.png",
       alt: "Image 2",
     },
     {
-      src: "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp",
+      src: "/imagenes/carrousel3.png",
       alt: "Image 3",
     },
     {
-      src: "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp",
+      src: "/imagenes/carrousel4.png",
       alt: "Image 4",
     },
   ];
@@ -26,7 +26,7 @@ const Carousel = () => {
       setCurrentItem((prevItem) =>
         prevItem === items.length - 1 ? 0 : prevItem + 1
       );
-    }, 3000); // Cambia cada 3 segundos
+    }, 6000); 
 
     return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
   }, [items.length]);
@@ -37,9 +37,8 @@ const Carousel = () => {
         {items.map((item, index) => (
           <div
             key={index}
-            className={`carousel-item w-full ${
-              index === currentItem ? "block" : "hidden"
-            }`}
+            className={`carousel-item w-full ${index === currentItem ? "block" : "hidden"
+              }`}
           >
             <img src={item.src} alt={item.alt} className="w-full" />
           </div>
@@ -50,9 +49,8 @@ const Carousel = () => {
           <a
             key={index}
             href={`#item${index + 1}`}
-            className={`btn btn-xs ${
-              index === currentItem ? "btn-active" : ""
-            }`}
+            className={`btn btn-xs ${index === currentItem ? "btn-active" : ""
+              }`}
             onClick={() => setCurrentItem(index)}
           >
             {index + 1}

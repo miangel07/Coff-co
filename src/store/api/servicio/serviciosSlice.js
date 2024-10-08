@@ -52,12 +52,43 @@ export const servicioApiSlice = createApi({
             invalidatesTags:['servicios']
         }),
 
+        // obtener precios segun tipo servicio para registrar un servicio
+        obtenerPrecioSegunTipoServicio:build.mutation({
+            query:(data)=>({
+                url:'servicios/getprecio',
+                method:'POST',
+                body:data
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['servicios']
+        }),
+
 
         //registrar servicio
         registrarServicio:build.mutation({
             query:(data)=>({
                 url:'servicios/registrarser',
                 method:'POST',
+                body:data,
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['servicios']
+        }),
+        //Registro servicio terminado
+        servicioTerminado:build.mutation({
+            query:(data)=>({
+                url:`servicios/servicioter/${data.id}`,
+                method:'PUT',
                 body:data,
             }),
             transformErrorResponse:(response,meta,arg)=>{
@@ -114,4 +145,4 @@ export const servicioApiSlice = createApi({
     })
 })
 
-export const { useGetServicioQuery, useRegistrarServicioMutation, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation,useObtenerVariablesParaActualizarServicioMutation} = servicioApiSlice;
+export const { useGetServicioQuery, useRegistrarServicioMutation,useServicioTerminadoMutation, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation,useObtenerVariablesParaActualizarServicioMutation,useObtenerPrecioSegunTipoServicioMutation} = servicioApiSlice;

@@ -22,13 +22,20 @@ export const repotesApi = createApi({
                 method: "GET",
             }),
         }),
-         postRepoteTipoServcio: build.query({
-            query: () => ({
-                url: `/reportes/listar`,
-                method: "GET",
+        postRepoteTipoServcio: build.mutation({
+            query: (data) => ({
+                url: `/reportes/generar`,
+                method: "POST",
+                body: data,
             }),
-        }), 
+            transformErrorResponse: (response, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message,
+                };
+            },
+        }),
     }),
 })
 
-export const { useGetReporteQuery ,usePostRepoteTipoServcioQuery} = repotesApi;
+export const { useGetReporteQuery, usePostRepoteTipoServcioMutation } = repotesApi;
