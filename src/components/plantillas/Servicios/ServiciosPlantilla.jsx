@@ -3,6 +3,7 @@ import Mybutton from "../../atoms/Mybutton";
 import {
   useActualizarEstadoServicioMutation,
   useGetServicioQuery,
+  useObtenerMuestrasParaServicioQuery,
   useObtenerPrecioSegunTipoServicioMutation,
   useObtenerVariablesParaActualizarServicioMutation,
   useServicioTerminadoMutation,
@@ -28,7 +29,6 @@ import {
   useRegistrarServicioMutation,
 } from "../../../store/api/servicio/serviciosSlice";
 import { useGetAmbientesQuery } from "../../../store/api/ambientes/ambientesSlice";
-import { useGetMuestrasQuery } from "../../../store/api/muestra";
 import Search from "../../atoms/Search";
 
 const ServiciosPlantilla = () => {
@@ -61,7 +61,8 @@ const ServiciosPlantilla = () => {
 
   //   // Trae los datos de ambientes, muestras, precios y usuarios
   const { data: dataAmbientes } = useGetAmbientesQuery();
-  const { data: dataMuestras } = useGetMuestrasQuery();
+  const { data: dataMuestras } = useObtenerMuestrasParaServicioQuery();
+  console.log('datos de la muestra: ',dataMuestras)
   const [actualizarEstadoServicio] = useActualizarEstadoServicioMutation();
   const {
     setValue,
@@ -107,6 +108,8 @@ const ServiciosPlantilla = () => {
   const [precioActual, setPrecioActual] = useState("");
   const [ambienteActual, setAmbienteActual] = useState("");
   const [muestraActual, setMuestraActual] = useState("");
+  console.log('muestra actual: ',muestraActual)
+  console.log('set muestra actual: ',setMuestraActual)
   const [variables, setVariables] = useState([]);
   const [variablesUpdate, setVariablesUpdate] = useState([]);
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
@@ -123,6 +126,7 @@ const ServiciosPlantilla = () => {
   }
 
   const manejadorobtencionTipoServicio = async (e) => {
+
     const idTipoServicio = e.target.value;
     setTipoServicioActual(idTipoServicio);
     manejadorObtencionPrecioParaTipoServicio(idTipoServicio);
@@ -250,46 +254,60 @@ const ServiciosPlantilla = () => {
 
   const onSubmitServicioTerminado = async (data) => {
     const payload = {
-      id: servicioId,  
+      id: servicioId,
       cantidad_salida: data.cantidad_salida,
     };
   
     try {
-
       await registroServicioTerminado(payload).unwrap();
   
       toast.success("Servicio terminado registrado con éxito!");
-      cerrarModalServicioTerminado();  
-      refetch();  
+  
+      // Ahora sí cambiamos el estado del servicio a "terminado"
+      actualizarEstadoServicio({ id: servicioId, estado: "terminado" })
+        .unwrap()
+        .then(() => {
+          toast.success("Estado cambiado a 'Terminado' con éxito!");
+          refetch();
+        })
+        .catch((error) => {
+          toast.error("Error al actualizar el estado a 'Terminado': " + error.message);
+        });
+  
+      cerrarModalServicioTerminado();
     } catch (error) {
-      toast.error("Error al registrar el servicio terminado: " + error.error); // Usamos el mensaje de error personalizado
+      toast.error("Error al registrar el servicio terminado: " + error.message);
     }
   };
-  
 
-  const manejadorCambioEstadoSwitch = (checked, id,tipo_servicio,) => {
-
-
+  const manejadorCambioEstadoSwitch = (checked, id, tipo_servicio) => {
     const nuevoEstado = checked ? "en proceso" : "terminado";
-
+  
     const servicioActual = dataServicios.find(
       (servicio) => servicio.id_servicios === id
     );
-
+  
     if (!servicioActual) {
       toast.error("Registro de servicio no encontrado");
       return;
     }
-
+  
+    // Cuando se intenta marcar como terminado, abrimos el modal antes de cambiar el estado
+    if (nuevoEstado === "terminado") {
+      abrirModalServicioTerminado(id); // Abre el modal para registrar la cantidad de salida
+      return; // Detenemos aquí para no cambiar el estado aún
+    }
+  
+    // Si se trata de cambiar a "en proceso", simplemente procedemos
     const payload = {
       id: id,
       estado: nuevoEstado,
     };
-
+  
     const mensajeConfirmacion = checked
-      ? `¿Está seguro de que desea cambiar el estado a "En proceso" para el servicio ${tipo_servicio} ?`
-      : `¿Está seguro de que desea cambiar el estado a "Terminado" para el servicio ${tipo_servicio} ?`;
-
+      ? `¿Está seguro de que desea cambiar el estado a "En proceso" para el servicio ${tipo_servicio}?`
+      : `¿Está seguro de que desea cambiar el estado a "Terminado" para el servicio ${tipo_servicio}?`;
+  
     confirmAlert({
       title: "Confirmación de cambio de estado",
       message: mensajeConfirmacion,
@@ -302,16 +320,9 @@ const ServiciosPlantilla = () => {
               .then(() => {
                 toast.success("Estado actualizado con éxito");
                 refetch();
-
-                if (nuevoEstado === "terminado") {
-                  abrirModalServicioTerminado(id);
-                }
               })
               .catch((error) => {
-                console.error(
-                  "Error al actualizar el estado del servicio",
-                  error
-                );
+                console.error("Error al actualizar el estado del servicio", error);
                 toast.error("Error al actualizar el estado del servicio");
               });
           },
@@ -323,6 +334,7 @@ const ServiciosPlantilla = () => {
       ],
     });
   };
+  
 
   return (
     <>
@@ -431,20 +443,23 @@ const ServiciosPlantilla = () => {
           >
             <form onSubmit={handleSubmit(onSubmitRegistroEdicion)}>
               <div className="mb-10 space-y-6 ">
-                <SelectAtomo
-                  data={dataTipoServicio}
-                  label="Selecciona tipo de servicio"
-                  items="idTipoServicio"
-                  ValueItem="nombreServicio"
-                  value={tipoServicioActual}
+              <SelectAtomo
+                  data={dataMuestras}
+                  label="Selecciona una muestra"
+                  items="id_muestra"
+                  ValueItem="codigo_muestra"
+                  value={muestraActual}
                   onChange={(e) => {
+                    setValue("id_muestra", e.target.value);
+                    setMuestraActual(e.target.value);
+
                     const idTipoServicio = e.target.value;
                     setTipoServicioActual(idTipoServicio);
                     manejadorobtencionTipoServicio(e);
                     setValue("fk_idTipoServicio", idTipoServicio);
                   }}
                 />
-
+                
                 <SelectAtomo
                   data={precios} // Precios obtenidos según el tipo de servicio
                   label="Selecciona la Presentación"
@@ -468,18 +483,6 @@ const ServiciosPlantilla = () => {
                   onChange={(e) => {
                     setValue("idAmbiente", e.target.value);
                     setAmbienteActual(e.target.value);
-                  }}
-                />
-
-                <SelectAtomo
-                  data={dataMuestras}
-                  label="Selecciona una muestra"
-                  items="id_muestra"
-                  ValueItem="codigo_muestra"
-                  value={muestraActual}
-                  onChange={(e) => {
-                    setValue("id_muestra", e.target.value);
-                    setMuestraActual(e.target.value);
                   }}
                 />
               </div>
