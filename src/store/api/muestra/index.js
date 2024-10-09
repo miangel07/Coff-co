@@ -26,6 +26,16 @@ endpoints: (build) => ({
       }),
       providesTags:['Muestras']
     }),
+    getMuestrasterminadas: build.query({
+      query: () => ({
+        url: "muestra/listarTerminadas",
+        method: "GET",
+        headers: {
+          token: `${getCookie("authToken")}`,
+        },
+      }),
+      providesTags:['Muestras']
+    }),
 
     //crear Muestra
     postMuestra: build.mutation({
@@ -97,7 +107,7 @@ endpoints: (build) => ({
   }),
 });
 
-export const { useGetMuestrasQuery, usePostMuestraMutation, usePutMuestraMutation, useDeleteMuestraMutation, useUpdateEstadoMuestraMutation  } = muestraApiSlice
+export const { useGetMuestrasQuery, usePostMuestraMutation, usePutMuestraMutation, useDeleteMuestraMutation, useUpdateEstadoMuestraMutation,useGetMuestrasterminadasQuery  } = muestraApiSlice
 
 
 
