@@ -23,6 +23,7 @@ import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import RecuperarPasswordPage from "./pages/recuperarpassword/RecuperarPasswordPage";
+import RegistroPage from "./pages/registro/registrarsePage";
 
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
@@ -69,6 +70,7 @@ const App = () => {
         {/* RUTAS SI LA SESION NO ESTA INICIADA */}
         <Route>
           <Route path="/password" element={<RecuperarPasswordPage />} />
+          <Route path="/registrarse" element={<RegistroPage />} />
         </Route>
         {!sesionExistente && (
           <>
