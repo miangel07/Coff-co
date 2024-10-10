@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 
-const SelectAtomoActualizar = ({ data, label, onChange, value, items, ValueItem, placeholder }) => {
+const SelectAtomoActualizar = ({ data, label, onChange, value, items, ValueItem, placeholder, habilitado }) => {
 
   // Esto toma el valor que llega de value y trim quita cualquier espacio que encuente en el al principio y al final
   const valorLimpio = String(value || "").trim();
@@ -25,7 +25,7 @@ const SelectAtomoActualizar = ({ data, label, onChange, value, items, ValueItem,
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Select isRequired
+        <Select isRequired isDisabled={habilitado}
           label={label}
           placeholder={placeholder}
           defaultSelectedKeys={valorSeleccionado ? [valorSeleccionado] : []}

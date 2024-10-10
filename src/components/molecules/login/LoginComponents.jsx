@@ -9,6 +9,7 @@ import Label from "../../atoms/Label.jsx";
 
 const LoginComponent = () => {
   const [LoginSuccessful, setLoginSuccessful] = useState(false);
+  const [ver, setVer] = useState(true);
   const [loginUser, { isSuccess, isError, error }] = useLoginUserMutation();
   const navigate = useNavigate();
   const { iniciarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
@@ -64,15 +65,26 @@ const LoginComponent = () => {
               </div>
               <div className="form-control">
                 <Label>Contraseña</Label>
+                <div className="flex justify-center items-center">
                 <Input
                   id={"password"}
-                  type={"password"}
+                  type={ver ? "password" : "text"} 
                   register={register}
                   name={"password"}
                   erros={errors}
-                />
+                  icon={
+                    <span className="focus:outline-none cursor-pointer" onClick={() => setVer(!ver)} aria-label="toggle password visibility">
+                      {ver ? (
+                        <i className="bi bi-eye-slash"></i>
+                      ) : (
+                        <i className="bi bi-eye"></i>
+                      )}
+                    </span>
+                  }
+                /> 
+                </div>
                 <label className="label">
-                  <Link to="/password" className="label-text-alt link link-hover">
+                  <Link to="/registrarse" className="label-text-alt link link-hover">
                     <Label>Registrarse</Label>
                   </Link>
                   <Link to="/password" className="label-text-alt link link-hover ">

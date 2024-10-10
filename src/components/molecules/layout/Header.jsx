@@ -68,14 +68,24 @@ const Header = ({ color }) => {
                         <figure className="h-16 w-16 flex items-center justify-between">
                             <LazyLoadImage
                                 src={"/logo-sena-verde.jpg"}
+                                className="h-10 w-full pl-2"
+                                effect="opacity"
+                                alt="logo-sena"
+                            /> |
+                        </figure>
+                       
+                        <figure className="h-16 w-16 ml-1 flex items-center justify-between">
+                            <LazyLoadImage
+                                src={"/logotics.png"}
                                 className="h-14 w-full cursor-pointer"
                                 effect="opacity"
                                 alt="logo-sena"
                             /> 
                         </figure>
-                        <div className="flex justify-center items-center font-semibold ml-2 text-3xl">
+                        
+                        {/* <div className="flex justify-center items-center font-semibold ml-2 text-3xl">
                            Coffco
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="w-[200px]">

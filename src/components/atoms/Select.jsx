@@ -1,7 +1,7 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import { useEffect, useMemo } from "react";
 
-const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
+const SelectAtomo = ({ data, label, onChange, items, ValueItem, value, habilitado }) => {
 
   const trimmedValue = String(value || "").trim();
 
@@ -25,6 +25,7 @@ const SelectAtomo = ({ data, label, onChange, items, ValueItem, value }) => {
       <div key={"flat"} className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Select
           isRequired
+          isDisabled={habilitado}
           variant={"flat"}
           label={label}
           selectedKeys={selectedKey ? [selectedKey] : []}

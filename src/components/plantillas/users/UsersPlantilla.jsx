@@ -7,7 +7,7 @@ import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Tbody from "../../molecules/table/Tbody";
 import Search from "../../atoms/Search";
 import { useTranslation } from 'react-i18next';
-import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
+import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useGetRolesQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
 import { Spinner } from "@nextui-org/react";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -35,6 +35,8 @@ const UsersPlantilla = () => {
 
   // FUNCIONES CRUD
   const {data,isLoading, refetch} = useGetUsuarioQuery()
+  const {data: dato} = useGetRolesQuery()
+  console.log(dato)
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [actualizarEstado] = useActualizarEstadoMutation();
   const [actualizarUsuario]= useActualizarUsuarioMutation();
@@ -199,15 +201,74 @@ const UsersPlantilla = () => {
     <>
     <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
 
+    {/* CARDS */}
+    <div className="flex justify-center items-center gap-4 px-20 py-6">
+      {/* Card Administrador */}
+      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+        <h2 className="text-lg font-bold mb-2">Admin</h2>
+        <input
+          disabled
+          type="text"
+          className="w-full p-2 text-center  rounded-md"
+          placeholder={dato.usuariosPorRol[0].total_usuarios}
+        />
+      </div>
+
+      {/* Card Encargado */}
+      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+        <h2 className="text-lg font-bold mb-2">Encargado</h2>
+        <input
+          disabled
+          type="text"
+          className="w-full p-2 text-center  rounded-md"
+          placeholder={dato.usuariosPorRol[1].total_usuarios}
+        />
+      </div>
+
+      {/* Card Cliente */}
+      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+        <h2 className="text-lg font-bold mb-2">Cliente</h2>
+        <input
+          disabled
+          type="text"
+          className="w-full p-2 text-center  rounded-md"
+          placeholder={dato.usuariosPorRol[2].total_usuarios}
+        />
+      </div>
+
+      {/* Card Operario */}
+      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+        <h2 className="text-lg font-bold mb-2">Operario</h2>
+        <input
+          disabled
+          type="text"
+          className="w-full p-2 text-center  rounded-md"
+          placeholder={dato.usuariosPorRol[3].total_usuarios}
+        />
+      </div>
+
+      {/* Card Total */}
+      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+        <h2 className="text-lg font-bold mb-2">Total</h2>
+        <input
+          disabled
+          type="text"
+          className="w-full p-2 text-center  rounded-md"
+          placeholder={dato.total}
+        />
+      </div>
+
+    </div>
+
     {/* TABLA */}
     <div className="flex justify-center items-center space-x-64">
-      <div className="pt-10 pl-20">
+      <div className="pl-20">
         <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
       </div>
-      <div className="w-[550px] pt-10 pl-20">
+      <div className="w-[550px] pl-20">
           <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
       </div>
-      <div className="pt-10 pl-20">
+      <div className="pl-20">
           <Switch
             color={filtroEstado ? "success" : "default"}
             isSelected={filtroEstado}
