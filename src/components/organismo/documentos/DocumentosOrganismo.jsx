@@ -302,7 +302,7 @@ const DocumentosOrganismo = () => {
                 <Td>
                   <Switch
                     color={
-                      doc.estado_version === "activo" ? "primary" : "default"
+                      doc.estado_version === "activo" ? "success" : "default"
                     }
                     isSelected={doc.estado_version === "activo"}
                     onValueChange={() => handleClick(doc)}

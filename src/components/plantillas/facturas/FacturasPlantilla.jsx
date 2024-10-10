@@ -3,7 +3,7 @@ import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
-import { useGetMuestrasQuery } from "../../../store/api/muestra";
+import { useGetMuestrasterminadasQuery } from "../../../store/api/muestra";
 import Td from "../../atoms/Td";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { useGeneraFacturaMutation } from "../../../store/api/factura";
@@ -15,10 +15,13 @@ import Mybutton from "../../atoms/Mybutton";
 import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
+import Search from "../../atoms/Search";
+import FacturasAlquiler from "./FacturasAlquiler";
 
 const FacturasPlantilla = () => {
   const [datosFactura, setDatosDelFormulario] = useState([]);
-  const { data, isLoading, isError, error } = useGetMuestrasQuery();
+  const [serch, setSerch] = useState("");
+  const { data, isLoading, isError, error } = useGetMuestrasterminadasQuery();
   const [showModal, setShowModal] = useState(false);
   const [pages, setPages] = useState(1);
   const [generaFactura, { isLoading: isLoadingFactura, isSuccess, data: dataFactura }] = useGeneraFacturaMutation();
@@ -34,7 +37,6 @@ const FacturasPlantilla = () => {
     }
   };
 
-  console.log(datosFactura);
   useEffect(() => {
     const downloadPDF = async () => {
       if (datosFactura.length > 0) {
@@ -64,9 +66,16 @@ const FacturasPlantilla = () => {
   const handlePageChange = (page) => {
     setPages(page);
   };
-  const numeroPagina = Math.ceil((data?.length || 0) / cantidad);
-  const DataArrayPaginacion = data
-    ? data?.slice(inicial, final)
+  const filtro = data && data.length > 0 ? data.filter(
+    (codigo) => {
+      return serch === "" || (codigo.codigo_muestra &&
+        codigo.codigo_muestra.toLowerCase().includes(serch.toLowerCase()))
+    }
+
+  ) : []
+  const numeroPagina = Math.ceil((filtro?.length || 0) / cantidad);
+  const DataArrayPaginacion = filtro
+    ? filtro?.slice(inicial, final)
     : [];
   const handleFacturaAlquiler = () => {
     setShowModal(true)
@@ -74,34 +83,29 @@ const FacturasPlantilla = () => {
   const closeModal = () => {
     setShowModal(false);
   }
-  const submit = async (data) => {
-    console.log(data);
-
-  }
-
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20  font-bold">Facturas</h2>
       <div className="w-full px-20 overflow-x-auto flex gap-2 flex-col ">
         {showModal &&
           <ModalOrganismo visible={showModal} closeModal={closeModal}>
-            <form className="flex flex-col gap-3 justify-center items-center " onSubmit={handleSubmit(submit)}>
-              <div className="w-[250px]">
 
-                <InputAtomo erros={errors} name={"cedula"} register={register} type={"date"} placeholder={"Ingrese el numero de cedula"} />
-              </div>
-              <div className="w-full justify-center items-center flex ">
 
-                <Mybutton color={"primary"} type={"submit"}>
-                  Generar Factura
-                </Mybutton>
-              </div>
-            </form>
+
+            <FacturasAlquiler />
+
+
+
           </ModalOrganismo>}
-        <div>
+        <div className="flex flex-row justify-between items-center">
           <Mybutton color={"primary"} onClick={handleFacturaAlquiler}>
             Facura Alquiler
           </Mybutton>
+          <div>
+
+            <Search label={""} placeholder={"Buscar..."} onchange={(e) => setSerch(e.target.value)} />
+          </div>
+
         </div>
         <TableMolecula>
           <Thead>
@@ -121,7 +125,7 @@ const FacturasPlantilla = () => {
                 <Td>{muestra.codigo_muestra}</Td>
                 <Td>{muestra.cantidadEntrada}</Td>
                 <Td>{muestra.fecha_muestra}</Td>
-                <Td>{muestra.finca}</Td>
+                <Td>{muestra.finca || 'No Especificada'}</Td>
                 <Td>{muestra.usuario}</Td>
                 <Td>{muestra.estado}</Td>
                 <Td>

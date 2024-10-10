@@ -20,9 +20,23 @@ export const facturasApi = createApi({
             }),
             providesTags: ["Facturas"],
         }),
+        GeneraFacturaAlquiler: build.mutation({
+            query: (data) => ({
+                url: "facturas/alquiler",
+                method: "POST",
+                body: data,
+            }),
+            transformErrorResponse: (response, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message,
+                };
+            },
+            providesTags: ["Facturas"],
+        }),
     })
 })
 
 
 
-export const { useGeneraFacturaMutation } = facturasApi;
+export const { useGeneraFacturaMutation, useGeneraFacturaAlquilerMutation } = facturasApi;

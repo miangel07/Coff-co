@@ -23,6 +23,7 @@ import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import RecuperarPasswordPage from "./pages/recuperarpassword/RecuperarPasswordPage";
+import RegistroPage from "./pages/registro/registrarsePage";
 
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
@@ -69,17 +70,18 @@ const App = () => {
         {/* RUTAS SI LA SESION NO ESTA INICIADA */}
         <Route>
           <Route path="/password" element={<RecuperarPasswordPage />} />
+          <Route path="/registrarse" element={<RegistroPage />} />
         </Route>
         {!sesionExistente && (
           <>
             <Route path="/*" element={<LoginPages />}></Route>
-            <Route path="/login" element={<LoginPages />}></Route>
+            {/* <Route path="/login" element={<LoginPages />}></Route> */}
           </>
         )}
 
         {/* RUTAS PROTEGIDAS (ESTADO DE SESION VERDADERO) */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/login" element={<Navigate to="/" />} />
+          {/* <Route path="/login" element={<Navigate to="/"/>} /> */}
           <Route path="/*" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePages />} />
 
