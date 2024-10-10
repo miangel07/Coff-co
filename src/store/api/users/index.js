@@ -22,6 +22,15 @@ export const usuariosSlice = createApi({
     providesTags:['usuarios']
   }),
 
+  //LISTAR
+  getRoles: build.query({
+    query:()=>({
+      url:'/usuario/listarroles',
+      method:'GET',
+    }),
+    providesTags:['usuarios']
+  }),
+
   // LISTAR ID
   getUsuarioId: build.query({
     query: (id) => ({
@@ -125,4 +134,4 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery,useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice
+export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice
