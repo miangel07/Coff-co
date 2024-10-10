@@ -26,6 +26,12 @@ export const facturasApi = createApi({
                 method: "POST",
                 body: data,
             }),
+            transformErrorResponse: (response, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message,
+                };
+            },
             providesTags: ["Facturas"],
         }),
     })
