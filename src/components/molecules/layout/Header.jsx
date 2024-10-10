@@ -4,15 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import Cookies from 'js-cookie';
 import usuarioImagen from "../../../../public/usuario.png";
+import SelectDocumentos from "../../atoms/SelectDocumentos";
+import { TraslateContex } from "../../../context/TranslationoContex";
+import { useTranslation } from "react-i18next";
+import { MdOutlineGTranslate } from "react-icons/md";
+
 
 const Header = ({ color }) => {
     const [open, setOpen] = useState(false);
+    const { t } = useTranslation();
+    const { changeLanguage, language } = useContext(TraslateContex);
     const Menus = ["Mi perfil", "Logos", "Ayuda", "Salir"];
 
     const menuRef = useRef();
     const imgRef = useRef();
     const navigate = useNavigate();
-
     const { cerrarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
 
     window.addEventListener("click", (e) => {
@@ -20,6 +26,10 @@ const Header = ({ color }) => {
             setOpen(false);
         }
     });
+    const idioma = [
+        { value: "en", label: t("ingles") },
+        { value: "es", label: t("espanol") },
+    ];
 
     //Se llama a la funcion cerrar sesion del contexto que se encarga de eliminar la informacion del usuario con sesion iniciada
     const handleLogout = () => {
@@ -30,17 +40,17 @@ const Header = ({ color }) => {
     };
 
     const handleMenuClick = (menu) => {
-        setOpen(false); 
+        setOpen(false);
 
         switch (menu) {
             case "Mi perfil":
-                navigate("/perfil"); 
+                navigate("/perfil");
                 break;
             case "Logos":
-                navigate("/logos"); 
+                navigate("/logos");
                 break;
             case "Ayuda":
-                navigate("/ayuda"); 
+                navigate("/ayuda");
                 break;
             case "Salir":
                 handleLogout();
@@ -54,12 +64,14 @@ const Header = ({ color }) => {
     return (
         <>
             <header
-                className={`inset-x-0 top-0 shadow-lg h-16 md:px-8 sm:px-8 max-sm:px-8 ${color} z-50`}
+                className={`inset-x-0 top-0 shadow-lg    h-16 md:px-8 sm:px-8 max-sm:px-8 ${color} z-50`}
             >
                 <nav
-                    className="flex items-center justify-between lg:px-8"
+                    className="flex items-center flex-row  justify-between lg:px-8"
                     aria-label="Global"
                 >
+
+
                     <div className="flex lg:flex-1">
                         <figure className="h-16 w-16">
                             <LazyLoadImage
@@ -74,7 +86,17 @@ const Header = ({ color }) => {
                         </div>
                     </div>
 
-                    {/* Menu Dropeable */}
+                    <div className="w-[200px]">
+                        <SelectDocumentos
+                            value={""}
+                            data={idioma}
+                            items={"value"}
+                            label={<MdOutlineGTranslate size={28} />}
+                            ValueItem={"label"}
+                            onChange={(e) => changeLanguage(e.target.value)}
+                        />
+                    </div>
+
                     <div className="relative">
                         <img
                             ref={imgRef}
@@ -101,8 +123,11 @@ const Header = ({ color }) => {
                                 </ul>
                             </div>
                         )}
+
                     </div>
+
                 </nav>
+
             </header>
         </>
     );

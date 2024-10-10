@@ -6,7 +6,7 @@ import SelectDocumentos from '../../atoms/SelectDocumentos';
 import { useGetVariablesQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
-import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
+import { useTipoServicioActivoQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
 import { useGetLogosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
@@ -14,6 +14,7 @@ import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { useValidarServcioDocumentoMutation } from '../../../store/api/TipoServicio';
+import { Link } from 'react-router-dom';
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
@@ -30,7 +31,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
-    const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
+    const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useTipoServicioActivoQuery();
     const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
         data: dataResponseActualizarVersion, isSuccess: isSuccessActualizarVersion }] = useActualizarVersionMutation()
     const [validarServicioDocumento, { isError: isErrorValidarServicioDocumento, error: ErrorValidarServicioDocumento, data: dataResponseValidarServicioDocumento, isSuccess: succesTipoServicio }] = useValidarServcioDocumentoMutation()
@@ -59,6 +60,7 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
     }, [isSuccess, dataResponse, isSuccessActualizarVersion, servicio]);
+    console.log(logos)
     useEffect(() => {
         if (valor) {
             reset({
@@ -69,7 +71,8 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                 version: valor?.version,
             });
         }
-    }, [valor, reset]);
+
+    }, [valor, reset, logos]);
 
 
 
@@ -82,8 +85,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const HanderEnviar = (e) => {
         setFile(e.target.files[0]);
     }
-
-
     const onSubmit = async (data) => {
 
         const DataForm = new FormData();
@@ -98,14 +99,25 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-
-
+        if (dataInput == 5 && ErrorVariable) {
+            toast.info('Para poder Regisitrar un documento de servicio tecnologicos es necesario ingresar varibles');
+            return;
+        }
+        if (logos.length > 3 || logos.length < 3) {
+            toast.info('Lo siento tienes que ingresar 3 logos');
+            return;
+        }
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
             return;
         }
+
         if (dataInput == 5 && mensajeServicio != false) {
             toast.info('Todos los campos son obligatorios');
+            return;
+        }
+        if (dataInput == 5 && ArryVariables == null) {
+            toast.info('Lo siento no puedes actualizar una version sin asignarle Varibles');
             return;
         }
         try {
@@ -135,10 +147,17 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
-
-
+        if (logos.length > 3 || logos.length < 3) {
+            toast.info('Lo siento tienes que ingresar 3 logos');
+            return;
+        }
         if (!logos || !file) {
             toast.info('Todos los campos son obligatorios');
+            return;
+        }
+
+        if (dataInput == 5 && !ArryVariables) {
+            toast.info('Lo siento no puedes actualizar una version sin asignarle Varibles');
             return;
         }
 
@@ -155,16 +174,16 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         }
 
     }
-    console.log(mensajeServicio)
+
 
     if (isLoading || loandingLogos || TipoServicio || LoandVariables || loandCrearDocumneto || loandActualizarVersion) {
         return <p>Loading...</p>;
     }
 
-    if (isError || tipoServicioError || isErrorDocumento || ErrorVariable || isErrorActualizarVersion) {
-        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message || Error?.message
-            || ErrorActualizarVersion.message} </p>;
+    if (isError || tipoServicioError || isErrorDocumento) {
+        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message} </p>;
     }
+
 
     /* 'entrada', 'salida' */
     return (
@@ -269,17 +288,31 @@ const DocumentosFrom = ({ closeModal, valor }) => {
 
 
                             </section>
-                            <div className='w-full h-[20px]'>
-                                <CheckboxAtomo
+                            <div className='w-full h-[20px] '>
+                                {
+                                    varibles ? (
+                                        <CheckboxAtomo
 
-                                    disable={mensajeServicio}
-                                    value={valor?.variables}
-                                    data={varibles}
-                                    items={"nombre"}
-                                    valor={"idVariable"}
-                                    onDataChange={onDataChangeVersiones}
-                                    cantidad={6}
-                                />
+                                            disable={mensajeServicio}
+                                            value={valor?.variables}
+                                            data={varibles}
+                                            items={"nombre"}
+                                            valor={"idVariable"}
+                                            onDataChange={onDataChangeVersiones}
+                                            cantidad={6}
+                                        />
+                                    ) : <div className='w-[230px] h-[155px]  justify-center flex flex-col'>
+                                        <p className=' text-red-400 font-semibold'>No hay Varibles Disponibles</p>
+                                        <Link to="/variables">
+
+
+                                            <Mybutton color={"primary"}>
+                                                Agregar Variables
+                                            </Mybutton>
+                                        </Link>
+                                    </div>
+                                }
+
                             </div>
 
                         </>

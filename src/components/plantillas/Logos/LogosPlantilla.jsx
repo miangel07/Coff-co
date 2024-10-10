@@ -4,12 +4,15 @@ import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
+import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
+import Search from "../../atoms/Search";
 import { useGetLogosQuery, useRegistrarLogoMutation, useActualizarLogoMutation, useActualizarEstadoMutation} from "../../../store/api/logos";
 import { Spinner } from "@nextui-org/react";
-import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
-import { FaRegEye } from "react-icons/fa";
+import { Switch } from "@nextui-org/react";
+import { useTranslation } from 'react-i18next';
+// import { FaRegEye } from "react-icons/fa";
 
 //Importaciones para el modal
 import { IoAtCircle } from "react-icons/io5";
@@ -33,14 +36,18 @@ const LogosPlantilla = () => {
     const itemsPorPagina = 7
 
      // FUNCIONES CRUD
-    const {data,isLoading, refetch} = useGetLogosQuery()
-    //Faltan  
+    const {data,isLoading} = useGetLogosQuery()
     const [registrarLogo, { isSuccess, datos, isError, error }] = useRegistrarLogoMutation();
     const [actualizarEstado] = useActualizarEstadoMutation();
     const [actualizarLogo]= useActualizarLogoMutation();
 
+    //FILTRO DE DATOS
+    const { t } = useTranslation();
+    const [busqueda, setBusqueda] = useState('')
+    const [filtroEstado, setFiltroEstado] = useState(true);
+
      //MODAL 
-    const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
+    const {handleSubmit, register, formState: { errors },reset,} = useForm();
 
     //Abrir modal
     const [openModal, setOpenModal] = useState(false);
@@ -64,7 +71,7 @@ const LogosPlantilla = () => {
       console.log("Logo seleccionado:", logo); 
       setLogoSeleccionado(logo);
       setOpenLogoModal(true);
-  };
+    };
     
     //CAMBIAR EL ESTADO DEL LOGO
     const handleSwitchChange = async (id, nombre) => {
@@ -158,25 +165,46 @@ const LogosPlantilla = () => {
         <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
         )
     }
-    
 
     const estadoOptions = [
         { value: "activo", label: "Activo" },
         { value: "inactivo", label: "Inactivo" }
     ];
 
+    const filtrodeDatos = data && data.data.length > 0 ? data.data.filter((logo) => {
+      const filtroestado = filtroEstado ? "activo" : "inactivo"
+      const nombreLogo = busqueda === "" ||
+        (logo.nombre && logo.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+      const logoEstado = logo.estado === filtroestado
+      return logoEstado && nombreLogo
+    }) : []
+
     // CONTROL DE PAGINAS DE LA TABLA
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
-    const elementosActuales = data ? data.data.slice(indicePrimerItem,indiceUltimoItem):[]
+    const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
     const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
     return(
     <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100"> 
 
     {/* TABLA */}
+      
+      <div className="flex justify-center items-center space-x-64">
       <div className="pt-10 pl-20">
         <Mybutton onClick={handleClick} color={"primary"}>Nuevo Logo<IoAtCircle/></Mybutton>
+      </div>
+      <div className="w-[550px] pt-10 pl-20">
+          <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
+      </div>
+      <div className="pt-10 pl-20">
+          <Switch
+            color={filtroEstado ? "success" : "default"}
+            isSelected={filtroEstado}
+            onValueChange={(checked) =>setFiltroEstado(checked)}>
+            {t("estado")}
+          </Switch>
+        </div>
       </div>
       <div className="w-full px-20 h-auto overflow-y-auto">
         <TableMolecula lassName="w-full">
@@ -198,7 +226,6 @@ const LogosPlantilla = () => {
                   <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
                   </Td>
                   {/* <Td>{logo.ruta}</Td> */}
-                  {/* <Td><FaRegEye className="cursor-pointer" onClick={() => setOpenLogoModal(true)} /></Td> */}
                   <Td>
                   <div className="flex  items-center space-x-4">
                     

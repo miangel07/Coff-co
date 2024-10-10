@@ -1,23 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetVariablesQuery,
   useUpdateEstadoMutation,
 } from "../../../store/api/variables";
+import { Switch } from "@nextui-org/react";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Tbody from "../../molecules/table/Tbody";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
+import { confirmAlert } from "react-confirm-alert";
 import Td from "../../atoms/Td";
 import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { FaRegEdit } from "react-icons/fa";
 import Mybutton from "../../atoms/Mybutton";
 import VariablesFormulario from "../../molecules/Formulario/VariablesFormulario";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
-import { Switch } from "@nextui-org/react";
+import Search from "../../atoms/Search";
+import { toast } from "react-toastify";
+
 const VariablesPlantilla = () => {
   const [showModal, setShowMdal] = useState(false);
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
+  const [inactivos, setInactivos] = useState(true);
+  const [isChecked, setIsChecked] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     data: dataVariables,
     isLoading,
@@ -26,7 +33,7 @@ const VariablesPlantilla = () => {
   } = useGetVariablesQuery();
   const [
     updateEstado,
-    { isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio },
+    { isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio, data, isSuccess },
   ] = useUpdateEstadoMutation();
 
   const handleModal = () => {
@@ -40,9 +47,23 @@ const VariablesPlantilla = () => {
     setPages(page);
   };
 
-  const numeroPagina = Math.ceil((dataVariables?.length || 0) / cantidad);
-  const DataArrayPaginacion = dataVariables
-    ? dataVariables?.slice(inicial, final)
+
+
+  const filtro = dataVariables && dataVariables.length > 0 ? dataVariables.filter(
+    (variable) => {
+      const isCheck = isChecked ? "activo" : "inactivo";
+      const estadoVariableMatch = variable.estado === isCheck;
+      const nombreVariableMatch =
+        searchTerm === "" ||
+        (variable.nombre &&
+          variable.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+      return (estadoVariableMatch && nombreVariableMatch)
+
+    }
+  ) : []
+  const numeroPagina = Math.ceil((filtro?.length || 0) / cantidad);
+  const DataArrayPaginacion = filtro
+    ? filtro?.slice(inicial, final)
     : [];
   const handleEdit = (variable) => {
     setDatosDelFormulario(variable);
@@ -53,12 +74,57 @@ const VariablesPlantilla = () => {
     setDatosDelFormulario("");
     setShowMdal(false);
   };
+  const hadleEstado = (checked) => {
+    setIsChecked(checked);
+    setInactivos(!inactivos);
+  };
+  useEffect(
+    () => {
+      if (isSuccess) {
+        toast.success(`${data.message}`);
+      }
+      if (
+        isErrorCambio
+      ) {
+        toast.error(`${errorCambio.error}`);
+      }
+    },
+    [dataVariables, isErrorCambio]
+  )
   const handleSwitchChange = (checked, id) => {
     try {
-      updateEstado({
-        id: id,
-        estado: checked ? "activo" : "inactivo",
+      confirmAlert({
+        title: "Confirmación de Cambiar el estado activo",
+        message: `¿Estás seguro de que quieres Cambiar el Estado al Documento ${id}?`,
+        buttons: [
+          {
+            label: "Sí",
+            onClick: async () => {
+              try {
+
+                updateEstado({
+                  id: id,
+                  estado: checked ? "activo" : "inactivo",
+                });
+
+
+              } catch (error) {
+                if (
+                  isErrorCambio
+                ) {
+                  toast.error("Error al Cambiar el estado");
+                }
+              }
+            },
+          },
+          {
+            label: "No",
+            onClick: () => toast.info("Operación cancelada"),
+          },
+        ],
+        closeOnClickOutside: true,
       });
+
     } catch (error) {
       console.error("Error al procesar la solicitud", error);
     }
@@ -68,13 +134,29 @@ const VariablesPlantilla = () => {
   }
 
   return (
-    <section className="w-full  mt-5 gap-4 flex flex-wrap flex-col">
+    <section className="w-full   mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">Variables</h2>
-      <div className="px-20 ">
+      <div className="px-20   w-full flex flex-wrap justify-between items-center   ">
         <Mybutton color={"primary"} onClick={handleModal}>
           Nuevo
         </Mybutton>
+        <div className="flex items-center mb-2 w-full max-w-[550px]">
+          <Search
+            label={""}
+            placeholder={"Buscar..."}
+            onchange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Switch
+          color={isChecked ? "success" : "default"}
+          isSelected={isChecked}
+          onValueChange={(checked) => hadleEstado(checked)}
+        >
+          estado
+        </Switch>
+
       </div>
+
       {showModal && (
         <ModalOrganismo
           title={"Registrar Nueva Variable"}
@@ -106,7 +188,7 @@ const VariablesPlantilla = () => {
                 <Td>{variable.UnidadMedida}</Td>
                 <Td>
                   <Switch
-                    color={variable.estado === "activo" ? "success" : "default"}
+                    color={variable.estado === "activo" ? "primary" : "default"}
                     isSelected={variable.estado === "activo"}
                     onValueChange={(checked) =>
                       handleSwitchChange(checked, variable.idVariable)

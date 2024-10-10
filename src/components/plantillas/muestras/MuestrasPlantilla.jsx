@@ -6,21 +6,10 @@ import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
 import Td from "../../atoms/Td";
 import { FaRegEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
-import { Spinner, Switch } from "@nextui-org/react";
-import { toast } from "react-toastify";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
+import { Switch } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
-import { useForm } from "react-hook-form";
-import ToolTip from "../../molecules/toolTip/ToolTip";
-import InputAtomo from "../../atoms/Input";
-import { Select, SelectItem } from "@nextui-org/react";
-import { useGetFincasQuery } from "../../../store/api/fincas";
-import { useGetUsuarioQuery } from "../../../store/api/users";
 import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
-
 
 import {
   useGetMuestrasQuery,
@@ -31,16 +20,9 @@ const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
-  const {
-    data: dataMuestras,
-    isLoading,
-    isError,
-    error,
-  } = useGetMuestrasQuery();
-  const [
-    updateEstado,
-    { isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio },
-  ] = useUpdateEstadoMuestraMutation();
+  
+  const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
+  const [updateEstado] = useUpdateEstadoMuestraMutation();
 
   const handleModal = () => {
     setShowModal(true);
@@ -57,6 +39,7 @@ const MuestrasPlantilla = () => {
   const DataArrayPaginacion = dataMuestras
     ? dataMuestras?.slice(inicial, final)
     : [];
+
   const handleEdit = (muestra) => {
     setDatosDelFormulario(muestra);
     setShowModal(true);
@@ -66,6 +49,7 @@ const MuestrasPlantilla = () => {
     setDatosDelFormulario("");
     setShowModal(false);
   };
+
   const handleSwitchChange = (checked, id) => {
     try {
       updateEstado({
@@ -76,14 +60,15 @@ const MuestrasPlantilla = () => {
       console.error("Error al procesar la solicitud", error);
     }
   };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <section className="w-full  mt-5 gap-4 flex flex-wrap flex-col">
+    <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">Muestras</h2>
-      <div className="px-20 ">
+      <div className="px-20">
         <Mybutton color={"primary"} onClick={handleModal}>
           Nuevo
         </Mybutton>
@@ -100,27 +85,30 @@ const MuestrasPlantilla = () => {
           />
         </ModalOrganismo>
       )}
-      <div className="w-full px-20 overflow-x-auto ">
+      <div className="w-full px-20 overflow-x-auto">
         <TableMolecula>
           <Thead>
-              <Th>ID</Th>
-              <Th>Código</Th>
-              <Th>Cantidad</Th>
-              <Th>Fecha</Th>
-              <Th>Finca</Th>
-              <Th>Usuario</Th>
-              <Th>Estado</Th>
-              <Th>Acciones</Th>
+            <Th>ID</Th>
+            <Th>Código</Th>
+            <Th>Cantidad</Th>
+            <Th>Fecha</Th>
+            <Th>Finca</Th>
+            <Th>Usuario</Th>
+            <Th>Estado</Th>
+            <Th>Altura</Th>
+            <Th>Variedad</Th>
+            <Th>Observaciones</Th>
+            <Th>Acciones</Th>
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((muestra) => (
               <tr key={muestra.id_muestra}>
                 <Td>{muestra.id_muestra}</Td>
-                    <Td>{muestra.codigo_muestra}</Td>
-                    <Td>{muestra.cantidadEntrada}</Td>
-                    <Td>{muestra.fecha_muestra}</Td>
-                    <Td>{muestra.finca}</Td>
-                    <Td>{muestra.usuario}</Td>
+                <Td>{muestra.codigo_muestra}</Td>
+                <Td>{muestra.cantidadEntrada}</Td>
+                <Td>{muestra.fecha_muestra}</Td>
+                <Td>{muestra.finca}</Td>
+                <Td>{muestra.usuario}</Td>
                 <Td>
                   <Switch
                     color={muestra.estado === "terminado" ? "success" : "default"}
@@ -132,9 +120,11 @@ const MuestrasPlantilla = () => {
                     {muestra.estado}
                   </Switch>
                 </Td>
-
+                <Td>{muestra.altura}</Td> {/* Nueva variable: altura */}
+                <Td>{muestra.variedad}</Td> {/* Nueva variable: variedad */}
+                <Td>{muestra.observaciones}</Td> {/* Nueva variable: observaciones */}
                 <Td>
-                  <div className=" gap-3 flex flex-graw">
+                  <div className="gap-3 flex flex-grow">
                     <FaRegEdit
                       className="cursor-pointer"
                       size={"30px"}
@@ -159,4 +149,3 @@ const MuestrasPlantilla = () => {
 };
 
 export default MuestrasPlantilla;
-

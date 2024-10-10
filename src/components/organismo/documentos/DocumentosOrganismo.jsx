@@ -25,10 +25,11 @@ import { MdEditDocument } from "react-icons/md";
 import DocumentoEdit from "../../molecules/Formulario/DocumentoEdit";
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../context/AuthContext";
+import { useValidarServcioDocumentoMutation } from "../../../store/api/TipoServicio";
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
-  const {authData}=useContext(AuthContext)
+  const { authData } = useContext(AuthContext)
   const [pages, setPages] = useState(1);
   const [form, setFrom] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -38,8 +39,11 @@ const DocumentosOrganismo = () => {
   const [valuedocs, setValuedocs] = useState(null);
   const [dataValue, setDataValue] = useState(null);
   const { data, isLoading, isError, error } = useGetDocumentosQuery();
+  const [validarServicioDocumento, { isError: isErrorValidarServicioDocumento, error: ErrorValidarServicioDocumento, data: dataResponseValidarServicioDocumento, isSuccess: succesTipoServicio }] = useValidarServcioDocumentoMutation()
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(authData.usuario)
+
+  const rol = authData.usuario.rol
+
   const [
     CambioEstado,
     {
@@ -71,25 +75,29 @@ const DocumentosOrganismo = () => {
   const filteredData =
     data && data.length > 0
       ? data.filter((item) => {
-          const isCheck = isChecked ? "activo" : "inactivo";
+        const isCheck = isChecked ? "activo" : "inactivo";
 
-          const estadoVersionMatch = item.estado_version === isCheck;
-          const tipoDocumentoMatch =
-            dataInput === "" ||
-            (item.tipo_documento &&
-              item.tipo_documento.toLowerCase() === dataInput.toLowerCase());
-          const nombreDocumentoMatch =
-            searchTerm === "" ||
-            (item.nombre_documento &&
-              item.nombre_documento
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase()));
-          return (
-            tipoDocumentoMatch && nombreDocumentoMatch && estadoVersionMatch
-          );
-        })
+        const estadoVersionMatch = item.estado_version === isCheck;
+        const tipoDocumentoMatch =
+          dataInput === "" ||
+          (item.tipo_documento &&
+            item.tipo_documento.toLowerCase() === dataInput.toLowerCase());
+        const nombreDocumentoMatch =
+          searchTerm === "" ||
+          (item.nombre_documento &&
+            item.nombre_documento
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()));
+        return (
+          tipoDocumentoMatch && nombreDocumentoMatch && estadoVersionMatch
+        );
+      })
       : [];
- 
+  const numeroPagina = Math.ceil(filteredData.length / cantidad);
+
+
+  const DataArrayPaginacion = filteredData.slice(inicial, final);
+
   const handledescargar = (doc) => {
     const url = `${import.meta.env.VITE_BASE_URL_DOCUMENTO}/${doc}`;
 
@@ -103,32 +111,74 @@ const DocumentosOrganismo = () => {
   const handleClick = async (doc) => {
     try {
       const id = doc.id_documentos;
-      confirmAlert({
-        title: "Confirmación de Cambiar el estado a inactivo",
-        message: `¿Estás seguro de que quieres Cambiar el Estado al Documento  ${id}?`,
-        buttons: [
-          {
-            label: "Sí",
-            onClick: async () => {
-              try {
-                await CambioEstado(data);
-              } catch (error) {
-                toast.error("Error al Cambiar el estado");
-              }
+      console.log(doc)
+
+      if (doc.estado_version === "inactivo" && doc.fk_idTipoServicio > 0) {
+        const response = await validarServicioDocumento({ idTipoServicio: doc.fk_idTipoServicio }).unwrap();
+
+
+        if (response.message != true) {
+          toast.error(`${response.message}`);
+          return;
+        }
+        confirmAlert({
+          title: "Confirmación de Cambiar el estado activo",
+          message: `¿Estás seguro de que quieres Cambiar el Estado al Documento ${id}?`,
+          buttons: [
+            {
+              label: "Sí",
+              onClick: async () => {
+                try {
+                  const nuevoEstado = "activo";
+                  const data = { id, estado: nuevoEstado };
+
+                  await CambioEstado(data);
+                } catch (error) {
+                  toast.error("Error al Cambiar el estado");
+                }
+              },
             },
-          },
-          {
-            label: "No",
-            onClick: () => toast.info("Operacion cancelada"),
-          },
-        ],
-        closeOnClickOutside: true,
-      });
-      const nuevoEstado =
-        doc.estado_version === "activo" ? "inactivo" : "activo";
-      const data = { id: id, estado: nuevoEstado };
+            {
+              label: "No",
+              onClick: () => toast.info("Operación cancelada"),
+            },
+          ],
+          closeOnClickOutside: true,
+        });
+
+      }
+
+
+      if (doc.estado_version === "activo" || (doc.fk_idTipoServicio == null && doc.estado_version === "inactivo")) {
+        confirmAlert({
+          title: "Confirmación de Cambiar el estado a inactivo",
+          message: `¿Estás seguro de que quieres Cambiar el Estado al Documento ${id}?`,
+          buttons: [
+            {
+              label: "Sí",
+              onClick: async () => {
+                try {
+                  const nuevoEstado = "inactivo";
+                  const data = { id, estado: nuevoEstado };
+
+                  await CambioEstado(data);
+                } catch (error) {
+                  toast.error("Error al Cambiar el estado");
+                }
+              },
+            },
+            {
+              label: "No",
+              onClick: () => toast.info("Operación cancelada"),
+            },
+          ],
+          closeOnClickOutside: true,
+        });
+      }
+
     } catch (error) {
       console.error(error);
+      toast.error("Error al procesar la solicitud");
     }
   };
   const hadleEstado = (checked) => {
@@ -145,8 +195,7 @@ const DocumentosOrganismo = () => {
     setShowModal(true);
     setDataValue(doc);
   };
-  const numeroPagina = Math.ceil(data?.length / cantidad);
-  const DataArrayPaginacion = filteredData.slice(inicial, final);
+
 
   const closeModal = () => {
     setValuedocs(null);
@@ -168,15 +217,17 @@ const DocumentosOrganismo = () => {
   }
 
   return (
-    <section className="w-full  flex flex-col gap-3 ">
-      <div className="w-full mt-3 border-slate-100  border-b-4 bg-white  flex flex-wrap justify-around   items-center">
+    <section className="w-full  flex flex-col gap-3">
+      <div className="w-full mt-4  flex flex-wrap justify-between items-center p-4 rounded-lg shadow-md">
         <Mybutton
           color={"primary"}
           type={"submit"}
           onClick={() => setFrom(true)}
+          className="mb-2"
         >
           {t("nuevo")}
         </Mybutton>
+
         {form && (
           <ModalOrganismo
             closeModal={closeModal}
@@ -186,6 +237,7 @@ const DocumentosOrganismo = () => {
             <DocumentosFrom valor={valuedocs} closeModal={closeModal} />
           </ModalOrganismo>
         )}
+
         {showModal && (
           <ModalOrganismo
             closeModal={() => setShowModal(false)}
@@ -195,7 +247,8 @@ const DocumentosOrganismo = () => {
             <DocumentoEdit closeModalEdit={closeModalEdit} valor={dataValue} />
           </ModalOrganismo>
         )}
-        <div className="w-72 ">
+
+        <div className="flex items-center mb-2 w-72">
           <SelectDocumentos
             label={t("selecioneTipoDocumento")}
             data={tipoData}
@@ -204,14 +257,16 @@ const DocumentosOrganismo = () => {
             ValueItem={"nombreDocumento"}
           />
         </div>
-        <div className="w-[550px]">
+
+        <div className="flex items-center mb-2 w-full max-w-[550px]">
           <Search
-            label={"Search"}
+            label={""}
             placeholder={"Buscar..."}
             onchange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div>
+
+        <div className="flex items-center mb-2">
           <Switch
             color={isChecked ? "success" : "default"}
             isSelected={isChecked}
@@ -221,6 +276,7 @@ const DocumentosOrganismo = () => {
           </Switch>
         </div>
       </div>
+
       <div className=" w-full  h-auto overflow-y-auto">
         <TableMolecula>
           <Thead>
@@ -264,7 +320,7 @@ const DocumentosOrganismo = () => {
                         handledescargar(doc.nombre_documento_version)
                       }
                     />
-                    {inactivos && (
+                    {(inactivos && rol === "administrador") && (
                       <>
                         <FaRegEdit
                           className="cursor-pointer"
