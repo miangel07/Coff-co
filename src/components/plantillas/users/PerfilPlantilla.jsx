@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { parseJwt } from "../../../utils/ValidarLogin";
+import { parseJwt } from "../../../utils/ProtectedRoute";
 import styled from 'styled-components'
 //ICONOS
 import { MdEdit } from "react-icons/md";
