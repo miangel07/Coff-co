@@ -115,53 +115,55 @@ const RecuperarPassPlantilla = () => {
     if (successCambiar) {
       navigate("/")
     }
-   
+
   }, [password, password2, successCambiar]);
- 
+
   return (
     <div className="flex items-center gap-10 flex-col justify-center min-h-screen bg-gray-100 p-4">
 
 
-      {isSuccess && (
-        <div className="bg-slate-500 p-6 rounded-lg shadow-md">
+      {isSuccess ? (
+        <div className="bg-slate-700 p-8 rounded-lg shadow-lg w-full max-w-sm mx-auto">
           <h2 className="text-2xl font-semibold text-center mb-4 text-white">Validar Código</h2>
-          <form onSubmit={handleValidarCodigo}>
+          <form onSubmit={handleValidarCodigo} className="flex flex-col items-center">
             <InputOtp
               value={token}
               onChange={(e) => setTokens(e.value)}
               style={{
                 width: '200px',
-                margin: '0 auto',
                 marginBottom: '20px',
-                borderColor: "black",
+                borderColor: 'black',
+                color: 'black',
                 fontSize: '24px',
                 borderRadius: '5px',
+
               }}
-              placeholder="Ingrese el código de verificación"
+              placeholder="Ingrese el código"
               length={4}
               aria-label="Ingrese el código de verificación"
             />
-            <Mybutton color="primary" type="submit">Verificar Código</Mybutton>
+            <Mybutton color="primary" type="submit" className="w-full mt-4">Verificar Código</Mybutton>
           </form>
         </div>
-      ) || <div className="bg-white shadow-lg rounded-lg p-8 mx-auto w-full max-w-md">
-          <h2 className="text-2xl font-semibold mb-6 text-center">Cambio de Contraseña</h2>
-         
-          <form className='flex flex-col gap-4' onSubmit={handleCambiarPassword}>
+      ) : (
+        <div className="bg-white shadow-xl rounded-lg p-8 mx-auto w-full max-w-md">
+          <h2 className="text-3xl font-semibold text-center mb-6 text-gray-700">Cambio de Contraseña</h2>
+          <form className="flex flex-col gap-6" onSubmit={handleCambiarPassword}>
             <Input
-              className='w-full p-3 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out'
+              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200 ease-in-out"
               type="text"
               label="Número de Documento"
-              placeholder="Ingrese Número de Identificación"
-              onChange={(e) => { setCedula(e.target.value) }}
+              placeholder="Ingrese su número de identificación"
+              onChange={(e) => setCedula(e.target.value)}
               required
-              aria-label="Ingrese el Número de Documento"
+              aria-label="Ingrese su número de identificación"
             />
-            <Mybutton type="submit" color="primary">Validar</Mybutton>
-
-
+            <Mybutton type="submit" color="primary" className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-200 ease-in-out">
+              Validar
+            </Mybutton>
           </form>
-        </div>}
+        </div>
+      )}
 
       {showModal && (
         <ModalOrganismo title="" visible={showModal} closeModal={() => setShowModal(false)}>
