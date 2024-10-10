@@ -210,7 +210,7 @@ const UsersPlantilla = () => {
           disabled
           type="text"
           className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[0]?.total_usuarios}
+          placeholder={dato?.usuariosPorRol[0]?.total_usuarios ?? "0"}
         />
       </div>
 
@@ -221,7 +221,7 @@ const UsersPlantilla = () => {
           disabled
           type="text"
           className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[1]?.total_usuarios}
+          placeholder={dato?.usuariosPorRol[1]?.total_usuarios ?? "0"}
         />
       </div>
 
@@ -232,7 +232,7 @@ const UsersPlantilla = () => {
           disabled
           type="text"
           className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[2]?.total_usuarios}
+          placeholder={dato?.usuariosPorRol[2]?.total_usuarios ?? "0"}
         />
       </div>
 
@@ -243,7 +243,7 @@ const UsersPlantilla = () => {
           disabled
           type="text"
           className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[3]?.total_usuarios}
+          placeholder={dato?.usuariosPorRol[3]?.total_usuarios ?? "0"}
         />
       </div>
 
@@ -254,7 +254,7 @@ const UsersPlantilla = () => {
           disabled
           type="text"
           className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.total}
+          placeholder={dato?.total ?? "0"}
         />
       </div>
 
