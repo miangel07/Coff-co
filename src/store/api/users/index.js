@@ -28,7 +28,9 @@ export const usuariosSlice = createApi({
       url:'/usuario/listarroles',
       method:'GET',
     }),
+    invalidatesTags:['usuarios'],
     providesTags:['usuarios']
+
   }),
 
   // LISTAR ID

@@ -35,8 +35,7 @@ const UsersPlantilla = () => {
 
   // FUNCIONES CRUD
   const {data,isLoading, refetch} = useGetUsuarioQuery()
-  const {data: dato} = useGetRolesQuery()
-  console.log(dato)
+  const { data: dato, isLoading: cargando } = useGetRolesQuery();
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [actualizarEstado] = useActualizarEstadoMutation();
   const [actualizarUsuario]= useActualizarUsuarioMutation();
@@ -202,172 +201,175 @@ const UsersPlantilla = () => {
     <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
 
     {/* CARDS */}
+    {dato && dato.usuariosPorRol && dato.usuariosPorRol.length > 0 ? (
     <div className="flex justify-center items-center gap-4 px-20 py-6">
-      {/* Card Administrador */}
-      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-        <h2 className="text-lg font-bold mb-2">Admin</h2>
-        <input
-          disabled
-          type="text"
-          className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[0]?.total_usuarios ?? "0"}
-        />
-      </div>
-
-      {/* Card Encargado */}
-      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-        <h2 className="text-lg font-bold mb-2">Encargado</h2>
-        <input
-          disabled
-          type="text"
-          className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[1]?.total_usuarios ?? "0"}
-        />
-      </div>
-
-      {/* Card Cliente */}
-      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-        <h2 className="text-lg font-bold mb-2">Cliente</h2>
-        <input
-          disabled
-          type="text"
-          className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[2]?.total_usuarios ?? "0"}
-        />
-      </div>
-
-      {/* Card Operario */}
-      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-        <h2 className="text-lg font-bold mb-2">Operario</h2>
-        <input
-          disabled
-          type="text"
-          className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.usuariosPorRol[3]?.total_usuarios ?? "0"}
-        />
-      </div>
-
-      {/* Card Total */}
-      <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-        <h2 className="text-lg font-bold mb-2">Total</h2>
-        <input
-          disabled
-          type="text"
-          className="w-full p-2 text-center  rounded-md"
-          placeholder={dato?.total ?? "0"}
-        />
-      </div>
-
+    {/* Card Administrador */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Admin</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[0]?.total_usuarios || '0'}
+      />
     </div>
+
+    {/* Card Encargado */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Encargado</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[1]?.total_usuarios || '0'}
+      />
+    </div>
+
+    {/* Card Cliente */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Cliente</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[2]?.total_usuarios || '0'}
+      />
+    </div>
+
+    {/* Card Operario */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Operario</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[3]?.total_usuarios || '0'}
+      />
+    </div>
+
+    {/* Card Total */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Total</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato?.total || '0'}
+      />
+    </div>
+    </div>
+    ) : (
+      <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
+    )}
 
     {/* TABLA */}
     <div className="flex justify-center items-center space-x-64">
-      <div className="pl-20">
-        <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
+    <div className="pl-20">
+      <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
+    </div>
+    <div className="w-[550px] pl-20">
+        <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
+    </div>
+    <div className="pl-20">
+        <Switch
+          color={filtroEstado ? "success" : "default"}
+          isSelected={filtroEstado}
+          onValueChange={(checked) =>setFiltroEstado(checked)}>
+          {t("estado")}
+        </Switch>
       </div>
-      <div className="w-[550px] pl-20">
-          <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
-      </div>
-      <div className="pl-20">
-          <Switch
-            color={filtroEstado ? "success" : "default"}
-            isSelected={filtroEstado}
-            onValueChange={(checked) =>setFiltroEstado(checked)}>
-            {t("estado")}
-          </Switch>
-        </div>
-      </div>
-      
-      <div className="w-full px-20 h-auto overflow-y-auto">
-        <TableMolecula lassName="w-full">
-          <Thead>
-            <Th>ID</Th>
-            <Th>Nombre</Th>
-            <Th>Apellidos</Th>
-            <Th>Correo</Th>
-            <Th>Telefono</Th>
-            <Th>Documento</Th>
-            <Th>Tipo</Th>
-            {/* <Th>Estado</Th> */}
-            <Th>Rol</Th>
-            <Th>Editar</Th>
-            <Th>Estado</Th>
-          </Thead>
-          <Tbody>
-            {elementosActuales.length>0?(
-              elementosActuales.map((usuario)=>(
-                <tr className="hover:bg-slate-200" key={usuario.id_usuario}>
-                  <Td>{usuario.id_usuario}</Td>
-                  <Td>{usuario.nombre}</Td>
-                  <Td>{usuario.apellidos}</Td>
-                  <Td>{usuario.correo_electronico}</Td>
-                  <Td>{usuario.telefono}</Td>
-                  <Td>{usuario.numero_documento}</Td>
-                  <Td>{usuario.tipo_documento}</Td>
-                  {/* <Td>{usuario.estado}</Td> */}
-                  <Td>{usuario.rol}</Td>
-                  <Td>
-                  <div className="flex justify-center items-center space-x-4">
-                    
-                  <button
-                    className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
-                    onClick={() => handleClickActualizar(usuario)}
-                  >
-                  <svg
-                    className="icon-default block group-hover:hidden"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                  </svg>
-                  <svg
-                    className="icon-hover hidden group-hover:block"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
-                  </svg>
-                  </button>
-                    {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
-                  </div>
-                  </Td>
-                  <Td>
-                    <CustomSwitch
-                        setisSelected={usuario.estado === "activo"}
-                        onChange={() => handleSwitchChange(usuario.id_usuario, usuario.nombre)}
-                    />
-                    {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
-                  </Td>
+    </div>
+    
+    <div className="w-full px-20 h-auto overflow-y-auto">
+      <TableMolecula lassName="w-full">
+        <Thead>
+          <Th>ID</Th>
+          <Th>Nombre</Th>
+          <Th>Apellidos</Th>
+          <Th>Correo</Th>
+          <Th>Telefono</Th>
+          <Th>Documento</Th>
+          <Th>Tipo</Th>
+          {/* <Th>Estado</Th> */}
+          <Th>Rol</Th>
+          <Th>Editar</Th>
+          <Th>Estado</Th>
+        </Thead>
+        <Tbody>
+          {elementosActuales.length>0?(
+            elementosActuales.map((usuario)=>(
+              <tr className="hover:bg-slate-200" key={usuario.id_usuario}>
+                <Td>{usuario.id_usuario}</Td>
+                <Td>{usuario.nombre}</Td>
+                <Td>{usuario.apellidos}</Td>
+                <Td>{usuario.correo_electronico}</Td>
+                <Td>{usuario.telefono}</Td>
+                <Td>{usuario.numero_documento}</Td>
+                <Td>{usuario.tipo_documento}</Td>
+                {/* <Td>{usuario.estado}</Td> */}
+                <Td>{usuario.rol}</Td>
+                <Td>
+                <div className="flex justify-center items-center space-x-4">
+                  
+                <button
+                  className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
+                  onClick={() => handleClickActualizar(usuario)}
+                >
+                <svg
+                  className="icon-default block group-hover:hidden"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                </svg>
+                <svg
+                  className="icon-hover hidden group-hover:block"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                </svg>
+                </button>
+                  {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
+                </div>
+                </Td>
+                <Td>
+                  <CustomSwitch
+                      setisSelected={usuario.estado === "activo"}
+                      onChange={() => handleSwitchChange(usuario.id_usuario, usuario.nombre)}
+                  />
+                  {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
+                </Td>
 
-                </tr>
-              ))
-            ):(
-              <tr>
-              <td colSpan={9} className="text-center">
-                <h1 className="text-2xl">
-                  <b>No hay datos</b>
-                </h1>
-              </td>
-            </tr>
-            )
-            }
+              </tr>
+            ))
+          ):(
+            <tr>
+            <td colSpan={9} className="text-center">
+              <h1 className="text-2xl">
+                <b>No hay datos</b>
+              </h1>
+            </td>
+          </tr>
+          )
+          }
 
-          </Tbody>
-        </TableMolecula>
-      </div>
-      <div className="flex justify-center mt-4">
-          <PaginationMolecula
-          total={totalPages}
-          initialPage={paginaActual}
-          onChange={(pagina)=>setPaginaActual(pagina)}
-          />
-      </div>
+        </Tbody>
+      </TableMolecula>
+    </div>
+    <div className="flex justify-center mt-4">
+        <PaginationMolecula
+        total={totalPages}
+        initialPage={paginaActual}
+        onChange={(pagina)=>setPaginaActual(pagina)}
+        />
+    </div>
     {/* FIN TABLA */}
 
     {/* MODAL REGISTRO*/}
