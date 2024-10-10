@@ -24,7 +24,7 @@ const ProtectedRoute = () => {
 
     return(
         <>
-        {SesionExistente ? <Outlet/> : <Navigate to="/login"/>}
+        {SesionExistente ? <Outlet/> : <Navigate to="/"/>}
         </>
     )
 }

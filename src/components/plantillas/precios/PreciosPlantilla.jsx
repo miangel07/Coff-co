@@ -62,7 +62,7 @@ const PreciosPlantilla = () => {
   }
 
   const abrirModal = (precio) => {
-    console.log('precio cargado al editar: ',precio)
+    console.log("precio cargado al editar: ", precio);
     if (precio) {
       setPrecioSeleccionado(precio);
       reset({
@@ -78,7 +78,7 @@ const PreciosPlantilla = () => {
         precio: "",
         fk_idTipoServicio: "",
       });
-      setTipoServicioActual("")
+      setTipoServicioActual("");
     }
     setVisible(true);
   };
@@ -86,10 +86,11 @@ const PreciosPlantilla = () => {
   const cerrarModal = () => {
     setVisible(false);
     reset();
-    setTipoServicioActual("")
+    setTipoServicioActual("");
   };
 
   const onSubmit = async (datosDelFormulario) => {
+
     try {
       const payload = {
         presentacion: datosDelFormulario.presentacion,
@@ -324,7 +325,7 @@ const PreciosPlantilla = () => {
                     label="Tipo de servicio"
                     onChange={(e) => {
                       setValue("fk_idTipoServicio", e.target.value);
-                      setTipoServicioActual(e.target.value); 
+                      setTipoServicioActual(e.target.value);
                     }}
                     items="idTipoServicio"
                     ValueItem="nombreServicio"
@@ -346,4 +347,3 @@ const PreciosPlantilla = () => {
 };
 
 export default PreciosPlantilla;
-

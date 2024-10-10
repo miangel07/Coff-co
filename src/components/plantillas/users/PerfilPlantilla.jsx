@@ -277,6 +277,7 @@ const PerfilPlantilla = () => {
                             onChange={(e) => setValue("fk_idRol", e.target.value)}
                             placeholder={usuarioSeleccionado?.rol}
                             value={usuarioSeleccionado?.fk_idRol || ""}
+                            habilitado={true}
                         />
 
                         <SelectAtomoActualizar

@@ -26,6 +26,21 @@ endpoints: (build) => ({
       }),
       providesTags:['Fincas']
     }),
+    PostFinca: build.mutation({
+      query: (data) => ({
+          url: "finca/registrar",
+          method: "POST",
+          body: data,
+          headers: {
+              token: `${getCookie("authToken")}`,
+          },
+      }),
+      transformErrorResponse: (response) => ({
+          error: response.data.message,
+      }),
+      invalidatesTags: ["Fincas"],
+  }),
+
 }),
 });
-export const { useGetFincasQuery } =  fincaApiSlice
+export const { useGetFincasQuery, usePostFincaMutation } =  fincaApiSlice
