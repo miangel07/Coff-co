@@ -188,7 +188,7 @@ const VariablesPlantilla = () => {
                 <Td>{variable.UnidadMedida}</Td>
                 <Td>
                   <Switch
-                    color={variable.estado === "activo" ? "primary" : "default"}
+                    color={variable.estado === "activo" ? "success" : "default"}
                     isSelected={variable.estado === "activo"}
                     onValueChange={(checked) =>
                       handleSwitchChange(checked, variable.idVariable)

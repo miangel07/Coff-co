@@ -4,27 +4,31 @@ import { IoSearchOutline } from "react-icons/io5";
 
 const Search = ({ label, onchange, placeholder }) => {
     return (
-        <div className="w-full h-[70px] px-4 py-2 rounded-xl flex justify-center items-center bg-gradient-to-tr from-blue-500 to-purple-600 shadow-md">
+        <div className="w-full max-w-md mx-auto p-4">
             <Input
                 onChange={onchange}
                 label={`${label}`}
                 radius="lg"
                 classNames={{
-                    label: "text-gray-300 font-semibold dark:text-gray-100 mb-1", // Mejor contraste en el texto del label
+                    base: "max-w-full",
+                    label: "text-blue-600 font-semibold mb-1",
+                    inputWrapper: [
+                        "bg-white",
+                        "border-2 border-sena",
+                        "hover:border-sena",
+                        "focus:border-blue-600",
+                        "transition-all duration-300 ease-in-out",
+                        "shadow-md hover:shadow-lg",
+                    ],
                     input: [
-                        "bg-white/10", // Fondo más sutil para que no sea tan opaco
-                        "backdrop-blur-sm", // Menos difuminado para no distraer
-                        "border border-transparent focus:border-white", // Bordes más sutiles con transición al enfocar
-                        "transition-colors duration-300", // Transición suave de colores al enfocar
-                        "text-black dark:text-white", // Texto visible en ambos modos
-                        "placeholder:text-gray-500 dark:placeholder:text-gray-400", // Placeholder con mejor contraste
-                        "rounded-lg", // Bordes redondeados pero no demasiado
-                        "px-3 py-1.5" // Padding reducido para una mejor integración
+                        "text-gray-800",
+                        "placeholder:text-gray-500",
+                        "font-medium",
                     ],
                 }}
                 placeholder={`${placeholder}`}
                 startContent={
-                    <IoSearchOutline className="text-gray-600 dark:text-gray-300 text-lg" />
+                    <IoSearchOutline className="text-sena text-xl" />
                 }
                 fullWidth
             />
