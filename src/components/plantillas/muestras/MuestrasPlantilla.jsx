@@ -10,6 +10,8 @@ import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { Switch } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
+import FincaFormulario from "../../molecules/Formulario/FincaFormulario"; // Importar el nuevo formulario
+import Search from "../../atoms/Search"; // Importar el componente de búsqueda
 
 import {
   useGetMuestrasQuery,
@@ -18,14 +20,20 @@ import {
 
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showFincaModal, setShowFincaModal] = useState(false); // Estado para el modal de finca
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
-  
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para el valor del campo de búsqueda
+
   const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
   const [updateEstado] = useUpdateEstadoMuestraMutation();
 
   const handleModal = () => {
     setShowModal(true);
+  };
+
+  const handleFincaModal = () => {
+    setShowFincaModal(true); // Mostrar modal de finca
   };
 
   const cantidad = 4;
@@ -36,8 +44,16 @@ const MuestrasPlantilla = () => {
   };
 
   const numeroPagina = Math.ceil((dataMuestras?.length || 0) / cantidad);
-  const DataArrayPaginacion = dataMuestras
-    ? dataMuestras?.slice(inicial, final)
+
+  // Filtrar los datos según el valor del campo de búsqueda
+  const filteredData = dataMuestras
+  ? dataMuestras.filter((muestra) =>
+      muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  : [];
+
+  const DataArrayPaginacion = filteredData
+    ? filteredData?.slice(inicial, final)
     : [];
 
   const handleEdit = (muestra) => {
@@ -48,6 +64,10 @@ const MuestrasPlantilla = () => {
   const closemodal = () => {
     setDatosDelFormulario("");
     setShowModal(false);
+  };
+
+  const closeFincaModal = () => {
+    setShowFincaModal(false); // Cerrar modal de finca
   };
 
   const handleSwitchChange = (checked, id) => {
@@ -68,11 +88,26 @@ const MuestrasPlantilla = () => {
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">Muestras</h2>
-      <div className="px-20">
+
+      {/* Botones y barra de búsqueda */}
+      <div className="px-20 flex gap-4 items-center">
         <Mybutton color={"primary"} onClick={handleModal}>
           Nuevo
         </Mybutton>
+        <Mybutton color={"secondary"} onClick={handleFincaModal}>
+          Agregar Finca
+        </Mybutton>
+
+        {/* Componente de búsqueda */}
+        <div className="ml-auto">
+          <Search
+            label={"Buscar muestra"}
+            placeholder={"Código de muestra"}
+            onchange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
+
       {showModal && (
         <ModalOrganismo
           title={"Registrar Nueva Muestra"}
@@ -85,17 +120,30 @@ const MuestrasPlantilla = () => {
           />
         </ModalOrganismo>
       )}
+
+      {showFincaModal && (
+        <ModalOrganismo
+          title={"Agregar Nueva Finca"}
+          visible={showFincaModal}
+          closeModal={closeFincaModal}
+        >
+          <FincaFormulario closeModal={closeFincaModal} />
+        </ModalOrganismo>
+      )}
+
       <div className="w-full px-20 overflow-x-auto">
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
             <Th>Código</Th>
             <Th>Cantidad</Th>
+            <Th>Unidad</Th>
             <Th>Fecha</Th>
             <Th>Finca</Th>
             <Th>Usuario</Th>
+            <Th>Servicio</Th>
             <Th>Estado</Th>
-            <Th>Altura</Th>
+            <Th>Altura (M)</Th>
             <Th>Variedad</Th>
             <Th>Observaciones</Th>
             <Th>Acciones</Th>
@@ -106,9 +154,11 @@ const MuestrasPlantilla = () => {
                 <Td>{muestra.id_muestra}</Td>
                 <Td>{muestra.codigo_muestra}</Td>
                 <Td>{muestra.cantidadEntrada}</Td>
+                <Td>{muestra.UnidadMedida}</Td>
                 <Td>{muestra.fecha_muestra}</Td>
                 <Td>{muestra.finca}</Td>
                 <Td>{muestra.usuario}</Td>
+                <Td>{muestra.fk_idTipoServicio}</Td>
                 <Td>
                   <Switch
                     color={muestra.estado === "terminado" ? "success" : "default"}
@@ -120,9 +170,9 @@ const MuestrasPlantilla = () => {
                     {muestra.estado}
                   </Switch>
                 </Td>
-                <Td>{muestra.altura}</Td> {/* Nueva variable: altura */}
-                <Td>{muestra.variedad}</Td> {/* Nueva variable: variedad */}
-                <Td>{muestra.observaciones}</Td> {/* Nueva variable: observaciones */}
+                <Td>{muestra.altura}</Td>
+                <Td>{muestra.variedad}</Td>
+                <Td>{muestra.observaciones}</Td>
                 <Td>
                   <div className="gap-3 flex flex-grow">
                     <FaRegEdit
@@ -137,6 +187,7 @@ const MuestrasPlantilla = () => {
           </Tbody>
         </TableMolecula>
       </div>
+
       <div className="flex justify-center mt-4">
         <PaginationMolecula
           total={numeroPagina}
