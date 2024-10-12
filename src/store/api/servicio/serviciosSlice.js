@@ -11,6 +11,7 @@ export const servicioApiSlice = createApi({
         },
     }),
     endpoints: (build) => ({
+        
         //listar servicios
         getServicio: build.query({
             query: () => ({
@@ -20,6 +21,7 @@ export const servicioApiSlice = createApi({
             providesTags:['servicios']
         }),
 
+        // obtener muestras para servicios 
         obtenerMuestrasParaServicio:build.query({
             query:()=>({
                 url:'servicios/getmuestrasser',

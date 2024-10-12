@@ -12,12 +12,12 @@ import { ambientesApiSlice } from "./api/ambientes/ambientesSlice";
 import { servicioApiSlice } from "./api/servicio/serviciosSlice";
 import { preciosSlice } from "./api/precios/preciosSlice";
 import { usuariosSlice } from "./api/users";
-import { AlquilerApi } from "./api/alquilerLaboratorio";
 import { muestraApiSlice } from "./api/muestra";
 import { fincaApiSlice } from "./api/fincas";
 import { facturasApi } from "./api/factura";
 import { repotesApi } from "./api/reportes";
 import { CambioPasswordApi } from "./api/cambioPassword";
+import { AlquilerSlice } from "./api/alquilerLaboratorio/alquilerSlice";
 
 
 export const store = configureStore({
@@ -31,7 +31,7 @@ export const store = configureStore({
     [ambientesApiSlice.reducerPath]: ambientesApiSlice.reducer,
     [servicioApiSlice.reducerPath]: servicioApiSlice.reducer,
     [preciosSlice.reducerPath]: preciosSlice.reducer,
-    [AlquilerApi.reducerPath]: AlquilerApi.reducer,
+    [AlquilerSlice.reducerPath]: AlquilerSlice.reducer,
     [usuariosSlice.reducerPath]: usuariosSlice.reducer,
     [muestraApiSlice.reducerPath]: muestraApiSlice.reducer,
     [fincaApiSlice.reducerPath]: fincaApiSlice.reducer,
@@ -55,13 +55,13 @@ export const store = configureStore({
       ambientesApiSlice.middleware,
       servicioApiSlice.middleware,
       preciosSlice.middleware,
-      AlquilerApi.middleware,
+      AlquilerSlice.middleware,
       usuariosSlice.middleware,
       muestraApiSlice.middleware,
       fincaApiSlice.middleware,
       facturasApi.middleware,
       repotesApi.middleware,
       CambioPasswordApi.middleware,
-
+      
     ),
 });
