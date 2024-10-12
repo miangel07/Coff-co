@@ -83,6 +83,23 @@ export const TipoDocumento = createApi({
             }),
             invalidatesTags: ["TipoDocumento"],
         }),
+        listarActivos: build.query(
+            {
+                query: () => ({
+                    url: "tipodocumento/listaActivo",
+                    method: "GET",
+                    headers: {
+                        token: `${getCookie("authToken")}`,
+                    },
+                }),
+                transformErrorResponse: (response) => ({
+                    error: response.data.message,
+                }),
+                invalidatesTags: ["TipoDocumento"],
+
+
+            }
+        )
     }),
 });
 
@@ -91,5 +108,6 @@ export const {
     useCrearTipoDocumentoMutation,
     useEliminarTipoDocumentoMutation,
     useGetTipoDocumentosQuery,
-    useUpdateEstadoTipoDocumentoMutation
+    useUpdateEstadoTipoDocumentoMutation,
+    useListarActivosQuery
 } = TipoDocumento;

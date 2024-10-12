@@ -20,58 +20,71 @@ export const logosApi = createApi({
             providesTags: ['logos']
         }),
 
-         //REGISTRAR
+        //REGISTRAR
         registrarLogo: build.mutation({
-            query:(data)=>({
-            url:'/logo/registrar',
-            method:'POST',
-            body:data,
+            query: (data) => ({
+                url: '/logo/registrar',
+                method: 'POST',
+                body: data,
             }),
-            transformErrorResponse:(response,meta,arg)=>{
-            return{
-                originalArg:arg,
-                error:response.data.message,
-            }
+            transformErrorResponse: (response, meta, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response.data.message,
+                }
             },
-            invalidatesTags:['logos']
+            invalidatesTags: ['logos']
         }),
 
         //ACTUALIZAR
         actualizarLogo: build.mutation({
-        query: ({ data, id }) => ({
-            url: `/logo/actualizar/${id}`,
-            method: 'PUT',
-            body: data,
-        }),
-        transformErrorResponse: (response, meta, arg) => {
-            console.log("Respuesta completa de error:", response);
-            
-            return {
-            originalArg: arg,
-            error: response?.data?.message || response?.statusText || "Error desconocido",
-            };
-        },
-        invalidatesTags: ['logos'],
+            query: ({ data, id }) => ({
+                url: `/logo/actualizar/${id}`,
+                method: 'PUT',
+                body: data,
+            }),
+            transformErrorResponse: (response, meta, arg) => {
+                console.log("Respuesta completa de error:", response);
+
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message || response?.statusText || "Error desconocido",
+                };
+            },
+            invalidatesTags: ['logos'],
         }),
 
         //ACTUALIZAR ESTADO ('ACTIVO' 'INACTIVO')
         actualizarEstado: build.mutation({
-        query: (id) => ({
-            url: `logo/estado/${id}`,
-            method: 'PUT',
+            query: (id) => ({
+                url: `logo/estado/${id}`,
+                method: 'PUT',
+            }),
+            transformErrorResponse: (response, meta, arg) => {
+                console.log("Respuesta completa de error:", response);
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message || response?.statusText || "Error desconocido",
+                };
+            },
+            invalidatesTags: ['logos'],
         }),
-        transformErrorResponse: (response, meta, arg) => {
-            console.log("Respuesta completa de error:", response);
-            return {
-            originalArg: arg,
-            error: response?.data?.message || response?.statusText || "Error desconocido",
-            };
-        },
-        invalidatesTags: ['logos'],
-        }),
+        logosActivos: build.query({
+            query: () => ({
+                url: "logo/listaActivos",
+                method: "GET",
+            }),
+            transformErrorResponse: (response, meta, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message || response?.statusText || "Error desconocido",
+                };
+            },
+            providesTags: ['logos']
+        })
 
     })
 })
 
 
-export const { useGetLogosQuery,useRegistrarLogoMutation,useActualizarLogoMutation,useActualizarEstadoMutation } = logosApi;
+export const { useGetLogosQuery, useRegistrarLogoMutation, useActualizarLogoMutation, useActualizarEstadoMutation, useLogosActivosQuery } = logosApi;
