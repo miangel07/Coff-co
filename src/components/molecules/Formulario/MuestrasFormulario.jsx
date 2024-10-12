@@ -41,7 +41,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
     if (dataValue) {
       reset({
         cantidadEntrada: dataValue.cantidadEntrada,
-        fecha_muestra: dataValue.fecha_muestra || today, // Establece la fecha o usa la actual
+        fecha_muestra: dataValue.fecha_muestra || today, 
         fk_id_finca: dataValue.fk_id_finca,
         fk_id_usuarios: dataValue.fk_id_usuarios,
         estado: dataValue.estado,
@@ -50,7 +50,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
         observaciones: dataValue.observaciones,
         codigoExterno: dataValue.codigoExterno,
         UnidadMedida: dataValue.unidadMedida,
-        fk_idTipoServicio: dataValue.fk_idTipoServicio, // Añadido
+        fk_idTipoServicio: dataValue.fk_idTipoServicio, 
       });
 
       setUnidadMedida(dataValue.unidadMedida);
@@ -59,7 +59,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
       setValue("fk_idTipoServicio", dataValue.fk_idTipoServicio);
     } else {
       reset({
-        fecha_muestra: today, // Fecha actual por defecto
+        fecha_muestra: today, 
       });
     }
 
@@ -74,7 +74,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   }, [dataValue, isSuccess, isSuccessEdit, isError, isErrorEdit, reset, closeModal, dataResponse, dataResponseEdit, setValue]);
 
   const onSubmit = async (data) => {
-    console.log(data); // Muestra los datos en la consola para depuración
+    console.log(data); 
     try {
       if (!UnidadMedida) {
         toast.error("La unidad de medida es obligatoria");
@@ -129,7 +129,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             label={"Unidad medida"}
             ValueItem={"label"}
             onChange={(e) => setUnidadMedida(e.target.value)}
-            
+
           />
           <InputAtomo
             type="date"
