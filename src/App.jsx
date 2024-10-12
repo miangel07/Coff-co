@@ -116,6 +116,7 @@ const App = () => {
               <Route path="/servicios" element={<ServicioPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/muestras" element={<MuestrasPage />} />
+              <Route path="/logos" element={<Logos />} />
               <Route path="/reportes" element={<ReportesPages />} />
               <Route path="/perfil" element={<Perfil />} />
             </>
@@ -131,6 +132,7 @@ const App = () => {
               <Route path="/Tipodocumento" element={<TipoDocumentoPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/muestras" element={<MuestrasPage />} />
+              <Route path="/logos" element={<Logos />} />
               <Route path="/variables" element={<VariablePages />} />
               <Route path="/perfil" element={<Perfil />} />
             </>
@@ -140,6 +142,7 @@ const App = () => {
             <>
               <Route path="/*" element={<Navigate to="/home" />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route path="/logos" element={<Logos />} />
             </>
           )}
 
