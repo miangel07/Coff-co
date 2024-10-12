@@ -12,6 +12,7 @@ import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
 import { Switch } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
+import { FaRegEdit } from "react-icons/fa";
 // import { FaRegEye } from "react-icons/fa";
 
 //Importaciones para el modal
@@ -105,19 +106,6 @@ const LogosPlantilla = () => {
     
     const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
     const closeLogoModal = () => {setOpenLogoModal(false);};
-  
-    //SUBMIT REGISTRAR
-    // const onsubmit = (data) => {
-    //   const formData = new FormData();
-    //   console.log(data.file[0].type); 
-      
-    //   formData.append("file", data.file[0]);
-    //   formData.append("nombre", data.nombre);
-    
-    //   registrarLogo(formData).unwrap();
-    //   reset();
-    //   setOpenModal(false);
-    // };
      
     const onsubmit = async (data) => {
       const formData = new FormData();
@@ -165,36 +153,6 @@ const LogosPlantilla = () => {
         setOpenModalActualizar(false);
       }
     };
-    
-    // useEffect(() => {
-    //   if (isSuccess) {
-    //     // console.log(datos?.message); 
-    //     setsucess(datos?.message);
-    
-    //     toast.success(datos?.message, {
-    //       duration: 5000,
-    //       position: "top-center",
-    //       style: {
-    //         background: "#333",
-    //         color: "#fff",
-    //       },
-    //       icon: <FcOk />,
-    //     });
-    //   }
-    
-    //   if (isError) {
-    //     console.log("Error:", error?.error || "Ocurrió un error");
-    
-    //     toast.error(error?.error || "Ocurrió un error", {
-    //       duration: 5000,
-    //       position: "top-center",
-    //       style: {
-    //         background: "#333",
-    //         color: "#fff",
-    //       },
-    //     });
-    //   }
-    // }, [isSuccess, isError, error, datos]);
 
     // ESTADO DE CARGA DE LA TABLA 
     if(isLoading){
@@ -223,7 +181,7 @@ const LogosPlantilla = () => {
     const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
 
     return(
-    <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100"> 
+    <div className="w-auto rounded-tl-xl h-screen flex flex-col gap-8 bg-gray-100"> 
 
     {/* TABLA */}
       <div className="flex justify-center items-center space-x-64">
@@ -269,26 +227,7 @@ const LogosPlantilla = () => {
                     className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
                     onClick={() => handleClickActualizar(logo)}
                   >
-                  <svg
-                    className="icon-default block group-hover:hidden"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                  </svg>
-                  <svg
-                    className="icon-hover hidden group-hover:block"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
-                  </svg>
+                  <FaRegEdit/>
                   </button>
                   </div>
                   </Td>

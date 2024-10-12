@@ -36,7 +36,12 @@ const Header = ({ color }) => {
     ];
 
     //OPCIONES DEL MENU Y NAVEGACION
-    const Menus = ["Mi perfil", "Logos", "Ayuda", "Salir"];
+    const Menus = [
+        "Mi perfil", 
+        "Logos", 
+        "Ayuda", 
+        "Salir"
+    ];
     const handleMenuClick = (menu) => {
         setOpen(false);
         setOpen(false);
@@ -102,7 +107,7 @@ const Header = ({ color }) => {
                     <div className="relative">
                         <i  ref={imgRef}
                             onClick={() => setOpen(!open)}
-                            className="bi bi-person-circle cursor-pointer text-4xl">
+                            className="bi bi-person-circle cursor-pointer text-4xl pl-3">
                         </i>
                         {open && (
                             <div ref={menuRef} className="bg-white p-3 w-40 shadow-lg absolute -left-32 top-16 ">
