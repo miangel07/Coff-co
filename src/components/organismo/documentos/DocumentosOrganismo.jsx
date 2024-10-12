@@ -219,14 +219,21 @@ const DocumentosOrganismo = () => {
   return (
     <section className="w-full  flex flex-col gap-3">
       <div className="w-full mt-4  flex flex-wrap justify-between items-center p-4 rounded-lg shadow-md">
-        <Mybutton
-          color={"primary"}
-          type={"submit"}
-          onClick={() => setFrom(true)}
-          className="mb-2"
-        >
-          {t("nuevo")}
-        </Mybutton>
+        {
+          rol === "administrador" && (
+            <>
+              <Mybutton
+                color={"primary"}
+                type={"submit"}
+                onClick={() => setFrom(true)}
+                className="mb-2"
+              >
+                {t("nuevo")}
+              </Mybutton>
+            </>
+          )
+        }
+
 
         {form && (
           <ModalOrganismo
