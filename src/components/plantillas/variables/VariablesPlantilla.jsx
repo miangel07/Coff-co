@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   useGetVariablesQuery,
   useUpdateEstadoMutation,
@@ -17,6 +17,7 @@ import VariablesFormulario from "../../molecules/Formulario/VariablesFormulario"
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../../context/AuthContext";
 
 const VariablesPlantilla = () => {
   const [showModal, setShowMdal] = useState(false);
@@ -25,6 +26,7 @@ const VariablesPlantilla = () => {
   const [inactivos, setInactivos] = useState(true);
   const [isChecked, setIsChecked] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const { authData } = useContext(AuthContext)
   const {
     data: dataVariables,
     isLoading,
@@ -35,6 +37,7 @@ const VariablesPlantilla = () => {
     updateEstado,
     { isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio, data, isSuccess },
   ] = useUpdateEstadoMutation();
+  const rol = authData.usuario.rol
 
   const handleModal = () => {
     setShowMdal(true);
@@ -136,10 +139,18 @@ const VariablesPlantilla = () => {
   return (
     <section className="w-full   mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">Variables</h2>
-      <div className="px-20   w-full flex flex-wrap justify-between items-center   ">
-        <Mybutton color={"primary"} onClick={handleModal}>
-          Nuevo
-        </Mybutton>
+      <div className="px-20   w-full flex flex-wrap justify-between items-center">
+        {
+          rol === "administrador" &&
+          (
+            <>
+              <Mybutton color={"primary"} onClick={handleModal}>
+                Nuevo
+              </Mybutton>
+            </>
+          )
+        }
+
         <div className="flex items-center mb-2 w-full max-w-[550px]">
           <Search
             label={""}
@@ -177,7 +188,10 @@ const VariablesPlantilla = () => {
             <Th>Tipo de Dato</Th>
             <Th>Unidad de medida</Th>
             <Th>Estado</Th>
-            <Th>Acciones</Th>
+           
+                <Th>{rol === "administrador" ? "Acciones":""}</Th>
+            
+            
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((variable) => (
@@ -200,11 +214,18 @@ const VariablesPlantilla = () => {
 
                 <Td>
                   <div className=" gap-3 flex flex-graw">
-                    <FaRegEdit
-                      className="cursor-pointer"
-                      size={"30px"}
-                      onClick={() => handleEdit(variable)}
-                    />
+                    {
+                      rol === "administrador" && (
+                        <>
+                          <FaRegEdit
+                            className="cursor-pointer"
+                            size={"30px"}
+                            onClick={() => handleEdit(variable)}
+                          />
+                        </>
+                      )
+                    }
+
                   </div>
                 </Td>
               </tr>
