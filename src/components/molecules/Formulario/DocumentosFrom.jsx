@@ -264,12 +264,12 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                     {valor && (
                         <div className='flex w-[230px] h-[155px] flex-col'>
                             <Label>Version</Label>
-                            <InputAtomoActualizar
+                            <InputAtomo
                                 id={"version"}
-                                errores={errors}
+                                erros={errors}
                                 name={"version"}
                                 placeholder={"version"}
-                                defaultValue={valor?.version || ""}
+                                isReadOnly={true}
                                 type={"text"}
                                 register={register}
 
