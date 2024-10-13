@@ -13,6 +13,7 @@ import { useActualizarDocumentoMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useEffect, useState } from 'react';
 import SelectDocumentos from '../../atoms/SelectDocumentos';
+import InputAtomoActualizar from '../../atoms/InputActualizar';
 const DocumentoEdit = ({ valor, closeModalEdit }) => {
 
     const [file, setFile] = useState(null);
@@ -167,6 +168,7 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>Version </Label>
                         <InputAtomo
+                            isReadOnly={true}
                             register={register}
                             name={'version'}
                             erros={errors}

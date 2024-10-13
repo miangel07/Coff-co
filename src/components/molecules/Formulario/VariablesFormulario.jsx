@@ -61,7 +61,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     }
 
     if (isSuccess || isSuccessEdit) {
-      toast.success(`${dataResponse?.menssage || dataResponseEdit?.menssage}`);
+      toast.success(`${dataResponse?.message || dataResponseEdit?.message}`);
       closeModal();
     }
 

@@ -7,7 +7,7 @@ export const TipoDocumento = createApi({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
 
@@ -18,7 +18,7 @@ export const TipoDocumento = createApi({
                 url: "tipodocumento/listar",
                 method: "GET",
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             providesTags: ['TipoDocumento']
@@ -31,7 +31,7 @@ export const TipoDocumento = createApi({
                 method: "POST",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -47,7 +47,7 @@ export const TipoDocumento = createApi({
                 method: "PUT",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -63,7 +63,7 @@ export const TipoDocumento = createApi({
                 method: "PUT",
                 body: { estado: data.estado }, // Asegúrate de enviar el estado en el cuerpo
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             invalidatesTags: ["TipoDocumento"],
@@ -75,7 +75,7 @@ export const TipoDocumento = createApi({
                 url: `tipodocumento/eliminar/${id}`,
                 method: "DELETE",
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -89,7 +89,7 @@ export const TipoDocumento = createApi({
                     url: "tipodocumento/listaActivo",
                     method: "GET",
                     headers: {
-                        token: `${getCookie("authToken")}`,
+                        token: `${getCookie("Token")}`,
                     },
                 }),
                 transformErrorResponse: (response) => ({
