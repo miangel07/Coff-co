@@ -61,10 +61,25 @@ export const AlquilerSlice=createApi({
             invalidatesTags:['alquiler']
         }),
 
+        //eliminar reserva 
+        eliminarAlquiler:build.mutation({
+            query:(id)=>({
+                url:`alquiler/eliminar/${id}`,
+                method:'DELETE',
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message,
+                }
+            },
+            invalidatesTags:['alquiler']
+        })
+
     })
 })
 
-export const {useGetAlquilerQuery, useRegistrarAlquilerMutation, useGetUsuariosAlquilerQuery, useActualizarAlquilerMutation} = AlquilerSlice;
+export const {useGetAlquilerQuery, useRegistrarAlquilerMutation, useGetUsuariosAlquilerQuery, useActualizarAlquilerMutation, useEliminarAlquilerMutation} = AlquilerSlice;
 
 
 
