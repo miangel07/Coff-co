@@ -20,7 +20,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
   } = useForm();
   const [
     crearVariable,
-    { isLoading, isError, error, data: dataResponse, isSuccess },
+    { isError, error, data: dataResponse, isSuccess },
   ] = useCrearVariableMutation();
   const [
     editarVariable,
@@ -39,13 +39,19 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
           id: dataValue.idVariable,
           nombre: data.nombre,
           tipo_dato: tipoDato,
-          UnidadMedida:unidadadMedida
-          
+          UnidadMedida: unidadadMedida
+
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
+    if (isError) {
+      toast.error(`${error.error}`);
+    }
+    if (isErrorEdit) {
+      toast.error(`${errorEdit.error}`);
+    }
     if (dataValue) {
       reset({ nombre: dataValue.nombre });
       setUnidadMedida(dataValue.UnidadMedida);
@@ -55,10 +61,12 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     }
 
     if (isSuccess || isSuccessEdit) {
-      toast.success(`${dataResponse?.menssage || dataResponseEdit?.menssage}`);
+      toast.success(`${dataResponse?.message || dataResponseEdit?.message}`);
       closeModal();
     }
-  }, [dataValue, dataResponse, setValue, isSuccess, isSuccessEdit]);
+
+  }, [dataValue, dataResponse, setValue, isSuccess, isSuccessEdit, isError, isErrorEdit]);
+
   console.log(dataValue);
   const onsubmit = async (data) => {
     console.log(data);
@@ -70,7 +78,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
         await crearVariable({
           nombre: data.nombre,
           tipo_dato: tipoDato,
-          UnidadMedida:unidadadMedida
+          UnidadMedida: unidadadMedida
         });
       }
     } catch (error) {
@@ -89,9 +97,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
     { value: "G", label: "Gramos" },
     { value: "%", label: "Porcentaje" },
   ];
-  if (isLoading || isLoadingEdit) {
-    return <div>Loading...</div>;
-  }
+
   return (
     /* data, label, onChange, items, ValueItem, value */
     <section className="w-full overflow-auto  justify-center items-center flex">

@@ -26,16 +26,15 @@
     "echarts": "^5.5.1",
     "echarts-for-react": "^3.0.2",
     "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.2.12",
     "i18next": "^23.15.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
-    "mui-datatables": "^4.3.0",
     "primeicons": "^7.0.0",
     "primereact": "^10.8.0",
     "react": "^18.2.0",
     "react-big-calendar": "^1.13.3",
-    "react-burger-menu": "^3.0.9",
     "react-confirm-alert": "^3.0.6",
     "react-doc-viewer": "^0.1.14",
     "react-dom": "^18.2.0",
@@ -51,7 +50,8 @@
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.28.0",
     "react-transition-group": "^4.4.5",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.12",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

@@ -7,11 +7,7 @@ import { useTranslation } from "react-i18next"; //Importacion para cambio de idi
 import { Link } from "react-router-dom";
 
 const ItemsNavbar = ({ visiblite }) => {
-
-
   const { t } = useTranslation(); //Aca ponen esto tal cual no vayan a cambiar la letra, lo usan con la "t"
-
-
 
   //ROL DEL USUARIO
   const { authData } = useContext(AuthContext); 
@@ -80,7 +76,7 @@ const ItemsNavbar = ({ visiblite }) => {
       iconFill: "bi-handbag-fill",
       label: visiblite ? t("servicios") : "",
       link: "/servicios",
-      roles: ["administrador", "encargado"],
+      roles: ["administrador", "encargado", "operario"],
     },
     {
       icon: "bi-calendar",
@@ -94,7 +90,7 @@ const ItemsNavbar = ({ visiblite }) => {
       iconFill: "bi-people-fill",
       label: visiblite ? t("usuarios") : "",
       link: "/users",
-      roles: ["administrador", "encargado"],
+      roles: ["administrador"],
     },
     {
       icon: "bi-clipboard-check",

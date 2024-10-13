@@ -19,6 +19,7 @@ import { facturasApi } from "./api/factura";
 import { municipioApiSlice } from "./api/municipio";
 import { repotesApi } from "./api/reportes";
 import { CambioPasswordApi } from "./api/cambioPassword";
+import { excelApiSlice } from "./api/Excel/ExcelApiSlice";
 
 
 export const store = configureStore({
@@ -40,6 +41,8 @@ export const store = configureStore({
     [municipioApiSlice.reducerPath]: municipioApiSlice.reducer,
     [repotesApi.reducerPath]: repotesApi.reducer,
     [CambioPasswordApi.reducerPath]: CambioPasswordApi.reducer,
+    [excelApiSlice.reducerPath]: CambioPasswordApi.reducer,
+
 
   },
 
@@ -65,6 +68,7 @@ export const store = configureStore({
       municipioApiSlice.middleware,
       repotesApi.middleware,
       CambioPasswordApi.middleware,
+      excelApiSlice.middleware,
 
     ),
 });

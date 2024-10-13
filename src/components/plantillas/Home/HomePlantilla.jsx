@@ -24,7 +24,6 @@ const HomePlantilla = () => {
           <div className="flex-1 items-center bg-gray-100 mt-6 mb-6 rounded-lg border border-gray-200 justify-center">
             <GraficaDocumento />
             <div className="w-full justify-end flex">
-
               <Mybutton color={"sena"} onClick={() => navigate("/documentos")}>Ingresar</Mybutton>
             </div>
           </div>
