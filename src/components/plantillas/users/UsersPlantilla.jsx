@@ -6,6 +6,7 @@ import Th from "../../atoms/Th";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Tbody from "../../molecules/table/Tbody";
 import Search from "../../atoms/Search";
+import { FaRegEdit } from "react-icons/fa";
 import { useTranslation } from 'react-i18next';
 import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useGetRolesQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
 import { Spinner } from "@nextui-org/react";
@@ -116,11 +117,34 @@ const UsersPlantilla = () => {
   const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
 
   //SUBMIT REGISTRAR
-  const onsubmit = (data) => {
-    registrarUsuario(data);
-    reset();
-    toast.success("Usuario registrado con éxito");
-    setOpenModal(false);
+  const onsubmit = async (data) => {
+    try {
+      const response = await registrarUsuario(data).unwrap(); 
+      setsucess(response.message); 
+  
+      toast.success(response.message, {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+        icon: <FcOk />,
+      });
+
+      setOpenModal(false);
+      reset();
+    } catch (error) {
+      const mensajesError = error.errors.join(', ');
+      toast.error(mensajesError || "Ocurrió un error", {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   //SUBMIT ACTUALIZAR
@@ -135,32 +159,32 @@ const UsersPlantilla = () => {
   };
   
   //Para registrar
-  useEffect(() => {
-    if (isSuccess) {
-      setsucess(datos?.message);
-      toast.success(datos?.message, {
-        duration: 5000,
-        position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
-        icon: <FcOk />,
-      });
-    }
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setsucess(datos?.message);
+  //     toast.success(datos?.message, {
+  //       duration: 5000,
+  //       position: "top-center",
+  //       style: {
+  //         background: "#333",
+  //         color: "#fff",
+  //       },
+  //       icon: <FcOk />,
+  //     });
+  //   }
 
-    if (isError) {
-      console.log(error);
-      toast.error(error?.error || "Ocurrió un error", {
-        duration: 5000,
-        position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
-      });
-    }
-  }, [isSuccess, isError, error, datos]);
+  //   if (isError) {
+  //     console.log(error);
+  //     toast.error(error?.error || "Ocurrió un error", {
+  //       duration: 5000,
+  //       position: "top-center",
+  //       style: {
+  //         background: "#333",
+  //         color: "#fff",
+  //       },
+  //     });
+  //   }
+  // }, [isSuccess, isError, error, datos]);
 
   // ESTADO DE CARGA DE LA TABLA 
   if(isLoading){
@@ -198,73 +222,11 @@ const UsersPlantilla = () => {
   
   return (
     <>
-    <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
-
-    {/* CARDS */}
-    {dato && dato.usuariosPorRol && dato.usuariosPorRol.length > 0 ? (
-    <div className="flex justify-center items-center gap-4 px-20 py-6">
-    {/* Card Administrador */}
-    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Admin</h2>
-      <input
-        disabled
-        type="text"
-        className="w-full p-2 text-center  rounded-md"
-        placeholder={dato.usuariosPorRol[0]?.total_usuarios || '0'}
-      />
-    </div>
-
-    {/* Card Encargado */}
-    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Encargado</h2>
-      <input
-        disabled
-        type="text"
-        className="w-full p-2 text-center  rounded-md"
-        placeholder={dato.usuariosPorRol[1]?.total_usuarios || '0'}
-      />
-    </div>
-
-    {/* Card Cliente */}
-    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Cliente</h2>
-      <input
-        disabled
-        type="text"
-        className="w-full p-2 text-center  rounded-md"
-        placeholder={dato.usuariosPorRol[2]?.total_usuarios || '0'}
-      />
-    </div>
-
-    {/* Card Operario */}
-    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Operario</h2>
-      <input
-        disabled
-        type="text"
-        className="w-full p-2 text-center  rounded-md"
-        placeholder={dato.usuariosPorRol[3]?.total_usuarios || '0'}
-      />
-    </div>
-
-    {/* Card Total */}
-    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Total</h2>
-      <input
-        disabled
-        type="text"
-        className="w-full p-2 text-center  rounded-md"
-        placeholder={dato?.total || '0'}
-      />
-    </div>
-    </div>
-    ) : (
-      <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
-    )}
+    <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
 
     {/* TABLA */}
-    <div className="flex justify-center items-center space-x-64">
-    <div className="pl-20">
+    <div className="flex pt-5 justify-center items-center ">
+    <div>
       <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
     </div>
     <div className="w-[550px] pl-20">
@@ -279,9 +241,76 @@ const UsersPlantilla = () => {
         </Switch>
       </div>
     </div>
+
+     {/* CARDS */}
+     {dato && dato.usuariosPorRol && dato.usuariosPorRol.length > 0 ? (
+    <div className="flex justify-center items-center gap-4 px-20 py-6">
+    {/* Card Administrador */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Admin </h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[0]?.total_usuarios || '0'}
+      />
+      <i className="bi bi-person-lock text-2xl"></i>
+    </div>
+
+    {/* Card Encargado */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Encargado</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[1]?.total_usuarios || '0'}
+      />
+      <i className="bi bi-person-check text-2xl"></i>
+    </div>
+
+    {/* Card Cliente */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Cliente</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[2]?.total_usuarios || '0'}
+      />
+      <i className="bi bi-person text-2xl"></i>
+    </div>
+
+    {/* Card Operario */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Operario</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato.usuariosPorRol[3]?.total_usuarios || '0'}
+      />
+      <i className="bi bi-person-gear text-2xl"></i>
+    </div>
+
+    {/* Card Total */}
+    <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
+      <h2 className="text-lg font-bold mb-2">Total</h2>
+      <input
+        disabled
+        type="text"
+        className="w-full p-2 text-center  rounded-md"
+        placeholder={dato?.total || '0'}
+      />
+      <i className="bi bi-people text-2xl"></i>
+    </div>
+    </div>
+    ) : (
+      <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
+    )}
     
-    <div className="w-full px-20 h-auto overflow-y-auto">
-      <TableMolecula lassName="w-full">
+    <div className="w-full px-20 h-auto ">
+      <TableMolecula className="w-full">
         <Thead>
           <Th>ID</Th>
           <Th>Nombre</Th>
@@ -315,26 +344,7 @@ const UsersPlantilla = () => {
                   className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
                   onClick={() => handleClickActualizar(usuario)}
                 >
-                <svg
-                  className="icon-default block group-hover:hidden"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="15"
-                  height="15"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                </svg>
-                <svg
-                  className="icon-hover hidden group-hover:block"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="15"
-                  height="15"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
-                </svg>
+                <FaRegEdit/>
                 </button>
                   {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
                 </div>
@@ -363,7 +373,7 @@ const UsersPlantilla = () => {
         </Tbody>
       </TableMolecula>
     </div>
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center mt-4 mb-5">
         <PaginationMolecula
         total={totalPages}
         initialPage={paginaActual}
@@ -403,7 +413,7 @@ const UsersPlantilla = () => {
                   erros={errors}
                   id={"correo_electronico"}
                   placeholder={"Ingrese el  correo del usuario"}
-                  type={"email"}
+                  type={"text"}
                 />
                 <InputAtomo
                   register={register}

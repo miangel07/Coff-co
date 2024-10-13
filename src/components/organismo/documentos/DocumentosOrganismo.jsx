@@ -26,6 +26,7 @@ import DocumentoEdit from "../../molecules/Formulario/DocumentoEdit";
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../../context/AuthContext";
 import { useValidarServcioDocumentoMutation } from "../../../store/api/TipoServicio";
+import ToolTip from "../../molecules/toolTip/ToolTip";
 
 const DocumentosOrganismo = () => {
   const [dataInput, SetDataInput] = useState("");
@@ -320,25 +321,59 @@ const DocumentosOrganismo = () => {
                 <Td>{doc.tipo_documento}</Td>
                 <Td>
                   <div className=" flex flex-row gap-3 justify-between">
-                    <BiDownload
-                      className="cursor-pointer"
-                      size={"30px"}
-                      onClick={() =>
-                        handledescargar(doc.nombre_documento_version)
+                    <ToolTip
+                      content="Descargar"
+                      placement="top"
+                      icon={() => (
+                        <BiDownload
+
+                          size={"30px"}
+                          onClick={() =>
+                            handledescargar(doc.nombre_documento_version)
+                          }
+                        />
+                      )
+
                       }
+                      className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
                     />
+
+
+
+
+
                     {(inactivos && rol === "administrador") && (
                       <>
-                        <FaRegEdit
-                          className="cursor-pointer"
-                          size={"30px"}
-                          onClick={() => hadeleEditar(doc)}
+                        <ToolTip
+                          content="Actiualizar"
+                          placement="top"
+                          icon={() => (
+                            <FaRegEdit
+                              className="cursor-pointer"
+                              size={"30px"}
+                              onClick={() => hadeleEditar(doc)}
+                            />
+                          )}
+                          className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
                         />
-                        <MdEditDocument
-                          onClick={() => hadleActualizar(doc)}
-                          className="cursor-pointer"
-                          size={"30px"}
+                        <ToolTip
+                          content="Ac.Version"
+                          placement="top"
+                          icon={
+                            () => (
+                              <MdEditDocument
+                                onClick={() => hadleActualizar(doc)}
+                                className="cursor-pointer"
+                                size={"30px"}
+                              />
+                            )
+                          }
+                          className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
+
+
                         />
+
+
                       </>
                     )}
                   </div>
