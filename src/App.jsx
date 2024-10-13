@@ -109,13 +109,14 @@ const App = () => {
               <Route path="/documentos" element={<DocumentosPage />} />
               <Route path="/ambientes" element={<AmbientesPage />} />
               <Route path="/precios" element={<PreciosPage />} />
-              <Route path="/users" element={<UsersPages />} />
               <Route path="/alquiler" element={<CalendarPages />} />
               <Route path="/facturas" element={<FacturasPages />} />
               <Route path="/variables" element={<VariablePages />} />
               <Route path="/Tipodocumento" element={<TipoDocumentoPage />} />
+              <Route path="/servicios" element={<ServicioPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/muestras" element={<MuestrasPage />} />
+              <Route path="/logos" element={<Logos />} />
               <Route path="/reportes" element={<ReportesPages />} />
               <Route path="/perfil" element={<Perfil />} />
             </>
@@ -126,10 +127,12 @@ const App = () => {
               <Route path="/documentos" element={<DocumentosPage />} />
               <Route path="/ambientes" element={<AmbientesPage />} />
               <Route path="/precios" element={<PreciosPage />} />
+              <Route path="/servicios" element={<ServicioPage />} />
               <Route path="/users" element={<UsersPages />} />
               <Route path="/Tipodocumento" element={<TipoDocumentoPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/muestras" element={<MuestrasPage />} />
+              <Route path="/logos" element={<Logos />} />
               <Route path="/variables" element={<VariablePages />} />
               <Route path="/perfil" element={<Perfil />} />
             </>
@@ -139,6 +142,7 @@ const App = () => {
             <>
               <Route path="/*" element={<Navigate to="/home" />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route path="/logos" element={<Logos />} />
             </>
           )}
 

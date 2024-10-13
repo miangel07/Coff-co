@@ -18,6 +18,7 @@ import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Search from "../../atoms/Search";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/AuthContext";
+import ToolTip from "../../molecules/toolTip/ToolTip";
 
 const VariablesPlantilla = () => {
   const [showModal, setShowMdal] = useState(false);
@@ -188,10 +189,10 @@ const VariablesPlantilla = () => {
             <Th>Tipo de Dato</Th>
             <Th>Unidad de medida</Th>
             <Th>Estado</Th>
-           
-                <Th>{rol === "administrador" ? "Acciones":""}</Th>
-            
-            
+
+            <Th>{rol === "administrador" ? "Acciones" : ""}</Th>
+
+
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((variable) => (
@@ -217,11 +218,19 @@ const VariablesPlantilla = () => {
                     {
                       rol === "administrador" && (
                         <>
-                          <FaRegEdit
-                            className="cursor-pointer"
-                            size={"30px"}
-                            onClick={() => handleEdit(variable)}
+                          <ToolTip
+                            content="Editar"
+                            placement="top"
+                            icon={() => (
+                              <FaRegEdit
+                                className="cursor-pointer"
+                                size={"30px"}
+                                onClick={() => handleEdit(variable)}
+                              />
+                            )}
+
                           />
+
                         </>
                       )
                     }
