@@ -26,7 +26,7 @@ const LoginComponent = () => {
 
   //MUTACIONES
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, {isError: isErrorLogin, error: errorLogin}] = useLoginUserMutation();
 
   //FUNCIONES
    //Use Form del formulario de registro y del Login
@@ -127,8 +127,8 @@ const LoginComponent = () => {
   ];
 
   //MANEJO DE ERRORES EN LOS INPUTS
-  const errorLogin = isError ? (
-    <p className="text-red-400 font-calibri">{error.error}</p>
+  const errorInputLogin = isErrorLogin ? (
+    <p className="text-red-400 font-calibri">{errorLogin.error}</p>
   ) : ("");
 
   return (
@@ -139,7 +139,7 @@ const LoginComponent = () => {
           <h1 className="card-title text-center mt-6 font-sans text-3xl font-bold text-gray-800">
             COFFCO
           </h1>
-          {errorLogin && <p className="text-red-400">{errorLogin}</p>}
+          {errorInputLogin && <p className="text-red-400">{errorInputLogin}</p>}
         </div>
       
         <form className="card-body mt-4" onSubmit={handleSubmitLogin(onSubmitLogin)}>

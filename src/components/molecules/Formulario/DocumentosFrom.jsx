@@ -4,17 +4,19 @@ import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
 import SelectDocumentos from '../../atoms/SelectDocumentos';
 import { useGetVariablesQuery } from '../../../store/api/variables';
-import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
+import { useListarActivosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
 import { useTipoServicioActivoQuery } from '../../../store/api/TipoServicio';
 import CheckboxAtomo from '../../atoms/CheckboxAtomo';
-import { useGetLogosQuery } from '../../../store/api/logos';
+import { useLogosActivosQuery } from '../../../store/api/logos';
 import { useCrearDocumentoMutation } from '../../../store/api/documentos';
 import { useActualizarVersionMutation } from '../../../store/api/documentos';
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { useValidarServcioDocumentoMutation } from '../../../store/api/TipoServicio';
 import { Link } from 'react-router-dom';
+import InputAtomoActualizar from '../../atoms/InputActualizar';
+
 
 const DocumentosFrom = ({ closeModal, valor }) => {
 
@@ -26,10 +28,10 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     const [servicio, setTipoServicio] = useState('')
     const [mensajeServicio, setMensajeServicio] = useState(false)
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
-    const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
+    const { data, isLoading, isError, error } = useListarActivosQuery();
     const [crearDocumento, { isLoading: loandCrearDocumneto, isError: isErrorDocumento,
         error: ErrorDocumento, data: dataResponse, isSuccess }] = useCrearDocumentoMutation()
-    const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
+    const { data: datalogos, isLoading: loandingLogos, } = useLogosActivosQuery();
     const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useTipoServicioActivoQuery();
     const [actualizarVersion, { isLoading: loandActualizarVersion, isError: isErrorActualizarVersion, error: ErrorActualizarVersion,
@@ -95,7 +97,6 @@ const DocumentosFrom = ({ closeModal, valor }) => {
         DataForm.append('fecha_emision', data.fecha_emision);
         DataForm.append('servicios', servicio);
         DataForm.append('tipo_documento', dataInput);
-        DataForm.append('version', data.version);
         DataForm.append('variables', JSON.stringify(ArryVariables));
         DataForm.append('logos', JSON.stringify(logos));
         DataForm.append('file', file);
@@ -181,11 +182,8 @@ const DocumentosFrom = ({ closeModal, valor }) => {
     }
 
     if (isError || tipoServicioError || isErrorDocumento) {
-        return <p>Error: {error?.message || ErroTipo?.message || ErrorDocumento?.message} </p>;
+        return <p>Error: {error?.error || ErroTipo?.error || ErrorDocumento?.error} </p>;
     }
-
-
-    /* 'entrada', 'salida' */
     return (
         <div className='w-full flex flex-col max-h-full  '>
 
@@ -230,14 +228,28 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                         />
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
-                        <CheckboxAtomo
-                            value={valor?.logos}
-                            data={datalogos.data}
-                            items={"nombre"}
-                            valor={"idLogos"}
-                            onDataChange={onDataChangeLogos}
-                            cantidad={2}
-                        />
+
+                        {
+                            datalogos ?
+                                <CheckboxAtomo
+                                    value={valor?.logos}
+                                    data={datalogos.data}
+                                    items={"nombre"}
+                                    valor={"idLogos"}
+                                    onDataChange={onDataChangeLogos}
+                                    cantidad={2}
+                                /> : <div className='w-[230px] h-[155px]  justify-center flex flex-col'>
+                                    <p className=' text-red-400 font-semibold'>No hay Logos Disponibles</p>
+                                    <Link to="/logos">
+
+
+                                        <Mybutton color={"primary"}>
+                                            Agregar Logos
+                                        </Mybutton>
+                                    </Link>
+                                </div>
+                        }
+
                     </div>
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>{t('FechaEmision')}</Label>
@@ -249,17 +261,23 @@ const DocumentosFrom = ({ closeModal, valor }) => {
                             placeholder={t('FechaEmision')}
                         />
                     </div>
-                    <div className='flex w-[230px] h-[155px] flex-col'>
-                        <Label>Version</Label>
-                        <InputAtomo
-                            register={register}
-                            name={'version'}
-                            erros={errors}
-                            placeholder={"version"}
-                            id={'version'}
-                            type={"text"}
-                        />
-                    </div>
+                    {valor && (
+                        <div className='flex w-[230px] h-[155px] flex-col'>
+                            <Label>Version</Label>
+                            <InputAtomoActualizar
+                                id={"version"}
+                                errores={errors}
+                                name={"version"}
+                                placeholder={"version"}
+                                defaultValue={valor?.version || ""}
+                                type={"text"}
+                                register={register}
+
+
+                            />
+                        </div>
+                    )}
+
                     <div className='flex w-[230px] h-[155px] flex-col'>
                         <Label>{t("tipoDocumentos")}</Label>
                         <SelectDocumentos

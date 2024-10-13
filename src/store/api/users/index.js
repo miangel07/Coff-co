@@ -57,11 +57,11 @@ export const usuariosSlice = createApi({
       method:'POST',
       body:data,
     }),
-    transformErrorResponse:(response,meta,arg)=>{
-      return{
-        originalArg:arg,
-        error:response.data.message,
-      }
+    transformErrorResponse: (response) => {
+      return {
+        status: response.status,
+        errors: response.data?.errors || [response.data?.message || "Error desconocido"]
+      };
     },
     invalidatesTags:['usuarios']
   }),
