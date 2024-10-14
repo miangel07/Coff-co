@@ -7,7 +7,7 @@ export const VariablesApi = createApi({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({
@@ -15,6 +15,13 @@ export const VariablesApi = createApi({
         getVariables: build.query({
             query: () => ({
                 url: "variables/listar",
+                method: "GET",
+            }),
+            providesTags: ['Variable']
+        }),
+        getVariableActivas: build.query({
+            query: () => ({
+                url: "variables/listaActivas",
                 method: "GET",
             }),
             providesTags: ['Variable']
@@ -76,4 +83,4 @@ export const VariablesApi = createApi({
 
 })
 
-export const { useCrearVariableMutation, useEditarVariableMutation, useGetVariablesQuery, useEliminarVariableMutation, useUpdateEstadoMutation } = VariablesApi
+export const { useCrearVariableMutation, useEditarVariableMutation, useGetVariablesQuery, useEliminarVariableMutation, useUpdateEstadoMutation, useGetVariableActivasQuery } = VariablesApi
