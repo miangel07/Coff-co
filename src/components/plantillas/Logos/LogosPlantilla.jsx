@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -12,12 +12,11 @@ import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
 import { Switch } from "@nextui-org/react";
 import { useTranslation } from 'react-i18next';
-// import { FaRegEye } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { AuthContext } from "../../../context/AuthContext";
 
 //Importaciones para el modal
 import { IoAtCircle } from "react-icons/io5";
-import SelectAtomo from "../../atoms/Select";
-import SelectAtomoActualizar from "../../atoms/SelectActualizar";
 import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import Logosímbolo from "../../atoms/Logosímbolo";
 import UserFrom from "../../molecules/Formulario/UserFrom";
@@ -35,9 +34,14 @@ const LogosPlantilla = () => {
     const [paginaActual,setPaginaActual]= useState(1)
     const itemsPorPagina = 7
 
+    //ROL DEL USUARIO
+    const { authData } = useContext(AuthContext); 
+    const Rol = authData?.usuario.rol
+    console.log()
+
      // FUNCIONES CRUD
     const {data,isLoading} = useGetLogosQuery()
-    const [registrarLogo, { isSuccess, datos, isError, error }] = useRegistrarLogoMutation();
+    const [registrarLogo] = useRegistrarLogoMutation();
     const [actualizarEstado] = useActualizarEstadoMutation();
     const [actualizarLogo]= useActualizarLogoMutation();
 
@@ -46,8 +50,8 @@ const LogosPlantilla = () => {
     const [busqueda, setBusqueda] = useState('')
     const [filtroEstado, setFiltroEstado] = useState(true);
 
-     //MODAL 
-    const {handleSubmit, register, formState: { errors },reset,} = useForm();
+    //MODAL 
+    const {handleSubmit, register, formState: { errors }, reset} = useForm();
 
     //Abrir modal
     const [openModal, setOpenModal] = useState(false);
@@ -105,19 +109,41 @@ const LogosPlantilla = () => {
     
     const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
     const closeLogoModal = () => {setOpenLogoModal(false);};
-  
-    //SUBMIT REGISTRAR
-    const onsubmit = (data) => {
+     
+    const onsubmit = async (data) => {
       const formData = new FormData();
-      formData.append("file", data.file[0]);
-      formData.append("nombre", data.nombre);
-  
-      registrarLogo(formData);
+      formData.append('file', data.file[0]);
+      formData.append('nombre', data.nombre);
+    
+      try {
+        const response = await registrarLogo(formData).unwrap(); 
+        setsucess(response.message); 
+    
+        toast.success(response.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+      } catch (error) {
+        console.error("Error:", error);
+        toast.error(error.error || "Ocurrió un error", {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    
       reset();
-      toast.success("Logo registrado con éxito");
       setOpenModal(false);
-    };    
-
+    };
+    
     //SUBMIT ACTUALIZAR
     const onsubmitActualizar = (valores) => {
       if (logoSeleccionado) {
@@ -130,34 +156,6 @@ const LogosPlantilla = () => {
         setOpenModalActualizar(false);
       }
     };
-    
-    //Para registrar
-    useEffect(() => {
-      if (isSuccess) {
-        setsucess(datos?.message);
-        toast.success(datos?.message, {
-          duration: 5000,
-          position: "top-center",
-          style: {
-            background: "#333",
-            color: "#fff",
-          },
-          icon: <FcOk />,
-        });
-      }
-  
-      if (isError) {
-        console.log(error);
-        toast.error(error?.error || "Ocurrió un error", {
-          duration: 5000,
-          position: "top-center",
-          style: {
-            background: "#333",
-            color: "#fff",
-          },
-        });
-      }
-    }, [isSuccess, isError, error, datos]);
 
     // ESTADO DE CARGA DE LA TABLA 
     if(isLoading){
@@ -171,7 +169,7 @@ const LogosPlantilla = () => {
         { value: "inactivo", label: "Inactivo" }
     ];
 
-    const filtrodeDatos = data && data.data.length > 0 ? data.data.filter((logo) => {
+    const filtrodeDatos = data.data && data.data.length > 0 ? data.data.filter((logo) => {
       const filtroestado = filtroEstado ? "activo" : "inactivo"
       const nombreLogo = busqueda === "" ||
         (logo.nombre && logo.nombre.toLowerCase().includes(busqueda.toLowerCase()));
@@ -183,21 +181,21 @@ const LogosPlantilla = () => {
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
     const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-    const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
+    const totalPages = Math.ceil((data.data.length||0)/itemsPorPagina)
 
     return(
-    <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100"> 
+      <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
+
 
     {/* TABLA */}
-      
-      <div className="flex justify-center items-center space-x-64">
-      <div className="pt-10 pl-20">
+      <div className="flex justify-center items-center ">
+        {Rol === "administrador" ? (<div className="pt-10 pl-20">
         <Mybutton onClick={handleClick} color={"primary"}>Nuevo Logo<IoAtCircle/></Mybutton>
-      </div>
-      <div className="w-[550px] pt-10 pl-20">
+      </div>) : null}
+      <div className="w-[550px] pt-10 pl-20 ">
           <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
       </div>
-      <div className="pt-10 pl-20">
+      <div className="pt-10 pl-20 ">
           <Switch
             color={filtroEstado ? "success" : "default"}
             isSelected={filtroEstado}
@@ -206,7 +204,7 @@ const LogosPlantilla = () => {
           </Switch>
         </div>
       </div>
-      <div className="w-full px-20 h-auto overflow-y-auto">
+      <div className="w-full px-20 h-auto ">
         <TableMolecula lassName="w-full">
           <Thead>
             <Th>ID</Th>
@@ -228,32 +226,13 @@ const LogosPlantilla = () => {
                   {/* <Td>{logo.ruta}</Td> */}
                   <Td>
                   <div className="flex  items-center space-x-4">
-                    
-                  <button
+                    <button
                     className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
                     onClick={() => handleClickActualizar(logo)}
                   >
-                  <svg
-                    className="icon-default block group-hover:hidden"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                  </svg>
-                  <svg
-                    className="icon-hover hidden group-hover:block"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="15"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
-                  </svg>
+                  <FaRegEdit/>
                   </button>
+                 
                   </div>
                   </Td>
                   <Td>
@@ -279,7 +258,7 @@ const LogosPlantilla = () => {
           </Tbody>
         </TableMolecula>
       </div>
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-4 mb-4">
           <PaginationMolecula
           total={totalPages}
           initialPage={paginaActual}
@@ -314,8 +293,7 @@ const LogosPlantilla = () => {
                   type={"file"}
                 />
                 </>
-              }
-            />
+              }/>
           }
           visible={true}
           title={"Registro de Logo"}

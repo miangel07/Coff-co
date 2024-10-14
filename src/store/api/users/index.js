@@ -22,6 +22,17 @@ export const usuariosSlice = createApi({
     providesTags:['usuarios']
   }),
 
+  //LISTAR
+  getRoles: build.query({
+    query:()=>({
+      url:'/usuario/listarroles',
+      method:'GET',
+    }),
+    invalidatesTags:['usuarios'],
+    providesTags:['usuarios']
+
+  }),
+
   // LISTAR ID
   getUsuarioId: build.query({
     query: (id) => ({
@@ -46,11 +57,11 @@ export const usuariosSlice = createApi({
       method:'POST',
       body:data,
     }),
-    transformErrorResponse:(response,meta,arg)=>{
-      return{
-        originalArg:arg,
-        error:response.data.message,
-      }
+    transformErrorResponse: (response) => {
+      return {
+        status: response.status,
+        errors: response.data?.errors || [response.data?.message || "Error desconocido"]
+      };
     },
     invalidatesTags:['usuarios']
   }),
@@ -125,4 +136,4 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery,useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice
+export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice
