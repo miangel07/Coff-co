@@ -75,10 +75,9 @@ export const usuariosSlice = createApi({
       }),
       transformErrorResponse: (response, meta, arg) => {
         console.log("Respuesta completa de error:", response);
-        
         return {
-          originalArg: arg,
-          error: response?.data?.message || response?.statusText || "Error desconocido",
+          status: response.status,
+          errors: response.data?.errors || [response.data?.message || "Error desconocido"]
         };
       },
       invalidatesTags: ['usuarios'],

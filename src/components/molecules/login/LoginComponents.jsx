@@ -33,7 +33,7 @@ const LoginComponent = () => {
     const {handleSubmit: handleSubmitLogin, register: registerLogin, formState: { errors: errorsLogin }, } = useForm();
     const {handleSubmit: handleSubmitRegistro, register: registerRegistro, formState: { errors: errorsRegistro }, watch: watchRegistro, setValue: setValueRegistro, reset: resetRegistro } = useForm();
   const { iniciarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
-  const closeModal = () => {setModalRegistro(false);reset()};
+  const closeModal = () => {setModalRegistro(false); resetRegistro()};
   const navigate = useNavigate();
 
   //ROLES
@@ -53,12 +53,36 @@ const LoginComponent = () => {
   }, []);
 
   //SUBMIT REGISTRAR
-  const onsubmitRegistrar = (data) => {
-    registrarUsuario(data);
-    setModalRegistro(false)
-    resetRegistro();
-    toast.success("Usuario registrado con éxito");
+  const onsubmitRegistrar = async (data) => {
+    try {
+      const response = await registrarUsuario(data).unwrap(); 
+      setsucess(response.message); 
+  
+      toast.success(response.message, {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+        icon: <FcOk />,
+      });
+
+      setOpenModal(false);
+      reset();
+    } catch (error) {
+      const mensajesError = error.errors.join(', ');
+      toast.error(mensajesError || "Ocurrió un error", {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
+
 
   //SUBMIT LOGIN
   const onSubmitLogin = async (datos) => {
@@ -139,7 +163,7 @@ const LoginComponent = () => {
           <h1 className="card-title text-center mt-6 font-sans text-3xl font-bold text-gray-800">
             COFFCO
           </h1>
-          {errorInputLogin && <p className="text-red-400">{errorInputLogin}</p>}
+          {errorInputLogin && <div className="text-red-400">{errorInputLogin}</div>}
         </div>
       
         <form className="card-body mt-4" onSubmit={handleSubmitLogin(onSubmitLogin)}>

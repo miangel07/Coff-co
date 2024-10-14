@@ -6,7 +6,7 @@ export const docuentosApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({
@@ -16,7 +16,7 @@ export const docuentosApi = createApi({
                 url: "documentos/listar",
                 method: "GET",
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             providesTags: ["Documentos"],
@@ -28,7 +28,7 @@ export const docuentosApi = createApi({
                 method: "POST",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response, meta, arg) => {
@@ -43,12 +43,12 @@ export const docuentosApi = createApi({
         //actualizar documento
         actualizarDocumento: build.mutation({
             query: (data) => (
-                console.log("DATA",data), {
+                console.log("DATA", data), {
                     url: `documentos/actualizar/${data.get('id_documentos')}`,
                     method: "PUT",
                     body: data,
                     headers: {
-                        token: `${getCookie("authToken")}`,
+                        token: `${getCookie("Token")}`,
                     },
                 }),
             transformErrorResponse: (response, meta, arg) => {
@@ -114,6 +114,9 @@ export const docuentosApi = createApi({
             query: () => ({
                 url: "documentos/grafica",
                 method: "GET",
+                headers: {
+                    token: `${getCookie("Token")}`,
+                },
             }),
             providesTags: ["Documentos"],
         })

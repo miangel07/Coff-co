@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+import { getCookie } from "../../../utils";
 export const repotesApi = createApi({
     reducerPath: "reportes",
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${localStorage.getItem("token")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({
