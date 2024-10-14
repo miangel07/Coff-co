@@ -5,7 +5,7 @@ import Footer from "../../components/molecules/Footer/Footer";
 import { useState } from "react";
 
 const CalendarPages = () => {
-    const [menuAbierto, setMenuAbierto] = useState(false);
+    const [menuAbierto, setMenuAbierto] = useState(true);
 
     const toggleMenu = () => {
         setMenuAbierto(!menuAbierto);
@@ -16,11 +16,8 @@ const CalendarPages = () => {
             <Header contenido={"Coffco"} />
             <div className="flex flex-grow">
                 <div
-                    className={`transition-all duration-300 ease-in-out ${
-                        menuAbierto ? "w-60" : "w-16"
-                    } bg-gray-100`}
-                >
-                    <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
+                    className={`transition-all duration-300 ease-in-out`}>
+                    <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu}/>
                 </div>
                 <div className="w-full overflow-auto">
                     <CalendarPlantilla />
