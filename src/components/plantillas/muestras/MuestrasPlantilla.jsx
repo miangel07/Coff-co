@@ -11,6 +11,7 @@ import { Switch } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
 import FincaFormulario from "../../molecules/Formulario/FincaFormulario";
+import ClienteFormulario from "../../molecules/Formulario/ClienteFormulario";
 import Search from "../../atoms/Search";
 
 import {
@@ -20,6 +21,7 @@ import {
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
   const [showFincaModal, setShowFincaModal] = useState(false);
+  const [showClienteModal, setShowClienteModal] = useState(false);
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,6 +46,10 @@ const MuestrasPlantilla = () => {
   const handleFincaModal = () => {
     setShowFincaModal(true);
   };
+
+  const handleClienteModal = () => {
+    setShowClienteModal(true);
+  }
 
   const cantidad = 4;
   const final = pages * cantidad;
@@ -78,6 +84,10 @@ const MuestrasPlantilla = () => {
     setShowFincaModal(false);
   };
 
+const closeClienteModal = () => {
+  setShowClienteModal(false);
+}
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -92,6 +102,9 @@ console.log(DataArrayPaginacion)
         </Mybutton>
         <Mybutton color={"secondary"} onClick={handleFincaModal}>
           Agregar Finca
+        </Mybutton>
+        <Mybutton color={"secondary"} onClick={handleClienteModal}>
+          Agregar Cliente
         </Mybutton>
 
         <div className="ml-auto">
@@ -123,6 +136,16 @@ console.log(DataArrayPaginacion)
           closeModal={closeFincaModal}
         >
           <FincaFormulario closeModal={closeFincaModal} />
+        </ModalOrganismo>
+      )}
+
+        {showClienteModal && (
+        <ModalOrganismo
+          title={"Agregar Cliente"}
+          visible={showClienteModal}
+          closeModal={closeClienteModal}
+        >
+          <ClienteFormulario closeModal={closeClienteModal} />
         </ModalOrganismo>
       )}
 
