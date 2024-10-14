@@ -3,7 +3,7 @@ import InputAtomo from '../../atoms/Input'
 import { useForm } from 'react-hook-form'
 import Mybutton from '../../atoms/Mybutton';
 import SelectAtomo from '../../atoms/Select';
-import { useGetVariablesQuery } from '../../../store/api/variables';
+import { useGetVariableActivasQuery } from '../../../store/api/variables';
 import { useGetTipoDocumentosQuery } from '../../../store/api/TipoDocumentos';
 import Label from '../../atoms/Label';
 import { useGetTipoServicioQuery } from '../../../store/api/TipoServicio';
@@ -24,11 +24,10 @@ const DocumentoEdit = ({ valor, closeModalEdit }) => {
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
     const { data, isLoading, isError, error } = useGetTipoDocumentosQuery();
     const { data: datalogos, isLoading: loandingLogos, } = useGetLogosQuery();
-    const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariablesQuery();
+    const { data: varibles, isLoading: LoandVariables, isError: ErrorVariable, error: Error } = useGetVariableActivasQuery();
     const { data: TpoServicio, isLoading: TipoServicio, isError: tipoServicioError, error: ErroTipo } = useGetTipoServicioQuery();
     const [actualizarVersion, { isLoading: loandActualizar, isError: isErrorActualizar, error: ErrorActualizar,
         data: dataResponseActualizar, isSuccess: isSuccessActualizar }] = useActualizarDocumentoMutation()
-    console.log(valor)
     useEffect(() => {
         if (isSuccessActualizar) {
             toast.success(`${dataResponseActualizar?.message}`);
