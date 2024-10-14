@@ -50,6 +50,25 @@ export const usuariosSlice = createApi({
     providesTags:['usuarios']
   }),
 
+  // LISTAR CLIENTES
+  getClientes: build.query({
+    query: (id) => ({
+      url: '/usuario/clientes',
+      method: 'GET',
+    }),
+    transformErrorResponse: (response, meta, arg) => {
+      console.log("Respuesta completa de error:", response);
+      
+      return {
+        originalArg: arg,
+        error: response?.data?.message || response?.statusText || "Error desconocido",
+      };
+    },
+    providesTags:['usuarios']
+  }),
+
+
+
     //REGISTRAR
   registrarUsuario: build.mutation({
     query:(data)=>({
@@ -136,4 +155,6 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice
+export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,
+  useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,
+  useActualizarContraMutation, useGetClientesQuery} = usuariosSlice

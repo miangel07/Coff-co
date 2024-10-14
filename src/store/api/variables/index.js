@@ -19,6 +19,13 @@ export const VariablesApi = createApi({
             }),
             providesTags: ['Variable']
         }),
+        getVariableActivas: build.query({
+            query: () => ({
+                url: "variables/listaActivas",
+                method: "GET",
+            }),
+            providesTags: ['Variable']
+        }),
         //crear variable
         crearVariable: build.mutation({
             query: (data) => ({
@@ -76,4 +83,4 @@ export const VariablesApi = createApi({
 
 })
 
-export const { useCrearVariableMutation, useEditarVariableMutation, useGetVariablesQuery, useEliminarVariableMutation, useUpdateEstadoMutation } = VariablesApi
+export const { useCrearVariableMutation, useEditarVariableMutation, useGetVariablesQuery, useEliminarVariableMutation, useUpdateEstadoMutation, useGetVariableActivasQuery } = VariablesApi

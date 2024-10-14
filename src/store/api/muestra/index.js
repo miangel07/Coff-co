@@ -53,13 +53,14 @@ endpoints: (build) => ({
           error:response.data.message,
         };
       },
-      invalidatesTags:['Muestras'],
+      invalidatesTags:['Muestras']
     }),
 
     //actualizar muestra 
     putMuestra: build.mutation({
-      query:(data)=>({
-        url:`muestra/actualizar/${data.id}`,
+      query:(data)=>(
+        {
+        url:`muestra/actualizar/${data.get("id_muestra")}`,
         method:'PUT',
         body:data,
         headers:{
