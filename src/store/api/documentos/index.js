@@ -114,6 +114,9 @@ export const docuentosApi = createApi({
             query: () => ({
                 url: "documentos/grafica",
                 method: "GET",
+                headers: {
+                    token: `${getCookie("Token")}`,
+                },
             }),
             providesTags: ["Documentos"],
         })
