@@ -12,6 +12,8 @@ import { useForm } from 'react-hook-form'
 import InputAtomo from '../../atoms/Input'
 import { toast } from "react-toastify";
 import { Spinner } from "@nextui-org/react";
+import ReporteExcel from '../../molecules/Formulario/ExcelForm.jsx'
+
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
   const [excel, setExcel] = useState(false)
@@ -105,16 +107,9 @@ const ReportesPlantillas = () => {
           </div>
           {excel &&
             <ModalOrganismo visible={excel} closeModal={() => setExcel(false)}>
-              <h2>Reporte Excel</h2>
-              {/* aca mete un componente y en ese componete va lo del reporte de excel solo pone el componente con la logica
-              no valla hacer todo aca  */}
-
+              <ReporteExcel />
             </ModalOrganismo>
           }
-
-
-
-
 
         </section>
 

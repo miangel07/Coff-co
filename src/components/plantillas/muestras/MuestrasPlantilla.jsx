@@ -10,30 +10,39 @@ import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { Switch } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
-import FincaFormulario from "../../molecules/Formulario/FincaFormulario"; // Importar el nuevo formulario
-import Search from "../../atoms/Search"; // Importar el componente de búsqueda
+import FincaFormulario from "../../molecules/Formulario/FincaFormulario";
+import Search from "../../atoms/Search";
 
 import {
   useGetMuestrasQuery,
-  useUpdateEstadoMuestraMutation,
 } from "../../../store/api/muestra";
 
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
-  const [showFincaModal, setShowFincaModal] = useState(false); // Estado para el modal de finca
+  const [showFincaModal, setShowFincaModal] = useState(false);
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para el valor del campo de búsqueda
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedMuestra, setSelectedMuestra] = useState(null);
   const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
-  const [updateEstado] = useUpdateEstadoMuestraMutation();
+
+  const handleImageClick = (muestra) => {
+    setSelectedMuestra(muestra);
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
+    setSelectedMuestra(null);
+  };
 
   const handleModal = () => {
     setShowModal(true);
   };
 
   const handleFincaModal = () => {
-    setShowFincaModal(true); // Mostrar modal de finca
+    setShowFincaModal(true);
   };
 
   const cantidad = 4;
@@ -45,12 +54,11 @@ const MuestrasPlantilla = () => {
 
   const numeroPagina = Math.ceil((dataMuestras?.length || 0) / cantidad);
 
-  // Filtrar los datos según el valor del campo de búsqueda
   const filteredData = dataMuestras
-  ? dataMuestras.filter((muestra) =>
-      muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  : [];
+    ? dataMuestras.filter((muestra) =>
+        muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   const DataArrayPaginacion = filteredData
     ? filteredData?.slice(inicial, final)
@@ -67,29 +75,17 @@ const MuestrasPlantilla = () => {
   };
 
   const closeFincaModal = () => {
-    setShowFincaModal(false); // Cerrar modal de finca
-  };
-
-  const handleSwitchChange = (checked, id) => {
-    try {
-      updateEstado({
-        id: id,
-        estado: checked ? "terminado" : "pendiente",
-      });
-    } catch (error) {
-      console.error("Error al procesar la solicitud", error);
-    }
+    setShowFincaModal(false);
   };
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
+console.log(DataArrayPaginacion)
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">Muestras</h2>
 
-      {/* Botones y barra de búsqueda */}
       <div className="px-20 flex gap-4 items-center">
         <Mybutton color={"primary"} onClick={handleModal}>
           Nuevo
@@ -98,7 +94,6 @@ const MuestrasPlantilla = () => {
           Agregar Finca
         </Mybutton>
 
-        {/* Componente de búsqueda */}
         <div className="ml-auto">
           <Search
             label={"Buscar muestra"}
@@ -110,7 +105,7 @@ const MuestrasPlantilla = () => {
 
       {showModal && (
         <ModalOrganismo
-          title={"Registrar Nueva Muestra"}
+          title={datosDelFormulario ? "Editar Muestra" : "Registrar Nueva Muestra"}
           visible={showModal}
           closeModal={closemodal}
         >
@@ -146,6 +141,7 @@ const MuestrasPlantilla = () => {
             <Th>Altura (M)</Th>
             <Th>Variedad</Th>
             <Th>Observaciones</Th>
+            <Th>Imagen</Th>
             <Th>Acciones</Th>
           </Thead>
           <Tbody>
@@ -161,11 +157,8 @@ const MuestrasPlantilla = () => {
                 <Td>{muestra.fk_idTipoServicio}</Td>
                 <Td>
                   <Switch
-                    color={muestra.estado === "terminado" ? "success" : "default"}
                     isSelected={muestra.estado === "terminado"}
-                    onValueChange={(checked) =>
-                      handleSwitchChange(checked, muestra.id_muestra)
-                    }
+                    color={muestra.estado === "terminado" ? "success" : "default"}
                   >
                     {muestra.estado}
                   </Switch>
@@ -174,12 +167,23 @@ const MuestrasPlantilla = () => {
                 <Td>{muestra.variedad}</Td>
                 <Td>{muestra.observaciones}</Td>
                 <Td>
-                  <div className="gap-3 flex flex-grow">
-                    <FaRegEdit
-                      className="cursor-pointer"
-                      size={"30px"}
-                      onClick={() => handleEdit(muestra)}
+                  {muestra.fotoMuestra && (
+                    <img
+                      src={`http://localhost:3000/public/muestras/${muestra.fotoMuestra}`}
+                      alt="Muestra"
+                      className="cursor-pointer h-8 w-8 rounded object-cover"
+                      onClick={() => handleImageClick(muestra)}
                     />
+                  )}
+                </Td>
+                <Td>
+                  <div className="flex items-center space-x-4">
+                    <button
+                      className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
+                      onClick={() => handleEdit(muestra)}
+                    >
+                      <FaRegEdit />
+                    </button>
                   </div>
                 </Td>
               </tr>
@@ -187,6 +191,22 @@ const MuestrasPlantilla = () => {
           </Tbody>
         </TableMolecula>
       </div>
+
+      {showImageModal && selectedMuestra && (
+        <ModalOrganismo
+          title={`Imagen de la Muestra: ${selectedMuestra.codigo_muestra}`}
+          visible={true}
+          closeModal={closeImageModal}
+        >
+          <div className="flex justify-center items-center">
+            <img
+              src={`http://localhost:3000/public/muestras/${selectedMuestra.fotoMuestra}`}
+              alt={`Muestra ${selectedMuestra.codigo_muestra}`}
+              className="max-w-full max-h-[80vh] object-contain"
+            />
+          </div>
+        </ModalOrganismo>
+      )}
 
       <div className="flex justify-center mt-4">
         <PaginationMolecula
