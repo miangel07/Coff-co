@@ -13,6 +13,7 @@ import InputAtomo from '../../atoms/Input'
 import { toast } from "react-toastify";
 import { Spinner } from "@nextui-org/react";
 import ReporteExcel from '../../molecules/Formulario/ExcelForm.jsx'
+import GraficaAlquiler from '../../molecules/graficas/GraficaAlquiler.jsx'
 
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
@@ -115,7 +116,7 @@ const ReportesPlantillas = () => {
 
       </header>
       <section className=' gap-6 flex flex-col bg-white '>
-        <ReportesGrafica />
+        <GraficaAlquiler />
         <GraficaRadar />
       </section>
     </>

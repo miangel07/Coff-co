@@ -5,31 +5,70 @@ import { Spinner } from "@nextui-org/react";
 
 const ReportesGrafica = () => {
     const { data, isLoading, isError } = useGetReporteQuery();
-    if (!data || data.length === 0) {
-        return <p>No hay datos para mostrar</p>;
-    }
+
     const option = () => {
         return {
+            title: {
+                text: 'Cantidad de servicios usados',
+                subtext: 'Datos de Servicio',
+                left: 'center',
+                top: '10',
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                },
+            },
             xAxis: {
                 type: 'category',
-                data: data?.map((item) => item.nombreServicio) || [],
+                data: data.map((item) => item.nombreServicio),
+                axisLabel: {
+                    show: true,
+                    position: 'bottom',
+                    color: '#000',
+                    fontSize: 12,
+                    formatter: (params) => params.value,
+                },
             },
             yAxis: {
                 type: 'value',
+                axisLabel: {
+                    fontSize: 12,
+                    color: '#555',
+                },
             },
             series: [
                 {
-                    data: data?.map((item) => item.cantidad_uso) || [],
+                    data: data.map((item) => item.cantidad_uso),
                     type: 'bar',
                     barWidth: '20%',
                     label: {
-                        show: true,
-                        position: 'top',
-                        color: '#000',
-                        fontSize: 12,
+                        show: false,
+                    },
+                    itemStyle: {
+                        color: '#4CAF50',
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: '#81C784',
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            color: '#000',
+                            fontSize: 12,
+                            formatter: (params) => {
+                                return params.name;
+                            },
+                        },
                     },
                 },
             ],
+            grid: {
+                left: '5%',
+                right: '5%',
+                bottom: '20%',
+                top: '10%',
+            },
         };
     };
 
@@ -37,10 +76,8 @@ const ReportesGrafica = () => {
     if (isError) return <p>Error al Graficar, intenta después.</p>;
 
     return (
-
-        <ReactEcharts option={option()} style={{ height: '300px', width: '100%' }} />
-
+        <ReactEcharts option={option()} style={{ height: '350px', width: '100%' }} />
     );
-}
+};
 
 export default ReportesGrafica;

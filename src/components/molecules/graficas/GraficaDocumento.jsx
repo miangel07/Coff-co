@@ -50,7 +50,7 @@ const GraficaDocumento = () => {
     return (
         <div className='flex flex-col   items-center' onClick={() => navigate("/documentos")}>
             <p className='font-sans font-medium' >Gestion Documental</p>
-            <ReactEcharts option={getOption()} style={{ height: '600px', width: '100%' }} />
+            <ReactEcharts option={getOption()} style={{ height: '600px', width: '50%' }} />
 
         </div>
     )
