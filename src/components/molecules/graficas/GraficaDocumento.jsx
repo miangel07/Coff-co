@@ -21,7 +21,7 @@ const GraficaDocumento = () => {
                 top: '5%',
                 left: 'center'
             },
-           
+
             series: [
                 {
                     name: 'Informacion',
@@ -38,13 +38,7 @@ const GraficaDocumento = () => {
                         position: 'outside',
                         formatter: '{b}: {c}',
                     },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            fontSize: 20,
-                            fontWeight: 'Bold'
-                        }
-                    },
+
                     labelLine: {
                         show: true
                     },
@@ -56,7 +50,7 @@ const GraficaDocumento = () => {
     return (
         <div className='flex flex-col   items-center' onClick={() => navigate("/documentos")}>
             <p className='font-sans font-medium' >Gestion Documental</p>
-            <ReactEcharts option={getOption()} style={{ height: '600px', width: '100%' }} />
+            <ReactEcharts option={getOption()} style={{ height: '600px', width: '50%' }} />
 
         </div>
     )

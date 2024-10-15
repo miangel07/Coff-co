@@ -4,6 +4,9 @@ import InputAtomo from "../../atoms/Input";
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 import { useCrearTipoDocumentoMutation, useActualizarTipoDocumentoMutation } from "../../../store/api/TipoDocumentos";
+import { useTranslation } from "react-i18next";
+
+
 
 const TipoDocumentoFormulario = ({ closeModal, dataValue }) => {
   const {
@@ -16,7 +19,7 @@ const TipoDocumentoFormulario = ({ closeModal, dataValue }) => {
 
   const [crearTipoDocumento, { isLoading: isLoadingCreate, isError: isErrorCreate, isSuccess: isSuccessCreate, data: dataResponseCreate }] = useCrearTipoDocumentoMutation();
   const [actualizarTipoDocumento, { isLoading: isLoadingUpdate, isError: isErrorUpdate, isSuccess: isSuccessUpdate, data: dataResponseUpdate }] = useActualizarTipoDocumentoMutation();
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (dataValue) {
       reset({ nombreDocumento: dataValue.nombreDocumento });
@@ -58,7 +61,7 @@ const TipoDocumentoFormulario = ({ closeModal, dataValue }) => {
           <InputAtomo
             name={"nombreDocumento"}
             erros={errors}
-            placeholder={"Nombre del Documento"}
+            placeholder={t("NombreDocumento")}
             register={register}
             type={"text"}
             id={"nombreDocumento"}
@@ -66,7 +69,7 @@ const TipoDocumentoFormulario = ({ closeModal, dataValue }) => {
         </div>
         <div className="flex justify-center">
           <Mybutton type="submit" color="primary">
-            {dataValue ? "Actualizar" : "Registrar"}
+            {dataValue ? t("actualizar") : t("registrar")}
           </Mybutton>
         </div>
       </form>

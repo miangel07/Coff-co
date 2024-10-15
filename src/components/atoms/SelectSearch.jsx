@@ -29,7 +29,7 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
   const [showTable, setShowTable] = useState(true);
   const [pages, setPages] = useState(1);
 
-  const cantidad = 2;
+  const cantidad = 4;
   const final = pages * cantidad;
   const inicial = final - cantidad;
   const numeroPagina = Math.ceil((filteredData?.length > 0 || 0) / cantidad)

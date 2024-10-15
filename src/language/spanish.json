@@ -33,5 +33,51 @@
     "idioma": "idioma",
     "ingles": "Ingles",
     "espanol": "Español",
-    "tipoEntrada": "Selecione entrada o salida"
+    "tipoEntrada": "Selecione entrada o salida",
+    "nombreDocumento": "Nombre del Documento",
+    "registrarDocumento": "Registrar nuevo tipo de documento",
+    "nombreServicio": "Nombre del Servicio",
+    "codigoServicio": "Código del Servicio",
+    "registrarServicio": "Registrar nuevo tipo de servicio",
+    "agregarMuestra": "Agregar Muestra",
+    "agregarFinca": "Agregar Finca",
+    "agregarCliente": "Agregar Cliente",
+    "cantidad": "Cantidad",
+    "unidad": "Unidad",
+    "fecha": "Fecha",
+    "finca": "Finca",
+    "usuario": "Usuario",
+    "altura": "Altura (M)",
+    "alturaMetros": "Altura (en metros)",
+    "variedad": "Variedad",
+    "observaciones": "Observaciones",
+    "imagen": "Imagen",
+    "seleccioneFinca": "Seleccione una finca",
+    "seleccioneUsuario": "Seleccione un usuario",
+    "subirImagen": "Subir Imagen",
+    "seleccionaArchivo": "Selecciona un archivo",
+    "arrastraSuelta": "o arrastra y suelta",
+    "hasta": "PNG, JPG, SVG, GIF hasta 10MB",
+    "unidadMedida": "Unidad Medida",
+    "añadirCodExterno": "Añadir código externo",
+    "ocultarCodExterno": "Ocultar código externo",
+    "CodExternoAplica": "Código Externo (si aplica)",
+    "registrarMuestra": "Registrar nueva muestra",
+    "editarMuestra": "Editar muestra",
+    "nombreFinca": "Nombre de la finca",
+    "nombreVereda": "Nombre de la vereda",
+    "seleccioneMunicipio": "Seleccione un Municipio",
+    "apellidos": "Apellidos",
+    "correo": "Correo Electrónico",
+    "telefono": "Teléfono",
+    "contraseña": "Contraseña",
+    "NDocumento": "Número de Documento",
+    "tipoDocumento": "Tipo de Documento"
+
+
+
+
+
+
+
 }
