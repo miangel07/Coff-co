@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react"; // Asegúrate de importar useContext
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -13,10 +13,9 @@ import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
 import FincaFormulario from "../../molecules/Formulario/FincaFormulario";
 import ClienteFormulario from "../../molecules/Formulario/ClienteFormulario";
 import Search from "../../atoms/Search";
-
-import {
-  useGetMuestrasQuery,
-} from "../../../store/api/muestra";
+import { AuthContext } from "../../../context/AuthContext";
+import { useGetMuestrasQuery } from "../../../store/api/muestra";
+import { useTranslation } from "react-i18next";
 
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
@@ -28,6 +27,11 @@ const MuestrasPlantilla = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedMuestra, setSelectedMuestra] = useState(null);
   const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
+  const { authData } = useContext(AuthContext);
+  const { t } = useTranslation();
+
+  // Acceso al rol del usuario
+  const userRole = authData.usuario.rol;
 
   const handleImageClick = (muestra) => {
     setSelectedMuestra(muestra);
@@ -49,7 +53,7 @@ const MuestrasPlantilla = () => {
 
   const handleClienteModal = () => {
     setShowClienteModal(true);
-  }
+  };
 
   const cantidad = 4;
   const final = pages * cantidad;
@@ -84,33 +88,39 @@ const MuestrasPlantilla = () => {
     setShowFincaModal(false);
   };
 
-const closeClienteModal = () => {
-  setShowClienteModal(false);
-}
+  const closeClienteModal = () => {
+    setShowClienteModal(false);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-console.log(DataArrayPaginacion)
+
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
-      <h2 className="text-2xl px-20 font-bold">Muestras</h2>
+      <h2 className="text-2xl px-20 font-bold">{t("muestras")}</h2>
 
       <div className="px-20 flex gap-4 items-center">
-        <Mybutton color={"primary"} onClick={handleModal}>
-          Nuevo
-        </Mybutton>
-        <Mybutton color={"secondary"} onClick={handleFincaModal}>
-          Agregar Finca
-        </Mybutton>
-        <Mybutton color={"secondary"} onClick={handleClienteModal}>
-          Agregar Cliente
-        </Mybutton>
+      {(userRole === "administrador" || userRole === "encargado" || userRole === "operario") && (
+          <Mybutton color={"primary"} onClick={handleModal}>
+            {t("agregarMuestra")}
+          </Mybutton>
+        )}
+        {(userRole === "administrador" || userRole === "encargado") && (
+          <Mybutton color={"secondary"} onClick={handleFincaModal}>
+            {t("agregarFinca")}
+          </Mybutton>
+        )}
+        {(userRole === "administrador" || userRole === "encargado") && (
+          <Mybutton color={"secondary"} onClick={handleClienteModal}>
+            {t("agregarCliente")}
+          </Mybutton>
+        )}
 
         <div className="ml-auto">
           <Search
-            label={"Buscar muestra"}
-            placeholder={"Código de muestra"}
+            label={"buscar Muestra"}
+            placeholder={"Código Muestra"}
             onchange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
@@ -118,7 +128,7 @@ console.log(DataArrayPaginacion)
 
       {showModal && (
         <ModalOrganismo
-          title={datosDelFormulario ? "Editar Muestra" : "Registrar Nueva Muestra"}
+          title={datosDelFormulario ? t("editarMuestra") : t("registrarMuestra")}
           visible={showModal}
           closeModal={closemodal}
         >
@@ -131,7 +141,7 @@ console.log(DataArrayPaginacion)
 
       {showFincaModal && (
         <ModalOrganismo
-          title={"Agregar Nueva Finca"}
+          title={t("agregarFinca")}
           visible={showFincaModal}
           closeModal={closeFincaModal}
         >
@@ -139,9 +149,9 @@ console.log(DataArrayPaginacion)
         </ModalOrganismo>
       )}
 
-        {showClienteModal && (
+      {showClienteModal && (
         <ModalOrganismo
-          title={"Agregar Cliente"}
+          title={t("agregarCliente")}
           visible={showClienteModal}
           closeModal={closeClienteModal}
         >
@@ -153,19 +163,19 @@ console.log(DataArrayPaginacion)
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
-            <Th>Código</Th>
-            <Th>Cantidad</Th>
-            <Th>Unidad</Th>
-            <Th>Fecha</Th>
-            <Th>Finca</Th>
-            <Th>Usuario</Th>
-            <Th>Servicio</Th>
-            <Th>Estado</Th>
-            <Th>Altura (M)</Th>
-            <Th>Variedad</Th>
-            <Th>Observaciones</Th>
-            <Th>Imagen</Th>
-            <Th>Acciones</Th>
+            <Th>{t("Codigo")}</Th>
+            <Th>{t("cantidad")}</Th>
+            <Th>{t("unidad")}</Th>
+            <Th>{t("fecha")}</Th>
+            <Th>{t("finca")}</Th>
+            <Th>{t("usuario")}</Th>
+            <Th>{t("servicios")}</Th>
+            <Th>{t("estado")}</Th>
+            <Th>{t("altura")}</Th>
+            <Th>{t("variedad")}</Th>
+            <Th>{t("observaciones")}</Th>
+            <Th>{t("imagen")}</Th>
+            <Th>{userRole === "administrador" ? t("acciones") : ""}</Th>
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((muestra) => (
@@ -201,12 +211,15 @@ console.log(DataArrayPaginacion)
                 </Td>
                 <Td>
                   <div className="flex items-center space-x-4">
-                    <button
-                      className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
-                      onClick={() => handleEdit(muestra)}
-                    >
-                      <FaRegEdit />
-                    </button>
+                    {/* Solo el administrador puede editar */}
+                    {userRole === "administrador" && (
+                      <button
+                        className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
+                        onClick={() => handleEdit(muestra)}
+                      >
+                        <FaRegEdit />
+                      </button>
+                    )}
                   </div>
                 </Td>
               </tr>
@@ -231,11 +244,11 @@ console.log(DataArrayPaginacion)
         </ModalOrganismo>
       )}
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center mt-5">
         <PaginationMolecula
-          total={numeroPagina}
-          initialPage={pages}
-          onChange={handlePageChange}
+          currentPage={pages}
+          totalPages={numeroPagina}
+          onPageChange={handlePageChange}
         />
       </div>
     </section>
