@@ -12,6 +12,7 @@ import {
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetClientesQuery } from "../../../store/api/users";
 import { useGetTipoServicioQuery } from "../../../store/api/TipoServicio";
+import { useTranslation } from "react-i18next";
 
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [UnidadMedida, setUnidadMedida] = useState("");
@@ -21,6 +22,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const { data: dataUsuarios, isLoading: isLoadingUsuarios } = useGetClientesQuery();
   const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
   const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } = useGetTipoServicioQuery();
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -152,7 +154,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-3">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fotoMuestra">
-              Subir Imagen
+              {t("subirImagen")}
             </label>
             <div className="relative border-2 border-gray-300 border-dashed rounded-lg p-6 hover:bg-gray-50 transition duration-300 ease-in-out">
               <input
@@ -172,11 +174,11 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
                   </svg>
                   <p className="mt-1 text-sm text-gray-600">
                     <span className="font-medium text-indigo-600 hover:text-indigo-500">
-                      Selecciona un archivo
-                    </span> o arrastra y suelta
+                    {t("seleccionaArchivo")}
+                    </span> {t("arrastraSuelta")}
                   </p>
                   <p className="mt-1 text-xs text-gray-500">
-                    PNG, JPG, SVG, GIF hasta 10MB
+                    {t("hasta")}
                   </p>
                 </div>
               )}
@@ -187,7 +189,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             type="number"
             id="cantidadEntrada"
             name="cantidadEntrada"
-            placeholder="Cantidad"
+            placeholder={t("cantidad")}
             register={register}
             erros={errors}
           />
@@ -195,7 +197,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             value={UnidadMedida}
             data={unidadMedidas}
             items={"value"}
-            label={"Seleccione la unidad de medida"}
+            label={t("unidadMedida")}
             ValueItem={"label"}
             onChange={(e) => setUnidadMedida(e.target.value)}
           />
@@ -203,7 +205,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             type="date"
             id="fecha_muestra"
             name="fecha_muestra"
-            placeholder="Fecha"
+            placeholder={t("fecha")}
             register={register}
             erros={errors}
           />
@@ -211,7 +213,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             type="number"
             id="altura"
             name="altura"
-            placeholder="Altura (en metros)"
+            placeholder={t("alturaMetros")}
             register={register}
             erros={errors}
           />
@@ -219,7 +221,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             type="text"
             id="variedad"
             name="variedad"
-            placeholder="Variedad"
+            placeholder={t("variedad")}
             register={register}
             erros={errors}
           />
@@ -227,7 +229,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
             type="text"
             id="observaciones"
             name="observaciones"
-            placeholder="Observaciones"
+            placeholder={t("observaciones")}
             register={register}
             erros={errors}
           />
@@ -235,7 +237,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
 
         <div className="mt-6 space-y-6">
           <SelectSearch
-            label="Usuario"
+            label={t("usuario")}
             valueCampos={[
               { value: "nombre_cliente", label: "Nombre" },
               { value: "numero_documento", label: "Documento" }
@@ -247,7 +249,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
           />
 
           <SelectSearch
-            label="Finca"
+            label={t("finca")}
             valueCampos={[
               { value: "nombre_finca", label: "Nombre" },
               { value: "id_finca", label: "ID" }
@@ -259,7 +261,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
           />
 
           <SelectSearch
-            label="Servicio"
+            label={t("servicios")}
             valueCampos={[
               { value: "nombreServicio", label: "Nombre" },
               { value: "idTipoServicio", label: "ID" }
@@ -273,7 +275,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
 
         <div className="mt-6 flex justify-center">
           <Mybutton type="button" onClick={() => setMostrarCodigoExterno(!mostrarCodigoExterno)}>
-            {mostrarCodigoExterno ? "Ocultar Código Externo" : "Agregar Código Externo"}
+            {mostrarCodigoExterno ? t("ocultarCodExterno") : t("añadirCodExterno")}
           </Mybutton>
         </div>
 
@@ -283,7 +285,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
               type="text"
               id="codigoExterno"
               name="codigoExterno"
-              placeholder="Código Externo (si aplica)"
+              placeholder={t("CodExternoAplica")}
               register={register}
               erros={errors}
             />
@@ -292,7 +294,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
 
         <div className="mt-8 flex justify-center">
           <Mybutton type="submit" color="primary">
-            {dataValue ? "Actualizar" : "Registrar"}
+            {dataValue ? t("actualizar") : t("registrar")}
           </Mybutton>
         </div>
       </form>
