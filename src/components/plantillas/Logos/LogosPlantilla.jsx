@@ -181,7 +181,7 @@ const LogosPlantilla = () => {
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
     const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-    const totalPages = Math.ceil((data.data.length||0)/itemsPorPagina)
+    const totalPages = Math.ceil((filtrodeDatos.length||0)/itemsPorPagina)
 
     return(
       <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
