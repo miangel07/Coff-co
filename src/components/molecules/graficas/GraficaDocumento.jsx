@@ -21,7 +21,7 @@ const GraficaDocumento = () => {
                 top: '5%',
                 left: 'center'
             },
-           
+
             series: [
                 {
                     name: 'Informacion',
@@ -38,13 +38,7 @@ const GraficaDocumento = () => {
                         position: 'outside',
                         formatter: '{b}: {c}',
                     },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            fontSize: 20,
-                            fontWeight: 'Bold'
-                        }
-                    },
+
                     labelLine: {
                         show: true
                     },

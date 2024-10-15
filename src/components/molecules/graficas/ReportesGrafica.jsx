@@ -5,26 +5,28 @@ import { Spinner } from "@nextui-org/react";
 
 const ReportesGrafica = () => {
     const { data, isLoading, isError } = useGetReporteQuery();
-
+    if (!data || data.length === 0) {
+        return <p>No hay datos para mostrar</p>;
+    }
     const option = () => {
         return {
             xAxis: {
                 type: 'category',
-                data: data.map((item) => item.nombreServicio), 
+                data: data?.map((item) => item.nombreServicio) || [],
             },
             yAxis: {
                 type: 'value',
             },
             series: [
                 {
-                    data: data.map((item) => item.cantidad_uso),  
+                    data: data?.map((item) => item.cantidad_uso) || [],
                     type: 'bar',
-                    barWidth: '20%', 
+                    barWidth: '20%',
                     label: {
-                        show: true, 
-                        position: 'top', 
-                        color: '#000', 
-                        fontSize: 12, 
+                        show: true,
+                        position: 'top',
+                        color: '#000',
+                        fontSize: 12,
                     },
                 },
             ],
@@ -35,9 +37,9 @@ const ReportesGrafica = () => {
     if (isError) return <p>Error al Graficar, intenta después.</p>;
 
     return (
-       
-            <ReactEcharts option={option()} style={{ height: '300px', width: '100%' }} />
-        
+
+        <ReactEcharts option={option()} style={{ height: '300px', width: '100%' }} />
+
     );
 }
 

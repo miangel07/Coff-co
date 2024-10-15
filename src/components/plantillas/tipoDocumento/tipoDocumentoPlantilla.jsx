@@ -16,6 +16,7 @@ import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { Switch } from "@nextui-org/react";
 import { AuthContext } from "../../../context/AuthContext";
 import Search from "../../atoms/Search";
+import { toast } from "react-toastify";
 
 const TipoDocumentoPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
@@ -61,6 +62,10 @@ const TipoDocumentoPlantilla = () => {
 
   const handleSwitchChange = async (checked, id) => {
     try {
+      if (rol !== "administrador") {
+        toast.error(" Lo siento no tiene permisos para realizar esta acción");
+        return;
+      }
       await updateEstadoTipoDocumento({
         id: id,
         estado: checked ? "activo" : "inactivo",
