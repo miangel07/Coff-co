@@ -97,6 +97,10 @@ const VariablesPlantilla = () => {
   )
   const handleSwitchChange = (checked, id) => {
     try {
+      if (rol !== "admin") {
+        toast.error("No tienes permisos para cambiar el estado");
+        return;
+      }
       confirmAlert({
         title: "Confirmación de Cambiar el estado activo",
         message: `¿Estás seguro de que quieres Cambiar el Estado al Documento ${id}?`,
