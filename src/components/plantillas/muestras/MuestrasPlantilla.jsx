@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react"; // Asegúrate de importar useContext
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -10,30 +10,49 @@ import ModalOrganismo from "../../organismo/Modal/ModalOrganismo";
 import { Switch } from "@nextui-org/react";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import MuestrasFormulario from "../../molecules/Formulario/MuestrasFormulario";
-import FincaFormulario from "../../molecules/Formulario/FincaFormulario"; // Importar el nuevo formulario
-import Search from "../../atoms/Search"; // Importar el componente de búsqueda
-
-import {
-  useGetMuestrasQuery,
-  useUpdateEstadoMuestraMutation,
-} from "../../../store/api/muestra";
+import FincaFormulario from "../../molecules/Formulario/FincaFormulario";
+import ClienteFormulario from "../../molecules/Formulario/ClienteFormulario";
+import Search from "../../atoms/Search";
+import { AuthContext } from "../../../context/AuthContext";
+import { useGetMuestrasQuery } from "../../../store/api/muestra";
+import { useTranslation } from "react-i18next";
 
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
-  const [showFincaModal, setShowFincaModal] = useState(false); // Estado para el modal de finca
+  const [showFincaModal, setShowFincaModal] = useState(false);
+  const [showClienteModal, setShowClienteModal] = useState(false);
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para el valor del campo de búsqueda
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedMuestra, setSelectedMuestra] = useState(null);
   const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
-  const [updateEstado] = useUpdateEstadoMuestraMutation();
+  const { authData } = useContext(AuthContext);
+  const { t } = useTranslation();
+
+  // Acceso al rol del usuario
+  const userRole = authData.usuario.rol;
+
+  const handleImageClick = (muestra) => {
+    setSelectedMuestra(muestra);
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
+    setSelectedMuestra(null);
+  };
 
   const handleModal = () => {
     setShowModal(true);
   };
 
   const handleFincaModal = () => {
-    setShowFincaModal(true); // Mostrar modal de finca
+    setShowFincaModal(true);
+  };
+
+  const handleClienteModal = () => {
+    setShowClienteModal(true);
   };
 
   const cantidad = 4;
@@ -45,12 +64,11 @@ const MuestrasPlantilla = () => {
 
   const numeroPagina = Math.ceil((dataMuestras?.length || 0) / cantidad);
 
-  // Filtrar los datos según el valor del campo de búsqueda
   const filteredData = dataMuestras
-  ? dataMuestras.filter((muestra) =>
-      muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  : [];
+    ? dataMuestras.filter((muestra) =>
+        muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   const DataArrayPaginacion = filteredData
     ? filteredData?.slice(inicial, final)
@@ -67,18 +85,11 @@ const MuestrasPlantilla = () => {
   };
 
   const closeFincaModal = () => {
-    setShowFincaModal(false); // Cerrar modal de finca
+    setShowFincaModal(false);
   };
 
-  const handleSwitchChange = (checked, id) => {
-    try {
-      updateEstado({
-        id: id,
-        estado: checked ? "terminado" : "pendiente",
-      });
-    } catch (error) {
-      console.error("Error al procesar la solicitud", error);
-    }
+  const closeClienteModal = () => {
+    setShowClienteModal(false);
   };
 
   if (isLoading) {
@@ -87,22 +98,29 @@ const MuestrasPlantilla = () => {
 
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
-      <h2 className="text-2xl px-20 font-bold">Muestras</h2>
+      <h2 className="text-2xl px-20 font-bold">{t("muestras")}</h2>
 
-      {/* Botones y barra de búsqueda */}
       <div className="px-20 flex gap-4 items-center">
-        <Mybutton color={"primary"} onClick={handleModal}>
-          Nuevo
-        </Mybutton>
-        <Mybutton color={"secondary"} onClick={handleFincaModal}>
-          Agregar Finca
-        </Mybutton>
+      {(userRole === "administrador" || userRole === "encargado" || userRole === "operario") && (
+          <Mybutton color={"primary"} onClick={handleModal}>
+            {t("agregarMuestra")}
+          </Mybutton>
+        )}
+        {(userRole === "administrador" || userRole === "encargado") && (
+          <Mybutton color={"secondary"} onClick={handleFincaModal}>
+            {t("agregarFinca")}
+          </Mybutton>
+        )}
+        {(userRole === "administrador" || userRole === "encargado") && (
+          <Mybutton color={"secondary"} onClick={handleClienteModal}>
+            {t("agregarCliente")}
+          </Mybutton>
+        )}
 
-        {/* Componente de búsqueda */}
         <div className="ml-auto">
           <Search
-            label={"Buscar muestra"}
-            placeholder={"Código de muestra"}
+            label={"buscar Muestra"}
+            placeholder={"Código Muestra"}
             onchange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
@@ -110,7 +128,7 @@ const MuestrasPlantilla = () => {
 
       {showModal && (
         <ModalOrganismo
-          title={"Registrar Nueva Muestra"}
+          title={datosDelFormulario ? t("editarMuestra") : t("registrarMuestra")}
           visible={showModal}
           closeModal={closemodal}
         >
@@ -123,7 +141,7 @@ const MuestrasPlantilla = () => {
 
       {showFincaModal && (
         <ModalOrganismo
-          title={"Agregar Nueva Finca"}
+          title={t("agregarFinca")}
           visible={showFincaModal}
           closeModal={closeFincaModal}
         >
@@ -131,22 +149,33 @@ const MuestrasPlantilla = () => {
         </ModalOrganismo>
       )}
 
+      {showClienteModal && (
+        <ModalOrganismo
+          title={t("agregarCliente")}
+          visible={showClienteModal}
+          closeModal={closeClienteModal}
+        >
+          <ClienteFormulario closeModal={closeClienteModal} />
+        </ModalOrganismo>
+      )}
+
       <div className="w-full px-20 overflow-x-auto">
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
-            <Th>Código</Th>
-            <Th>Cantidad</Th>
-            <Th>Unidad</Th>
-            <Th>Fecha</Th>
-            <Th>Finca</Th>
-            <Th>Usuario</Th>
-            <Th>Servicio</Th>
-            <Th>Estado</Th>
-            <Th>Altura (M)</Th>
-            <Th>Variedad</Th>
-            <Th>Observaciones</Th>
-            <Th>Acciones</Th>
+            <Th>{t("Codigo")}</Th>
+            <Th>{t("cantidad")}</Th>
+            <Th>{t("unidad")}</Th>
+            <Th>{t("fecha")}</Th>
+            <Th>{t("finca")}</Th>
+            <Th>{t("usuario")}</Th>
+            <Th>{t("servicios")}</Th>
+            <Th>{t("estado")}</Th>
+            <Th>{t("altura")}</Th>
+            <Th>{t("variedad")}</Th>
+            <Th>{t("observaciones")}</Th>
+            <Th>{t("imagen")}</Th>
+            <Th>{userRole === "administrador" ? t("acciones") : ""}</Th>
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((muestra) => (
@@ -161,11 +190,8 @@ const MuestrasPlantilla = () => {
                 <Td>{muestra.fk_idTipoServicio}</Td>
                 <Td>
                   <Switch
-                    color={muestra.estado === "terminado" ? "success" : "default"}
                     isSelected={muestra.estado === "terminado"}
-                    onValueChange={(checked) =>
-                      handleSwitchChange(checked, muestra.id_muestra)
-                    }
+                    color={muestra.estado === "terminado" ? "success" : "default"}
                   >
                     {muestra.estado}
                   </Switch>
@@ -174,12 +200,26 @@ const MuestrasPlantilla = () => {
                 <Td>{muestra.variedad}</Td>
                 <Td>{muestra.observaciones}</Td>
                 <Td>
-                  <div className="gap-3 flex flex-grow">
-                    <FaRegEdit
-                      className="cursor-pointer"
-                      size={"30px"}
-                      onClick={() => handleEdit(muestra)}
+                  {muestra.fotoMuestra && (
+                    <img
+                      src={`http://localhost:3000/public/muestras/${muestra.fotoMuestra}`}
+                      alt="Muestra"
+                      className="cursor-pointer h-8 w-8 rounded object-cover"
+                      onClick={() => handleImageClick(muestra)}
                     />
+                  )}
+                </Td>
+                <Td>
+                  <div className="flex items-center space-x-4">
+                    {/* Solo el administrador puede editar */}
+                    {userRole === "administrador" && (
+                      <button
+                        className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
+                        onClick={() => handleEdit(muestra)}
+                      >
+                        <FaRegEdit />
+                      </button>
+                    )}
                   </div>
                 </Td>
               </tr>
@@ -188,11 +228,27 @@ const MuestrasPlantilla = () => {
         </TableMolecula>
       </div>
 
-      <div className="flex justify-center mt-4">
+      {showImageModal && selectedMuestra && (
+        <ModalOrganismo
+          title={`Imagen de la Muestra: ${selectedMuestra.codigo_muestra}`}
+          visible={true}
+          closeModal={closeImageModal}
+        >
+          <div className="flex justify-center items-center">
+            <img
+              src={`http://localhost:3000/public/muestras/${selectedMuestra.fotoMuestra}`}
+              alt={`Muestra ${selectedMuestra.codigo_muestra}`}
+              className="max-w-full max-h-[80vh] object-contain"
+            />
+          </div>
+        </ModalOrganismo>
+      )}
+
+      <div className="flex justify-center mt-5">
         <PaginationMolecula
-          total={numeroPagina}
-          initialPage={pages}
-          onChange={handlePageChange}
+          currentPage={pages}
+          totalPages={numeroPagina}
+          onPageChange={handlePageChange}
         />
       </div>
     </section>

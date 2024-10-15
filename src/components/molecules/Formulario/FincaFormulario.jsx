@@ -6,6 +6,7 @@ import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 import { usePostFincaMutation } from "../../../store/api/fincas";
 import { useGetMunicipioQuery } from "../../../store/api/municipio";
+import { useTranslation } from "react-i18next";
 
 const FincaFormulario = ({ closeModal }) => {
   const { data: dataMunicipios, isLoading: isLoadingMunicipios, isError: MunicipioError } = useGetMunicipioQuery();
@@ -13,6 +14,7 @@ const FincaFormulario = ({ closeModal }) => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, watch } = useForm();
   const [crearFinca, { isLoading, isError, data: dataResponse, isSuccess }] = usePostFincaMutation();
   const hasNotified = useRef(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isSuccess && !hasNotified.current) {
@@ -46,7 +48,7 @@ const FincaFormulario = ({ closeModal }) => {
             type="text"
             id="nombre_finca"
             name="nombre_finca"
-            placeholder="Nombre de la Finca"
+            placeholder={t("nombreFinca")}
             register={register}
             erros={errors}
           />
@@ -54,12 +56,12 @@ const FincaFormulario = ({ closeModal }) => {
             type="text"
             id="vereda"
             name="vereda"
-            placeholder="Nombre de la Vereda"
+            placeholder={t("nombreVereda")}
             register={register}
             erros={errors}
           />
           <SelectAtomo
-            label="Selecciona un Municipio"
+            label={t("seleccioneMunicipio")}
             data={dataMunicipios}
             onChange={(e) => setValue("fk_id_municipio", e.target.value)}
             items="id_municipio"
@@ -70,7 +72,7 @@ const FincaFormulario = ({ closeModal }) => {
 
         <div className="flex justify-center mt-4">
           <Mybutton type="submit" color="primary">
-            Registrar Finca
+            {t("registrar")}
           </Mybutton>
         </div>
       </form>

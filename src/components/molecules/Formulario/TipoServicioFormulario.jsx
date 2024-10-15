@@ -4,6 +4,8 @@ import InputAtomo from "../../atoms/Input";
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 import { usePostTipoServicioMutation, usePutTipoServicioMutation } from "../../../store/api/TipoServicio";
+import { useTranslation } from "react-i18next";
+
 
 const TipoServicioFormulario = ({ closeModal, dataValue }) => {
   const {
@@ -13,6 +15,7 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
     formState: { errors },
     setValue,
   } = useForm();
+  const { t } = useTranslation();
 
   const [crearTipoServicio, { isLoading: isLoadingCreate, isError: isErrorCreate, isSuccess: isSuccessCreate, data: dataResponseCreate }] = usePostTipoServicioMutation();
   const [actualizarTipoServicio, { isLoading: isLoadingUpdate, isError: isErrorUpdate, isSuccess: isSuccessUpdate, data: dataResponseUpdate }] = usePutTipoServicioMutation();
@@ -61,7 +64,7 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
           <InputAtomo
             name={"nombreServicio"}
             erros={errors}
-            placeholder={"Nombre del servicio"}
+            placeholder={t("NombreServicio")}
             register={register}
             type={"text"}
             id={"nombreServicio"}
@@ -69,7 +72,7 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
           <InputAtomo
             name={"codigoTipoServicio"}
             erros={errors}
-            placeholder={"Código del servicio"}
+            placeholder={t("CodigoServicio")}
             register={register}
             type={"text"}
             id={"codigoTipoServicio"}
@@ -77,7 +80,7 @@ const TipoServicioFormulario = ({ closeModal, dataValue }) => {
         </div>
         <div className="flex justify-center">
           <Mybutton type="submit" color="primary">
-            {dataValue ? "Actualizar" : "Registrar"}
+            {dataValue ? t("actualizar") : t("registrar")}
           </Mybutton>
         </div>
       </form>
