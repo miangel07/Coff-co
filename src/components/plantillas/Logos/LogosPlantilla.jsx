@@ -181,7 +181,7 @@ const LogosPlantilla = () => {
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
     const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-    const totalPages = Math.ceil((data.data.length||0)/itemsPorPagina)
+    const totalPages = Math.ceil((filtrodeDatos.length||0)/itemsPorPagina)
 
     return(
       <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
@@ -221,7 +221,8 @@ const LogosPlantilla = () => {
                   <Td>{logo.idLogos}</Td>
                   <Td>{logo.nombre}</Td>
                   <Td>
-                  <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
+                  <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} 
+                  src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
                   </Td>
                   {/* <Td>{logo.ruta}</Td> */}
                   <Td>

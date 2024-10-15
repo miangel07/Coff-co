@@ -4,6 +4,7 @@ import Card from "../../molecules/cards/Cards";
 import GraficaDocumento from "../../molecules/graficas/GraficaDocumento";
 import Mybutton from "../../atoms/Mybutton";
 import { useNavigate } from "react-router-dom";
+import ReportesGrafica from "../../molecules/graficas/ReportesGrafica";
 
 const HomePlantilla = () => {
   const navigate = useNavigate();
@@ -29,14 +30,11 @@ const HomePlantilla = () => {
           </div>
 
 
-          <div className="flex-1 items-center justify-center bg-gray-100 mt-6 mb-6 rounded-lg border border-gray-200">
-            <Card
-              imageSrc="/imagenes/gestionDocumental.jpg"
-              altText="Imagen de escuela nacional del cafe"
-              footerText="Servicios"
-              buttonText="Ingresar"
-              imageClass="object-contain mx-auto"
-            />
+          <div className="flex-1 flex flex-col  items-center justify-between   mt-6 mb-6 rounded-lg border border-gray-200">
+            <ReportesGrafica />
+            <div className="w-full justify-end flex ">
+              <Mybutton color={"sena"} onClick={() => navigate("/servicios")}>Ingresar</Mybutton>
+            </div>
           </div>
 
         </div>

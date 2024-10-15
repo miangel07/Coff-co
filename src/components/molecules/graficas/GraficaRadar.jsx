@@ -22,7 +22,7 @@ const GraficaRadar = () => {
             },
             xAxis: {
                 type: 'category',
-                data: data.map((items) => (items.nombreServicio)),
+                data: data?.map((items) => (items.nombreServicio))|| [],
                 axisLine: {
                     lineStyle: {
                         color: '#333',
@@ -53,7 +53,7 @@ const GraficaRadar = () => {
             },
             series: [
                 {
-                    data: data.map((items) => (items.cantidad_uso)),
+                    data: data?.map((items) => (items.cantidad_uso))||[],
                     type: 'line',
                     smooth: true, 
                     lineStyle: {

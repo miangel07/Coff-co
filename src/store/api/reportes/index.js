@@ -16,11 +16,17 @@ export const repotesApi = createApi({
                 method: "GET",
             }),
         }),
-        getReporteRadar: build.query({
+        getReporteAlquiler: build.query({
             query: () => ({
-                url: `/estadisticas/radar`,
+                url: `/estadisticas/alquiler`,
                 method: "GET",
             }),
+            transformErrorResponse: (response, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response?.data?.message,
+                };
+            },
         }),
         postRepoteTipoServcio: build.mutation({
             query: (data) => ({
@@ -38,4 +44,4 @@ export const repotesApi = createApi({
     }),
 })
 
-export const { useGetReporteQuery, usePostRepoteTipoServcioMutation } = repotesApi;
+export const { useGetReporteQuery, usePostRepoteTipoServcioMutation, useGetReporteAlquilerQuery } = repotesApi;

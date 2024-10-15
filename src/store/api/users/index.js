@@ -33,6 +33,39 @@ export const usuariosSlice = createApi({
 
   }),
 
+    //LISTAR
+    getRoles: build.query({
+      query:()=>({
+        url:'/usuario/listarroles',
+        method:'GET',
+      }),
+      invalidatesTags:['usuarios'],
+      providesTags:['usuarios']
+  
+    }),
+  //LISTAR
+  getRoles: build.query({
+    query:()=>({
+      url:'/usuario/listarroles',
+      method:'GET',
+    }),
+    invalidatesTags:['usuarios'],
+    providesTags:['usuarios']
+
+  }),
+  
+  
+  //LISTAR ROLES DANIEL
+  getClienteRol: build.query({
+    query:()=>({
+      url:'/rol/listar',
+      method:'GET',
+    }),
+    invalidatesTags:['usuarios'],
+    providesTags:['usuarios']
+
+  }),
+
   // LISTAR ID
   getUsuarioId: build.query({
     query: (id) => ({
@@ -49,6 +82,25 @@ export const usuariosSlice = createApi({
     },
     providesTags:['usuarios']
   }),
+
+  // LISTAR CLIENTES
+  getClientes: build.query({
+    query: (id) => ({
+      url: '/usuario/clientes',
+      method: 'GET',
+    }),
+    transformErrorResponse: (response, meta, arg) => {
+      console.log("Respuesta completa de error:", response);
+      
+      return {
+        originalArg: arg,
+        error: response?.data?.message || response?.statusText || "Error desconocido",
+      };
+    },
+    providesTags:['usuarios']
+  }),
+
+
 
     //REGISTRAR
   registrarUsuario: build.mutation({
@@ -135,4 +187,6 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,useActualizarContraMutation} = usuariosSlice
+export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,
+  useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,
+  useActualizarContraMutation, useGetClientesQuery, useGetClienteRolQuery} = usuariosSlice
