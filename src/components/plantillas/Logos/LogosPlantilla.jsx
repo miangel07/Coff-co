@@ -286,6 +286,8 @@ const LogosPlantilla = () => {
                   type={"text"}
                 />
                 <InputAtomo
+                 IsRequired={false}
+                 required={false}
                   register={register}
                   name={"file"}
                   erros={errors}
@@ -330,6 +332,7 @@ const LogosPlantilla = () => {
                   placeholder={"Selecciona tu nuevo logo"}
                   type={"file"}
                   defaultValue={logoSeleccionado?.ruta || ""}
+                  isRequired={false} 
               />
 
             </>
