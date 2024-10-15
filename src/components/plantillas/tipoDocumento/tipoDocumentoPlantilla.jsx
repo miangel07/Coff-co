@@ -17,6 +17,7 @@ import { Switch } from "@nextui-org/react";
 import { AuthContext } from "../../../context/AuthContext";
 import Search from "../../atoms/Search";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const TipoDocumentoPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +27,8 @@ const TipoDocumentoPlantilla = () => {
   const { authData } = useContext(AuthContext)
   const { data: dataTipoDocumentos, isLoading, isError, error } = useGetTipoDocumentosQuery();
   const [updateEstadoTipoDocumento] = useUpdateEstadoTipoDocumentoMutation();
+  const { t } = useTranslation();
+
   const rol = authData.usuario.rol
   const handleModal = () => {
     setShowModal(true);
@@ -85,14 +88,14 @@ const TipoDocumentoPlantilla = () => {
 
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
-      <h2 className="text-2xl px-20 font-bold">Tipo de Documento</h2>
+      <h2 className="text-2xl px-20 font-bold">{t("tipoDocumentos")}</h2>
       <div className="px-20">
         {
           rol === "administrador" &&
           (
             <>
               <Mybutton color="primary" onClick={handleModal}>
-                Nuevo
+              {t("nuevo")}
               </Mybutton>
             </>
           )
@@ -102,7 +105,7 @@ const TipoDocumentoPlantilla = () => {
       </div>
       {showModal && (
         <ModalOrganismo
-          title="Registrar Nuevo Tipo de Documento"
+          title={t("registrarDocumento")}
           visible={showModal}
           closeModal={closeModal}
         >
@@ -116,9 +119,9 @@ const TipoDocumentoPlantilla = () => {
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
-            <Th>Nombre del Documento</Th>
-            <Th>Estado</Th>
-            <Th>{rol === "administrador" ? "Acciones" : ""}</Th>
+            <Th>{t("NombreDocumento")}</Th>
+            <Th>{t("estado")}</Th>
+            <Th>{rol === "administrador" ? t("acciones") : ""}</Th>
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((tipoDocumento) => (
