@@ -186,7 +186,6 @@ const LogosPlantilla = () => {
     return(
       <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
 
-
     {/* TABLA */}
       <div className="flex justify-center items-center ">
         {Rol === "administrador" ? (<div className="pt-10 pl-20">
