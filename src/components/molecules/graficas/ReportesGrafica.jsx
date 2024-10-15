@@ -20,7 +20,7 @@ const ReportesGrafica = () => {
             },
             xAxis: {
                 type: 'category',
-                data: data.map((item) => item.nombreServicio),
+                data: data?.map((item) => item.nombreServicio),
                 axisLabel: {
                     show: true,
                     position: 'bottom',
@@ -38,7 +38,7 @@ const ReportesGrafica = () => {
             },
             series: [
                 {
-                    data: data.map((item) => item.cantidad_uso),
+                    data: data?.map((item) => item.cantidad_uso),
                     type: 'bar',
                     barWidth: '20%',
                     label: {

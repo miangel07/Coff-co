@@ -169,7 +169,7 @@ const LogosPlantilla = () => {
         { value: "inactivo", label: "Inactivo" }
     ];
 
-    const filtrodeDatos = data.data && data.data.length > 0 ? data.data.filter((logo) => {
+    const filtrodeDatos = data?.data && data?.data.length > 0 ? data?.data.filter((logo) => {
       const filtroestado = filtroEstado ? "activo" : "inactivo"
       const nombreLogo = busqueda === "" ||
         (logo.nombre && logo.nombre.toLowerCase().includes(busqueda.toLowerCase()));
