@@ -25,7 +25,6 @@ import { FaRegEdit } from "react-icons/fa";
 
 const CalendarPlantilla = () => {
   const { data: dataAlquiler } = useGetAlquilerQuery();
-  console.log("datos de alquiler: ", dataAlquiler);
   const { data: dataAmbientes } = useGetAmbientesQuery();
   const { data: dataUsuariosAlquiler } = useGetUsuariosAlquilerQuery();
   const [registrarReserva] = useRegistrarAlquilerMutation();
@@ -42,12 +41,10 @@ const CalendarPlantilla = () => {
   const [modalDetalleVisible, setModalDetalleVisible] = useState(false);
   const [modalEditarVisible, setModalEditarVisible] = useState(false);
   const [reservaSeleccionada, setReservaSeleccionada] = useState(null);
-  console.log("reserva seleccionada: ", reservaSeleccionada);
   const [modalRegistrarVisible, setModalRegistrarVisible] = useState(false);
   const [ambienteActual, setAmbienteActual] = useState("");
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("");
   const [reservas, setReservas] = useState([]);
-  console.log('reservas hechas: ', reservas)
 
   useEffect(() => {
     if (dataAlquiler) {

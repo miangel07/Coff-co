@@ -76,6 +76,21 @@ export const servicioApiSlice = createApi({
             invalidatesTags:['servicios']
         }),
 
+        //obtener fk_idTipoServicio
+        obtenerIdTipoServicio:build.mutation({
+            query:(data)=>({
+                url:'servicios/gettiposervicio',
+                method:'POST',
+                body:data
+            }),
+            transformErrorResponse:(response,meta,arg)=>{
+                return{
+                    originalArg:arg,
+                    error:response.data.message
+                }
+            },
+            invalidatesTags:['servicios']
+        }),
 
         //registrar servicio
         registrarServicio:build.mutation({
@@ -108,14 +123,37 @@ export const servicioApiSlice = createApi({
             invalidatesTags:['servicios']
         }),
 
-        // actualizarServicio:build.mutation({
-        //     query:(data)=>({
-        //         url:``
-        //     })
-        // }),
+        // actualizarValores de variables de servicio 
+            editarValoresPorServicio:build.mutation({
+                query:(data)=>({
+                    url:`servicios/editarvaloresvariables`,
+                    method:'POST',
+                    body:data,
+                }),
+                transformErrorResponse:(response,meta,arg)=>{
+                    return{
+                        originalArg:arg,
+                        error:response.data.message
+                    }
+                },
+                invalidatesTags:['servicios']
+            }),
 
-
-
+            //registro del cambio 
+            registrarCambioDelServicio:build.mutation({
+                query:(data)=>({
+                    url:`servicios/registrarcambio`,
+                    method:'POST',
+                    body:data,
+                }),
+                transformErrorResponse:(response,meta,arg)=>{
+                    return{
+                        originalArg:arg,
+                        error:response.data.message
+                    }
+                },
+                invalidatesTags:['servicios']
+            }),
 
         //eliminar servicio
         eliminarServicio:build.mutation({
@@ -146,11 +184,16 @@ export const servicioApiSlice = createApi({
                     error:response.data.message
                 }
             },
-            invalidatesTags:['dervicios']
+            invalidatesTags:['servicios']
         })
 
 
     })
 })
 
-export const { useGetServicioQuery, useObtenerMuestrasParaServicioQuery, useRegistrarServicioMutation,useServicioTerminadoMutation, useEliminarServicioMutation, useActualizarEstadoServicioMutation, useObtenerVariablesParaServicioMutation,useObtenerVariablesParaActualizarServicioMutation,useObtenerPrecioSegunTipoServicioMutation} = servicioApiSlice;
+export const { useGetServicioQuery, useObtenerMuestrasParaServicioQuery, 
+    useRegistrarServicioMutation,useServicioTerminadoMutation,useRegistrarCambioDelServicioMutation,
+    useEliminarServicioMutation, useActualizarEstadoServicioMutation, 
+    useObtenerVariablesParaServicioMutation,useEditarValoresPorServicioMutation,
+    useObtenerIdTipoServicioMutation,useObtenerVariablesParaActualizarServicioMutation, 
+    useObtenerPrecioSegunTipoServicioMutation} = servicioApiSlice;
