@@ -356,7 +356,6 @@ const LogosPlantilla = () => {
       title={"Logo"}
       closeModal={closeLogoModal}
     />
-
     )}
     {/* FIN MODAL LOGO*/}
     </div>
