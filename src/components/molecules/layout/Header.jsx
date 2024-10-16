@@ -37,26 +37,26 @@ const Header = ({ color }) => {
 
     //OPCIONES DEL MENU Y NAVEGACION
     const Menus = [
-        "Mi perfil", 
-        "Logos", 
-        "Ayuda", 
-        "Salir"
+        t("miPerfil"),
+        t("logos"),
+        t("ayuda"),
+        t("salir")
     ];
+    
     const handleMenuClick = (menu) => {
         setOpen(false);
-        setOpen(false);
-
+    
         switch (menu) {
-            case "Mi perfil":
+            case t("miPerfil"):
                 navigate("/perfil");
                 break;
-            case "Logos":
+            case t("logos"):
                 navigate("/logos");
                 break;
-            case "Ayuda":
+            case t("ayuda"):
                 navigate("/ayuda");
                 break;
-            case "Salir":
+            case t("salir"):
                 handleLogout();
                 navigate("/");
                 break;
