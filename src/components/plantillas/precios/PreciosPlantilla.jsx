@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -25,11 +25,17 @@ import { useForm } from "react-hook-form";
 import ToolTip from "../../molecules/toolTip/ToolTip";
 import InputAtomo from "../../atoms/Input";
 import SelectAtomo from "../../atoms/Select";
+import Search from "../../atoms/Search";
+import { AuthContext } from "../../../context/AuthContext";
 
 const PreciosPlantilla = () => {
   const [paginaActual, setPaginaActual] = useState(1);
+  const { authData } = useContext(AuthContext)
   const itemsPorPagina = 4;
   const [tipoServicioActual, setTipoServicioActual] = useState("");
+  const [UnidadMedida, setUnidadMedida] = useState("");
+  const [filtro, setfiltro] = useState("");
+
 
   const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } =
     useGetTipoServicioQuery();
@@ -42,7 +48,7 @@ const PreciosPlantilla = () => {
   const [actualizarPrecio] = useActualizarPrecioMutation();
   const [actualizarEstadoPrecio] = useActualizarEstadoPrecioMutation();
   const [eliminarPrecio] = useEliminarPrecioMutation();
-
+  const rol = authData.usuario.rol
   const [visible, setVisible] = useState(false);
   const [precioSeleccionado, setPrecioSeleccionado] = useState(null);
   const {
@@ -52,17 +58,37 @@ const PreciosPlantilla = () => {
     formState: { errors },
     setValue,
   } = useForm();
+  console.log(dataPrecio)
+  const filteredData =
+    dataPrecio && dataPrecio.length > 0
+      ? dataPrecio.filter((item) => {
+        const NombrePrecio =
+          filtro === "" ||
+          (item.nombreServicio &&
+            item.nombreServicio.toLowerCase().includes(filtro.toLowerCase()));
+        const presentacion =
+          filtro === "" ||
+          (item.presentacion &&
+            item.presentacion.toLowerCase().includes(filtro.toLowerCase()));
+        return NombrePrecio || presentacion;
+      })
+      : [];
 
-  const totalPages = Math.ceil((dataPrecio?.length || 0) / itemsPorPagina);
+  const indexOfLastItem = paginaActual * itemsPorPagina;
+  const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
+  const articulosActualesPrecio = dataPrecio
+    ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
 
+  const totalPages = Math.ceil((filteredData?.length || 0) / itemsPorPagina);
   if (isLoadingPrecio || isLoadingTipoServicio || isLoading) {
     return (
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
     );
   }
-
+  console.log(UnidadMedida)
   const abrirModal = (precio) => {
-    console.log("precio cargado al editar: ", precio);
+
     if (precio) {
       setPrecioSeleccionado(precio);
       reset({
@@ -71,6 +97,7 @@ const PreciosPlantilla = () => {
         fk_idTipoServicio: precio.fk_idTipoServicio,
       });
       setTipoServicioActual(precio.nombreServicio);
+      setUnidadMedida(precio.UnidadMedida)
     } else {
       setPrecioSeleccionado(null);
       reset({
@@ -96,6 +123,7 @@ const PreciosPlantilla = () => {
         presentacion: datosDelFormulario.presentacion,
         precio: datosDelFormulario.precio,
         fk_idTipoServicio: datosDelFormulario.fk_idTipoServicio,
+        unidaMedida: UnidadMedida
       };
 
       if (precioSeleccionado) {
@@ -118,6 +146,10 @@ const PreciosPlantilla = () => {
 
   const manejadorCambioEstadoSwitch = (checked, id) => {
     const nuevoEstado = checked ? "activo" : "inactivo";
+    if (rol !== "administrador") {
+      toast.error("No tiene permisos para cambiar el estado del precio");
+      return;
+    }
 
     const precioActual = dataPrecio.find((precio) => precio.idPrecio === id);
 
@@ -182,20 +214,31 @@ const PreciosPlantilla = () => {
       closeOnClickOutside: true,
     });
   };
+  const dataUnidadMedida = [
+    { value: "Lb", label: "Libras" },
+    { value: "Kg", label: "Kilogramos" },
+    { value: "N/A", label: "N/A" },
+  ]
 
-  const indexOfLastItem = paginaActual * itemsPorPagina;
-  const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
-  const articulosActualesPrecio = dataPrecio
-    ? dataPrecio.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
 
   return (
     <>
       <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
-        <div className="pt-10 pl-20">
-          <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
-            <b>Nuevo Precio</b>
-          </Mybutton>
+        <div className="pt-10 pl-20 justify-center flex items-center">
+          {
+            rol === "administrador" && (
+              <>
+                <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
+                  <b>Nuevo Precio</b>
+                </Mybutton>
+              </>
+            )
+          }
+
+          <Search
+            label={""}
+            placeholder={"buscar precio"}
+            onchange={(e) => setfiltro(e.target.value)} />
         </div>
         <div className="w-full px-20 h-auto overflow-y-auto">
           <TableMolecula>
@@ -204,8 +247,9 @@ const PreciosPlantilla = () => {
               <Th>Presentacion</Th>
               <Th>Precio</Th>
               <Th>Tipo servicio</Th>
+              <Th>Unida de Medida</Th>
               <Th>Estado</Th>
-              <Th>Acciones</Th>
+              <Th>{rol === "administrador" ? "Acciones" : ""}</Th>
             </Thead>
             <Tbody>
               {articulosActualesPrecio.length > 0 ? (
@@ -215,54 +259,51 @@ const PreciosPlantilla = () => {
                     <Td>{precio.presentacion}</Td>
                     <Td>{precio.precio}</Td>
                     <Td>{precio.nombreServicio}</Td>
+                    <Td>{precio.UnidadMedida}</Td>
                     <Td>
-                      <Switch
-                        color={
-                          precio.estado_precio === "activo"
-                            ? "success"
-                            : "default"
-                        }
-                        isSelected={precio.estado_precio === "activo"}
-                        onValueChange={(checked) =>
-                          manejadorCambioEstadoSwitch(
-                            checked,
-                            precio.idPrecio,
-                            dataTipoServicio.idTipoServicio
-                          )
-                        }
-                      >
-                        {precio.estado_precio}
-                      </Switch>
+
+                      <>
+                        <Switch
+                          color={
+                            precio.estado_precio === "activo"
+                              ? "success"
+                              : "default"
+                          }
+                          isSelected={precio.estado_precio === "activo"}
+                          onValueChange={(checked) =>
+                            manejadorCambioEstadoSwitch(
+                              checked,
+                              precio.idPrecio,
+                              dataTipoServicio.idTipoServicio
+                            )
+                          }
+                        >
+                          {precio.estado_precio}
+                        </Switch>
+                      </>
+
+
                     </Td>
                     <Td>
                       <div className="flex flex-row gap-6">
-                        <ToolTip
-                          content="Eliminar"
-                          placement="left"
-                          icon={() => (
-                            <MdDelete
-                              size={"35px"}
-                              onClick={() =>
-                                handleEliminarPrecio(
-                                  precio.idPrecio,
-                                  precio.presentacion
-                                )
-                              }
-                              className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
+
+                        {
+                          rol === "administrador" && (
+                            <ToolTip
+                              content="Actualizar"
+                              placement="right"
+                              icon={() => (
+                                <FaRegEdit
+                                  size={"35px"}
+                                  onClick={() => abrirModal(precio)}
+                                  className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
+                                />
+                              )}
                             />
-                          )}
-                        />
-                        <ToolTip
-                          content="Actualizar"
-                          placement="right"
-                          icon={() => (
-                            <FaRegEdit
-                              size={"35px"}
-                              onClick={() => abrirModal(precio)}
-                              className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
-                            />
-                          )}
-                        />
+                          )
+                        }
+
+
                       </div>
                     </Td>
                   </tr>
@@ -319,7 +360,7 @@ const PreciosPlantilla = () => {
                 erros={errors}
               />
               <div>
-                <div className="">
+                <div className="flex gap-2 flex-col">
                   <SelectAtomo
                     data={dataTipoServicio}
                     label="Tipo de servicio"
@@ -330,6 +371,14 @@ const PreciosPlantilla = () => {
                     items="idTipoServicio"
                     ValueItem="nombreServicio"
                     value={tipoServicioActual}
+                  />
+                  <SelectAtomo
+                    value={UnidadMedida}
+                    data={dataUnidadMedida}
+                    items={"value"}
+                    label={"unidad de medida"}
+                    ValueItem={"label"}
+                    onChange={(e) => setUnidadMedida(e.target.value)}
                   />
                 </div>
               </div>

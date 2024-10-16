@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -22,20 +22,23 @@ import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { useForm } from "react-hook-form";
 import ToolTip from "../../molecules/toolTip/ToolTip";
 import InputAtomo from "../../atoms/Input";
+import { AuthContext } from "../../../context/AuthContext";
+import Search from "../../atoms/Search";
 
 
 const AmbientesPlantilla = () => {
   const [paginaActual, setPaginaActual] = useState(1);
+  const [filtro, setfiltro] = useState("");
   const itemsPorPagina = 4;
 
   const { data, isLoading, refetch } = useGetAmbientesQuery();
   const [crearAmbiente] = useCrearAmbienteMutation();
   const [actualizarAmbiente] = useActualizarAmbienteMutation();
   const [eliminarAmbiente] = useEliminarAmbienteMutation();
-
+  const { authData } = useContext(AuthContext)
   const [visible, setVisible] = useState(false);
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState(null);
-
+  const rol = authData.usuario.rol
   const {
     register,
     handleSubmit,
@@ -43,6 +46,21 @@ const AmbientesPlantilla = () => {
     formState: { errors },
   } = useForm();
 
+
+  const indiceUltimoItem = paginaActual * itemsPorPagina;
+  const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
+
+  const ambientesFiltrados = data
+    ? data.filter((ambiente) => {
+      const nombre = filtro === "" ||
+        ambiente.nombre_ambiente && ambiente.nombre_ambiente.toLowerCase().includes(filtro)
+      return nombre;
+    }
+    )
+    : [];
+
+  const currentItems = data ? ambientesFiltrados.slice(indicePrimerItem, indiceUltimoItem) : [];
+  const totalPages = Math.ceil(ambientesFiltrados.length / itemsPorPagina);
   if (isLoading) {
     return (
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
@@ -98,9 +116,12 @@ const AmbientesPlantilla = () => {
   };
 
   const handleSwitchChange = (checked, id) => {
-    C
+    if (rol !== "administrador") {
+      toast.error("No tienes permisos para cambiar el estado del ambiente")
+      return;
+    }
     const ambienteActual = data.find((ambiente) => ambiente.idAmbiente === id);
-
+    const nuevoEstado = checked ? "activo" : "inactivo"
     if (!ambienteActual) {
       toast.error("Ambiente no encontrado");
       return;
@@ -166,20 +187,30 @@ const AmbientesPlantilla = () => {
     });
   };
 
-  const indiceUltimoItem = paginaActual * itemsPorPagina;
-  const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
-  const currentItems = data
-    ? data.slice(indicePrimerItem, indiceUltimoItem)
-    : [];
-  const totalPages = Math.ceil((data?.length || 0) / itemsPorPagina);
+
 
   return (
     <>
       <div className="w-auto h-screen flex flex-col gap-8 bg-gray-100">
         <div className="pt-10 pl-20">
-          <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
-            <b>Nuevo Ambiente</b>
-          </Mybutton>
+          {
+            rol === "administrador" && (
+              <>
+                <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
+                  <b>Nuevo Ambiente</b>
+                </Mybutton>
+              </>
+            )
+          }
+          <Search
+            onchange={(e) => setfiltro(e.target.value.toLowerCase())}
+            label={""}
+            placeholder={"Filtro por ambiente..."}
+
+
+
+          />
+
         </div>
         <div className="w-full px-20 h-auto overflow-y-auto">
           <TableMolecula>
@@ -187,7 +218,9 @@ const AmbientesPlantilla = () => {
               <Th>ID</Th>
               <Th>Nombre ambiente</Th>
               <Th>Estado</Th>
-              <Th>Acciones</Th>
+              <Th>{
+                rol === "administrador" ? "Acciones" : ""
+              }</Th>
             </Thead>
             <Tbody>
               {currentItems.length > 0 ? (
@@ -210,33 +243,22 @@ const AmbientesPlantilla = () => {
                     </Td>
                     <Td>
                       <div className="flex flex-row gap-6">
-                        <ToolTip
-                          content="Eliminar"
-                          placement="left"
-                          icon={() => (
-                            <MdDelete
-                              size={"35px"}
-                              onClick={() =>
-                                handleEliminarAmbiente(
-                                  ambiente.idAmbiente,
-                                  ambiente.nombre_ambiente
-                                )
-                              }
-                              className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300"
-                            />
-                          )}
-                        />
-                        <ToolTip
-                          content="Actualizar"
-                          placement="right"
-                          icon={() => (
-                            <FaRegEdit
-                              size={"35px"}
-                              onClick={() => abrirModal(ambiente)}
-                              className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300"
-                            />
-                          )}
-                        />
+                        {rol === "administrador" && (
+                          <ToolTip
+                            content="Actualizar"
+                            placement="right"
+                            icon={() => (
+                              <FaRegEdit
+                                size={"35px"}
+                                onClick={() => abrirModal(ambiente)}
+                                className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300"
+                              />
+                            )}
+                          />
+                        )}
+
+
+
                       </div>
                     </Td>
                   </tr>

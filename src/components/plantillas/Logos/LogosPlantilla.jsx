@@ -169,7 +169,7 @@ const LogosPlantilla = () => {
         { value: "inactivo", label: "Inactivo" }
     ];
 
-    const filtrodeDatos = data.data && data.data.length > 0 ? data.data.filter((logo) => {
+    const filtrodeDatos = data?.data && data?.data.length > 0 ? data?.data.filter((logo) => {
       const filtroestado = filtroEstado ? "activo" : "inactivo"
       const nombreLogo = busqueda === "" ||
         (logo.nombre && logo.nombre.toLowerCase().includes(busqueda.toLowerCase()));
@@ -181,11 +181,10 @@ const LogosPlantilla = () => {
     const indiceUltimoItem = paginaActual * itemsPorPagina
     const indicePrimerItem = indiceUltimoItem - itemsPorPagina
     const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-    const totalPages = Math.ceil((data.data.length||0)/itemsPorPagina)
+    const totalPages = Math.ceil((filtrodeDatos.length||0)/itemsPorPagina)
 
     return(
       <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
-
 
     {/* TABLA */}
       <div className="flex justify-center items-center ">
@@ -222,7 +221,7 @@ const LogosPlantilla = () => {
                   <Td>{logo.nombre}</Td>
                   <Td>
                   <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} 
-                  src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
+                  src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logo.ruta}`} alt="Logo" />
                   </Td>
                   {/* <Td>{logo.ruta}</Td> */}
                   <Td>
@@ -286,6 +285,8 @@ const LogosPlantilla = () => {
                   type={"text"}
                 />
                 <InputAtomo
+                 IsRequired={false}
+                 required={false}
                   register={register}
                   name={"file"}
                   erros={errors}
@@ -330,6 +331,7 @@ const LogosPlantilla = () => {
                   placeholder={"Selecciona tu nuevo logo"}
                   type={"file"}
                   defaultValue={logoSeleccionado?.ruta || ""}
+                  isRequired={false} 
               />
 
             </>

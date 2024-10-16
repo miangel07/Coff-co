@@ -56,7 +56,7 @@ const UsersPlantilla = () => {
       // Función para obtener los roles desde el backend
       const fetchRoles = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/rol/listar'); 
+          const response = await fetch(`${import.meta.env.VITE_BASE_URL}/rol/listar`); 
           const data = await response.json();
           setRoles(data);
         } catch (error) {
@@ -70,10 +70,13 @@ const UsersPlantilla = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openModalActualizar, setOpenModalActualizar] = useState(false);
   const [sucess, setsucess] = useState("");
+  const [sucessActualizar, setsucessActualizar] = useState("");
 
   //MODAL REGISTRAR
   const handleClick = () => {setOpenModal(true);};
-  const closeModal = () => {setOpenModal(false);reset()};
+  const closeModal = () => {setOpenModal(false);
+    // reset()
+  };
 
   //MODAL ACTUALIZAR
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
@@ -96,7 +99,8 @@ const UsersPlantilla = () => {
               await actualizarEstado(id_usuario).unwrap();
               toast.success("Estado actualizado con éxito");
             } catch (error) {
-              console.error('Error al actualizar el estado:', error);
+              toast.error(error.error);
+              console.log('Error al actualizar el estado:', error);
             }
           }
         },
@@ -114,7 +118,9 @@ const UsersPlantilla = () => {
     console.log("Valor actual de tipo_documento:", usuarioSeleccionado?.tipo_documento);
   }, [usuarioSeleccionado]);
   
-  const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
+  const closeModalActualizar = () => {setOpenModalActualizar(false);
+    // reset()
+  };
 
   //SUBMIT REGISTRAR
   const onsubmit = async (data) => {
@@ -132,8 +138,9 @@ const UsersPlantilla = () => {
         icon: <FcOk />,
       });
 
+      console.log('Valores enviados', data)
       setOpenModal(false);
-      reset();
+      // reset();
     } catch (error) {
       const mensajesError = error.errors.join(', ');
       toast.error(mensajesError || "Ocurrió un error", {
@@ -144,47 +151,50 @@ const UsersPlantilla = () => {
           color: "#fff",
         },
       });
+      console.log(mensajesError)
+      console.log('Valores enviados', data)
     }
   };
 
-  //SUBMIT ACTUALIZAR
-  const onsubmitActualizar = (valores) => {
+  // SUBMIT ACTUALIZAR
+  const onsubmitActualizar = async (valores) => {
     if (usuarioSeleccionado) {
-      console.log("valores enviados:", valores);
-      actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario });
-      toast.success("Usuario actualizado con éxito");
-      reset();
-      setOpenModalActualizar(false);
+      try {
+        // Asumiendo que actualizarUsuario es una función asíncrona
+        const response = await actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario }).unwrap();
+        
+        // Se utiliza la respuesta del servidor para obtener el mensaje
+        setsucessActualizar(response.message);
+      
+        toast.success(response.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+
+        console.log('Valores enviados:', valores);
+        setOpenModalActualizar(false);
+        // reset();
+      } catch (error) {
+        // Se maneja el error y se comprueba que `error.errors` exista
+        const mensajesError = error.errors ? error.errors.join(', ') : "Ocurrió un error";
+        toast.error(mensajesError, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+        console.log(mensajesError);
+        console.log('Valores enviados:', valores);
+      }
     }
   };
-  
-  //Para registrar
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setsucess(datos?.message);
-  //     toast.success(datos?.message, {
-  //       duration: 5000,
-  //       position: "top-center",
-  //       style: {
-  //         background: "#333",
-  //         color: "#fff",
-  //       },
-  //       icon: <FcOk />,
-  //     });
-  //   }
-
-  //   if (isError) {
-  //     console.log(error);
-  //     toast.error(error?.error || "Ocurrió un error", {
-  //       duration: 5000,
-  //       position: "top-center",
-  //       style: {
-  //         background: "#333",
-  //         color: "#fff",
-  //       },
-  //     });
-  //   }
-  // }, [isSuccess, isError, error, datos]);
 
   // ESTADO DE CARGA DE LA TABLA 
   if(isLoading){
@@ -205,7 +215,7 @@ const UsersPlantilla = () => {
   const indiceUltimoItem = paginaActual * itemsPorPagina
   const indicePrimerItem = indiceUltimoItem - itemsPorPagina
   const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-  const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
+  const totalPages = Math.ceil((filtrodeDatos?.length||0)/itemsPorPagina)
 
   //OPCIONES PARA LOS SELECT 
   const estadoOptions = [
@@ -440,7 +450,7 @@ const UsersPlantilla = () => {
                   ValueItem={"label"} 
                   value={watch("rol")} 
                 />
-
+{/* 
                 <SelectAtomo
                   data={estadoOptions} 
                   label={"Estado"} 
@@ -448,7 +458,7 @@ const UsersPlantilla = () => {
                   items={"value"} 
                   ValueItem={"label"} 
                   value={watch("estado")} 
-                />
+                /> */}
 
                 <SelectAtomo
                   data={documentoOptions} 
