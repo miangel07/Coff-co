@@ -115,7 +115,7 @@ const ReportesPlantillas = () => {
         </section>
 
       </header>
-      <section className='gap-6 flex w-full justify-center items-center bg-white  flex-wrap'>
+      <section className='gap-3 flex w-full justify-center items-center bg-white  flex-row md:flex-grow'>
         <div className='flex w-1/2'>
           <GraficaAlquiler />
         </div>
