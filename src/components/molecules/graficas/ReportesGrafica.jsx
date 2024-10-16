@@ -10,9 +10,8 @@ const ReportesGrafica = () => {
         return {
             title: {
                 text: 'Cantidad de servicios usados',
-                subtext: 'Datos de Servicio',
                 left: 'center',
-                top: '10',
+                top: '0',
                 textStyle: {
                     fontSize: 18,
                     fontWeight: 'bold',
@@ -39,6 +38,7 @@ const ReportesGrafica = () => {
             series: [
                 {
                     data: data.map((item) => item.cantidad_uso),
+                    top: '25',
                     type: 'bar',
                     barWidth: '20%',
                     label: {
@@ -67,7 +67,7 @@ const ReportesGrafica = () => {
                 left: '5%',
                 right: '5%',
                 bottom: '20%',
-                top: '10%',
+                top: '30%',
             },
         };
     };

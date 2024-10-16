@@ -47,6 +47,7 @@
     "fecha": "Fecha",
     "finca": "Finca",
     "usuario": "Usuario",
+    "usuarios": "Usuarios",
     "altura": "Altura (M)",
     "alturaMetros": "Altura (en metros)",
     "variedad": "Variedad",
@@ -72,12 +73,47 @@
     "telefono": "Teléfono",
     "contraseña": "Contraseña",
     "NDocumento": "Número de Documento",
-    "tipoDocumento": "Tipo de Documento"
-
-
-
-
-
-
-
+    "tipoDocumento": "Tipo de Documento",
+    "tipoDeDatos":"tipo de datos",
+    "editar":"Editar",
+    "buscar": "Buscar",
+    "enviar": "Enviar",
+    "cambioestadologo": "Cambiar el estado del Logo",
+    "cambioestaousuario": "Cambiar el estado del Usuario",
+    "cambioestadoexitoso": "Estado modificado exitosamente",
+    "cambioestadofallido": "Error cambiando el estado",
+    "operacioncancelada": "Operacion cancelada",
+    "ingreseNombreLogo": "Ingrese el nombre del logo",
+    "seleccionaTuLogo": "Selecciona tu logo",
+    "registroDeLogo": "Registro de Logo",
+    "actualizarLogo": "Actualizar Logo",
+    "confirmacion": "Confirmación",
+    "documento": "Documento",
+    "tipo": "Tipo",
+    "rol": "Rol",
+    "admin": "Administrador",
+    "encargado": "Encargado",
+    "cliente": "Cliente",
+    "operario": "Operario",
+    "total": "Total",
+    "nuevoUsuario": "Nuevo usuario",
+    "ingreseNombreUsuario": "Ingrese el nombre del usuario",
+    "ingreseApellidoUsuario": "Ingrese el apellido del usuario",
+    "ingreseCorreoUsuario": "Ingrese el correo del usuario",
+    "ingreseTelefonoUsuario": "Ingrese el teléfono del usuario",
+    "ingreseContrasenaUsuario": "Ingrese la contraseña del usuario",
+    "ingreseNumeroIdentificacion": "Ingrese el número de identificación del usuario",
+    "registroUsuarios": "Registro de Usuarios",
+    "informacion": "Información",
+    "nombres": "Nombres",
+    "identificacion": "Identificación",
+    "contrasena": "Contraseña",
+    "cambiaContrasena": "Cambia tu contraseña",
+    "actualizarUsuario": "Actualizar Usuario",
+    "ingresaContraseñaActual": "Ingresa la contraseña actual",
+    "ingresaContraseñaNueva": "Ingresa la contraseña nueva",
+    "actualizarContraseña": "Actualizar Contraseña",
+    "miPerfil": "Mi perfil",
+    "logos": "Logos",
+    "ayuda": "Ayuda"
 }
