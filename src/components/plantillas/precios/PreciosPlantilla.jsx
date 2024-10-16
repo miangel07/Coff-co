@@ -33,8 +33,9 @@ const PreciosPlantilla = () => {
   const { authData } = useContext(AuthContext)
   const itemsPorPagina = 4;
   const [tipoServicioActual, setTipoServicioActual] = useState("");
+  const [UnidadMedida, setUnidadMedida] = useState("");
   const [filtro, setfiltro] = useState("");
- 
+
 
   const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } =
     useGetTipoServicioQuery();
@@ -57,6 +58,7 @@ const PreciosPlantilla = () => {
     formState: { errors },
     setValue,
   } = useForm();
+  console.log(dataPrecio)
   const filteredData =
     dataPrecio && dataPrecio.length > 0
       ? dataPrecio.filter((item) => {
@@ -84,9 +86,9 @@ const PreciosPlantilla = () => {
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
     );
   }
-
+  console.log(UnidadMedida)
   const abrirModal = (precio) => {
-    console.log("precio cargado al editar: ", precio);
+
     if (precio) {
       setPrecioSeleccionado(precio);
       reset({
@@ -95,6 +97,7 @@ const PreciosPlantilla = () => {
         fk_idTipoServicio: precio.fk_idTipoServicio,
       });
       setTipoServicioActual(precio.nombreServicio);
+      setUnidadMedida(precio.UnidadMedida)
     } else {
       setPrecioSeleccionado(null);
       reset({
@@ -120,6 +123,7 @@ const PreciosPlantilla = () => {
         presentacion: datosDelFormulario.presentacion,
         precio: datosDelFormulario.precio,
         fk_idTipoServicio: datosDelFormulario.fk_idTipoServicio,
+        unidaMedida: UnidadMedida
       };
 
       if (precioSeleccionado) {
@@ -210,7 +214,11 @@ const PreciosPlantilla = () => {
       closeOnClickOutside: true,
     });
   };
-
+  const dataUnidadMedida = [
+    { value: "Lb", label: "Libras" },
+    { value: "Kg", label: "Kilogramos" },
+    { value: "N/A", label: "N/A" },
+  ]
 
 
   return (
@@ -239,6 +247,7 @@ const PreciosPlantilla = () => {
               <Th>Presentacion</Th>
               <Th>Precio</Th>
               <Th>Tipo servicio</Th>
+              <Th>Unida de Medida</Th>
               <Th>Estado</Th>
               <Th>{rol === "administrador" ? "Acciones" : ""}</Th>
             </Thead>
@@ -250,6 +259,7 @@ const PreciosPlantilla = () => {
                     <Td>{precio.presentacion}</Td>
                     <Td>{precio.precio}</Td>
                     <Td>{precio.nombreServicio}</Td>
+                    <Td>{precio.UnidadMedida}</Td>
                     <Td>
 
                       <>
@@ -276,26 +286,7 @@ const PreciosPlantilla = () => {
                     </Td>
                     <Td>
                       <div className="flex flex-row gap-6">
-                        {
-                          rol === "administrador" && (
-                            <ToolTip
-                              content="Eliminar"
-                              placement="left"
-                              icon={() => (
-                                <MdDelete
-                                  size={"35px"}
-                                  onClick={() =>
-                                    handleEliminarPrecio(
-                                      precio.idPrecio,
-                                      precio.presentacion
-                                    )
-                                  }
-                                  className="cursor-pointer transform hover:scale-y-110 hover:scale-x-110 transition duration-300 "
-                                />
-                              )}
-                            />
-                          )
-                        }
+
                         {
                           rol === "administrador" && (
                             <ToolTip
@@ -369,7 +360,7 @@ const PreciosPlantilla = () => {
                 erros={errors}
               />
               <div>
-                <div className="">
+                <div className="flex gap-2 flex-col">
                   <SelectAtomo
                     data={dataTipoServicio}
                     label="Tipo de servicio"
@@ -380,6 +371,14 @@ const PreciosPlantilla = () => {
                     items="idTipoServicio"
                     ValueItem="nombreServicio"
                     value={tipoServicioActual}
+                  />
+                  <SelectAtomo
+                    value={UnidadMedida}
+                    data={dataUnidadMedida}
+                    items={"value"}
+                    label={"unidad de medida"}
+                    ValueItem={"label"}
+                    onChange={(e) => setUnidadMedida(e.target.value)}
                   />
                 </div>
               </div>
