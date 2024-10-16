@@ -42,7 +42,7 @@ const GraficaDocumento = () => {
                     labelLine: {
                         show: true
                     },
-                    data: data.data
+                    data: data?.data
                 }
             ]
         };

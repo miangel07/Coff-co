@@ -36,7 +36,7 @@ const selectDocumentos = ({ data, label, onChange, items, ValueItem, value }) =>
           label={label}
           value={selectedKey ? `${selectedKey}` : ""} // Establece el valor del Select
           defaultSelectedKeys={selectedKey ? [`${selectedKey}`] : []} // defaultSelectedKeys debe ser un array
-          className="max-w-xs"
+          className="max-w-xs m-2"
           onChange={onChange}
         >
           {data?.map((item, index) => (
