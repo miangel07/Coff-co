@@ -72,7 +72,9 @@
     "telefono": "Teléfono",
     "contraseña": "Contraseña",
     "NDocumento": "Número de Documento",
-    "tipoDocumento": "Tipo de Documento"
+    "tipoDocumento": "Tipo de Documento",
+    "tipoDeDatos":"tipo de datos",
+    "editar":"editar"
 
 
 
