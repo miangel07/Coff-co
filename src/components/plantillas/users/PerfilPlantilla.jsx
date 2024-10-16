@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next';
 //ICONOS
 import { MdEdit } from "react-icons/md";
 import { PiIdentificationBadgeThin, PiBriefcaseThin, PiEnvelopeSimpleThin, PiPhoneThin, PiUserThin, PiUserGearThin, PiPasswordThin, PiTrendUpDuotone, PiUserBold } from "react-icons/pi";
+//FUNCIONES
 import { useGetUsuarioIdQuery, useActualizarUsuarioMutation, useActualizarContraMutation } from "../../../store/api/users";
+import { useGetRolQuery } from "../../../store/api/roles";
 //ALERTAS
 import { toast } from "react-toastify";
 //MODAL
@@ -53,25 +55,12 @@ const PerfilPlantilla = () => {
     const { data } = useGetUsuarioIdQuery(usuario, {skip: !usuario, });
     const [actualizarContraseña]= useActualizarContraMutation();
     const [actualizarUsuario]= useActualizarUsuarioMutation();
-    const [roles, setRoles] = useState([]); 
+    const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
     const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
     const closeModalActualizarContra = () => {setOpenModalActualizarContra(false);reset()};
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
     const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
 
-    useEffect(() => {
-        // Función para obtener los roles desde el backend
-        const fetchRoles = async () => {
-          try {
-            const response = await fetch('http://localhost:3000/api/rol/listar'); 
-            const data = await response.json();
-            setRoles(data);
-          } catch (error) {
-            console.error('Error al obtener los roles:', error);
-          }
-        };
-        fetchRoles();
-    }, []);
     const handleClickActualizar = (user) => {
         console.log("Usuario seleccionado:", user); 
         setUsuarioSeleccionado(user);

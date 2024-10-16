@@ -20,6 +20,7 @@ import { CambioPasswordApi } from "./api/cambioPassword";
 import { excelApiSlice } from "./api/Excel/ExcelApiSlice";
 import { AlquilerSlice } from "./api/alquilerLaboratorio/alquilerSlice";
 import { municipioApiSlice } from "./api/municipio";
+import { rolesSlice } from "./api/roles";
 
 export const store = configureStore({
   reducer: {
@@ -41,9 +42,7 @@ export const store = configureStore({
     [CambioPasswordApi.reducerPath]: CambioPasswordApi.reducer,
     [excelApiSlice.reducerPath]: excelApiSlice.reducer,
     [municipioApiSlice.reducerPath]: municipioApiSlice.reducer,
-
-
-
+    [rolesSlice.reducerPath]: rolesSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -69,7 +68,6 @@ export const store = configureStore({
       CambioPasswordApi.middleware,
       excelApiSlice.middleware,
       municipioApiSlice.middleware,
-
-      
+      rolesSlice.middleware,
     ),
 });

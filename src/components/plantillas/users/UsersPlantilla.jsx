@@ -9,6 +9,7 @@ import Search from "../../atoms/Search";
 import { FaRegEdit } from "react-icons/fa";
 import { useTranslation } from 'react-i18next';
 import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useGetRolesQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
+import { useGetRolQuery } from "../../../store/api/roles";
 import { Spinner } from "@nextui-org/react";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -37,6 +38,7 @@ const UsersPlantilla = () => {
   // FUNCIONES CRUD
   const {data,isLoading, refetch} = useGetUsuarioQuery()
   const { data: dato, isLoading: cargando } = useGetRolesQuery();
+  const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [actualizarEstado] = useActualizarEstadoMutation();
   const [actualizarUsuario]= useActualizarUsuarioMutation();
@@ -49,22 +51,6 @@ const UsersPlantilla = () => {
 
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
-
-  //ROLES
-  const [roles, setRoles] = useState([]); 
-  useEffect(() => {
-      // Función para obtener los roles desde el backend
-      const fetchRoles = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/api/rol/listar'); 
-          const data = await response.json();
-          setRoles(data);
-        } catch (error) {
-          console.error('Error al obtener los roles:', error);
-        }
-      };
-      fetchRoles();
-  }, []);
 
   //Abrir modal
   const [openModal, setOpenModal] = useState(false);

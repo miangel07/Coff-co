@@ -33,39 +33,6 @@ export const usuariosSlice = createApi({
 
   }),
 
-    //LISTAR
-    getRoles: build.query({
-      query:()=>({
-        url:'/usuario/listarroles',
-        method:'GET',
-      }),
-      invalidatesTags:['usuarios'],
-      providesTags:['usuarios']
-  
-    }),
-  //LISTAR
-  getRoles: build.query({
-    query:()=>({
-      url:'/usuario/listarroles',
-      method:'GET',
-    }),
-    invalidatesTags:['usuarios'],
-    providesTags:['usuarios']
-
-  }),
-  
-  
-  //LISTAR ROLES DANIEL
-  getClienteRol: build.query({
-    query:()=>({
-      url:'/rol/listar',
-      method:'GET',
-    }),
-    invalidatesTags:['usuarios'],
-    providesTags:['usuarios']
-
-  }),
-
   // LISTAR ID
   getUsuarioId: build.query({
     query: (id) => ({
@@ -99,8 +66,6 @@ export const usuariosSlice = createApi({
     },
     providesTags:['usuarios']
   }),
-
-
 
     //REGISTRAR
   registrarUsuario: build.mutation({

@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useLoginUserMutation } from "../../../store/api/auth/index.js";
 import {useRegistrarUsuarioMutation } from "../../../store/api/users";
+import { useGetRolQuery } from "../../../store/api/roles/index.js";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -27,6 +28,7 @@ const LoginComponent = () => {
   //MUTACIONES
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [loginUser, {isError: isErrorLogin, error: errorLogin}] = useLoginUserMutation();
+  const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
 
   //FUNCIONES
    //Use Form del formulario de registro y del Login
@@ -35,22 +37,6 @@ const LoginComponent = () => {
   const { iniciarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
   const closeModal = () => {setModalRegistro(false); resetRegistro()};
   const navigate = useNavigate();
-
-  //ROLES
-  const [roles, setRoles] = useState([]); 
-  useEffect(() => {
-      // Función para obtener los roles desde el backend
-      const fetchRoles = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/api/rol/listar'); 
-          const data = await response.json();
-          setRoles(data);
-        } catch (error) {
-          console.error('Error al obtener los roles:', error);
-        }
-      };
-      fetchRoles();
-  }, []);
 
   //SUBMIT REGISTRAR
   const onsubmitRegistrar = async (data) => {
