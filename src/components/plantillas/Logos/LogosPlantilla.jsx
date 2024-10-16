@@ -350,7 +350,7 @@ const LogosPlantilla = () => {
     <ModalOrganismo 
       // logo={<Logosímbolo />}
       children={
-        <img className="object-cover w-auto h-auto" src={`http://localhost:3000/public/logos/${logoSeleccionado.ruta}`} alt="Logo" />
+        <img className="object-cover w-auto h-auto" src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${logoSeleccionado.ruta}`} alt="Logo" />
       }
       visible={true}
       title={"Logo"}

@@ -63,7 +63,7 @@ const PerfilPlantilla = () => {
         // Función para obtener los roles desde el backend
         const fetchRoles = async () => {
           try {
-            const response = await fetch('http://localhost:3000/api/rol/listar'); 
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/rol/listar`); 
             const data = await response.json();
             setRoles(data);
           } catch (error) {

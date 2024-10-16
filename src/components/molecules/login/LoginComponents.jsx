@@ -42,7 +42,7 @@ const LoginComponent = () => {
       // Función para obtener los roles desde el backend
       const fetchRoles = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/rol/listar'); 
+          const response = await fetch('http://:3000/api/rol/listar'); 
           const data = await response.json();
           setRoles(data);
         } catch (error) {

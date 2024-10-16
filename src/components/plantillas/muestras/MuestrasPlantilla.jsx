@@ -202,7 +202,7 @@ const MuestrasPlantilla = () => {
                 <Td>
                   {muestra.fotoMuestra && (
                     <img
-                      src={`http://localhost:3000/public/muestras/${muestra.fotoMuestra}`}
+                      src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${muestra.fotoMuestra}`}
                       alt="Muestra"
                       className="cursor-pointer h-8 w-8 rounded object-cover"
                       onClick={() => handleImageClick(muestra)}
@@ -236,7 +236,7 @@ const MuestrasPlantilla = () => {
         >
           <div className="flex justify-center items-center">
             <img
-              src={`http://localhost:3000/public/muestras/${selectedMuestra.fotoMuestra}`}
+              src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${selectedMuestra.fotoMuestra}`}
               alt={`Muestra ${selectedMuestra.codigo_muestra}`}
               className="max-w-full max-h-[80vh] object-contain"
             />
