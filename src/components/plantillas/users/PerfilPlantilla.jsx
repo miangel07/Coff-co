@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { parseJwt } from "../../../utils/ProtectedRoute";
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next';
 //ICONOS
 import { MdEdit } from "react-icons/md";
 import { PiIdentificationBadgeThin, PiBriefcaseThin, PiEnvelopeSimpleThin, PiPhoneThin, PiUserThin, PiUserGearThin, PiPasswordThin, PiTrendUpDuotone, PiUserBold } from "react-icons/pi";
@@ -18,6 +19,7 @@ import InputAtomo from "../../atoms/Input";
 const PerfilPlantilla = () => {
 
     const [usuario, setUsuario] = useState(null); 
+    const { t } = useTranslation();
     const [openModalActualizar, setOpenModalActualizar] = useState(false);
     const [openModalActualizarContra, setOpenModalActualizarContra] = useState(false);
 
@@ -121,243 +123,205 @@ const PerfilPlantilla = () => {
                 <div className='cont-item'>
                     {data && data.map(user => (
                         <div key={user.id_usuario} className='cont-prin'>
-                            <div className='card-content'>
-                                <div className='content-info-up'>
-                                    <h1>Información</h1>
-                                    <button onClick={() => handleClickActualizar(user)} className='btn-edit'>
-                                        <MdEdit className='icon-edit' />
-                                    </button>
-                                </div>
-                                <div className='cont-data'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Nombres</p>
-                                        <p>{user.nombre}</p>
-                                    </div>
-                                    <PiUserThin className='icon-arrow' />
-                                </div>
-                                <hr />
-                                <div className='cont-data-estado'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Apellidos</p>
-                                        <p>{user.apellidos}</p>
-                                    </div>
-                                    <PiUserThin className='icon-arrow' />
-                                </div>
-                                <hr />
-                                <div className='cont-data'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Identificación</p>
-                                        <p>{user.numero_documento}</p>
-                                    </div>
-                                    <PiIdentificationBadgeThin className='icon-arrow' />
-                                </div>
-                                <hr />
-                                <div className='cont-data'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Tipo Documento</p>
-                                        <p>{user.tipo_documento}</p>
-                                    </div>
-                                    <PiIdentificationBadgeThin className='icon-arrow' />
-                                </div>
-                                <hr />
-                                <div className='cont-data'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Telefono</p>
-                                        <p>{user.telefono}</p>
-                                    </div>
-                                    <PiPhoneThin className='icon-arrow' />
-                                </div>
-                                <hr />
-                                <div className='cont-data'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Correo</p>
-                                        <p>{user.correo_electronico}</p>
-                                    </div>
-                                    <PiEnvelopeSimpleThin className='icon-arrow' />
-                                </div>
-                                <hr />
-                                <div className='cont-data'>
-                                    <div className='datos-info'>
-                                        <p className='user-info-name'>Rol</p>
-                                        <p>{user.rol}</p>
-                                    </div>
-                                    <PiBriefcaseThin className='icon-arrow' />
-                                </div>
-                                
+                        <div className='card-content'>
+                            <div className='content-info-up'>
+                                <h1>{t("informacion")}</h1>
+                                <button onClick={() => handleClickActualizar(user)} className='btn-edit'>
+                                    <MdEdit className='icon-edit' />
+                                </button>
                             </div>
-                            <div className='content-mini'>
-                                <div className='card-content-mini'>
-                                    <div className='title-infoP'>
-                                        <h1>Contraseña</h1>
-                                    </div>
-                                    <button onClick={() => { handleClickActualizarContra(user) }} className='cont-data-password'>
-                                        <div>
-                                            <p className='password-hide'>••••••••</p>
-                                            <p className='descrip-pass'>Cambia tu contraseña</p>
-                                        </div>
-                                        <PiPasswordThin className='icon-arrow' />
-                                    </button>
+                            <div className='cont-data'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("nombres")}</p>
+                                    <p>{user.nombre}</p>
                                 </div>
-                                {/* <div className='card-content-mini'>
-                                    <div className='title-infoP'>
-                                        <h1>Imagen de perfil</h1>
-                                    </div>
-                                    <button onClick={() => { setCambiarImagenModal(true) }} className='cont-img-info'>
-                                        <p className='descrip-img'>Cambiar Imagen</p>
-                                        <img src={"nada"} alt="imagen" />
-                                    </button>
-                                </div> */}
+                                <PiUserThin className='icon-arrow' />
+                            </div>
+                            <hr />
+                            <div className='cont-data-estado'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("apellidos")}</p>
+                                    <p>{user.apellidos}</p>
+                                </div>
+                                <PiUserThin className='icon-arrow' />
+                            </div>
+                            <hr />
+                            <div className='cont-data'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("identificacion")}</p>
+                                    <p>{user.numero_documento}</p>
+                                </div>
+                                <PiIdentificationBadgeThin className='icon-arrow' />
+                            </div>
+                            <hr />
+                            <div className='cont-data'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("tipoDocumento")}</p>
+                                    <p>{user.tipo_documento}</p>
+                                </div>
+                                <PiIdentificationBadgeThin className='icon-arrow' />
+                            </div>
+                            <hr />
+                            <div className='cont-data'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("telefono")}</p>
+                                    <p>{user.telefono}</p>
+                                </div>
+                                <PiPhoneThin className='icon-arrow' />
+                            </div>
+                            <hr />
+                            <div className='cont-data'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("correo")}</p>
+                                    <p>{user.correo_electronico}</p>
+                                </div>
+                                <PiEnvelopeSimpleThin className='icon-arrow' />
+                            </div>
+                            <hr />
+                            <div className='cont-data'>
+                                <div className='datos-info'>
+                                    <p className='user-info-name'>{t("rol")}</p>
+                                    <p>{user.rol}</p>
+                                </div>
+                                <PiBriefcaseThin className='icon-arrow' />
                             </div>
                         </div>
+                        <div className='content-mini'>
+                            <div className='card-content-mini'>
+                                <div className='title-infoP'>
+                                    <h1>{t("contrasena")}</h1>
+                                </div>
+                                <button onClick={() => { handleClickActualizarContra(user) }} className='cont-data-password'>
+                                    <div>
+                                        <p className='password-hide'>••••••••</p>
+                                        <p className='descrip-pass'>{t("cambiaContrasena")}</p>
+                                    </div>
+                                    <PiPasswordThin className='icon-arrow' />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     ))}
                 </div>
 
                 {/* MODAL ACTUALIZAR*/}
                 {openModalActualizar && (
                 <ModalOrganismo
-                // logo={<Logosímbolo />}
-                children={
-                    <UserFrom
-                    onsubmit={handleSubmit(onsubmitActualizar)}
+                    // logo={<Logosímbolo />}
                     children={
-                        <>
-                        <InputAtomoActualizar
-                            register={register}
-                            name={"nombre"}
-                            errores={errors}
-                            id={"nombre"}
-                            placeholder={"Ingrese el nombre del usuario"}
-                            type={"text"}
-                            defaultValue={usuarioSeleccionado?.nombre || ""}
+                        <UserFrom
+                            onsubmit={handleSubmit(onsubmitActualizar)}
+                            children={
+                                <>
+                                    <InputAtomoActualizar
+                                        register={register}
+                                        name={"nombre"}
+                                        errores={errors}
+                                        id={"nombre"}
+                                        placeholder={t("ingreseNombreUsuario")}
+                                        type={"text"}
+                                        defaultValue={usuarioSeleccionado?.nombre || ""}
+                                    />
+                                    <InputAtomoActualizar
+                                        register={register}
+                                        name={"apellidos"}
+                                        errores={errors}
+                                        id={"apellidos"}
+                                        placeholder={t("ingreseApellidoUsuario")}
+                                        type={"text"}
+                                        defaultValue={usuarioSeleccionado?.apellidos || ""}
+                                    />
+                                    <InputAtomoActualizar
+                                        register={register}
+                                        name={"correo_electronico"}
+                                        errores={errors}
+                                        id={"correo_electronico"}
+                                        placeholder={t("ingreseCorreoUsuario")}
+                                        type={"text"}
+                                        defaultValue={usuarioSeleccionado?.correo_electronico || ""}
+                                    />
+                                    <InputAtomoActualizar
+                                        register={register}
+                                        name={"telefono"}
+                                        errores={errors}
+                                        id={"telefono"}
+                                        placeholder={t("ingreseTelefonoUsuario")}
+                                        type={"text"}
+                                        defaultValue={usuarioSeleccionado?.telefono || ""}
+                                    />
+                                    <SelectAtomoActualizar
+                                        data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
+                                        label={t("rol")}
+                                        items={"value"}
+                                        onChange={(e) => setValue("fk_idRol", e.target.value)}
+                                        placeholder={usuarioSeleccionado?.rol}
+                                        value={usuarioSeleccionado?.fk_idRol || ""}
+                                        habilitado={true}
+                                    />
+                                    <SelectAtomoActualizar
+                                        data={documentoOptions}
+                                        label={t("tipoDocumento")}
+                                        items={"value"}
+                                        placeholder={usuarioSeleccionado?.tipo_documento}
+                                        onChange={(e) => setValue("tipo_documento", e.target.value)}
+                                        value={usuarioSeleccionado?.tipo_documento || ""}
+                                    />
+                                    <InputAtomoActualizar
+                                        register={register}
+                                        name={"numero_documento"}
+                                        errores={errors}
+                                        id={"numero_documento"}
+                                        placeholder={t("ingreseNumeroIdentificacion")}
+                                        type={"number"}
+                                        defaultValue={usuarioSeleccionado?.numero_documento || ""}
+                                    />
+                                </>
+                            }
                         />
-                        <InputAtomoActualizar
-                            register={register}
-                            name={"apellidos"}
-                            errores={errors}
-                            id={"apellidos"}
-                            placeholder={"Ingrese el apellido del usuario"}
-                            type={"text"}
-                            defaultValue={usuarioSeleccionado?.apellidos || ""}
-                        />
-                        <InputAtomoActualizar
-                            register={register}
-                            name={"correo_electronico"}
-                            errores={errors}
-                            id={"correo_electronico"}
-                            placeholder={"Ingrese el correo del usuario"}
-                            type={"text"}
-                            defaultValue={usuarioSeleccionado?.correo_electronico || ""}
-                        />
-                        <InputAtomoActualizar
-                            register={register}
-                            name={"telefono"}
-                            errores={errors}
-                            id={"telefono"}
-                            placeholder={"Ingrese el teléfono del usuario"}
-                            type={"text"}
-                            defaultValue={usuarioSeleccionado?.telefono || ""}
-                        />
-
-                        {/* 
-                        <InputAtomoActualizar
-                            register={register}
-                            name={"password"}
-                            errores={errors}
-                            id={"password"}
-                            placeholder={"Ingrese la contraseña del usuario"}
-                            type={"password"}
-                            defaultValue={usuarioSeleccionado?.password || ""}
-                        /> */
-                        }
-
-                        <SelectAtomoActualizar
-                            data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
-                            label={"Rol"}
-                            items={"value"}
-                            onChange={(e) => setValue("fk_idRol", e.target.value)}
-                            placeholder={usuarioSeleccionado?.rol}
-                            value={usuarioSeleccionado?.fk_idRol || ""}
-                            habilitado={true}
-                        />
-
-                        <SelectAtomoActualizar
-                            data={documentoOptions}
-                            label={"Tipo Documento"}
-                            items={"value"}
-                            placeholder={usuarioSeleccionado?.tipo_documento}
-                            onChange={(e) => setValue("tipo_documento", e.target.value)}
-                            value={usuarioSeleccionado?.tipo_documento || ""}
-                        />
-
-                        {/* <SelectAtomo
-                            data={estadoOptions}
-                            label={"Estado"}
-                            onChange={(e) => setValue("estado", e.target.value)}
-                            items={"value"}
-                            ValueItem={"label"}
-                            placeholder={usuarioSeleccionado?.estado}
-                            value={usuarioSeleccionado?.estado || ""}
-                        /> */}
-                            
-                        <InputAtomoActualizar
-                            register={register}
-                            name={"numero_documento"}
-                            errores={errors}
-                            id={"numero_documento"}
-                            placeholder={"Ingrese el número de identificación del usuario"}
-                            type={"number"}
-                            defaultValue={usuarioSeleccionado?.numero_documento || ""}
-                        />
-                        </>
                     }
-                    />
-                }
-                visible={true}
-                title={"Actualizar Usuario"}
-                closeModal={closeModalActualizar}
+                    visible={true}
+                    title={t("actualizarUsuario")}
+                    closeModal={closeModalActualizar}
                 />
-
                 )}
                 {/* FIN MODAL ACTUALIZAR*/}
 
                 {/* MODAL ACTUALIZAR CONTRA*/}
                 {openModalActualizarContra && (
-                <ModalOrganismo
-                // logo={<Logosímbolo />}
-                children={
-                    <UserFrom
-                    onsubmit={handleSubmit(onsubmitActualizarContra)}
-                    children={
-                        <>
-                       
-                        <InputAtomo
-                            register={register}
-                            name={"contraActual"}
-                            erros={errors}
-                            id={"contraActual"}
-                            placeholder={"Ingresa la contaseña actual"}
-                            type={"password"}
-                        />
-
-                        <InputAtomo
-                            register={register}
-                            name={"contraNueva"}
-                            erros={errors}
-                            id={"contraNueva"}
-                            placeholder={"Ingresa la contaseña nueva"}
-                            type={"password"}
-                        />
-                       
-                        </>
-                    }
+                    <ModalOrganismo
+                        // logo={<Logosímbolo />}
+                        children={
+                            <UserFrom
+                                onsubmit={handleSubmit(onsubmitActualizarContra)}
+                                children={
+                                    <>
+                                        <InputAtomo
+                                            register={register}
+                                            name={"contraActual"}
+                                            erros={errors}
+                                            id={"contraActual"}
+                                            placeholder={t("ingresaContraseñaActual")}
+                                            type={"password"}
+                                        />
+                                        <InputAtomo
+                                            register={register}
+                                            name={"contraNueva"}
+                                            erros={errors}
+                                            id={"contraNueva"}
+                                            placeholder={t("ingresaContraseñaNueva")}
+                                            type={"password"}
+                                        />
+                                    </>
+                                }
+                            />
+                        }
+                        visible={true}
+                        title={t("actualizarContraseña")}
+                        closeModal={closeModalActualizarContra}
                     />
-                }
-                visible={true}
-                title={"Actualizar Contraseña"}
-                closeModal={closeModalActualizarContra}
-                />
-
                 )}
+
                 {/* FIN MODAL ACTUALIZAR CONTRA*/}
             </Contenedor>
         </>
