@@ -101,7 +101,7 @@ const LogosPlantilla = () => {
       closeOnClickOutside: true,
     });
     };  
-
+    
     useEffect(() => {
         console.log("Logo seleccionado en modal:", logoSeleccionado);
     }, [logoSeleccionado]);
