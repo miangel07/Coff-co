@@ -97,7 +97,7 @@ const VariablesPlantilla = () => {
   )
   const handleSwitchChange = (checked, id) => {
     try {
-      if (rol !== "admin") {
+      if (rol !== "administrador") {
         toast.error("No tienes permisos para cambiar el estado");
         return;
       }
