@@ -70,5 +70,7 @@
     "telefono": "Telephone",
     "contraseña": "Password",
     "NDocumento": "Document Number",
-    "tipoDocumento": "Document Type"
+    "tipoDocumento": "Document Type",
+    "tipoDeDatos":"type of data",
+    "editar":"edit"
 }

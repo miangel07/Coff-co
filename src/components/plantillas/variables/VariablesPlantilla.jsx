@@ -19,8 +19,11 @@ import Search from "../../atoms/Search";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/AuthContext";
 import ToolTip from "../../molecules/toolTip/ToolTip";
+import { useTranslation } from "react-i18next";
+
 
 const VariablesPlantilla = () => {
+  const { t } = useTranslation();
   const [showModal, setShowMdal] = useState(false);
   const [datosDelFormulario, setDatosDelFormulario] = useState("");
   const [pages, setPages] = useState(1);
@@ -150,7 +153,7 @@ const VariablesPlantilla = () => {
           (
             <>
               <Mybutton color={"primary"} onClick={handleModal}>
-                Nuevo
+               {t("nuevo")}
               </Mybutton>
             </>
           )
@@ -168,7 +171,7 @@ const VariablesPlantilla = () => {
           isSelected={isChecked}
           onValueChange={(checked) => hadleEstado(checked)}
         >
-          estado
+         {t("estado")}
         </Switch>
 
       </div>
@@ -189,12 +192,12 @@ const VariablesPlantilla = () => {
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
-            <Th>Nombre</Th>
-            <Th>Tipo de Dato</Th>
-            <Th>Unidad de medida</Th>
-            <Th>Estado</Th>
+            <Th>{t('nombre')}</Th>
+            <Th>{t('tipoDeDatos')}</Th>
+            <Th>{t('unidadMedida')}</Th>
+            <Th>{t('estado')}</Th>
 
-            <Th>{rol === "administrador" ? "Acciones" : ""}</Th>
+            <Th>{rol === "administrador" ? (t("acciones")) : ""}</Th>
 
 
           </Thead>
@@ -223,7 +226,7 @@ const VariablesPlantilla = () => {
                       rol === "administrador" && (
                         <>
                           <ToolTip
-                            content="Editar"
+                            content={t("editar")}
                             placement="top"
                             icon={() => (
                               <FaRegEdit

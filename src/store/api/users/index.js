@@ -55,8 +55,8 @@ export const usuariosSlice = createApi({
   }),
   
   
-  //LISTAR ROLES DANIEL
-  getClienteRol: build.query({
+  //LISTAR ROLES 
+    getClienteRol: build.query({
     query:()=>({
       url:'/rol/listar',
       method:'GET',
@@ -83,7 +83,7 @@ export const usuariosSlice = createApi({
     providesTags:['usuarios']
   }),
 
-  // LISTAR CLIENTES
+  // LISTAR CLIENTES DANIEL
   getClientes: build.query({
     query: (id) => ({
       url: '/usuario/clientes',

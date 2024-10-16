@@ -294,7 +294,7 @@ const DocumentosOrganismo = () => {
             <Th>{t("Version")}</Th>
             <Th>{t("FechaVersion")}</Th>
             <Th>{t("FechaEmision")}</Th>
-            <Th>{t("Estado")}</Th>
+            <Th>{t("estado")}</Th>
             <Th>{t("tipoDocumentos")}</Th>
             <Th>{t("acciones")}</Th>
           </Thead>

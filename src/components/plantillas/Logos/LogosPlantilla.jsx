@@ -221,7 +221,7 @@ const LogosPlantilla = () => {
                   <Td>{logo.nombre}</Td>
                   <Td>
                   <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} 
-                  src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
+                  src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logo.ruta}`} alt="Logo" />
                   </Td>
                   {/* <Td>{logo.ruta}</Td> */}
                   <Td>
