@@ -168,7 +168,7 @@ const LogosPlantilla = () => {
         { value: "inactivo", label: "Inactivo" }
     ];
 
-    const filtrodeDatos = data?.data && data.data.length > 0 ? data.data.filter((logo) => {
+    const filtrodeDatos = data?.data && data?.data.length > 0 ? data?.data.filter((logo) => {
       const filtroestado = filtroEstado ? "activo" : "inactivo"
       const nombreLogo = busqueda === "" ||
         (logo.nombre && logo.nombre.toLowerCase().includes(busqueda.toLowerCase()));
@@ -220,7 +220,7 @@ const LogosPlantilla = () => {
                   <Td>{logo.nombre}</Td>
                   <Td>
                   <img className="cursor-pointer h-8 w-8 rounded" onClick={() => handleClickLogo(logo)} 
-                  src={`http://localhost:3000/public/logos/${logo.ruta}`} alt="Logo" />
+                  src={`${import.meta.env.VITE_BASE_URL_LOGOS}/${logo.ruta}`} alt="Logo" />
                   </Td>
                   {/* <Td>{logo.ruta}</Td> */}
                   <Td>
@@ -350,7 +350,7 @@ const LogosPlantilla = () => {
     <ModalOrganismo 
       // logo={<Logosímbolo />}
       children={
-        <img className="object-cover w-auto h-auto" src={`http://localhost:3000/public/logos/${logoSeleccionado.ruta}`} alt="Logo" />
+        <img className="object-cover w-auto h-auto" src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${logoSeleccionado.ruta}`} alt="Logo" />
       }
       visible={true}
       title={"Logo"}
