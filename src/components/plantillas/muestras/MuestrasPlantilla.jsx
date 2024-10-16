@@ -30,7 +30,10 @@ const MuestrasPlantilla = () => {
   const { authData } = useContext(AuthContext);
   const { t } = useTranslation();
 
-  // Acceso al rol del usuario
+
+
+
+  
   const userRole = authData.usuario.rol;
 
   const handleImageClick = (muestra) => {
