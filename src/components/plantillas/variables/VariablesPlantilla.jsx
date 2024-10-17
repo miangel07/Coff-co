@@ -37,10 +37,7 @@ const VariablesPlantilla = () => {
     isError,
     error,
   } = useGetVariablesQuery();
-  const [
-    updateEstado,
-    { isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio, data, isSuccess },
-  ] = useUpdateEstadoMutation();
+  const [updateEstado,{ isLoading: isLoadingCambio, isError: isErrorCambio, error: errorCambio, data, isSuccess },] = useUpdateEstadoMutation();
   const rol = authData.usuario.rol
 
   const handleModal = () => {

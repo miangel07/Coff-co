@@ -33,7 +33,6 @@ const EditarServicioOrganismo = ({
     closeModal(); // Llama a la función que cierra el modal
   };
 
-  console.log("Servicios obtenidos en el modal de editar: ", servicio);
 
   useEffect(() => {
     if (servicio) {

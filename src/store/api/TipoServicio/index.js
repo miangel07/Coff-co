@@ -22,6 +22,20 @@ export const TipoServicioApi = createApi({
             providesTags: ['TipoServicio']
         }),
 
+
+        GetTipoServicioActivo: build.query({
+            query: () => ({
+                url: "tiposervicio/listarTipoServActivos",
+                method: "GET",
+                headers: {
+                    token: `${getCookie("authToken")}`,
+                },
+            }),
+            providesTags: ['TipoServicio']
+        }),
+
+
+
         PostTipoServicio: build.mutation({
             query: (data) => ({
                 url: "tiposervicio/registrar",
@@ -92,4 +106,5 @@ export const TipoServicioApi = createApi({
 });
 
 export const { useGetTipoServicioQuery, usePostTipoServicioMutation,
-    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, useValidarServcioDocumentoMutation,useTipoServicioActivoQuery } = TipoServicioApi;
+    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, 
+    useValidarServcioDocumentoMutation,useTipoServicioActivoQuery, useGetTipoServicioActivoQuery } = TipoServicioApi;
