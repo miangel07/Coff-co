@@ -5,10 +5,9 @@ export const logosApi = createApi({
     reducerPath: "logos",
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
-        // headers: {
-        //     "Content-Type": "application/json",
-        //     token: `${getCookie("authToken")}`,
-        // },
+        headers: {
+         token: `${getCookie("Token")}`,
+     },
     }),
     endpoints: (build) => ({
         //LISTAR LOGOS

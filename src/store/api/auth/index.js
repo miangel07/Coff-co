@@ -39,7 +39,7 @@ export const authApi = createApi({
         url: `user/list`,
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getCookie("authToken")}`,
+          Authorization: `Bearer ${getCookie("Token")}`,
         },
       }),
     }),

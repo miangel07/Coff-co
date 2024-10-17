@@ -8,7 +8,7 @@ export const fincaApiSlice = createApi({
       baseUrl: import.meta.env.VITE_BASE_URL,
       headers: {
         "Content-Type": "application/json",
-        token: `${getCookie("authToken")}`
+        token: `${getCookie("Token")}`
       },
 }),
 
@@ -21,7 +21,7 @@ endpoints: (build) => ({
         url: "finca/listar",
         method: "GET",
         headers: {
-          token: `${getCookie("authToken")}`,
+          token: `${getCookie("Token")}`,
         },
       }),
       providesTags:['Fincas']
@@ -32,11 +32,11 @@ endpoints: (build) => ({
           method: "POST",
           body: data,
           headers: {
-              token: `${getCookie("authToken")}`,
+              token: `${getCookie("Token")}`,
           },
       }),
       transformErrorResponse: (response) => ({
-          error: response.data.message,
+          error: response.data?.message,
       }),
       invalidatesTags: ["Fincas"],
   }),

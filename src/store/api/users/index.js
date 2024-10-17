@@ -7,7 +7,7 @@ export const usuariosSlice = createApi({
     baseUrl:import.meta.env.VITE_BASE_URL,
     headers:{
       'Content-Type': 'application/json',
-      token:`${getCookie('authToken')}`
+      token:`${getCookie('Token')}`
     },
   }),
 
@@ -77,7 +77,7 @@ export const usuariosSlice = createApi({
     transformErrorResponse: (response) => {
       return {
         status: response.status,
-        errors: response.data?.errors || [response.data?.message || "Error desconocido"]
+        errors: response.data?.message || [response.data?.message || "Error desconocido"]
       };
     },
     invalidatesTags:['usuarios']

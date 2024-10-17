@@ -8,7 +8,7 @@ export const municipioApiSlice = createApi({
       baseUrl: import.meta.env.VITE_BASE_URL,
       headers: {
         "Content-Type": "application/json",
-        token: `${getCookie("authToken")}`
+        token: `${getCookie("Token")}`
       },
 }),
 
@@ -21,7 +21,7 @@ endpoints: (build) => ({
         url: "municipio/listar",
         method: "GET",
         headers: {
-          token: `${getCookie("authToken")}`,
+          token: `${getCookie("Token")}`,
         },
       }),
       providesTags:['municipio']
