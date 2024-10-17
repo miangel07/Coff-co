@@ -250,6 +250,7 @@ const UsersPlantilla = () => {
   // Se usa 'Math.ceil' para redondear hacia arriba, garantizando que se incluya una última página si hay elementos sobrantes.
   
   //OPCIONES PARA LOS SELECT 
+  //Ambas arrays contienen las opciones que meparearan los select
   const estadoOptions = [
     { value: "activo", label: "Activo" },
     { value: "inactivo", label: "Inactivo" }
