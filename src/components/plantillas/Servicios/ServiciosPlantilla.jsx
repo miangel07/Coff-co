@@ -21,7 +21,7 @@ const ServiciosPlantilla = () => {
   return (
     <>
      <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
-     <div className="flex ">
+     <div className="pt-10 pl-20 justify-center flex items-center">
           <div className="pt-10 pl-20">
             <Mybutton
               color={"primary"}
