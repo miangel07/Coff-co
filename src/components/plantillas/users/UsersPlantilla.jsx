@@ -80,7 +80,7 @@ const UsersPlantilla = () => {
   
     
   //CAMBIAR EL ESTADO DEL USUARIO
-  //Despues del async le estamos pasando dos propiedas id_usuario y nombre, es decir que esta funcion 
+  //Despues del async le estamos pasando dos propiedas id_usuario y nombre, es decir que esta funcion espera recibir estos parametros, los cuales se los enviaremos abajo en el renderizado cuando la misma funcion sea llamada
   const handleSwitchChange = async (id_usuario, nombre) => {
     // Muestra un cuadro de confirmación antes de cambiar el estado del usuario
     confirmAlert({
@@ -117,106 +117,138 @@ const UsersPlantilla = () => {
       // Permite cerrar el cuadro de confirmación al hacer clic fuera de él
     });
   };
-
-  useEffect(() => {
-    console.log("Usuario seleccionado en modal:", usuarioSeleccionado);
-    console.log("Valor actual de tipo_documento:", usuarioSeleccionado?.tipo_documento);
-  }, [usuarioSeleccionado]);
   
-  const closeModalActualizar = () => {setOpenModalActualizar(false);reset()
-  };
+  //Funcion para cerrar el modal de acutlizacion lo utilizaremos cuando se clickea cerrar en el moddal o cuando se actuzaliza un usuario
+  const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
 
   //SUBMIT REGISTRAR
+  //Esta funcion espera un parametro data que le anviaremos en el formulario de registro
   const onsubmit = async (data) => {
     try {
+      // Llama a la función 'registrarUsuario' con los datos proporcionados, y espera la respuesta sin envolver en error
       const response = await registrarUsuario(data).unwrap(); 
-
+  
+      // Muestra una notificación de éxito con el mensaje de la respuesta
       toast.success(response.message, {
-        duration: 5000,
-        position: "top-center",
+        duration: 5000, // La notificación dura 5 segundos
+        position: "top-center", // La notificación aparece en la parte superior central
         style: {
-          background: "#333",
-          color: "#fff",
+          background: "#333", // Color de fondo de la notificación
+          color: "#fff", // Color del texto de la notificación
         },
-        icon: <FcOk />,
+        icon: <FcOk />, // Icono que se muestra en la notificación
       });
-
-      console.log('Valores enviados', data)
+  
+      // Cierra el modal después de registrar el usuario
       setOpenModal(false);
+      
+      // Reinicia el formulario utilizando el reset proveido por useForm de react
       reset();
     } catch (error) {
+      // En caso de error, obtiene los mensajes de error y los une en una cadena
       const mensajesError = error.errors.join(', ');
+  
+      // Muestra una notificación de error con los mensajes de error o un mensaje genérico
       toast.error(mensajesError || "Ocurrió un error", {
-        duration: 5000,
-        position: "top-center",
+        duration: 5000, // La notificación dura 5 segundos
+        position: "top-center", // La notificación aparece en la parte superior central
         style: {
-          background: "#333",
-          color: "#fff",
+          background: "#333", // Color de fondo de la notificación
+          color: "#fff", // Color del texto de la notificación
         },
       });
-      console.log(mensajesError)
-      console.log('Valores enviados', data)
     }
   };
-
+  
   // SUBMIT ACTUALIZAR
   const onsubmitActualizar = async (valores) => {
+    // Verifica si hay un usuario seleccionado antes de continuar
     if (usuarioSeleccionado) {
       try {
-        // Asumiendo que actualizarUsuario es una función asíncrona
+        // Llama a la función asíncrona 'actualizarUsuario' pasando los valores del formulario y el ID del usuario seleccionado
         const response = await actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario }).unwrap();
-      
+        
+        // Muestra una notificación de éxito con el mensaje de la respuesta
         toast.success(response.message, {
-          duration: 5000,
-          position: "top-center",
+          duration: 5000, // La notificación dura 5 segundos
+          position: "top-center", // Aparece en la parte superior central
           style: {
-            background: "#333",
-            color: "#fff",
+            background: "#333", // Color de fondo de la notificación
+            color: "#fff", // Color del texto
           },
-          icon: <FcOk />,
+          icon: <FcOk />, // Icono que se muestra junto al mensaje
         });
-
+  
+        // Imprime en la consola los valores enviados para depuración
         console.log('Valores enviados:', valores);
+        
+        // Cierra el modal después de la actualización
         setOpenModalActualizar(false);
+  
+        // Reinicia el formulario
         reset();
       } catch (error) {
-        // Se maneja el error y se comprueba que `error.errors` exista
+        // Maneja el error, asegurándose de que 'error.errors' exista antes de unir los mensajes
         const mensajesError = error.errors ? error.errors.join(', ') : "Ocurrió un error";
+        
+        // Muestra una notificación de error con los mensajes correspondientes
         toast.error(mensajesError, {
-          duration: 5000,
-          position: "top-center",
+          duration: 5000, // Duración de 5 segundos
+          position: "top-center", // Aparece en la parte superior central
           style: {
-            background: "#333",
-            color: "#fff",
+            background: "#333", // Color de fondo
+            color: "#fff", // Color del texto
           },
         });
+        
+        // Imprime los mensajes de error en la consola para depuración
         console.log(mensajesError);
+        
+        // Imprime nuevamente los valores enviados para depuración
         console.log('Valores enviados:', valores);
       }
     }
   };
-
+  
   // ESTADO DE CARGA DE LA TABLA 
+  //Llamamos el estado isLoading de la consulta de listar usuarios y mientras carga llamamos un return que retorna el cosito de carga, esto reemplazara la tabla mientras se esta cargando
   if(isLoading){
     return(
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />
     )
   }
 
+  // Verifica si 'data' existe, data viene de la funcion de listar usuarios mas arriba y tiene al menos un elemento; si es así, filtra los usuarios según la condición proporcionada. 
+  // Si 'data' es null, undefined o está vacío, se devuelve un arreglo vacío.
   const filtrodeDatos = data && data.length > 0 ? data.filter((usuario) => {
-    const filtroestado = filtroEstado ? "activo" : "inactivo"
+    const filtroestado = filtroEstado ? "activo" : "inactivo"; // Determina el estado a filtrar (activo o inactivo) según el valor de 'filtroEstado'
+    
     const nombreUsuario = busqueda === "" ||
       (usuario.nombre && usuario.nombre.toLowerCase().includes(busqueda.toLowerCase()));
-    const usuarioEstado = usuario.estado === filtroestado
-    return usuarioEstado && nombreUsuario
-  }) : []
-
+    // Verifica si el campo de búsqueda está vacío o si el nombre del usuario incluye el texto buscado, ignorando mayúsculas y minúsculas.
+    
+    const usuarioEstado = usuario.estado === filtroestado;
+    // Comprueba si el estado del usuario coincide con el estado determinado por 'filtroEstado'.
+    
+    return usuarioEstado && nombreUsuario;
+    // Solo incluye el usuario en el filtro si ambos: el estado y el nombre coinciden con los criterios de búsqueda.
+  }) : [];
+  // Si 'data' existe y tiene longitud mayor a 0, filtra los datos de usuarios; de lo contrario, devuelve un arreglo vacío.
+  
   // CONTROL DE PAGINAS DE LA TABLA
-  const indiceUltimoItem = paginaActual * itemsPorPagina
-  const indicePrimerItem = indiceUltimoItem - itemsPorPagina
-  const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-  const totalPages = Math.ceil((filtrodeDatos?.length||0)/itemsPorPagina)
-
+  const indiceUltimoItem = paginaActual * itemsPorPagina; 
+  // Calcula el índice del último elemento a mostrar en la página actual.
+  
+  const indicePrimerItem = indiceUltimoItem - itemsPorPagina; 
+  // Calcula el índice del primer elemento a mostrar en la página actual.
+  
+  const elementosActuales = filtrodeDatos.slice(indicePrimerItem, indiceUltimoItem); 
+  // Toma los datos filtrados para mostrar solo los elementos que corresponden a la página actual.
+  
+  const totalPages = Math.ceil((filtrodeDatos?.length || 0) / itemsPorPagina);
+  // Calcula el número total de páginas dividiendo la longitud de los datos filtrados entre los ítems por página. 
+  // Se usa 'Math.ceil' para redondear hacia arriba, garantizando que se incluya una última página si hay elementos sobrantes.
+  
   //OPCIONES PARA LOS SELECT 
   const estadoOptions = [
     { value: "activo", label: "Activo" },
