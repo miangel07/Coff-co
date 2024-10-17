@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { useGetTipoServicioQuery, 
-    useUpdateEstadoTipoServicioMutation } from "../../../store/api/TipoServicio";
+import React, { useContext, useState, useTransition } from "react";
+import {
+  useGetTipoServicioQuery,
+  useUpdateEstadoTipoServicioMutation
+} from "../../../store/api/TipoServicio";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Tbody from "../../molecules/table/Tbody";
 import Thead from "../../molecules/table/Thead";
@@ -12,14 +14,22 @@ import Mybutton from "../../atoms/Mybutton";
 import TipoServicioFormulario from "../../molecules/Formulario/TipoServicioFormulario";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { Switch } from "@nextui-org/react";
+import { AuthContext } from "../../../context/AuthContext";
+import Search from "../../atoms/Search";
+import { useTranslation } from "react-i18next";
+
 
 const TipoServicioPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
+  const [buscar, setBuscar] = useState("");
   const [datosDelFormulario, setDatosDelFormulario] = useState(null);
   const [pages, setPages] = useState(1);
-
+  const { authData } = useContext(AuthContext)
   const { data: dataTipoServicios, isLoading, isError, error } = useGetTipoServicioQuery();
   const [updateEstadoTipoServicio] = useUpdateEstadoTipoServicioMutation();
+  const { t } = useTranslation();
+
+  const rol = authData.usuario.rol
 
   const handleModal = () => {
     setShowModal(true);
@@ -32,11 +42,21 @@ const TipoServicioPlantilla = () => {
     setPages(page);
   };
 
-  const numeroPagina = Math.ceil((dataTipoServicios?.length || 0) / cantidad);
-  const DataArrayPaginacion = dataTipoServicios ? dataTipoServicios.slice(inicial, final) : [];
+  const filtro = dataTipoServicios?.filter(
+    (tipoServicio) => {
+      const nombreTipoServicioMatch =
+        buscar === "" ||
+        (tipoServicio?.nombreServicio &&
+          tipoServicio?.nombreServicio.toLowerCase().includes(buscar.toLowerCase()));
+      return nombreTipoServicioMatch;
+    }
+  )
 
-  const handleEdit = (TipoServicio) => {
-    setDatosDelFormulario(TipoServicio);
+  const numeroPagina = Math.ceil((filtro?.length || 0) / cantidad);
+  const DataArrayPaginacion = filtro ? filtro.slice(inicial, final) : [];
+
+  const handleEdit = (tipoServicio) => {
+    setDatosDelFormulario(tipoServicio);
     setShowModal(true);
   };
 
@@ -66,15 +86,23 @@ const TipoServicioPlantilla = () => {
 
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
-      <h2 className="text-2xl px-20 font-bold">Tipo de Servicio</h2>
+      <h2 className="text-2xl px-20 font-bold">{t("tipoServicios")}</h2>
       <div className="px-20">
-        <Mybutton color="primary" onClick={handleModal}>
-          Nuevo
-        </Mybutton>
+        {
+          rol === "administrador" &&
+          (
+            <>
+              <Mybutton color="primary" onClick={handleModal}>
+                Nuevo
+              </Mybutton>
+            </>
+          )
+        }
+        <Search label={""} onchange={(e) => setBuscar(e.target.value)} placeholder={"Buscar..."} />
       </div>
       {showModal && (
         <ModalOrganismo
-          title="Registrar Nuevo Tipo de Servicio"
+          title={t("registrarServicio")}
           visible={showModal}
           closeModal={closeModal}
         >
@@ -88,33 +116,39 @@ const TipoServicioPlantilla = () => {
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
-            <Th>Nombre del Servicio</Th>
-            <Th>Código del Servicio</Th>
-            <Th>Estado</Th>
-            <Th>Acciones</Th>
+            <Th>{t("NombreServicio")}</Th>
+            <Th>{t("CodigoServicio")}</Th>
+            <Th>{t("estado")}</Th>
+            <Th>{rol === "administrador" ? t("acciones") : ""}</Th>
           </Thead>
           <Tbody>
-            {DataArrayPaginacion?.map((TipoServicio) => (
-              <tr key={TipoServicio.idTipoServicio}>
-                <Td>{TipoServicio.idTipoServicio}</Td>
-                <Td>{TipoServicio.nombreServicio}</Td>
-                <Td>{TipoServicio.codigoTipoServicio}</Td>
+            {DataArrayPaginacion?.map((tipoServicio) => (
+              <tr key={tipoServicio.idTipoServicio}>
+                <Td>{tipoServicio.idTipoServicio}</Td>
+                <Td>{tipoServicio.nombreServicio}</Td>
+                <Td>{tipoServicio.codigoTipoServicio}</Td>
                 <Td>
                   <Switch
-                    color={TipoServicio.estado === "activo" ? "success" : "default"}
-                    isSelected={TipoServicio.estado === "activo"}
-                    onValueChange={(checked) => handleSwitchChange(checked, TipoServicio.idTipoServicio)}
+                    color={tipoServicio.estado === "activo" ? "success" : "default"}
+                    isSelected={tipoServicio.estado === "activo"}
+                    onValueChange={(checked) => handleSwitchChange(checked, tipoServicio.idTipoServicio)}
                   >
-                    {TipoServicio.estado}
+                    {tipoServicio.estado}
                   </Switch>
                 </Td>
                 <Td>
                   <div className="gap-3 flex flex-graw">
-                    <FaRegEdit
-                      className="cursor-pointer"
-                      size="30px"
-                      onClick={() => handleEdit(TipoServicio)}
-                    />
+                    {
+                      rol === "administrador" && (
+                        <>
+                          <FaRegEdit
+                            className="cursor-pointer"
+                            size="30px"
+                            onClick={() => handleEdit(tipoServicio)}
+                          />
+                        </>
+                      )
+                    }
                   </div>
                 </Td>
               </tr>

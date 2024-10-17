@@ -20,7 +20,7 @@ const ReportesPages = () => {
                     <div className={`transition-all duration-300 ease-in-out`}>
                         <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
                     </div>
-                    <div className="w-full bg-gray-100 ">
+                    <div className="w-full h-screen bg-gray-100 ">
                         <ReportesPlantillas />
                     </div>
                 </div>

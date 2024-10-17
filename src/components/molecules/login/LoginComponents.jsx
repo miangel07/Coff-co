@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useLoginUserMutation } from "../../../store/api/auth/index.js";
 import {useRegistrarUsuarioMutation } from "../../../store/api/users";
+import { useGetRolQuery } from "../../../store/api/roles/index.js";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -27,38 +28,47 @@ const LoginComponent = () => {
   //MUTACIONES
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [loginUser, {isError: isErrorLogin, error: errorLogin}] = useLoginUserMutation();
+  const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
 
   //FUNCIONES
    //Use Form del formulario de registro y del Login
     const {handleSubmit: handleSubmitLogin, register: registerLogin, formState: { errors: errorsLogin }, } = useForm();
     const {handleSubmit: handleSubmitRegistro, register: registerRegistro, formState: { errors: errorsRegistro }, watch: watchRegistro, setValue: setValueRegistro, reset: resetRegistro } = useForm();
   const { iniciarSesion } = useContext(AuthContext); //LLAMDO DEL CONTEXTO
-  const closeModal = () => {setModalRegistro(false);reset()};
+  const closeModal = () => {setModalRegistro(false); resetRegistro()};
   const navigate = useNavigate();
 
-  //ROLES
-  const [roles, setRoles] = useState([]); 
-  useEffect(() => {
-      // Función para obtener los roles desde el backend
-      const fetchRoles = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/api/rol/listar'); 
-          const data = await response.json();
-          setRoles(data);
-        } catch (error) {
-          console.error('Error al obtener los roles:', error);
-        }
-      };
-      fetchRoles();
-  }, []);
-
   //SUBMIT REGISTRAR
-  const onsubmitRegistrar = (data) => {
-    registrarUsuario(data);
-    setModalRegistro(false)
-    resetRegistro();
-    toast.success("Usuario registrado con éxito");
+  const onsubmitRegistrar = async (data) => {
+    try {
+      const response = await registrarUsuario(data).unwrap(); 
+      setsucess(response.message); 
+  
+      toast.success(response.message, {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+        icon: <FcOk />,
+      });
+
+      setOpenModal(false);
+      reset();
+    } catch (error) {
+      const mensajesError = error.errors.join(', ');
+      toast.error(mensajesError || "Ocurrió un error", {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
+
 
   //SUBMIT LOGIN
   const onSubmitLogin = async (datos) => {
@@ -139,7 +149,7 @@ const LoginComponent = () => {
           <h1 className="card-title text-center mt-6 font-sans text-3xl font-bold text-gray-800">
             COFFCO
           </h1>
-          {errorInputLogin && <p className="text-red-400">{errorInputLogin}</p>}
+          {errorInputLogin && <div className="text-red-400">{errorInputLogin}</div>}
         </div>
       
         <form className="card-body mt-4" onSubmit={handleSubmitLogin(onSubmitLogin)}>

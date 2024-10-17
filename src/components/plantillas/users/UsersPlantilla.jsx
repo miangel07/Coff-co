@@ -9,6 +9,7 @@ import Search from "../../atoms/Search";
 import { FaRegEdit } from "react-icons/fa";
 import { useTranslation } from 'react-i18next';
 import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useGetRolesQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
+import { useGetRolQuery } from "../../../store/api/roles";
 import { Spinner } from "@nextui-org/react";
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
@@ -37,6 +38,7 @@ const UsersPlantilla = () => {
   // FUNCIONES CRUD
   const {data,isLoading, refetch} = useGetUsuarioQuery()
   const { data: dato, isLoading: cargando } = useGetRolesQuery();
+  const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
   const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
   const [actualizarEstado] = useActualizarEstadoMutation();
   const [actualizarUsuario]= useActualizarUsuarioMutation();
@@ -50,30 +52,16 @@ const UsersPlantilla = () => {
   //MODAL 
   const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
 
-  //ROLES
-  const [roles, setRoles] = useState([]); 
-  useEffect(() => {
-      // Función para obtener los roles desde el backend
-      const fetchRoles = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/api/rol/listar'); 
-          const data = await response.json();
-          setRoles(data);
-        } catch (error) {
-          console.error('Error al obtener los roles:', error);
-        }
-      };
-      fetchRoles();
-  }, []);
-
   //Abrir modal
   const [openModal, setOpenModal] = useState(false);
   const [openModalActualizar, setOpenModalActualizar] = useState(false);
   const [sucess, setsucess] = useState("");
+  const [sucessActualizar, setsucessActualizar] = useState("");
 
   //MODAL REGISTRAR
   const handleClick = () => {setOpenModal(true);};
-  const closeModal = () => {setOpenModal(false);reset()};
+  const closeModal = () => {setOpenModal(false);reset()
+  };
 
   //MODAL ACTUALIZAR
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
@@ -86,23 +74,24 @@ const UsersPlantilla = () => {
   //CAMBIAR EL ESTADO DEL USUARIO
   const handleSwitchChange = async (id_usuario, nombre) => {
     confirmAlert({
-      title: 'Confirmación',
-      message: `¿Cambiar el estado del usuario  ${nombre}?`,
+      title: `${t("confirmacion")}`,
+      message: `¿ ${t("cambioestadousuario")}  ${nombre}?`,
       buttons: [
         {
           label: 'Sí',
           onClick: async () => {
             try {
               await actualizarEstado(id_usuario).unwrap();
-              toast.success("Estado actualizado con éxito");
+              toast.success(t("cambioestadoexitoso"));
             } catch (error) {
-              console.error('Error al actualizar el estado:', error);
+              toast.error(error.error);
+              console.log(t("cambioestadofallido"), error);
             }
           }
         },
         {
           label: 'No',
-          onClick: () => toast.warn('Operacion cancelada')
+          onClick: () => toast.warn(t("operacioncancelada"))
         }
       ],
       closeOnClickOutside: true,
@@ -114,7 +103,8 @@ const UsersPlantilla = () => {
     console.log("Valor actual de tipo_documento:", usuarioSeleccionado?.tipo_documento);
   }, [usuarioSeleccionado]);
   
-  const closeModalActualizar = () => {setOpenModalActualizar(false);reset()};
+  const closeModalActualizar = () => {setOpenModalActualizar(false);reset()
+  };
 
   //SUBMIT REGISTRAR
   const onsubmit = async (data) => {
@@ -132,6 +122,7 @@ const UsersPlantilla = () => {
         icon: <FcOk />,
       });
 
+      console.log('Valores enviados', data)
       setOpenModal(false);
       reset();
     } catch (error) {
@@ -144,47 +135,50 @@ const UsersPlantilla = () => {
           color: "#fff",
         },
       });
+      console.log(mensajesError)
+      console.log('Valores enviados', data)
     }
   };
 
-  //SUBMIT ACTUALIZAR
-  const onsubmitActualizar = (valores) => {
+  // SUBMIT ACTUALIZAR
+  const onsubmitActualizar = async (valores) => {
     if (usuarioSeleccionado) {
-      console.log("valores enviados:", valores);
-      actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario });
-      toast.success("Usuario actualizado con éxito");
-      reset();
-      setOpenModalActualizar(false);
+      try {
+        // Asumiendo que actualizarUsuario es una función asíncrona
+        const response = await actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario }).unwrap();
+        
+        // Se utiliza la respuesta del servidor para obtener el mensaje
+        setsucessActualizar(response.message);
+      
+        toast.success(response.message, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+          icon: <FcOk />,
+        });
+
+        console.log('Valores enviados:', valores);
+        setOpenModalActualizar(false);
+        reset();
+      } catch (error) {
+        // Se maneja el error y se comprueba que `error.errors` exista
+        const mensajesError = error.errors ? error.errors.join(', ') : "Ocurrió un error";
+        toast.error(mensajesError, {
+          duration: 5000,
+          position: "top-center",
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+        console.log(mensajesError);
+        console.log('Valores enviados:', valores);
+      }
     }
   };
-  
-  //Para registrar
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setsucess(datos?.message);
-  //     toast.success(datos?.message, {
-  //       duration: 5000,
-  //       position: "top-center",
-  //       style: {
-  //         background: "#333",
-  //         color: "#fff",
-  //       },
-  //       icon: <FcOk />,
-  //     });
-  //   }
-
-  //   if (isError) {
-  //     console.log(error);
-  //     toast.error(error?.error || "Ocurrió un error", {
-  //       duration: 5000,
-  //       position: "top-center",
-  //       style: {
-  //         background: "#333",
-  //         color: "#fff",
-  //       },
-  //     });
-  //   }
-  // }, [isSuccess, isError, error, datos]);
 
   // ESTADO DE CARGA DE LA TABLA 
   if(isLoading){
@@ -205,7 +199,7 @@ const UsersPlantilla = () => {
   const indiceUltimoItem = paginaActual * itemsPorPagina
   const indicePrimerItem = indiceUltimoItem - itemsPorPagina
   const elementosActuales = filtrodeDatos.slice(indicePrimerItem,indiceUltimoItem);
-  const totalPages = Math.ceil((data?.length||0)/itemsPorPagina)
+  const totalPages = Math.ceil((filtrodeDatos?.length||0)/itemsPorPagina)
 
   //OPCIONES PARA LOS SELECT 
   const estadoOptions = [
@@ -227,10 +221,10 @@ const UsersPlantilla = () => {
     {/* TABLA */}
     <div className="flex pt-5 justify-center items-center ">
     <div>
-      <Mybutton onClick={handleClick} color={"primary"}>Nuevo usuario <IoPersonAddOutline/></Mybutton>
+      <Mybutton onClick={handleClick} color={"primary"}>{t("nuevoUsuario")} <IoPersonAddOutline /></Mybutton>
     </div>
     <div className="w-[550px] pl-20">
-        <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
+        <Search label={""} placeholder={t("buscar")} onchange={(e) => setBusqueda(e.target.value)} />
     </div>
     <div className="pl-20">
         <Switch
@@ -247,7 +241,7 @@ const UsersPlantilla = () => {
     <div className="flex justify-center items-center gap-4 px-20 py-6">
     {/* Card Administrador */}
     <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Admin </h2>
+    <h2 className="text-lg font-bold mb-2">{t("admin")}</h2>
       <input
         disabled
         type="text"
@@ -259,7 +253,7 @@ const UsersPlantilla = () => {
 
     {/* Card Encargado */}
     <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Encargado</h2>
+    <h2 className="text-lg font-bold mb-2">{t("encargado")}</h2>
       <input
         disabled
         type="text"
@@ -271,7 +265,7 @@ const UsersPlantilla = () => {
 
     {/* Card Cliente */}
     <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Cliente</h2>
+    <h2 className="text-lg font-bold mb-2">{t("cliente")}</h2>
       <input
         disabled
         type="text"
@@ -283,7 +277,7 @@ const UsersPlantilla = () => {
 
     {/* Card Operario */}
     <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Operario</h2>
+    <h2 className="text-lg font-bold mb-2">{t("operario")}</h2>
       <input
         disabled
         type="text"
@@ -295,7 +289,7 @@ const UsersPlantilla = () => {
 
     {/* Card Total */}
     <div className="bg-white rounded-lg shadow-md p-6 w-40 text-center">
-      <h2 className="text-lg font-bold mb-2">Total</h2>
+    <h2 className="text-lg font-bold mb-2">{t("total")}</h2>
       <input
         disabled
         type="text"
@@ -313,16 +307,16 @@ const UsersPlantilla = () => {
       <TableMolecula className="w-full">
         <Thead>
           <Th>ID</Th>
-          <Th>Nombre</Th>
-          <Th>Apellidos</Th>
-          <Th>Correo</Th>
-          <Th>Telefono</Th>
-          <Th>Documento</Th>
-          <Th>Tipo</Th>
+          <Th>{t("nombre")}</Th>
+          <Th>{t("apellidos")}</Th>
+          <Th>{t("correo")}</Th>
+          <Th>{t("telefono")}</Th>
+          <Th>{t("documento")}</Th>
+          <Th>{t("tipo")}</Th>
           {/* <Th>Estado</Th> */}
-          <Th>Rol</Th>
-          <Th>Editar</Th>
-          <Th>Estado</Th>
+          <Th>{t("rol")}</Th>
+          <Th>{t("editar")}</Th>
+          <Th>{t("estado")}</Th>
         </Thead>
         <Tbody>
           {elementosActuales.length>0?(
@@ -392,89 +386,78 @@ const UsersPlantilla = () => {
               children={
                 <>
                   <InputAtomo
-                  register={register}
-                  name={"nombre"}
-                  erros={errors}
-                  id={"nombre"}
-                  placeholder={"Ingrese el nombre del usuario"}
-                  type={"text"}
-                />
-                <InputAtomo
-                  register={register}
-                  name={"apellidos"}
-                  erros={errors}
-                  id={"apellidos"}
-                  placeholder={"Ingrese el  apellido del usuario"}
-                  type={"text"}
-                />
-                <InputAtomo
-                  register={register}
-                  name={"correo_electronico"}
-                  erros={errors}
-                  id={"correo_electronico"}
-                  placeholder={"Ingrese el  correo del usuario"}
-                  type={"text"}
-                />
-                <InputAtomo
-                  register={register}
-                  name={"telefono"}
-                  erros={errors}
-                  id={"telefono"}
-                  placeholder={"Ingrese el telefono del usuario"}
-                  type={"number"}
-                />
-                <InputAtomo
-                  register={register}
-                  name={"password"}
-                  erros={errors}
-                  id={"password"}
-                  placeholder={"Ingrese la contraseña del usuario"}
-                  type={"password"}
-                />
-
-                <SelectAtomo
-                  data={roles.map(role => ({ value: role.idRol, label: role.rol }))} // Mapeo de roles
-                  label={"Rol"} 
-                  onChange={(e) => setValue("rol", e.target.value)} 
-                  items={"value"} 
-                  ValueItem={"label"} 
-                  value={watch("rol")} 
-                />
-
-                <SelectAtomo
-                  data={estadoOptions} 
-                  label={"Estado"} 
-                  onChange={(e) => setValue("estado", e.target.value)} 
-                  items={"value"} 
-                  ValueItem={"label"} 
-                  value={watch("estado")} 
-                />
-
-                <SelectAtomo
-                  data={documentoOptions} 
-                  label={"Tipo Documento"} 
-                  onChange={(e) => setValue("tipo_documento", e.target.value)} 
-                  items={"value"} 
-                  ValueItem={"label"} 
-                  value={watch("tipo_documento")} 
-                />
-
-                <InputAtomo
-                  register={register}
-                  name={"numero_documento"}
-                  erros={errors}
-                  id={"numero_documento"}
-                  placeholder={"Ingrese el numero de identificación del usuario"}
-                  type={"number"}
-                />
+                    register={register}
+                    name={"nombre"}
+                    erros={errors}
+                    id={"nombre"}
+                    placeholder={t("ingreseNombreUsuario")}
+                    type={"text"}
+                  />
+                  <InputAtomo
+                    register={register}
+                    name={"apellidos"}
+                    erros={errors}
+                    id={"apellidos"}
+                    placeholder={t("ingreseApellidoUsuario")}
+                    type={"text"}
+                  />
+                  <InputAtomo
+                    register={register}
+                    name={"correo_electronico"}
+                    erros={errors}
+                    id={"correo_electronico"}
+                    placeholder={t("ingreseCorreoUsuario")}
+                    type={"text"}
+                  />
+                  <InputAtomo
+                    register={register}
+                    name={"telefono"}
+                    erros={errors}
+                    id={"telefono"}
+                    placeholder={t("ingreseTelefonoUsuario")}
+                    type={"number"}
+                  />
+                  <InputAtomo
+                    register={register}
+                    name={"password"}
+                    erros={errors}
+                    id={"password"}
+                    placeholder={t("ingreseContrasenaUsuario")}
+                    type={"password"}
+                  />
+                  <SelectAtomo
+                    data={roles.map(role => ({ value: role.idRol, label: role.rol }))} // Mapeo de roles
+                    label={t("rol")} 
+                    onChange={(e) => setValue("rol", e.target.value)} 
+                    items={"value"} 
+                    ValueItem={"label"} 
+                    value={watch("rol")} 
+                  />
+                  <SelectAtomo
+                    data={documentoOptions} 
+                    label={t("tipoDocumento")} 
+                    onChange={(e) => setValue("tipo_documento", e.target.value)} 
+                    items={"value"} 
+                    ValueItem={"label"} 
+                    value={watch("tipo_documento")} 
+                  />
+                  <InputAtomo
+                    register={register}
+                    name={"numero_documento"}
+                    erros={errors}
+                    id={"numero_documento"}
+                    placeholder={t("ingreseNumeroIdentificacion")}
+                    type={"number"}
+                  />
                 </>
               }
             />
           }
           visible={true}
-          title={"Registro de Usuarios"}
+          title={t("registroUsuarios")}
           closeModal={closeModal}
         />
+        
     )}
     {/* FIN MODAL REGISTRO*/}
 
@@ -492,7 +475,7 @@ const UsersPlantilla = () => {
                 name={"nombre"}
                 errores={errors}
                 id={"nombre"}
-                placeholder={"Ingrese el nombre del usuario"}
+                placeholder={t("ingreseNombreUsuario")}
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.nombre || ""}
               />
@@ -501,7 +484,7 @@ const UsersPlantilla = () => {
                 name={"apellidos"}
                 errores={errors}
                 id={"apellidos"}
-                placeholder={"Ingrese el apellido del usuario"}
+                placeholder={t("ingreseApellidoUsuario")}
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.apellidos || ""}
               />
@@ -510,7 +493,7 @@ const UsersPlantilla = () => {
                 name={"correo_electronico"}
                 errores={errors}
                 id={"correo_electronico"}
-                placeholder={"Ingrese el correo del usuario"}
+                placeholder={t("ingreseCorreoUsuario")}
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.correo_electronico || ""}
               />
@@ -519,7 +502,7 @@ const UsersPlantilla = () => {
                 name={"telefono"}
                 errores={errors}
                 id={"telefono"}
-                placeholder={"Ingrese el teléfono del usuario"}
+                placeholder={t("ingreseTelefonoUsuario")}
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
@@ -536,7 +519,7 @@ const UsersPlantilla = () => {
 
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
-                label={"Rol"}
+                label={t("rol")} 
                 items={"value"}
                 onChange={(e) => setValue("fk_idRol", e.target.value)}
                 placeholder={usuarioSeleccionado?.rol}
@@ -545,7 +528,7 @@ const UsersPlantilla = () => {
 
               <SelectAtomoActualizar
                 data={documentoOptions}
-                label={"Tipo Documento"}
+                label={t("tipoDocumento")} 
                 items={"value"}
                 placeholder={usuarioSeleccionado?.tipo_documento}
                 onChange={(e) => setValue("tipo_documento", e.target.value)}
@@ -567,7 +550,7 @@ const UsersPlantilla = () => {
                 name={"numero_documento"}
                 errores={errors}
                 id={"numero_documento"}
-                placeholder={"Ingrese el número de identificación del usuario"}
+                placeholder={t("ingreseNumeroIdentificacion")}
                 type={"number"}
                 defaultValue={usuarioSeleccionado?.numero_documento || ""}
               />
@@ -576,7 +559,7 @@ const UsersPlantilla = () => {
         />
       }
       visible={true}
-      title={"Actualizar Usuario"}
+      title={t("actualizarUsuario")}
       closeModal={closeModalActualizar}
     />
 

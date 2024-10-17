@@ -12,6 +12,9 @@ import { useForm } from 'react-hook-form'
 import InputAtomo from '../../atoms/Input'
 import { toast } from "react-toastify";
 import { Spinner } from "@nextui-org/react";
+import ReporteExcel from '../../molecules/Formulario/ExcelForm.jsx'
+import GraficaAlquiler from '../../molecules/graficas/GraficaAlquiler.jsx'
+
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
   const [excel, setExcel] = useState(false)
@@ -45,7 +48,7 @@ const ReportesPlantillas = () => {
 
   return (
     <>
-      <header className='bg-white w-full '>
+      <header className=' bg-white w-full '>
         {
           <ModalOrganismo visible={show} closeModal={() => setShow(false)}>
             <form onSubmit={handleSubmit(handleReporte)} className='flex  flex-col justify-center items-center'>
@@ -105,24 +108,22 @@ const ReportesPlantillas = () => {
           </div>
           {excel &&
             <ModalOrganismo visible={excel} closeModal={() => setExcel(false)}>
-              <h2>Reporte Excel</h2>
-              {/* aca mete un componente y en ese componete va lo del reporte de excel solo pone el componente con la logica
-              no valla hacer todo aca  */}
-
+              <ReporteExcel />
             </ModalOrganismo>
           }
-
-
-
-
 
         </section>
 
       </header>
-      <section className=' gap-6 flex flex-col bg-white '>
-        <ReportesGrafica />
-        <GraficaRadar />
+      <section className='gap-3 flex w-full justify-center items-center bg-white  flex-row md:flex-grow'>
+        <div className='flex w-1/2'>
+          <GraficaAlquiler />
+        </div>
+        <div className='flex w-1/2'>
+          <GraficaRadar />
+        </div>
       </section>
+
     </>
 
   )

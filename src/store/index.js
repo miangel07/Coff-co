@@ -17,8 +17,10 @@ import { fincaApiSlice } from "./api/fincas";
 import { facturasApi } from "./api/factura";
 import { repotesApi } from "./api/reportes";
 import { CambioPasswordApi } from "./api/cambioPassword";
+import { excelApiSlice } from "./api/Excel/ExcelApiSlice";
 import { AlquilerSlice } from "./api/alquilerLaboratorio/alquilerSlice";
-
+import { municipioApiSlice } from "./api/municipio";
+import { rolesSlice } from "./api/roles";
 
 export const store = configureStore({
   reducer: {
@@ -38,7 +40,9 @@ export const store = configureStore({
     [facturasApi.reducerPath]: facturasApi.reducer,
     [repotesApi.reducerPath]: repotesApi.reducer,
     [CambioPasswordApi.reducerPath]: CambioPasswordApi.reducer,
-
+    [excelApiSlice.reducerPath]: excelApiSlice.reducer,
+    [municipioApiSlice.reducerPath]: municipioApiSlice.reducer,
+    [rolesSlice.reducerPath]: rolesSlice.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -62,6 +66,8 @@ export const store = configureStore({
       facturasApi.middleware,
       repotesApi.middleware,
       CambioPasswordApi.middleware,
-      
+      excelApiSlice.middleware,
+      municipioApiSlice.middleware,
+      rolesSlice.middleware,
     ),
 });
