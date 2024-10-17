@@ -61,6 +61,7 @@ const AmbientesPlantilla = () => {
 
   const currentItems = data ? ambientesFiltrados.slice(indicePrimerItem, indiceUltimoItem) : [];
   const totalPages = Math.ceil(ambientesFiltrados.length / itemsPorPagina);
+  
   if (isLoading) {
     return (
       <Spinner className="flex justify-center items-center h-screen bg-gray-100" />

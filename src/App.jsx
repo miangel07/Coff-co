@@ -23,6 +23,7 @@ import TipoServicioPage from "./pages/tipoServicio/tipoServicioPage";
 import ReportesPages from "./pages/reportes/ReportesPages";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import RecuperarPasswordPage from "./pages/recuperarpassword/RecuperarPasswordPage";
+import CambiosPage from "./pages/cambios/CambiosPage";
 
 const App = () => {
   const [sesionExistente, setSesionExistente] = useState(false);
@@ -101,6 +102,7 @@ const App = () => {
               <Route path="/Tipodocumento" element={<TipoDocumentoPage />} />
               <Route path="/tiposervicio" element={<TipoServicioPage />} />
               <Route path="/reportes" element={<ReportesPages />} />
+              <Route path="/cambios" element={<CambiosPage/>} />
             </>
           )}
 
@@ -119,6 +121,7 @@ const App = () => {
               <Route path="/logos" element={<Logos />} />
               <Route path="/reportes" element={<ReportesPages />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route path="/cambios" element={<CambiosPage/>} />
             </>
           )}
 
@@ -135,6 +138,7 @@ const App = () => {
               <Route path="/logos" element={<Logos />} />
               <Route path="/variables" element={<VariablePages />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route path="/cambios" element={<CambiosPage/>} />
             </>
           )}
 

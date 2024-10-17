@@ -27,6 +27,7 @@ import { useForm } from "react-hook-form";
 import { FcOk } from "react-icons/fc";
 import Td from "../../atoms/Td";
 
+
 const LogosPlantilla = () => {
 
     //CONTROL DE LA PAGINACION
@@ -79,23 +80,23 @@ const LogosPlantilla = () => {
     //CAMBIAR EL ESTADO DEL LOGO
     const handleSwitchChange = async (id, nombre) => {
     confirmAlert({
-      title: `${t("confirmacion")}`,
-      message: `¿ ${t("cambioestadologo")} ${id},  ${nombre}?`,
+      title: 'Confirmación',
+      message: `¿Cambiar el estado del Logo ${id},  ${nombre}?`,
       buttons: [
         {
           label: 'Sí',
           onClick: async () => {
             try {
               await actualizarEstado(id).unwrap();
-              toast.success(t("cambioestadoexitoso"));
+              toast.success("Estado actualizado con éxito");
             } catch (error) {
-              console.error(t("cambioestadofallido"), error);
+              console.error('Error al actualizar el estado:', error);
             }
           }
         },
         {
           label: 'No',
-          onClick: () => toast.warn(t("operacioncancelada"))
+          onClick: () => toast.warn('Operacion cancelada')
         }
       ],
       closeOnClickOutside: true,
@@ -110,6 +111,7 @@ const LogosPlantilla = () => {
     const closeLogoModal = () => {setOpenLogoModal(false);};
      
     const onsubmit = async (data) => {
+      console.log("data",data);
       const formData = new FormData();
       formData.append('file', data.file[0]);
       formData.append('nombre', data.nombre);
@@ -188,10 +190,10 @@ const LogosPlantilla = () => {
     {/* TABLA */}
       <div className="flex justify-center items-center ">
         {Rol === "administrador" ? (<div className="pt-10 pl-20">
-        <Mybutton onClick={handleClick} color={"primary"}>{t("nuevo")} logo<IoAtCircle/></Mybutton>
+        <Mybutton onClick={handleClick} color={"primary"}>Nuevo Logo<IoAtCircle/></Mybutton>
       </div>) : null}
       <div className="w-[550px] pt-10 pl-20 ">
-          <Search label={""} placeholder={t("buscar")} onchange={(e) => setBusqueda(e.target.value)} />
+          <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
       </div>
       <div className="pt-10 pl-20 ">
           <Switch
@@ -206,11 +208,11 @@ const LogosPlantilla = () => {
         <TableMolecula lassName="w-full">
           <Thead>
             <Th>ID</Th>
-            <Th>{t("nombre")}</Th>
+            <Th>Nombre</Th>
             {/* <Th>Ruta</Th> */}
             <Th>Logo</Th>
-            <Th>{t("editar")}</Th>
-            <Th>{t("estado")}</Th>
+            <Th>Editar</Th>
+            <Th>Estado</Th>
           </Thead>
           <Tbody>
             {elementosActuales.length>0?(
@@ -269,7 +271,7 @@ const LogosPlantilla = () => {
     {/* MODAL REGISTRO*/}
     {openModal && (
           <ModalOrganismo
-          logo={<Logosímbolo />}
+          logo={""}
           children={
             <UserFrom
               onsubmit={handleSubmit(onsubmit)}
@@ -280,7 +282,7 @@ const LogosPlantilla = () => {
                   name={"nombre"}
                   erros={errors}
                   id={"nombre"}
-                  placeholder={t("ingreseNombreLogo")}
+                  placeholder={"Ingrese el nombre de el logo"}
                   type={"text"}
                 />
                 <InputAtomo
@@ -290,14 +292,14 @@ const LogosPlantilla = () => {
                   name={"file"}
                   erros={errors}
                   id={"file"}
-                  placeholder={t("seleccionaTuLogo")}
+                  placeholder={"Selecciona tu logo"}
                   type={"file"}
                 />
                 </>
               }/>
           }
           visible={true}
-          title={t("registroDeLogo")}
+          title={"Registro de Logo"}
           closeModal={closeModal}
         />
     )}
@@ -306,7 +308,7 @@ const LogosPlantilla = () => {
     {/* MODAL ACTUALIZAR*/}
     {openModalActualizar && (
     <ModalOrganismo
-      logo={<Logosímbolo />}
+      logo={""}
       children={
         <UserFrom
           onsubmit={handleSubmit(onsubmitActualizar)}
@@ -317,7 +319,7 @@ const LogosPlantilla = () => {
                 name={"nombre"}
                 errores={errors}
                 id={"nombre"}
-                placeholder={t("ingreseNombreLogo")}
+                placeholder={"Ingrese el nombre del logo"}
                 type={"text"}
                 defaultValue={logoSeleccionado?.nombre || ""}
               />
@@ -327,7 +329,7 @@ const LogosPlantilla = () => {
                   name={"file"}
                   errores={errors}
                   id={"file"}
-                  placeholder={t("seleccionaTuLogo")}
+                  placeholder={"Selecciona tu nuevo logo"}
                   type={"file"}
                   defaultValue={logoSeleccionado?.ruta || ""}
                   isRequired={false} 
@@ -338,7 +340,7 @@ const LogosPlantilla = () => {
         />
       }
       visible={true}
-      title={t("actualizarLogo")}
+      title={"Actualizar Logo"}
       closeModal={closeModalActualizar}
     />
 

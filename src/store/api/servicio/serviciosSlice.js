@@ -20,6 +20,14 @@ export const servicioApiSlice = createApi({
             providesTags:['servicios']
         }),
 
+        listarCambios: build.query({
+            query: () => ({
+                url: "servicios/getcambios",
+                method: "GET",
+            }),
+            providesTags:['servicios']
+        }),
+
         obtenerMuestrasParaServicio:build.query({
             query:()=>({
                 url:'servicios/getmuestrasser',
@@ -191,9 +199,9 @@ export const servicioApiSlice = createApi({
     })
 })
 
-export const { useGetServicioQuery, useObtenerMuestrasParaServicioQuery, 
+export const { useGetServicioQuery,useObtenerMuestrasParaServicioQuery, 
     useRegistrarServicioMutation,useServicioTerminadoMutation,useRegistrarCambioDelServicioMutation,
     useEliminarServicioMutation, useActualizarEstadoServicioMutation, 
     useObtenerVariablesParaServicioMutation,useEditarValoresPorServicioMutation,
     useObtenerIdTipoServicioMutation,useObtenerVariablesParaActualizarServicioMutation, 
-    useObtenerPrecioSegunTipoServicioMutation} = servicioApiSlice;
+    useObtenerPrecioSegunTipoServicioMutation,useListarCambiosQuery} = servicioApiSlice;

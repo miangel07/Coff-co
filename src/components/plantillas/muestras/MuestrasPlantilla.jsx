@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"; // Asegúrate de importar useContext
+import React, { useState, useContext, useEffect } from "react";
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -15,6 +15,7 @@ import ClienteFormulario from "../../molecules/Formulario/ClienteFormulario";
 import Search from "../../atoms/Search";
 import { AuthContext } from "../../../context/AuthContext";
 import { useGetMuestrasQuery } from "../../../store/api/muestra";
+import { useGetServicioQuery } from "../../../store/api/servicio/serviciosSlice.js";
 import { useTranslation } from "react-i18next";
 
 const MuestrasPlantilla = () => {
@@ -26,15 +27,29 @@ const MuestrasPlantilla = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedMuestra, setSelectedMuestra] = useState(null);
-  const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
+  
+  // Obtener los datos de muestras con refetch
+  const { 
+    data: dataMuestras, 
+    isLoading,
+    refetch: refetchMuestras 
+  } = useGetMuestrasQuery();
+
+  // Obtener los datos de servicios y monitorear cambios
+  const { data: servicios } = useGetServicioQuery(undefined, {
+    pollingInterval: 3000, // Verificar cambios cada 3 segundos
+  });
+
   const { authData } = useContext(AuthContext);
   const { t } = useTranslation();
-
-
-
-
-  
   const userRole = authData.usuario.rol;
+
+  // Efecto para actualizar las muestras cuando cambian los servicios
+  useEffect(() => {
+    if (servicios) {
+      refetchMuestras();
+    }
+  }, [servicios, refetchMuestras]);
 
   const handleImageClick = (muestra) => {
     setSelectedMuestra(muestra);
@@ -61,6 +76,7 @@ const MuestrasPlantilla = () => {
   const cantidad = 4;
   const final = pages * cantidad;
   const inicial = final - cantidad;
+  
   const handlePageChange = (page) => {
     setPages(page);
   };
@@ -85,14 +101,20 @@ const MuestrasPlantilla = () => {
   const closemodal = () => {
     setDatosDelFormulario("");
     setShowModal(false);
+    // Actualizar la lista después de cerrar el modal
+    refetchMuestras();
   };
 
   const closeFincaModal = () => {
     setShowFincaModal(false);
+    // Actualizar la lista después de cerrar el modal
+    refetchMuestras();
   };
 
   const closeClienteModal = () => {
     setShowClienteModal(false);
+    // Actualizar la lista después de cerrar el modal
+    refetchMuestras();
   };
 
   if (isLoading) {
@@ -104,7 +126,7 @@ const MuestrasPlantilla = () => {
       <h2 className="text-2xl px-20 font-bold">{t("muestras")}</h2>
 
       <div className="px-20 flex gap-4 items-center">
-      {(userRole === "administrador" || userRole === "encargado" || userRole === "operario") && (
+        {(userRole === "administrador" || userRole === "encargado" || userRole === "operario") && (
           <Mybutton color={"primary"} onClick={handleModal}>
             {t("agregarMuestra")}
           </Mybutton>
@@ -138,6 +160,10 @@ const MuestrasPlantilla = () => {
           <MuestrasFormulario
             dataValue={datosDelFormulario}
             closeModal={closemodal}
+            onSuccess={() => {
+              closemodal();
+              refetchMuestras();
+            }}
           />
         </ModalOrganismo>
       )}
@@ -148,7 +174,13 @@ const MuestrasPlantilla = () => {
           visible={showFincaModal}
           closeModal={closeFincaModal}
         >
-          <FincaFormulario closeModal={closeFincaModal} />
+          <FincaFormulario 
+            closeModal={closeFincaModal}
+            onSuccess={() => {
+              closeFincaModal();
+              refetchMuestras();
+            }}
+          />
         </ModalOrganismo>
       )}
 
@@ -158,7 +190,13 @@ const MuestrasPlantilla = () => {
           visible={showClienteModal}
           closeModal={closeClienteModal}
         >
-          <ClienteFormulario closeModal={closeClienteModal} />
+          <ClienteFormulario 
+            closeModal={closeClienteModal}
+            onSuccess={() => {
+              closeClienteModal();
+              refetchMuestras();
+            }}
+          />
         </ModalOrganismo>
       )}
 
@@ -214,7 +252,6 @@ const MuestrasPlantilla = () => {
                 </Td>
                 <Td>
                   <div className="flex items-center space-x-4">
-                    {/* Solo el administrador puede editar */}
                     {userRole === "administrador" && (
                       <button
                         className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
