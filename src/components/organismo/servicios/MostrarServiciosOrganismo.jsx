@@ -171,7 +171,7 @@ const MostrarServicios = ({ filtro }) => {
   return (
     <>
       <div>
-        <div>
+        <div className="w-full px-20 h-auto overflow-y-auto">
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
@@ -221,10 +221,12 @@ const MostrarServicios = ({ filtro }) => {
                       </Switch>
                     </Td>
                     <Td>
-                      <FaRegEdit
+                        <div className="flex flex-row gap-6">
+                        <FaRegEdit
                         size={"35px"}
                         onClick={() => abrirModalEditarValor(servicio)}
                       />
+                        </div>
                     </Td>
                   </tr>
                 ))
