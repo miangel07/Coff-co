@@ -79,6 +79,13 @@ const ItemsNavbar = ({ visiblite }) => {
       roles: ["administrador", "encargado", "operario"],
     },
     {
+      icon: "bi-arrow-repeat",
+      iconFill: "bi-handbag-fill",
+      label: visiblite ? t("cambios") : "",
+      link: "/cambios",
+      roles: ["administrador", "encargado", "operario"],
+    },
+    {
       icon: "bi-calendar",
       iconFill: "bi-calendar-fill",
       label: visiblite ? t("alquiler") : "",
