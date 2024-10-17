@@ -5,9 +5,8 @@ export const usuariosSlice = createApi({
   reducerPath: 'usuarios',
   baseQuery: fetchBaseQuery({
     baseUrl:import.meta.env.VITE_BASE_URL,
-    headers:{
-      'Content-Type': 'application/json',
-      token:`${getCookie('authToken')}`
+    headers: {
+      token: `${getCookie("Token")}`,
     },
   }),
 
@@ -71,6 +70,22 @@ export const usuariosSlice = createApi({
   registrarUsuario: build.mutation({
     query:(data)=>({
       url:'/usuario/registrar',
+      method:'POST',
+      body:data,
+    }),
+    transformErrorResponse: (response) => {
+      return {
+        status: response.status,
+        errors: response.data?.errors || [response.data?.message || "Error desconocido"]
+      };
+    },
+    invalidatesTags:['usuarios']
+  }),
+
+  //REGISTRAR DESDE EL LOGIN 
+  registrarUsuarioLogin: build.mutation({
+    query:(data)=>({
+      url:'/usuario/registrarlogin',
       method:'POST',
       body:data,
     }),
@@ -152,6 +167,6 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,
+export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation, useRegistrarUsuarioLoginMutation,
   useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,
   useActualizarContraMutation, useGetClientesQuery, useGetClienteRolQuery} = usuariosSlice
