@@ -115,6 +115,9 @@ const CalendarPlantilla = () => {
     }
   };
 
+
+  
+
   const actualizarReservaExistente = async (reservaActualizada) => {
     try {
       const payload = {
