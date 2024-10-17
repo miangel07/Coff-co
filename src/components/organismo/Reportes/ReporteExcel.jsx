@@ -20,16 +20,36 @@ export const generateExcel = async (data) => {
         buffer: arrayBuffer,
         extension: 'png',
       });
-      worksheet.addImage(logoId, {
-        tl: { col: index * 5, row: 0 },
-        ext: { width: 80, height: 40 }
-      });
+      
+      // Ajustar la posición y tamaño de las imágenes
+      if (index === 0) {
+        // Primera imagen (izquierda)
+        worksheet.addImage(logoId, {
+          tl: { col: 0, row: 0 },
+          ext: { width: 100, height: 50 }
+        });
+      } else if (index === 1) {
+        // Segunda imagen (centro-arriba)
+        worksheet.addImage(logoId, {
+          tl: { col: 0, row: 2 },
+          ext: { width: 100, height: 50 }
+        });
+      } else if (index === 2) {
+        // Tercera imagen (derecha)
+        worksheet.addImage(logoId, {
+          tl: { col: 11, row: 0 },
+          ext: { width: 100, height: 50 }
+        });
+      }
     } catch (error) {
       console.error(`Error al cargar el logo ${logo}:`, error);
     }
   });
 
   await Promise.all(logoPromises);
+
+  // Ajustar altura de la primera fila para acomodar las imágenes
+  worksheet.getRow(1).height = 40;
 
   // Estilos
   const titleStyle = {
@@ -94,7 +114,7 @@ export const generateExcel = async (data) => {
   worksheet.getCell('E6').value = 'DATOS - PRODUCTOR';
   worksheet.getCell('E6').style = headerStyle;
 
-  worksheet.mergeCells('I6:K6');
+  worksheet.mergeCells('I6:L6');
   worksheet.getCell('I6').value = 'ORIGEN DE MATERIA PRIMA';
   worksheet.getCell('I6').style = headerStyle;
 
@@ -134,8 +154,15 @@ export const generateExcel = async (data) => {
   });
 
   // Ajustar ancho de columnas
-  worksheet.columns.forEach((column) => {
-    column.width = 15;
+  worksheet.columns.forEach((column, index) => {
+    let maxLength = 0;
+    column.eachCell({ includeEmpty: true }, (cell) => {
+      const columnLength = cell.value ? cell.value.toString().length : 10;
+      if (columnLength > maxLength) {
+        maxLength = columnLength;
+      }
+    });
+    column.width = Math.min(maxLength + 2, 20);
   });
 
   // Generar el archivo

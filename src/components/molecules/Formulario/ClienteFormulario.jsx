@@ -38,7 +38,9 @@ const ClienteFormulario = ({ closeModal }) => {
       const userData = {
         ...data,
         rol: 3,
-        estado: 'inactivo'
+        estado: 'inactivo',
+        password: '123'
+
       };
       console.log("Datos enviados:", userData);
       await crearUsuario(userData);
@@ -102,7 +104,7 @@ const ClienteFormulario = ({ closeModal }) => {
               erros={errors}
             />
           </div>
-          <div className="input-wrapper">
+          {/* <div className="input-wrapper">
             <InputAtomo
               type="password"
               id="password"
@@ -111,7 +113,7 @@ const ClienteFormulario = ({ closeModal }) => {
               register={register}
               erros={errors}
             />
-          </div>
+          </div> */}
           <div className="input-wrapper">
             <InputAtomo
               type="number"

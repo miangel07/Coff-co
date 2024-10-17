@@ -11,7 +11,7 @@ import {
 } from "../../../store/api/muestra";
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetClientesQuery } from "../../../store/api/users";
-import { useGetTipoServicioQuery } from "../../../store/api/TipoServicio";
+import { useGetTipoServicioActivoQuery } from "../../../store/api/TipoServicio";
 import { useTranslation } from "react-i18next";
 
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
@@ -21,7 +21,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [Servicio, setServicio] = useState("");
   const { data: dataUsuarios, isLoading: isLoadingUsuarios } = useGetClientesQuery();
   const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
-  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } = useGetTipoServicioQuery();
+  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } = useGetTipoServicioActivoQuery();
   const { t } = useTranslation();
   const {
     register,
