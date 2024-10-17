@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import SelectSearch from "../../atoms/SelectSearch";
@@ -31,7 +31,6 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
     setValue,
     watch,
   } = useForm();
-  console.log(dataValue)
   const [crearMuestra, { isLoading, isError, data: dataResponse, isSuccess }] = usePostMuestraMutation();
   const [editarMuestra, { isLoading: isLoadingEdit, isError: isErrorEdit, data: dataResponseEdit, isSuccess: isSuccessEdit }] = usePutMuestraMutation();
 
@@ -40,7 +39,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
-  useEffect(() => {
+  const resetForm = useCallback(() => {
     const today = new Date().toLocaleDateString('en-CA', {
       timeZone: 'America/Bogota',
     });
@@ -53,28 +52,59 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
         variedad: dataValue?.variedad || '',
         observaciones: dataValue?.observaciones || '',
         codigoExterno: dataValue?.codigoExterno || '',
-      })
+      });
       setUnidadMedida(dataValue.UnidadMedida || '');
+      setUsuario(dataValue.fk_id_usuarios || '');
+      setFinca(dataValue.fk_id_finca || '');
+      setServicio(dataValue.fk_idTipoServicio || '');
+      setImagePreviewUrl(dataValue.fotoMuestra || null);
     } else {
       reset({
         fecha_muestra: today,
       });
+      setUnidadMedida('');
+      setUsuario('');
+      setFinca('');
+      setServicio('');
+      setImagePreviewUrl(null);
     }
+  }, [dataValue, reset]);
 
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
+
+  useEffect(() => {
     if ((isSuccess || isSuccessEdit) && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || dataResponseEdit?.message}`);
+      toast.success(`${dataResponse?.message || dataResponseEdit?.message || "Operación exitosa"}`);
       hasNotified.current = true;
       closeModal();
     } else if ((isError || isErrorEdit) && !hasNotified.current) {
-      toast.error("Error al procesar la muestra");
+      toast.error(`Error: ${dataResponse?.error || dataResponseEdit?.error || "Error al procesar la muestra"}`);
       hasNotified.current = true;
     }
-  }, [dataValue, isSuccess, isSuccessEdit, isError, isErrorEdit, reset, closeModal, dataResponse, dataResponseEdit, setValue]);
+
+    return () => {
+      hasNotified.current = false;
+    };
+  }, [isSuccess, isSuccessEdit, isError, isErrorEdit, closeModal, dataResponse, dataResponseEdit]);
 
   const onSubmit = async (data) => {
     try {
-      const formData = new FormData();
+      if (!previewImage && !dataValue) {
+        toast.error("La imagen es obligatoria");
+        return;
+      }
+      if (UnidadMedida === "") {
+        toast.error("La unidad de medida es obligatoria");
+        return;
+      }
+      if (!usuario || !Finca || !Servicio) {
+        toast.error("Todos los campos son obligatorios");
+        return;
+      }
 
+      const formData = new FormData();
       formData.append('cantidadEntrada', data.cantidadEntrada);
       formData.append('fk_id_finca', Finca);
       formData.append('fecha_muestra', data.fecha_muestra);
@@ -85,44 +115,22 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
       formData.append('codigoExterno', data?.codigoExterno || null);
       formData.append('fk_idTipoServicio', Servicio);
       formData.append('UnidadMedida', UnidadMedida);
-      formData.append('fotoMuestra', previewImage);
-      if(!previewImage){
-        toast.error("La imagen es Obligatoria");
-        return;
+      
+      if (previewImage) {
+        formData.append('fotoMuestra', previewImage);
       }
-      if(UnidadMedida === "" ){
-        toast.error("La unidad de medida es obligatoria");
-        return;
+
+      if (dataValue) {
+        formData.append('id_muestra', dataValue.id_muestra);
+        await editarMuestra(formData);
+      } else {
+        await crearMuestra(formData);
       }
-      await crearMuestra(formData);
     } catch (error) {
-      toast.error("Error al guardar la muestra");
-      console.error(error);
+      console.error("Error al procesar la muestra:", error);
+      toast.error("Error al procesar la muestra");
     }
   };
-
-  const hadleEditar = async(data) => {
-    const formData = new FormData();
-    formData.append('cantidadEntrada', data.cantidadEntrada);
-    formData.append('id_muestra', dataValue.id_muestra);
-    formData.append('fk_id_finca', Finca);
-    formData.append('fecha_muestra', data.fecha_muestra);
-    formData.append('fk_id_usuarios', usuario);
-    formData.append('variedad', data.variedad);
-    formData.append('altura', data.altura);
-    formData.append('observaciones', data.observaciones);
-    formData.append('codigoExterno', data?.codigoExterno || null);
-    formData.append('fk_idTipoServicio', Servicio);
-    formData.append('UnidadMedida', UnidadMedida);
-    if(UnidadMedida === "" ){
-      toast.error("La unidad de medida es obligatoria");
-      return;
-    }
-    if(previewImage){
-      formData.append('fotoMuestra', previewImage);
-    }
-    await editarMuestra(formData);
-  }
 
   const handleImageChange = (e) => {
     e.preventDefault();
@@ -145,7 +153,9 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   ];
 
   if (isLoading || isLoadingEdit || isLoadingUsuarios || isLoadingFincas || isLoadingTipoServicio) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center h-full">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>;
   }
 
   return (
