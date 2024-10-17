@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
+//Cabecera del componente
 import Mybutton from "../../atoms/Mybutton";
+import Search from "../../atoms/Search";
+import { Switch } from "@nextui-org/react";
+//Tabla y paginacion
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import Tbody from "../../molecules/table/Tbody";
-import Search from "../../atoms/Search";
-import { FaRegEdit } from "react-icons/fa";
-import { useTranslation } from 'react-i18next';
+import { Spinner } from "@nextui-org/react"; //El cosito que gira mientras algo carga
+import { FaRegEdit } from "react-icons/fa"; // Icono editar 
+//Funciones crud redux
 import { useActualizarEstadoMutation, useActualizarUsuarioMutation, useEliminarUsuarioMutation, useGetUsuarioQuery, useGetRolesQuery, useRegistrarUsuarioMutation } from "../../../store/api/users";
 import { useGetRolQuery } from "../../../store/api/roles";
-import { Spinner } from "@nextui-org/react";
+//Traduccion y alertas
+import { useTranslation } from 'react-i18next';
 import { confirmAlert } from "react-confirm-alert";
 import { toast } from "react-toastify";
-import { Switch } from "@nextui-org/react";
-
 //Importaciones para el modal
 import { IoPersonAddOutline } from "react-icons/io5";
 import SelectAtomo from "../../atoms/Select";
@@ -35,68 +38,85 @@ const UsersPlantilla = () => {
   const [paginaActual,setPaginaActual]= useState(1)
   const itemsPorPagina = 7
 
-  // FUNCIONES CRUD
-  const {data,isLoading, refetch} = useGetUsuarioQuery()
-  const { data: dato, isLoading: cargando } = useGetRolesQuery();
-  const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
-  const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
+  // FUNCIONES CRUD (Llamadas desde redux y a su vez desde el backend)
+  // Redux nos provee data, isLoading entre otras, para manejar la respuesta del endpoint:
+  // 'data' contiene la respuesta, 'isLoading' indica si la solicitud está en curso.
+  const {data,isLoading} = useGetUsuarioQuery() //Las clave data, isLoading y refetch ya vienen con redux y las utilizamos para manejar la respuesta del endpoint
+  const {data: dato} = useGetRolesQuery(); //Aqui le asignamos alias a esas clave ya que deben tener identificadores unicos, aqui: dato es un alias que trabaja como data manejando la informacion que devuelve la funcion de listar Roles
+  const {data: roles}= useGetRolQuery();
+  const [registrarUsuario] = useRegistrarUsuarioMutation(); //Aqui solo estamos llamando a la funcion y asignandole un identificador para utilizarla 
   const [actualizarEstado] = useActualizarEstadoMutation();
   const [actualizarUsuario]= useActualizarUsuarioMutation();
-  const [eliminarUsuario] = useEliminarUsuarioMutation();
 
-  //FILTRO DE DATOS
-  const { t } = useTranslation();
-  const [busqueda, setBusqueda] = useState('')
-  const [filtroEstado, setFiltroEstado] = useState(true);
+  //FILTRO DE DATOS Y TRADUCCION
+  const { t } = useTranslation(); //Esto es para identificar palabras al traducir y hacerlo, esta es una funcion de react y trabaja con los archivos json que contienen las posibles palabras atraducir
+  const [busqueda, setBusqueda] = useState('') // Este es un UseState comun, especificamente lo utilizamos para almacenar el texto que se introduce en el input de busqueda, lo identificamos por el nombre 'Busqueda' un UseState podria almacenar lo que fuera sabe
+  const [filtroEstado, setFiltroEstado] = useState(true); //Este es un UseState que se encarga de manejar un valor como true o false y se comporta de manera diferente dependiendo de este estado, en este caso para alterar lo que muestra la tabla en su estado true, (usuarios activos o inacitvos)
 
   //MODAL 
-  const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm();
+  const {handleSubmit, register, watch, setValue, formState: { errors },reset,} = useForm(); // Funciones proporcionadas por userForm de react para manejar el comportamiento del formulario de registro y acutlizacion utilizado en los modales con la misma funcion
 
   //Abrir modal
-  const [openModal, setOpenModal] = useState(false);
-  const [openModalActualizar, setOpenModalActualizar] = useState(false);
-  const [sucess, setsucess] = useState("");
-  const [sucessActualizar, setsucessActualizar] = useState("");
+  const [openModal, setOpenModal] = useState(false); //Abrir o cerrar modal de registro
+  const [openModalActualizar, setOpenModalActualizar] = useState(false); //Abrir o cerrar modal de actualizacion
 
   //MODAL REGISTRAR
-  const handleClick = () => {setOpenModal(true);};
-  const closeModal = () => {setOpenModal(false);reset()
+  const handleClick = () => {setOpenModal(true);}; //Funciona para abrir el modal de registro definiendo el estado del usestate openModal en true, lo utilizamos en el boton de 'Registrar Usuario' y mas abajo en el renderizado mostramos el modal dependiendo de si openModal es true o false 
+  const closeModal = () => {setOpenModal(false);reset() //Lo mismo de la linea de arriba
   };
 
   //MODAL ACTUALIZAR
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null); 
+  // Estado que guarda el usuario seleccionado para su actualización. Inicialmente es 'null' es decir vacio, hasta que se seleccione un usuario.
   const handleClickActualizar = (usuario) => {
     console.log("Usuario seleccionado:", usuario); 
+    // Imprime el usuario seleccionado en la consola para depuración, la depuracion se utiliza para verificar el funcionamiento o contenido de lo que hacemos
     setUsuarioSeleccionado(usuario);
+    // Actualiza el estado con el usuario seleccionado.
+
     setOpenModalActualizar(true);
+    // Abre el modal para actualizar la información del usuario seleccionado.
   };
+  
     
   //CAMBIAR EL ESTADO DEL USUARIO
+  //Despues del async le estamos pasando dos propiedas id_usuario y nombre, es decir que esta funcion 
   const handleSwitchChange = async (id_usuario, nombre) => {
+    // Muestra un cuadro de confirmación antes de cambiar el estado del usuario
     confirmAlert({
-      title: `${t("confirmacion")}`,
-      message: `¿ ${t("cambioestadousuario")}  ${nombre}?`,
+      title: `${t("confirmacion")}`, 
+      // Título del cuadro de confirmación traducido
+      message: `¿ ${t("cambioestadousuario")}  ${nombre}?`, 
+      // Mensaje que pregunta si se desea cambiar el estado del usuario con su nombre incluido
       buttons: [
         {
-          label: 'Sí',
+          label: 'Sí', 
+          // Opción para confirmar el cambio de estado
           onClick: async () => {
             try {
-              await actualizarEstado(id_usuario).unwrap();
+              await actualizarEstado(id_usuario).unwrap(); 
+              // Llama a la función para actualizar el estado del usuario
               toast.success(t("cambioestadoexitoso"));
+              // Muestra un mensaje de éxito si el estado se cambia correctamente
             } catch (error) {
               toast.error(error.error);
+              // Muestra un mensaje de error si algo falla
               console.log(t("cambioestadofallido"), error);
+              // Imprime el error en la consola para depuración
             }
           }
         },
         {
-          label: 'No',
+          label: 'No', 
+          // Opción para cancelar el cambio de estado
           onClick: () => toast.warn(t("operacioncancelada"))
+          // Muestra un mensaje de advertencia indicando que la operación fue cancelada
         }
       ],
-      closeOnClickOutside: true,
+      closeOnClickOutside: true, 
+      // Permite cerrar el cuadro de confirmación al hacer clic fuera de él
     });
-  };  
+  };
 
   useEffect(() => {
     console.log("Usuario seleccionado en modal:", usuarioSeleccionado);
@@ -110,8 +130,7 @@ const UsersPlantilla = () => {
   const onsubmit = async (data) => {
     try {
       const response = await registrarUsuario(data).unwrap(); 
-      setsucess(response.message); 
-  
+
       toast.success(response.message, {
         duration: 5000,
         position: "top-center",
@@ -146,9 +165,6 @@ const UsersPlantilla = () => {
       try {
         // Asumiendo que actualizarUsuario es una función asíncrona
         const response = await actualizarUsuario({ data: valores, id: usuarioSeleccionado.id_usuario }).unwrap();
-        
-        // Se utiliza la respuesta del servidor para obtener el mensaje
-        setsucessActualizar(response.message);
       
         toast.success(response.message, {
           duration: 5000,
@@ -329,7 +345,6 @@ const UsersPlantilla = () => {
                 <Td>{usuario.telefono}</Td>
                 <Td>{usuario.numero_documento}</Td>
                 <Td>{usuario.tipo_documento}</Td>
-                {/* <Td>{usuario.estado}</Td> */}
                 <Td>{usuario.rol}</Td>
                 <Td>
                 <div className="flex justify-center items-center space-x-4">
@@ -340,7 +355,6 @@ const UsersPlantilla = () => {
                 >
                 <FaRegEdit/>
                 </button>
-                  {/* <Mybutton color={"primary"} onClick={() => handleClickActualizar(usuario)}>Actualizar</Mybutton> */}
                 </div>
                 </Td>
                 <Td>
@@ -348,7 +362,6 @@ const UsersPlantilla = () => {
                       setisSelected={usuario.estado === "activo"}
                       onChange={() => handleSwitchChange(usuario.id_usuario, usuario.nombre)}
                   />
-                  {/* <Mybutton color={"danger"} onClick={() => eliminarUsuario(usuario.id_usuario)}> Eliminar </Mybutton> */}
                 </Td>
 
               </tr>
@@ -506,17 +519,6 @@ const UsersPlantilla = () => {
                 type={"text"}
                 defaultValue={usuarioSeleccionado?.telefono || ""}
               />
-              {/* 
-              <InputAtomoActualizar
-                register={register}
-                name={"password"}
-                errores={errors}
-                id={"password"}
-                placeholder={"Ingrese la contraseña del usuario"}
-                type={"password"}
-                defaultValue={usuarioSeleccionado?.password || ""}
-              /> */}
-
               <SelectAtomoActualizar
                 data={roles.map(role => ({ value: role.idRol, label: role.rol }))}
                 label={t("rol")} 
@@ -535,16 +537,6 @@ const UsersPlantilla = () => {
                 value={usuarioSeleccionado?.tipo_documento || ""}
               />
 
-              {/* <SelectAtomo
-                data={estadoOptions}
-                label={"Estado"}
-                onChange={(e) => setValue("estado", e.target.value)}
-                items={"value"}
-                ValueItem={"label"}
-                placeholder={usuarioSeleccionado?.estado}
-                value={usuarioSeleccionado?.estado || ""}
-              /> */}
-                
               <InputAtomoActualizar
                 register={register}
                 name={"numero_documento"}

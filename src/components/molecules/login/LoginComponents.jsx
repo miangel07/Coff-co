@@ -55,7 +55,7 @@ const LoginComponent = () => {
       });
 
       setModalRegistro(false);
-      reset();
+      resetRegistro();
     } catch (error) {
       const mensajesError = error.errors.join(', ');
       toast.error(mensajesError || "Ocurrió un error", {
