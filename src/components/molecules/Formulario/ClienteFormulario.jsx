@@ -14,24 +14,25 @@ const ClienteFormulario = ({ closeModal }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (isSuccess && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || "Usuario registrado con éxito"}`);
-      hasNotified.current = true;
-      closeModal();
-    } else if (isError && !hasNotified.current) {
-      // Si hay errores específicos desde el backend, los mostramos
-      if (error?.data?.errors) {
-        error.data.errors.forEach((msg) => toast.error(msg));
-      } else if (error?.data?.message) {
-        // Mostrar el mensaje general si no hay una lista de errores
-        toast.error(error.data.message);
+    if (isError && !hasNotified.current) {
+      if (Array.isArray(error.errors)) {
+        error.errors.forEach((err) => toast.error(err));
       } else {
-        // En caso de que no haya un mensaje específico, mostramos un error genérico
-        toast.error("Error al registrar el usuario");
+        toast.error(error.errors || "Error al registrar usuario");
       }
       hasNotified.current = true;
     }
-  }, [isSuccess, isError, closeModal, dataResponse, error]);
+
+    if (isSuccess && !hasNotified.current) {
+      toast.success("Usuario registrado exitosamente");
+      hasNotified.current = true;
+      closeModal(); 
+    }
+
+    return () => {
+      hasNotified.current = false;
+    };
+  }, [isError, isSuccess, error, closeModal]);
 
   const onSubmit = async (data) => {
     try {
@@ -40,12 +41,10 @@ const ClienteFormulario = ({ closeModal }) => {
         rol: 3,
         estado: 'inactivo',
         password: '123'
-
       };
       console.log("Datos enviados:", userData);
       await crearUsuario(userData);
     } catch (error) {
-      toast.error("Error al guardar el usuario");
       console.error(error);
     }
   };
@@ -55,8 +54,6 @@ const ClienteFormulario = ({ closeModal }) => {
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
     </div>;
   }
-
-
 
   return (
    
