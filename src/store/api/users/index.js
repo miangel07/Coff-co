@@ -83,6 +83,22 @@ export const usuariosSlice = createApi({
     invalidatesTags:['usuarios']
   }),
 
+  //REGISTRAR DESDE EL LOGIN 
+  registrarUsuarioLogin: build.mutation({
+    query:(data)=>({
+      url:'/usuario/registrarlogin',
+      method:'POST',
+      body:data,
+    }),
+    transformErrorResponse: (response) => {
+      return {
+        status: response.status,
+        errors: response.data?.errors || [response.data?.message || "Error desconocido"]
+      };
+    },
+    invalidatesTags:['usuarios']
+  }),
+
     //ACTUALIZAR
     actualizarUsuario: build.mutation({
       query: ({ data, id }) => ({
@@ -152,6 +168,6 @@ export const usuariosSlice = createApi({
 
 })
 
-export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation,
+export const {useGetUsuarioQuery, useGetRolesQuery, useGetUsuarioIdQuery,useRegistrarUsuarioMutation, useRegistrarUsuarioLoginMutation,
   useActualizarUsuarioMutation,useEliminarUsuarioMutation,useActualizarEstadoMutation,
   useActualizarContraMutation, useGetClientesQuery, useGetClienteRolQuery} = usuariosSlice
