@@ -38,6 +38,9 @@ export const usuariosSlice = createApi({
     query: (id) => ({
       url: `/usuario/listarid/${id}`,
       method: 'GET',
+      headers:{
+        token:`${getCookie('Token')}`
+      },
     }),
     transformErrorResponse: (response, meta, arg) => {
       console.log("Respuesta completa de error:", response);
@@ -55,6 +58,9 @@ export const usuariosSlice = createApi({
     query: (id) => ({
       url: '/usuario/clientes',
       method: 'GET',
+      headers:{
+        token:`${getCookie('Token')}`
+      },
     }),
     transformErrorResponse: (response, meta, arg) => {
       console.log("Respuesta completa de error:", response);
@@ -73,6 +79,9 @@ export const usuariosSlice = createApi({
       url:'/usuario/registrar',
       method:'POST',
       body:data,
+      headers:{
+        token:`${getCookie('Token')}`
+      },
     }),
     transformErrorResponse: (response) => {
       return {
@@ -89,6 +98,9 @@ export const usuariosSlice = createApi({
       url:'/usuario/registrarlogin',
       method:'POST',
       body:data,
+      headers:{
+        token:`${getCookie('Token')}`
+      },
     }),
     transformErrorResponse: (response) => {
       return {
