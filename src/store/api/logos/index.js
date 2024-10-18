@@ -6,8 +6,8 @@ export const logosApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
-            token: `${getCookie("Token")}`,
-        },
+         token: `${getCookie("Token")}`,
+     },
     }),
     endpoints: (build) => ({
         //LISTAR LOGOS

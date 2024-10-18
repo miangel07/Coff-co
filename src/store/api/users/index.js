@@ -5,8 +5,9 @@ export const usuariosSlice = createApi({
   reducerPath: 'usuarios',
   baseQuery: fetchBaseQuery({
     baseUrl:import.meta.env.VITE_BASE_URL,
-    headers: {
-      token: `${getCookie("Token")}`,
+    headers:{
+      'Content-Type': 'application/json',
+      token:`${getCookie('Token')}`
     },
   }),
 
@@ -76,7 +77,7 @@ export const usuariosSlice = createApi({
     transformErrorResponse: (response) => {
       return {
         status: response.status,
-        errors: response.data?.errors || [response.data?.message || "Error desconocido"]
+        errors: response.data?.message || [response.data?.message || "Error desconocido"]
       };
     },
     invalidatesTags:['usuarios']
