@@ -93,7 +93,7 @@ const TipoDocumentoPlantilla = () => {
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">{t("tipoDocumentos")}</h2>
-      <div className="px-20">
+      <div className="px-20 justify-center flex  items-center">
         {
           rol === "administrador" &&
           (
