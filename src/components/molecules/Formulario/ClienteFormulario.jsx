@@ -14,24 +14,15 @@ const ClienteFormulario = ({ closeModal }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (isError && !hasNotified.current) {
-      if (Array.isArray(error.errors)) {
-        error.errors.forEach((err) => toast.error(err));
-      } else {
-        toast.error(error.errors || "Error al registrar usuario");
-      }
-      hasNotified.current = true;
+    if (isError ) {
+        toast.error(error.errors);
+        return
     }
 
-    if (isSuccess && !hasNotified.current) {
-      toast.success("Usuario registrado exitosamente");
-      hasNotified.current = true;
+    if (isSuccess ) {
+      toast.success(`${dataResponse.message}`);
       closeModal(); 
     }
-
-    return () => {
-      hasNotified.current = false;
-    };
   }, [isError, isSuccess, error, closeModal]);
 
   const onSubmit = async (data) => {

@@ -39,6 +39,30 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
+
+
+  const hadleEditar = async(data) => {
+    const formData = new FormData();
+    formData.append('cantidadEntrada', data.cantidadEntrada);
+    formData.append('id_muestra', dataValue.id_muestra);
+    formData.append('fk_id_finca', Finca);
+    formData.append('fecha_muestra', data.fecha_muestra);
+    formData.append('fk_id_usuarios', usuario);
+    formData.append('variedad', data.variedad);
+    formData.append('altura', data.altura);
+    formData.append('observaciones', data.observaciones);
+    formData.append('codigoExterno', data?.codigoExterno || null);
+    formData.append('fk_idTipoServicio', Servicio);
+    formData.append('UnidadMedida', UnidadMedida);
+    if(UnidadMedida === "" ){
+      toast.error("La unidad de medida es obligatoria");
+      return;
+    }
+    if(previewImage){
+      formData.append('fotoMuestra', previewImage);
+    }
+    await editarMuestra(formData);
+  }
   const resetForm = useCallback(() => {
     const today = new Date().toLocaleDateString('en-CA', {
       timeZone: 'America/Bogota',
@@ -75,18 +99,23 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   }, [resetForm]);
 
   useEffect(() => {
-    if ((isSuccess || isSuccessEdit) && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || dataResponseEdit?.message || "Operación exitosa"}`);
-      hasNotified.current = true;
+    if (isSuccess ) {
+      toast.success(`${dataResponse?.message }`);
       closeModal();
-    } else if ((isError || isErrorEdit) && !hasNotified.current) {
-      toast.error(`Error: ${dataResponse?.error || dataResponseEdit?.error || "Error al procesar la muestra"}`);
-      hasNotified.current = true;
+    } 
+    if (isSuccessEdit) {
+      toast.success(`${dataResponseEdit?.message}`);
+      closeModal();
+    } 
+    if (isError) {
+      toast.success(`${dataResponse?.error}`);
+      closeModal();
+    } 
+     if ( isErrorEdit) {
+      toast.error(`Error: ${dataResponseEdit?.error}`);
+      closeModal();
     }
 
-    return () => {
-      hasNotified.current = false;
-    };
   }, [isSuccess, isSuccessEdit, isError, isErrorEdit, closeModal, dataResponse, dataResponseEdit]);
 
   const onSubmit = async (data) => {

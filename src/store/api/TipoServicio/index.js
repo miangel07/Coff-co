@@ -7,7 +7,7 @@ export const TipoServicioApi = createApi({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({
@@ -16,7 +16,7 @@ export const TipoServicioApi = createApi({
                 url: "tiposervicio/listar",
                 method: "GET",
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             providesTags: ['TipoServicio']
@@ -28,7 +28,7 @@ export const TipoServicioApi = createApi({
                 url: "tiposervicio/listarTipoServActivos",
                 method: "GET",
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             providesTags: ['TipoServicio']
@@ -42,7 +42,7 @@ export const TipoServicioApi = createApi({
                 method: "POST",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -58,7 +58,7 @@ export const TipoServicioApi = createApi({
                 method: "PUT",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -74,7 +74,7 @@ export const TipoServicioApi = createApi({
                 method: "PUT",
                 body: { estado: data.estado }, // Asegúrate de enviar el estado en el cuerpo
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             invalidatesTags: ["TipoServicio"],
