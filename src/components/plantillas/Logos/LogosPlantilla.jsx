@@ -102,7 +102,7 @@ const LogosPlantilla = () => {
       closeOnClickOutside: true,
     });
     };  
-
+    
     useEffect(() => {
         console.log("Logo seleccionado en modal:", logoSeleccionado);
     }, [logoSeleccionado]);
@@ -358,7 +358,6 @@ const LogosPlantilla = () => {
       title={"Logo"}
       closeModal={closeLogoModal}
     />
-
     )}
     {/* FIN MODAL LOGO*/}
     </div>
