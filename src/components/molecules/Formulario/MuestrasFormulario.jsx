@@ -99,18 +99,23 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   }, [resetForm]);
 
   useEffect(() => {
-    if ((isSuccess || isSuccessEdit) && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || dataResponseEdit?.message || "Operación exitosa"}`);
-      hasNotified.current = true;
+    if (isSuccess ) {
+      toast.success(`${dataResponse?.message }`);
       closeModal();
-    } else if ((isError || isErrorEdit) && !hasNotified.current) {
-      toast.error(`Error: ${dataResponse?.error || dataResponseEdit?.error || "Error al procesar la muestra"}`);
-      hasNotified.current = true;
+    } 
+    if (isSuccessEdit) {
+      toast.success(`${dataResponseEdit?.message}`);
+      closeModal();
+    } 
+    if (isError) {
+      toast.success(`${dataResponse?.error}`);
+      closeModal();
+    } 
+     if ( isErrorEdit) {
+      toast.error(`Error: ${dataResponseEdit?.error}`);
+      closeModal();
     }
 
-    return () => {
-      hasNotified.current = false;
-    };
   }, [isSuccess, isSuccessEdit, isError, isErrorEdit, closeModal, dataResponse, dataResponseEdit]);
 
   const onSubmit = async (data) => {
