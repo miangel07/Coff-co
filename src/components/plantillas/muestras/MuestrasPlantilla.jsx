@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"; // Asegúrate de importar useContext
+import React, { useState, useContext, useEffect } from "react";
 import Mybutton from "../../atoms/Mybutton";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
@@ -15,6 +15,7 @@ import ClienteFormulario from "../../molecules/Formulario/ClienteFormulario";
 import Search from "../../atoms/Search";
 import { AuthContext } from "../../../context/AuthContext";
 import { useGetMuestrasQuery } from "../../../store/api/muestra";
+import { useGetServicioQuery } from "../../../store/api/servicio/serviciosSlice.js";
 import { useTranslation } from "react-i18next";
 
 const MuestrasPlantilla = () => {
@@ -26,15 +27,29 @@ const MuestrasPlantilla = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedMuestra, setSelectedMuestra] = useState(null);
-  const { data: dataMuestras, isLoading } = useGetMuestrasQuery();
+
+  // Obtener los datos de muestras con refetch
+  const {
+    data: dataMuestras,
+    isLoading,
+    refetch: refetchMuestras,
+  } = useGetMuestrasQuery();
+
+  // Obtener los datos de servicios y monitorear cambios
+  const { data: servicios } = useGetServicioQuery(undefined, {
+    pollingInterval: 3000, // Verificar cambios cada 3 segundos
+  });
+
   const { authData } = useContext(AuthContext);
   const { t } = useTranslation();
-
-
-
-
-  
   const userRole = authData.usuario.rol;
+
+  // Efecto para actualizar las muestras cuando cambian los servicios
+  useEffect(() => {
+    if (servicios) {
+      refetchMuestras();
+    }
+  }, [servicios, refetchMuestras]);
 
   const handleImageClick = (muestra) => {
     setSelectedMuestra(muestra);
@@ -61,22 +76,22 @@ const MuestrasPlantilla = () => {
   const cantidad = 4;
   const final = pages * cantidad;
   const inicial = final - cantidad;
+
   const handlePageChange = (page) => {
     setPages(page);
   };
 
-  const numeroPagina = Math.ceil((dataMuestras?.length || 0) / cantidad);
-
   const filteredData = dataMuestras
-    ? dataMuestras.filter((muestra) =>
-        muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    ? dataMuestras.filter((muestra) => {
+        return muestra?.codigo_muestra?.toLowerCase().includes(searchTerm.toLowerCase());
+      })
     : [];
 
+  const numeroPagina = Math.ceil((filteredData?.length || 0) / cantidad);
   const DataArrayPaginacion = filteredData
     ? filteredData?.slice(inicial, final)
     : [];
-
+console.log(numeroPagina)
   const handleEdit = (muestra) => {
     setDatosDelFormulario(muestra);
     setShowModal(true);
@@ -85,14 +100,20 @@ const MuestrasPlantilla = () => {
   const closemodal = () => {
     setDatosDelFormulario("");
     setShowModal(false);
+    // Actualizar la lista después de cerrar el modal
+    refetchMuestras();
   };
 
   const closeFincaModal = () => {
     setShowFincaModal(false);
+    // Actualizar la lista después de cerrar el modal
+    refetchMuestras();
   };
 
   const closeClienteModal = () => {
     setShowClienteModal(false);
+    // Actualizar la lista después de cerrar el modal
+    refetchMuestras();
   };
 
   if (isLoading) {
@@ -104,7 +125,9 @@ const MuestrasPlantilla = () => {
       <h2 className="text-2xl px-20 font-bold">{t("muestras")}</h2>
 
       <div className="px-20 flex gap-4 items-center">
-      {(userRole === "administrador" || userRole === "encargado" || userRole === "operario") && (
+        {(userRole === "administrador" ||
+          userRole === "encargado" ||
+          userRole === "operario") && (
           <Mybutton color={"primary"} onClick={handleModal}>
             {t("agregarMuestra")}
           </Mybutton>
@@ -131,13 +154,19 @@ const MuestrasPlantilla = () => {
 
       {showModal && (
         <ModalOrganismo
-          title={datosDelFormulario ? t("editarMuestra") : t("registrarMuestra")}
+          title={
+            datosDelFormulario ? t("editarMuestra") : t("registrarMuestra")
+          }
           visible={showModal}
           closeModal={closemodal}
         >
           <MuestrasFormulario
             dataValue={datosDelFormulario}
             closeModal={closemodal}
+            onSuccess={() => {
+              closemodal();
+              refetchMuestras();
+            }}
           />
         </ModalOrganismo>
       )}
@@ -148,7 +177,13 @@ const MuestrasPlantilla = () => {
           visible={showFincaModal}
           closeModal={closeFincaModal}
         >
-          <FincaFormulario closeModal={closeFincaModal} />
+          <FincaFormulario
+            closeModal={closeFincaModal}
+            onSuccess={() => {
+              closeFincaModal();
+              refetchMuestras();
+            }}
+          />
         </ModalOrganismo>
       )}
 
@@ -158,7 +193,13 @@ const MuestrasPlantilla = () => {
           visible={showClienteModal}
           closeModal={closeClienteModal}
         >
-          <ClienteFormulario closeModal={closeClienteModal} />
+          <ClienteFormulario
+            closeModal={closeClienteModal}
+            onSuccess={() => {
+              closeClienteModal();
+              refetchMuestras();
+            }}
+          />
         </ModalOrganismo>
       )}
 
@@ -194,7 +235,9 @@ const MuestrasPlantilla = () => {
                 <Td>
                   <Switch
                     isSelected={muestra.estado === "terminado"}
-                    color={muestra.estado === "terminado" ? "success" : "default"}
+                    color={
+                      muestra.estado === "terminado" ? "success" : "default"
+                    }
                   >
                     {muestra.estado}
                   </Switch>
@@ -205,7 +248,9 @@ const MuestrasPlantilla = () => {
                 <Td>
                   {muestra.fotoMuestra && (
                     <img
-                      src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${muestra.fotoMuestra}`}
+                      src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${
+                        muestra.fotoMuestra
+                      }`}
                       alt="Muestra"
                       className="cursor-pointer h-8 w-8 rounded object-cover"
                       onClick={() => handleImageClick(muestra)}
@@ -214,7 +259,6 @@ const MuestrasPlantilla = () => {
                 </Td>
                 <Td>
                   <div className="flex items-center space-x-4">
-                    {/* Solo el administrador puede editar */}
                     {userRole === "administrador" && (
                       <button
                         className="group bg-none flex cursor-pointer items-center justify-center h-[30px] w-[60px] rounded-[5px] border-none hover:rounded-full hover:bg-gray-400/30"
@@ -239,7 +283,9 @@ const MuestrasPlantilla = () => {
         >
           <div className="flex justify-center items-center">
             <img
-              src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${selectedMuestra.fotoMuestra}`}
+              src={`${import.meta.env.VITE_BASE_URL_MUESTRA}/${
+                selectedMuestra.fotoMuestra
+              }`}
               alt={`Muestra ${selectedMuestra.codigo_muestra}`}
               className="max-w-full max-h-[80vh] object-contain"
             />
@@ -249,10 +295,15 @@ const MuestrasPlantilla = () => {
 
       <div className="flex justify-center mt-5">
         <PaginationMolecula
-          currentPage={pages}
-          totalPages={numeroPagina}
-          onPageChange={handlePageChange}
+          initialPage={pages}
+          total={numeroPagina}
+          onChange={(page)=>setPages(page)}
         />
+        {/*  <PaginationMolecula
+          total={numeroPagina}
+          initialPage={pages}
+          onChange={handlePageChange}
+        /> */}
       </div>
     </section>
   );

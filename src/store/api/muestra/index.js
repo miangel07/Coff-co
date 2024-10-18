@@ -8,7 +8,7 @@ export const muestraApiSlice = createApi({
       baseUrl: import.meta.env.VITE_BASE_URL,
       headers: {
         "Content-Type": "application/json",
-        token: `${getCookie("authToken")}`
+        token: `${getCookie("Token")}`
       },
 }),
 
@@ -21,7 +21,7 @@ endpoints: (build) => ({
         url: "muestra/listar",
         method: "GET",
         headers: {
-          token: `${getCookie("authToken")}`,
+          token: `${getCookie("Token")}`,
         },
       }),
       providesTags:['Muestras']
@@ -31,7 +31,7 @@ endpoints: (build) => ({
         url: "muestra/listarTerminadas",
         method: "GET",
         headers: {
-          token: `${getCookie("authToken")}`,
+          token: `${getCookie("Token")}`,
         },
       }),
       providesTags:['Muestras']
@@ -44,7 +44,7 @@ endpoints: (build) => ({
         method:'POST',
         body:data,
         headers:{
-          token:`${getCookie('authToken')}`
+          token:`${getCookie('Token')}`
         },
       }),
       transformErrorResponse:(response,meta,arg)=>{
@@ -64,7 +64,7 @@ endpoints: (build) => ({
         method:'PUT',
         body:data,
         headers:{
-          token:`${getCookie('authToken')}`,
+          token:`${getCookie('Token')}`,
         },
       }),
       transformErrorResponse:(response,meta,arg)=>{
@@ -94,7 +94,7 @@ endpoints: (build) => ({
         url:`muestra/eliminar/${id}`,
         method:'DELETE',
         headers:{
-          token:`${getCookie('authToken')}`
+          token:`${getCookie('Token')}`
         }
       }),
       transformErrorResponse:(response,meta,arg)=>{

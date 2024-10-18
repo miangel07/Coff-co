@@ -8,7 +8,7 @@ export const excelApiSlice = createApi({
       baseUrl: import.meta.env.VITE_BASE_URL,
       headers: {
         "Content-Type": "application/json",
-        token: `${getCookie("authToken")}`
+        token: `${getCookie("Token")}`
       },
 }),
 
@@ -22,7 +22,7 @@ endpoints: (build) => ({
         method:'POST',
         body:data,
         headers:{
-          token:`${getCookie('authToken')}`
+          token:`${getCookie('Token')}`
         },
       }),
       transformErrorResponse:(response,meta,arg)=>{

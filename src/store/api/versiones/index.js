@@ -9,7 +9,7 @@ export const VersionesApi = createApi({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({

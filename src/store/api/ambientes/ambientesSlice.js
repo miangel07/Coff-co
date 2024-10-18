@@ -8,7 +8,7 @@ export const ambientesApiSlice = createApi({
     baseUrl: import.meta.env.VITE_BASE_URL,
     headers: {
       "Content-Type": "application/json",
-      token: `${getCookie("authToken")}`
+      token: `${getCookie("Token")}`
     },
   }),
   endpoints: (build) => ({
@@ -19,7 +19,7 @@ export const ambientesApiSlice = createApi({
         url: "ambiente/listar",
         method: "GET",
         headers: {
-          token: `${getCookie("authToken")}`,
+          token: `${getCookie("Token")}`,
         },
       }),
       providesTags:['Ambientes']
@@ -32,7 +32,7 @@ export const ambientesApiSlice = createApi({
         method:'POST',
         body:data,
         headers:{
-          token:`${getCookie('authToken')}`
+          token:`${getCookie('Token')}`
         },
       }),
       transformErrorResponse:(response,meta,arg)=>{
@@ -51,7 +51,7 @@ export const ambientesApiSlice = createApi({
         method:'PUT',
         body:data,
         headers:{
-          token:`${getCookie('authToken')}`,
+          token:`${getCookie('Token')}`,
         },
       }),
       transformErrorResponse:(response,meta,arg)=>{
@@ -69,7 +69,7 @@ export const ambientesApiSlice = createApi({
         url:`ambiente/eliminar/${id}`,
         method:'DELETE',
         headers:{
-          token:`${getCookie('authToken')}`
+          token:`${getCookie('Token')}`
         }
       }),
       transformErrorResponse:(response,meta,arg)=>{

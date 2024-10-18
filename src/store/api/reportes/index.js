@@ -14,12 +14,18 @@ export const repotesApi = createApi({
             query: () => ({
                 url: `/estadisticas/estadistica`,
                 method: "GET",
+                headers :{
+                    token: `${getCookie("Token")}`,
+                }
             }),
         }),
         getReporteAlquiler: build.query({
             query: () => ({
                 url: `/estadisticas/alquiler`,
                 method: "GET",
+                headers :{
+                    token: `${getCookie("Token")}`,
+                }
             }),
             transformErrorResponse: (response, arg) => {
                 return {
@@ -33,6 +39,9 @@ export const repotesApi = createApi({
                 url: `/reportes/generar`,
                 method: "POST",
                 body: data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                }
             }),
             transformErrorResponse: (response, arg) => {
                 return {

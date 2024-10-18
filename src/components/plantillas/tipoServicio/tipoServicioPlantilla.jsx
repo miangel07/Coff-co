@@ -64,8 +64,12 @@ const TipoServicioPlantilla = () => {
     setDatosDelFormulario(null);
     setShowModal(false);
   };
-
   const handleSwitchChange = async (checked, id) => {
+    if (rol !== "administrador") {
+      toast.error("Lo siento, no tiene permisos para realizar esta acción");
+      return;
+    }
+    
     try {
       await updateEstadoTipoServicio({
         id: id,
@@ -73,6 +77,7 @@ const TipoServicioPlantilla = () => {
       });
     } catch (error) {
       console.error("Error al procesar la solicitud", error);
+      toast.error("Ocurrió un error al actualizar el estado del servicio");
     }
   };
 

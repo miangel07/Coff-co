@@ -12,32 +12,46 @@ const FincaFormulario = ({ closeModal }) => {
   const { data: dataMunicipios, isLoading: isLoadingMunicipios, isError: MunicipioError } = useGetMunicipioQuery();
   
   const { register, handleSubmit, reset, formState: { errors }, setValue, watch } = useForm();
-  const [crearFinca, { isLoading, isError, data: dataResponse, isSuccess }] = usePostFincaMutation();
+  const [crearFinca, { isLoading, isError, data: dataResponse, error, isSuccess }] = usePostFincaMutation();
   const hasNotified = useRef(false);
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (isSuccess && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || "Finca registrada con éxito"}`);
-      hasNotified.current = true;
+    if (isSuccess ) {
+      toast.success(dataResponse?.message || "Finca registrada con éxito");
       closeModal();
-    } else if (isError && !hasNotified.current) {
-      toast.error("Error al registrar la finca");
-      hasNotified.current = true;
+      reset(); 
+
+    } 
+    if (isError ) {
+      toast.error(error?.error || "Error al registrar la finca");
+      closeModal();
+      reset(); 
+
+      return
     }
-  }, [isSuccess, isError, closeModal, dataResponse]);
+
+
+  }, [isSuccess, isError, closeModal, dataResponse, error, reset]);
+
+  useEffect(() => {
+    if (MunicipioError) {
+      toast.error("Error al cargar los municipios");
+    }
+  }, [MunicipioError]);
 
   const onSubmit = async (data) => {
     try {
       await crearFinca(data);
     } catch (error) {
-      toast.error("Error al guardar la finca");
-      console.log(error);
+      console.error("Error al guardar la finca:", error);
     }
   };
 
   if (isLoading || isLoadingMunicipios) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center h-full">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>;
   }
 
   return (
@@ -51,6 +65,7 @@ const FincaFormulario = ({ closeModal }) => {
             placeholder={t("nombreFinca")}
             register={register}
             erros={errors}
+            required
           />
           <InputAtomo
             type="text"
@@ -59,6 +74,7 @@ const FincaFormulario = ({ closeModal }) => {
             placeholder={t("nombreVereda")}
             register={register}
             erros={errors}
+            required
           />
           <SelectAtomo
             label={t("seleccioneMunicipio")}
@@ -67,12 +83,13 @@ const FincaFormulario = ({ closeModal }) => {
             items="id_municipio"
             ValueItem="nombre_municipio"
             value={watch("fk_id_municipio")}
+            required
           />
         </div>
 
         <div className="flex justify-center mt-4">
-          <Mybutton type="submit" color="primary">
-            {t("registrar")}
+          <Mybutton type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? t("registrando") : t("registrar")}
           </Mybutton>
         </div>
       </form>

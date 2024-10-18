@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useLoginUserMutation } from "../../../store/api/auth/index.js";
-import {useRegistrarUsuarioMutation } from "../../../store/api/users";
+import {useRegistrarUsuarioLoginMutation } from "../../../store/api/users";
 import { useGetRolQuery } from "../../../store/api/roles/index.js";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ const LoginComponent = () => {
   const [ver, setVer] = useState(true);
 
   //MUTACIONES
-  const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioMutation();
+  const [registrarUsuario, { isSuccess, datos, isError, error }] = useRegistrarUsuarioLoginMutation();
   const [loginUser, {isError: isErrorLogin, error: errorLogin}] = useLoginUserMutation();
   const {data: roles, isLoading: cargandoRoles}= useGetRolQuery();
 
@@ -54,8 +54,8 @@ const LoginComponent = () => {
         icon: <FcOk />,
       });
 
-      setOpenModal(false);
-      reset();
+      setModalRegistro(false);
+      resetRegistro();
     } catch (error) {
       const mensajesError = error.errors.join(', ');
       toast.error(mensajesError || "Ocurrió un error", {
