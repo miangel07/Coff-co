@@ -113,5 +113,11 @@
     "actualizarContraseña": "Update Password",
     "miPerfil": "My Profile",
     "logos": "Logos",
-    "ayuda": "Help"
+    "ayuda": "Help",
+    "manual_usuario":"User Manual",
+     "manual_tecnico":"technical manual",
+     "aqui_encontrar_manual_tecnico":"here find technical manual",
+     "aqui_encontrar_manual_usuario":"here find user manual",
+    "Ver_pdf":"watch pdf",
+    "descargar_pdf":"Descargar pdf"
 }

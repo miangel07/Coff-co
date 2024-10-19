@@ -25,6 +25,7 @@ const DocumentosPage = () => {
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
           <div className="w-full flex overflow-auto bg-gray-100">
+           
             <Documentos/>
           </div>
         </div>
