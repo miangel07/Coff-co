@@ -95,7 +95,7 @@ const Header = ({ color }) => {
 
                     <div className="w-[200px]">
                         <SelectDocumentos
-                            value={""}
+                            value={language}
                             data={idioma}
                             items={"value"}
                             label={<MdOutlineGTranslate size={28} />}
