@@ -34,6 +34,7 @@ const CambiosPlantilla = () => {
   return (
     <>
      <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
+      <h1>Cambios</h1>
      <div className="w-full px-20 h-auto overflow-y-auto">
           <TableMolecula>
             <Thead>

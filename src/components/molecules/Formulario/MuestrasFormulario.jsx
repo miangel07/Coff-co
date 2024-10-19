@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import SelectSearch from "../../atoms/SelectSearch";
@@ -11,7 +11,7 @@ import {
 } from "../../../store/api/muestra";
 import { useGetFincasQuery } from "../../../store/api/fincas";
 import { useGetClientesQuery } from "../../../store/api/users";
-import { useGetTipoServicioQuery } from "../../../store/api/TipoServicio";
+import { useGetTipoServicioActivoQuery } from "../../../store/api/TipoServicio";
 import { useTranslation } from "react-i18next";
 
 const MuestrasFormulario = ({ closeModal, dataValue }) => {
@@ -21,7 +21,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [Servicio, setServicio] = useState("");
   const { data: dataUsuarios, isLoading: isLoadingUsuarios } = useGetClientesQuery();
   const { data: dataFincas, isLoading: isLoadingFincas } = useGetFincasQuery();
-  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } = useGetTipoServicioQuery();
+  const { data: dataTipoServicio, isLoading: isLoadingTipoServicio } = useGetTipoServicioActivoQuery();
   const { t } = useTranslation();
   const {
     register,
@@ -31,7 +31,6 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
     setValue,
     watch,
   } = useForm();
-  console.log(dataValue)
   const [crearMuestra, { isLoading, isError, data: dataResponse, isSuccess }] = usePostMuestraMutation();
   const [editarMuestra, { isLoading: isLoadingEdit, isError: isErrorEdit, data: dataResponseEdit, isSuccess: isSuccessEdit }] = usePutMuestraMutation();
 
@@ -40,66 +39,7 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
-  useEffect(() => {
-    const today = new Date().toLocaleDateString('en-CA', {
-      timeZone: 'America/Bogota',
-    });
 
-    if (dataValue) {
-      reset({
-        cantidadEntrada: dataValue?.cantidadEntrada || '',
-        fecha_muestra: dataValue?.fecha_muestra || today,
-        altura: dataValue?.altura || '',
-        variedad: dataValue?.variedad || '',
-        observaciones: dataValue?.observaciones || '',
-        codigoExterno: dataValue?.codigoExterno || '',
-      })
-      setUnidadMedida(dataValue.UnidadMedida || '');
-    } else {
-      reset({
-        fecha_muestra: today,
-      });
-    }
-
-    if ((isSuccess || isSuccessEdit) && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || dataResponseEdit?.message}`);
-      hasNotified.current = true;
-      closeModal();
-    } else if ((isError || isErrorEdit) && !hasNotified.current) {
-      toast.error("Error al procesar la muestra");
-      hasNotified.current = true;
-    }
-  }, [dataValue, isSuccess, isSuccessEdit, isError, isErrorEdit, reset, closeModal, dataResponse, dataResponseEdit, setValue]);
-
-  const onSubmit = async (data) => {
-    try {
-      const formData = new FormData();
-
-      formData.append('cantidadEntrada', data.cantidadEntrada);
-      formData.append('fk_id_finca', Finca);
-      formData.append('fecha_muestra', data.fecha_muestra);
-      formData.append('fk_id_usuarios', usuario);
-      formData.append('variedad', data.variedad);
-      formData.append('altura', data.altura);
-      formData.append('observaciones', data.observaciones);
-      formData.append('codigoExterno', data?.codigoExterno || null);
-      formData.append('fk_idTipoServicio', Servicio);
-      formData.append('UnidadMedida', UnidadMedida);
-      formData.append('fotoMuestra', previewImage);
-      if(!previewImage){
-        toast.error("La imagen es Obligatoria");
-        return;
-      }
-      if(UnidadMedida === "" ){
-        toast.error("La unidad de medida es obligatoria");
-        return;
-      }
-      await crearMuestra(formData);
-    } catch (error) {
-      toast.error("Error al guardar la muestra");
-      console.error(error);
-    }
-  };
 
   const hadleEditar = async(data) => {
     const formData = new FormData();
@@ -123,6 +63,103 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
     }
     await editarMuestra(formData);
   }
+  const resetForm = useCallback(() => {
+    const today = new Date().toLocaleDateString('en-CA', {
+      timeZone: 'America/Bogota',
+    });
+
+    if (dataValue) {
+      reset({
+        cantidadEntrada: dataValue?.cantidadEntrada || '',
+        fecha_muestra: dataValue?.fecha_muestra || today,
+        altura: dataValue?.altura || '',
+        variedad: dataValue?.variedad || '',
+        observaciones: dataValue?.observaciones || '',
+        codigoExterno: dataValue?.codigoExterno || '',
+      });
+      setUnidadMedida(dataValue.UnidadMedida || '');
+      setUsuario(dataValue.fk_id_usuarios || '');
+      setFinca(dataValue.fk_id_finca || '');
+      setServicio(dataValue.fk_idTipoServicio || '');
+      setImagePreviewUrl(dataValue.fotoMuestra || null);
+    } else {
+      reset({
+        fecha_muestra: today,
+      });
+      setUnidadMedida('');
+      setUsuario('');
+      setFinca('');
+      setServicio('');
+      setImagePreviewUrl(null);
+    }
+  }, [dataValue, reset]);
+
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
+
+  useEffect(() => {
+    if (isSuccess ) {
+      toast.success(`${dataResponse?.message }`);
+      closeModal();
+    } 
+    if (isSuccessEdit) {
+      toast.success(`${dataResponseEdit?.message}`);
+      closeModal();
+    } 
+    if (isError) {
+      toast.success(`${dataResponse?.error}`);
+      closeModal();
+    } 
+     if ( isErrorEdit) {
+      toast.error(`Error: ${dataResponseEdit?.error}`);
+      closeModal();
+    }
+
+  }, [isSuccess, isSuccessEdit, isError, isErrorEdit, closeModal, dataResponse, dataResponseEdit]);
+
+  const onSubmit = async (data) => {
+    try {
+      if (!previewImage && !dataValue) {
+        toast.error("La imagen es obligatoria");
+        return;
+      }
+      if (UnidadMedida === "") {
+        toast.error("La unidad de medida es obligatoria");
+        return;
+      }
+      if (!usuario || !Finca || !Servicio) {
+        toast.error("Todos los campos son obligatorios");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('cantidadEntrada', data.cantidadEntrada);
+      formData.append('fk_id_finca', Finca);
+      formData.append('fecha_muestra', data.fecha_muestra);
+      formData.append('fk_id_usuarios', usuario);
+      formData.append('variedad', data.variedad);
+      formData.append('altura', data.altura);
+      formData.append('observaciones', data.observaciones);
+      formData.append('codigoExterno', data?.codigoExterno || null);
+      formData.append('fk_idTipoServicio', Servicio);
+      formData.append('UnidadMedida', UnidadMedida);
+      
+      if (previewImage) {
+        formData.append('fotoMuestra', previewImage);
+      }
+
+      if (dataValue) {
+        formData.append('id_muestra', dataValue.id_muestra);
+        await editarMuestra(formData);
+      } else {
+        await crearMuestra(formData);
+      }
+    } catch (error) {
+      console.error("Error al procesar la muestra:", error);
+      toast.error("Error al procesar la muestra");
+    }
+  };
 
   const handleImageChange = (e) => {
     e.preventDefault();
@@ -145,7 +182,9 @@ const MuestrasFormulario = ({ closeModal, dataValue }) => {
   ];
 
   if (isLoading || isLoadingEdit || isLoadingUsuarios || isLoadingFincas || isLoadingTipoServicio) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center h-full">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>;
   }
 
   return (

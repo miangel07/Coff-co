@@ -14,7 +14,7 @@ const Logos = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-x-hidden">
+      <div className="h-screen  bg-gray-100 flex flex-col overflow-x-hidden">
         <Header  />
         <div className="flex flex-grow">
           <div

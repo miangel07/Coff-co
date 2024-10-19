@@ -65,6 +65,10 @@ const TipoDocumentoPlantilla = () => {
 
   const handleSwitchChange = async (checked, id) => {
     try {
+      if (id == 5) {
+        toast.error(" No se puede desactivar este  tipo de documento");
+        return;
+      }
       if (rol !== "administrador") {
         toast.error(" Lo siento no tiene permisos para realizar esta acción");
         return;
@@ -89,13 +93,13 @@ const TipoDocumentoPlantilla = () => {
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
       <h2 className="text-2xl px-20 font-bold">{t("tipoDocumentos")}</h2>
-      <div className="px-20">
+      <div className="px-20 justify-center flex  items-center">
         {
           rol === "administrador" &&
           (
             <>
               <Mybutton color="primary" onClick={handleModal}>
-              {t("nuevo")}
+                {t("nuevo")}
               </Mybutton>
             </>
           )

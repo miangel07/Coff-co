@@ -14,36 +14,28 @@ const ClienteFormulario = ({ closeModal }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (isSuccess && !hasNotified.current) {
-      toast.success(`${dataResponse?.message || "Usuario registrado con éxito"}`);
-      hasNotified.current = true;
-      closeModal();
-    } else if (isError && !hasNotified.current) {
-      // Si hay errores específicos desde el backend, los mostramos
-      if (error?.data?.errors) {
-        error.data.errors.forEach((msg) => toast.error(msg));
-      } else if (error?.data?.message) {
-        // Mostrar el mensaje general si no hay una lista de errores
-        toast.error(error.data.message);
-      } else {
-        // En caso de que no haya un mensaje específico, mostramos un error genérico
-        toast.error("Error al registrar el usuario");
-      }
-      hasNotified.current = true;
+    if (isError ) {
+        toast.error(error.errors);
+        return
     }
-  }, [isSuccess, isError, closeModal, dataResponse, error]);
+
+    if (isSuccess ) {
+      toast.success(`${dataResponse.message}`);
+      closeModal(); 
+    }
+  }, [isError, isSuccess, error, closeModal]);
 
   const onSubmit = async (data) => {
     try {
       const userData = {
         ...data,
         rol: 3,
-        estado: 'inactivo'
+        estado: 'inactivo',
+        password: '123'
       };
       console.log("Datos enviados:", userData);
       await crearUsuario(userData);
     } catch (error) {
-      toast.error("Error al guardar el usuario");
       console.error(error);
     }
   };
@@ -53,8 +45,6 @@ const ClienteFormulario = ({ closeModal }) => {
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
     </div>;
   }
-
-
 
   return (
    
@@ -102,7 +92,7 @@ const ClienteFormulario = ({ closeModal }) => {
               erros={errors}
             />
           </div>
-          <div className="input-wrapper">
+          {/* <div className="input-wrapper">
             <InputAtomo
               type="password"
               id="password"
@@ -111,7 +101,7 @@ const ClienteFormulario = ({ closeModal }) => {
               register={register}
               erros={errors}
             />
-          </div>
+          </div> */}
           <div className="input-wrapper">
             <InputAtomo
               type="number"

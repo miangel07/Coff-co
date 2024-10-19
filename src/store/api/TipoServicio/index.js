@@ -7,7 +7,7 @@ export const TipoServicioApi = createApi({
         baseUrl: import.meta.env.VITE_BASE_URL,
         headers: {
             "Content-Type": "application/json",
-            token: `${getCookie("authToken")}`,
+            token: `${getCookie("Token")}`,
         },
     }),
     endpoints: (build) => ({
@@ -16,11 +16,25 @@ export const TipoServicioApi = createApi({
                 url: "tiposervicio/listar",
                 method: "GET",
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             providesTags: ['TipoServicio']
         }),
+
+
+        GetTipoServicioActivo: build.query({
+            query: () => ({
+                url: "tiposervicio/listarTipoServActivos",
+                method: "GET",
+                headers: {
+                    token: `${getCookie("Token")}`,
+                },
+            }),
+            providesTags: ['TipoServicio']
+        }),
+
+
 
         PostTipoServicio: build.mutation({
             query: (data) => ({
@@ -28,7 +42,7 @@ export const TipoServicioApi = createApi({
                 method: "POST",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -44,7 +58,7 @@ export const TipoServicioApi = createApi({
                 method: "PUT",
                 body: data,
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             transformErrorResponse: (response) => ({
@@ -60,7 +74,7 @@ export const TipoServicioApi = createApi({
                 method: "PUT",
                 body: { estado: data.estado }, // Asegúrate de enviar el estado en el cuerpo
                 headers: {
-                    token: `${getCookie("authToken")}`,
+                    token: `${getCookie("Token")}`,
                 },
             }),
             invalidatesTags: ["TipoServicio"],
@@ -92,4 +106,5 @@ export const TipoServicioApi = createApi({
 });
 
 export const { useGetTipoServicioQuery, usePostTipoServicioMutation,
-    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, useValidarServcioDocumentoMutation,useTipoServicioActivoQuery } = TipoServicioApi;
+    usePutTipoServicioMutation, useUpdateEstadoTipoServicioMutation, 
+    useValidarServcioDocumentoMutation,useTipoServicioActivoQuery, useGetTipoServicioActivoQuery } = TipoServicioApi;
