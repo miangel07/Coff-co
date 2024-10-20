@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
+import enLocale from "@fullcalendar/core/locales/en-gb";
+
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 import {
@@ -22,8 +24,13 @@ import SelectSearch from "../../atoms/SelectSearch";
 import { confirmAlert } from "react-confirm-alert";
 import { MdDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
+import { TraslateContex } from "../../../context/TranslationoContex";
 
 const CalendarPlantilla = () => {
+
+  const {language} = useContext(TraslateContex)
+  const locales = {es:esLocale,en:enLocale}
+
   const { data: dataAlquiler } = useGetAlquilerQuery();
   const { data: dataAmbientes } = useGetAmbientesQuery();
   const { data: dataUsuariosAlquiler } = useGetUsuariosAlquilerQuery();
@@ -208,7 +215,7 @@ const CalendarPlantilla = () => {
               events={reservas}
               dateClick={handleDateClick} // Llama a handleDateClick al hacer clic en una fecha
               eventClick={manejadorReservaSeleccionada}
-              locale={esLocale}
+              locale={locales[language]}
             />
           </div>
         </div>

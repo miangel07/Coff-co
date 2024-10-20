@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModalOrganismo from "../Modal/ModalOrganismo";
 import {
   useObtenerIdTipoServicioMutation,
@@ -15,8 +15,10 @@ import Mybutton from "../../atoms/Mybutton";
 import { AuthContext } from "../../../context/AuthContext";
 import { toast } from "react-toastify";
 import SelectSearch from "../../atoms/SelectSearch";
+import { useTranslation } from "react-i18next";
 
 const RegistrarServicio = ({ visible, closeModal }) => {
+  const {t}=useTranslation()
   const {
     setValue,
     register,
@@ -25,32 +27,81 @@ const RegistrarServicio = ({ visible, closeModal }) => {
     formState: { errors },
   } = useForm();
 
-  const [obtenerVariables] = useObtenerVariablesParaServicioMutation();
-  const [obtenerPrecio] = useObtenerPrecioSegunTipoServicioMutation();
-  const [registrarServicio] = useRegistrarServicioMutation();
+  const [
+    obtenerVariables,
+    {
+      isSuccess: isSuccessObtenerVariables,
+      isError: isErrorObtenerVariables,
+      error: errorObtenerVariables,
+      data: dataObtenerVariables
+    },
+  ] = useObtenerVariablesParaServicioMutation();
+  const [
+    obtenerPrecio,
+    {
+      isSuccess: isSuccessPrecios,
+      isError: isErrorPrecios,
+      error: errorPrecios,
+    },
+  ] = useObtenerPrecioSegunTipoServicioMutation();
+  const [
+    registrarServicio,
+    {
+      isSuccess: isSuccessRegistroServicio,
+      isError: isErrorRegistroServicio,
+      error: errorRegistroServicio,
+      data: dataRegistroServicio,
+    },
+  ] = useRegistrarServicioMutation();
   const [obtenerTipoServicio] = useObtenerIdTipoServicioMutation();
   const { authData } = useContext(AuthContext);
   const { data: dataAmbientes } = useGetAmbientesQuery();
   const { data: dataMuestras } = useObtenerMuestrasParaServicioQuery();
-
   const [muestraSeleccionada, setMuestraSeleccionada] = useState("");
-  console.log("muestra seleccionada: ", muestraSeleccionada);
   const [precios, setPrecios] = useState([]);
   const [precioActual, setPrecioActual] = useState("");
   const [ambienteActual, setAmbienteActual] = useState("");
   const [variables, setVariables] = useState([]);
   const [tipoServicioSeleccionado, setTipoServicioSeleccionado] =
     useState(null);
-  console.log("id tipo servicio: ", tipoServicioSeleccionado);
+
+  useEffect(() => {
+    if (isErrorPrecios) {
+      toast.error(`${errorPrecios.error}`);
+      if (isSuccessRegistroServicio) {
+        toast.success(`${dataRegistroServicio.message}`);
+      }
+    }
+    if (isErrorObtenerVariables) {
+      toast.error(`${errorObtenerVariables.error}`);
+      if (isSuccessObtenerVariables) {
+        toast.success(`${dataObtenerVariables.message}`);
+      }
+    }
+  }, [
+    isErrorPrecios,
+    errorPrecios,
+    isErrorObtenerVariables,
+    errorObtenerVariables,
+  ]);
+
+  const manejadorObtencionPrecioParaTipoServicio = async (id_muestra) => {
+    try {
+
+      const respuesta = await obtenerPrecio({ id_muestra }).unwrap();
+      setPrecios(respuesta);
+    } catch (error) {
+      console.error("Error al obtener los precios: " + error.message);
+    }
+  };
 
   const manejadorobtenerVariables = async (id_muestra) => {
-    manejadorObtencionPrecioParaTipoServicio(id_muestra);
     try {
+      manejadorObtencionPrecioParaTipoServicio(id_muestra);
       const respuesta = await obtenerVariables({ id_muestra }).unwrap();
 
       // Verificar si hay al menos una respuesta y si el nombre del documento existe
       if (respuesta.length === 0 || !respuesta[0].documento_nombre) {
-        alert("No se encontró un documento asociado. No puede continuar.");
         return; // Detener el proceso
       }
       setVariables(respuesta);
@@ -60,15 +111,6 @@ const RegistrarServicio = ({ visible, closeModal }) => {
       setTipoServicioSeleccionado(fk_idTipoServicio);
     } catch (error) {
       console.error("Error al obtener las variables: " + error.message);
-    }
-  };
-
-  const manejadorObtencionPrecioParaTipoServicio = async (id_muestra) => {
-    try {
-      const respuesta = await obtenerPrecio({ id_muestra }).unwrap();
-      setPrecios(respuesta);
-    } catch (error) {
-      console.error("Error al obtener los precios: " + error.message);
     }
   };
 
@@ -122,16 +164,16 @@ const RegistrarServicio = ({ visible, closeModal }) => {
         <ModalOrganismo
           visible={visible}
           closeModal={cerrarModal}
-          title="Nuevo Servicio"
+          title={t('Nuevo Servicio')}
         >
           <form onSubmit={handleSubmit(onSubmitRegistro)}>
             <div className="mb-10 space-y-6 ">
               <SelectSearch
-                label="Ingresar muestra"
+                label={t('muestra')}
                 valueCampos={[
                   {
                     value: "codigo_muestra",
-                    label: "codigo muestra",
+                    label: t('Codigo muestra'),
                   },
                 ]}
                 data={dataMuestras}
@@ -143,23 +185,26 @@ const RegistrarServicio = ({ visible, closeModal }) => {
                   manejadorobtenerVariables(value); // Llama a la función con el id_muestra seleccionado
                 }}
               />
-
               <SelectAtomo
                 data={precios}
-                label="Selecciona la Presentación"
+                label={t('Selecciona la Presentación')}
                 items="idPrecio"
                 ValueItem="presentacion"
                 value={precioActual}
                 onChange={(e) => {
                   const idPrecio = e.target.value;
                   setPrecioActual(idPrecio);
-                  manejadorObtencionPrecioParaTipoServicio(e);
                   setValue("fk_idPrecio", idPrecio);
+                  manejadorObtencionPrecioParaTipoServicio(
+                    muestraSeleccionada,
+                    idPrecio
+                  );
                 }}
               />
+
               <SelectAtomo
                 data={dataAmbientes}
-                label="Selecciona el Ambiente"
+                label={t('Selecciona el Ambiente')}
                 items="idAmbiente"
                 ValueItem="nombre_ambiente"
                 value={ambienteActual}
@@ -174,7 +219,7 @@ const RegistrarServicio = ({ visible, closeModal }) => {
               {variables.length > 0 && (
                 <div className="mt-4">
                   <div>
-                    <h2>Variables del servicio:</h2>
+                    <h2>{t('Variables del servicio')}</h2>
                   </div>
                   {variables.map((variable) => {
                     return (
@@ -188,7 +233,7 @@ const RegistrarServicio = ({ visible, closeModal }) => {
                               ? "number"
                               : "text"
                           }
-                          placeholder={`Ingrese ${variable.variable_nombre}`}
+                          placeholder={`${t('Ingrese')} ${variable.variable_nombre}`}
                           id={`variable_${variable.idVariable}`}
                           name={`variable_${variable.idVariable}`}
                           register={register}
@@ -202,7 +247,7 @@ const RegistrarServicio = ({ visible, closeModal }) => {
             </div>
             <div className="flex justify-center mt-6">
               <Mybutton color={"primary"} type="submit">
-                Enviar
+                {t('Enviar')}
               </Mybutton>
             </div>
           </form>

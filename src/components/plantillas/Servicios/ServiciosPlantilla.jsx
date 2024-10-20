@@ -1,49 +1,54 @@
-import React, { useState } from 'react'
-import MostrarServicios from '../../organismo/servicios/MostrarServiciosOrganismo'
-import RegistrarServicio from '../../organismo/servicios/RegistrarServicioOrganismo'
-import Mybutton from '../../atoms/Mybutton'
-import Search from '../../atoms/Search'
+import React, { useContext, useState } from "react";
+import MostrarServicios from "../../organismo/servicios/MostrarServiciosOrganismo";
+import RegistrarServicio from "../../organismo/servicios/RegistrarServicioOrganismo";
+import Mybutton from "../../atoms/Mybutton";
+import Search from "../../atoms/Search";
+import { AuthContext } from "../../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const ServiciosPlantilla = () => {
+  const {t}=useTranslation()
+  const { authData } = useContext(AuthContext);
 
-  const [modalRegistroVisible,setModalRegistroVisible ] = useState(false)
+  const [modalRegistroVisible, setModalRegistroVisible] = useState(false);
   const [filtro, setFiltro] = useState("");
 
-  const abrirModalRegistro =()=>{
-    setModalRegistroVisible(true)
-  }
+  const rol = authData.usuario.rol;
 
-  const cerrarModalRegistro=()=>{
-    setModalRegistroVisible(false)
-  }
+  const abrirModalRegistro = () => {
+    setModalRegistroVisible(true);
+  };
 
+  const cerrarModalRegistro = () => {
+    setModalRegistroVisible(false);
+  };
 
   return (
     <>
-     <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
-     <div className="pt-10 pl-20 justify-center flex items-center">
+      <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
+        <div className="pt-10 pl-20 justify-center flex items-center">
           <div className="pt-10 pl-20">
             <Mybutton
               color={"primary"}
               onClick={() => abrirModalRegistro(null)}
             >
-              <b>Nuevo Servicio</b>
+              <b>{t('Nuevo servicio')}</b>
             </Mybutton>
           </div>
-            <Search
-            label={'Filtro'}
-            placeholder={'Filtro por muestra...'}
-            onchange={(e)=> setFiltro(e.target.value)}
-            />
+          <Search
+            label={t('Filtro')}
+            placeholder={t("Filtro por muestra...")}
+            onchange={(e) => setFiltro(e.target.value)}
+          />
         </div>
-      <MostrarServicios filtro={filtro}/>
-      <RegistrarServicio
-      visible={modalRegistroVisible}
-      closeModal={cerrarModalRegistro}
-      />
-      </div> 
+        <MostrarServicios filtro={filtro} />
+        <RegistrarServicio
+          visible={modalRegistroVisible}
+          closeModal={cerrarModalRegistro}
+        />
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default ServiciosPlantilla
+export default ServiciosPlantilla;

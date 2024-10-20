@@ -1,14 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import TableMolecula from '../molecules/table/TableMolecula';
-import Thead from '../molecules/table/Thead';
-import Tbody from '../molecules/table/Tbody';
-import Th from './Th';
-import Td from './Td';
-import PaginationMolecula from '../molecules/pagination/PaginationMolecula';
-import Mybutton from './Mybutton';
+import React, { useState, useEffect } from "react";
+import TableMolecula from "../molecules/table/TableMolecula";
+import Thead from "../molecules/table/Thead";
+import Tbody from "../molecules/table/Tbody";
+import Th from "./Th";
+import Td from "./Td";
+import PaginationMolecula from "../molecules/pagination/PaginationMolecula";
+import Mybutton from "./Mybutton";
+import { useTranslation } from "react-i18next";
 
-const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, placeholder }) => {
-  //COMO USARLO 
+const SelectSearch = ({
+  label,
+  valueCampos,
+  onChange,
+  data,
+  idKey,
+  labelKey,
+  placeholder,
+}) => {
+  const { t } = useTranslation();
+  //COMO USARLO
   //___________________________LO DECLARA NORMAL DONDE LO VALLAN A USAR
   /*     <SelectSearch
           label="Usuario">> el label normal
@@ -24,7 +34,7 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
           labelKey="nombre">>> lo que se va acargar al input del serch
           onChange={(value) => setUsuario(value)} este es el valor que se seleciono en el search osea idKey que es id_usuario 
         /> */
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState("");
   const [filteredData, setFilteredData] = useState(data);
   const [showTable, setShowTable] = useState(true);
   const [pages, setPages] = useState(1);
@@ -32,7 +42,7 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
   const cantidad = 4;
   const final = pages * cantidad;
   const inicial = final - cantidad;
-  const numeroPagina = Math.ceil((filteredData?.length > 0 || 0) / cantidad)
+  const numeroPagina = Math.ceil((filteredData?.length > 0 || 0) / cantidad);
   const DataArrayPaginacion = filteredData
     ? filteredData?.slice(inicial, final)
     : [];
@@ -40,12 +50,11 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
     setPages(page);
   };
   useEffect(() => {
-
-    if (filter === '') {
+    if (filter === "") {
       setShowTable(true);
       setFilteredData(data);
     } else {
-      const filtered = data.filter(item =>
+      const filtered = data.filter((item) =>
         item[labelKey].toLowerCase().includes(filter.toLowerCase())
       );
       setFilteredData(filtered);
@@ -67,10 +76,9 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
         id={label}
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        placeholder={placeholder || `Buscar ${label}`}
+        placeholder={placeholder || `${t("Buscar")} ${label}`}
         className="border p-2 w-full mb-4"
       />
-
 
       {showTable && (
         <>
@@ -81,17 +89,14 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
                   {campo.label}
                 </Th>
               ))}
-              <Th className="border px-4 py-2">Acciones</Th>
-
+              <Th className="border px-4 py-2">{t("Acciones")}</Th>
             </Thead>
             <Tbody>
-
               {DataArrayPaginacion.map((item) => (
                 <tr key={item[idKey]}>
-
                   {valueCampos.map((campo, index) => (
                     <Td key={index} className="border px-4 py-2">
-                      {item[campo.value] || '-'}
+                      {item[campo.value] || "-"}
                     </Td>
                   ))}
                   <Td className="border px-4 py-2">
@@ -99,7 +104,7 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
                       onClick={() => handleSelect(item)}
                       color={"primary"}
                     >
-                      Seleccionar
+                      {t("Seleccionar")}
                     </Mybutton>
                   </Td>
                 </tr>
@@ -112,7 +117,6 @@ const SelectSearch = ({ label, valueCampos, onChange, data, idKey, labelKey, pla
             onChange={handlePageChange}
           />
         </>
-
       )}
     </div>
   );

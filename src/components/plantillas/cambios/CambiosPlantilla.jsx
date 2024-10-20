@@ -1,49 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import TableMolecula from "../../molecules/table/TableMolecula";
 import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
-import { useListarCambiosQuery } from '../../../store/api/servicio/serviciosSlice';
-import Td from '../../atoms/Td';
+import { useListarCambiosQuery } from "../../../store/api/servicio/serviciosSlice";
+import Td from "../../atoms/Td";
+import { useTranslation } from "react-i18next";
 
 const CambiosPlantilla = () => {
 
-    const {data:dataCambios, isLoading, refetch} = useListarCambiosQuery()
+  const {t}=useTranslation()
 
-    const [paginaActual, setPaginaActual] = useState(1);
-    const [filtro, setfiltro] = useState("");
-    const itemsPorPagina = 4;
+  const { data: dataCambios, isLoading, refetch } = useListarCambiosQuery();
 
-    const indiceUltimoItem = paginaActual * itemsPorPagina;
-    const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
-  
-    const cambiosFiltrados = dataCambios
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [filtro, setfiltro] = useState("");
+  const itemsPorPagina = 4;
+
+  const indiceUltimoItem = paginaActual * itemsPorPagina;
+  const indicePrimerItem = indiceUltimoItem - itemsPorPagina;
+
+  const cambiosFiltrados = dataCambios
     ? dataCambios.filter((ambiente) => {
-      const nombre = filtro === "" ||
-        ambiente.nombre_ambiente && ambiente.nombre_ambiente.toLowerCase().includes(filtro)
-      return nombre;
-    }
-    )
+        const nombre =
+          filtro === "" ||
+          (ambiente.nombre_ambiente &&
+            ambiente.nombre_ambiente.toLowerCase().includes(filtro));
+        return nombre;
+      })
     : [];
 
-  const currentItems = dataCambios ? cambiosFiltrados.slice(indicePrimerItem, indiceUltimoItem) : [];
+  const currentItems = dataCambios
+    ? cambiosFiltrados.slice(indicePrimerItem, indiceUltimoItem)
+    : [];
   const totalPages = Math.ceil(cambiosFiltrados.length / itemsPorPagina);
-
-
 
   return (
     <>
-     <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
-      <h1>Cambios</h1>
-     <div className="w-full px-20 h-auto overflow-y-auto">
+      <div className="w-auto h-screen  flex flex-col gap-8 bg-gray-100">
+        <div className="w-full px-20 pt-10 h-auto overflow-y-auto">
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Descripción</Th>
-              <Th>Fecha</Th>
-              <Th>Muestra</Th>
-              <Th>Quien cambio</Th>
-              <Th>Rol</Th>
+              <Th>{t("Descripción")}</Th>
+              <Th>{t('Fecha')}</Th>
+              <Th>{t('Muestra')}</Th>
+              <Th>{t('Responsable')}</Th>
+              <Th>{t('Rol')}</Th>
             </Thead>
             <Tbody>
               {currentItems.length > 0 ? (
@@ -69,9 +72,9 @@ const CambiosPlantilla = () => {
             </Tbody>
           </TableMolecula>
         </div>
-        </div> 
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default CambiosPlantilla
+export default CambiosPlantilla;
