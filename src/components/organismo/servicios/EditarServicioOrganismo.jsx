@@ -9,6 +9,7 @@ import InputAtomo from "../../atoms/Input";
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 const EditarServicioOrganismo = ({
   visible,
   closeModal,
@@ -16,6 +17,8 @@ const EditarServicioOrganismo = ({
   servicio,
 }) => {
   const { authData } = useContext(AuthContext);
+
+  const {t} = useTranslation()
 
   const {
     setValue,
@@ -25,13 +28,20 @@ const EditarServicioOrganismo = ({
     formState: { errors },
   } = useForm();
 
-  const [editarValoresVariables] = useEditarValoresPorServicioMutation();
+  const [editarValoresVariables,{isSuccess:isSuccessEditarValores,isError:isErrorEditarVariables,error:errorEditarVariables}] = useEditarValoresPorServicioMutation();
   const [registrarCambio] = useRegistrarCambioDelServicioMutation();
 
   const cerrarModal = () => {
     reset(); // Resetea los valores del formulario
     closeModal(); // Llama a la función que cierra el modal
   };
+
+  useEffect(()=>{
+    if(isErrorEditarVariables){
+      toast.error(`${errorEditarVariables.error}`)
+    }
+  },[isErrorEditarVariables,errorEditarVariables])
+
 
 
   useEffect(() => {
@@ -76,7 +86,7 @@ const EditarServicioOrganismo = ({
       toast.success("Valores editados con exito!.");
       cerrarModal();
     } catch (error) {
-      toast.error("Error al procesar el servicio: " + error.message);
+      console.error("Error al procesar el servicio: " + error.message);
     }
   };
 
@@ -86,50 +96,15 @@ const EditarServicioOrganismo = ({
         <ModalOrganismo
           visible={visible}
           closeModal={cerrarModal}
-          title="Editar valores del servicio"
+          title={t('Editar valores del servicio')}
         >
           <form onSubmit={handleSubmit(onsubmitEditarValoresVariables)}>
             <div className="mb-10 space-y-6 ">
-              {/* <InputAtomo
-                type="text"
-                id="tipo_servicio"
-                name="tipo_servicio"
-                placeholder="Tipo de servicio"
-                register={register}
-                isReadOnly={true}
-                erros={errors}
-              />
-              <InputAtomo
-                type="text"
-                id="codigo_muestra"
-                name="codigo_muestra"
-                placeholder="Código muestra"
-                register={register}
-                isReadOnly={true}
-                erros={errors}
-              />
-              <InputAtomo
-                type="text"
-                id="presentacion"
-                name="presentacion"
-                placeholder="Presentación"
-                register={register}
-                isReadOnly={true}
-                erros={errors}
-              />
-              <InputAtomo
-                type="text"
-                id="nombre_ambiente"
-                name="nombre_ambiente"
-                placeholder="Nombre ambiente"
-                register={register}
-                isReadOnly={true}
-                erros={errors}
-              /> */}
+
               {variablesUpdate.length > 0 && (
                 <div className="mt-4">
                   <div>
-                    <h2>Variables del servicio:</h2>
+                    <h2>{t('Variables del servicio')}</h2>
                   </div>
                   {variablesUpdate.map((variable) => {
                     return (
@@ -143,7 +118,7 @@ const EditarServicioOrganismo = ({
                           }
                           id={`variable_${variable.idVariable}`}
                           name={`variable_${variable.idVariable}`}
-                          placeholder={`Ingrese ${variable.nombre_variable}`}
+                          placeholder={`${t('Ingrese')} ${variable.nombre_variable}`}
                           register={register}
                           defaultValue={variable.valor || ""}
                           erros={errors}
@@ -164,7 +139,7 @@ const EditarServicioOrganismo = ({
             </div>
             <div className="flex justify-center mt-6">
               <Mybutton color={"primary"} type="submit">
-                Enviar
+                {t('Enviar')}
               </Mybutton>
             </div>
           </form>

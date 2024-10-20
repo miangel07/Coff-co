@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   useActualizarEstadoServicioMutation,
   useGetServicioQuery,
@@ -9,15 +9,19 @@ import Thead from "../../molecules/table/Thead";
 import Th from "../../atoms/Th";
 import Tbody from "../../molecules/table/Tbody";
 import Td from "../../atoms/Td";
-import Mybutton from "../../atoms/Mybutton";
 import PaginationMolecula from "../../molecules/pagination/PaginationMolecula";
 import { Spinner, Switch } from "@nextui-org/react";
 import ModalServicioTerminado from "./ModalServicioTerminadoOrganismo";
 import { toast } from "react-toastify";
 import EditarServicioOrganismo from "./EditarServicioOrganismo";
 import { FaRegEdit } from "react-icons/fa";
+import { AuthContext } from "../../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const MostrarServicios = ({ filtro }) => {
+
+  const {t} = useTranslation()
+  const {authData} = useContext(AuthContext)
   const {
     data: dataServicios,
     isLoading: isLoadingServicios,
@@ -27,7 +31,6 @@ const MostrarServicios = ({ filtro }) => {
   const [obtencionVariablesUpdate] =
     useObtenerVariablesParaActualizarServicioMutation();
   const [variablesUpdate, setVariablesUpdate] = useState([]);
-  console.log("variables con valores: ", variablesUpdate);
   const [modalServicioTerminado, setModalServicioTerminado] = useState(false); // Para controlar la visibilidad del modal
   const [abrirModalEditarValores, setAbrirModalEditarValores] = useState(false);
   const [servicioId, setServicioId] = useState(null); // Para almacenar el ID del servicio seleccionado
@@ -54,6 +57,8 @@ const MostrarServicios = ({ filtro }) => {
     indicePrimerItem,
     indiceUltimoItem
   );
+
+  const rol = authData.usuario.rol
 
   if (isLoadingServicios) {
     return (
@@ -85,16 +90,15 @@ const MostrarServicios = ({ filtro }) => {
   };
 
   const abrirModalEditarValor = async (servicio) => {
-    console.log("servicio pasado al abrir : ", servicio);
     try {
       const respuesta = await obtencionVariablesUpdate({
         id_servicios: servicio.id_servicios,
       }).unwrap();
       setVariablesUpdate(respuesta);
     } catch (error) {}
-  
+
     // Aquí pasamos el servicio completo al modal
-    setServicioId(servicio);  // Guarda el servicio completo en vez de solo el id
+    setServicioId(servicio); // Guarda el servicio completo en vez de solo el id
     setAbrirModalEditarValores(true);
   };
 
@@ -102,8 +106,6 @@ const MostrarServicios = ({ filtro }) => {
     setAbrirModalEditarValores(false); // Cierra el modal
     setVariablesUpdate([]); // Limpia las variables cargadas previamente
   };
-
-
 
   const manejadorCambioEstadoSwitch = (checked, id, tipo_servicio) => {
     const nuevoEstado = checked ? "en proceso" : "terminado";
@@ -175,15 +177,15 @@ const MostrarServicios = ({ filtro }) => {
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Tipo servicio</Th>
-              <Th>Fecha</Th>
-              <Th>Nombre ambiente</Th>
-              <Th>Codigo muestra</Th>
-              <Th>Presentación</Th>
-              <Th>Encargado</Th>
-              <Th>Rol</Th>
-              <Th>Estado</Th>
-              <Th>Acciones</Th>
+              <Th>{t('Tipo servicio')}</Th>
+              <Th>{t('Fecha')}</Th>
+              <Th>{t('Nombre ambiente')}</Th>
+              <Th>{t('Codigo muestra')}</Th>
+              <Th>{t('Presentación')}</Th>
+              <Th>{t('Encargado')}</Th>
+              <Th>{t('Rol')}</Th>
+              <Th>{t('Estado')}</Th>
+              <Th>{t('Acciones')}</Th>
             </Thead>
             <Tbody>
               {DataArrayPaginacion.length > 0 ? (
@@ -221,12 +223,16 @@ const MostrarServicios = ({ filtro }) => {
                       </Switch>
                     </Td>
                     <Td>
-                        <div className="flex flex-row gap-6">
-                        <FaRegEdit
-                        size={"35px"}
-                        onClick={() => abrirModalEditarValor(servicio)}
-                      />
-                        </div>
+                      <div className="flex flex-row gap-6">
+                        {rol === "administrador" && (
+                          <>
+                            <FaRegEdit
+                              size={"35px"}
+                              onClick={() => abrirModalEditarValor(servicio)}
+                            />
+                          </>
+                        )}
+                      </div>
                     </Td>
                   </tr>
                 ))
@@ -234,7 +240,7 @@ const MostrarServicios = ({ filtro }) => {
                 <tr>
                   <td colSpan={10} className="text-center">
                     <h1 className="text-2xl">
-                      <b>No hay datos</b>
+                      <b>{t('No hay datos')}</b>
                     </h1>
                   </td>
                 </tr>
@@ -264,7 +270,7 @@ const MostrarServicios = ({ filtro }) => {
             closeModal={cerrarModal}
             title="Editar valores del servicio"
             variablesUpdate={variablesUpdate}
-            servicio={servicioId} 
+            servicio={servicioId}
           />
         </div>
       </div>
