@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalOrganismo from "../Modal/ModalOrganismo";
 import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
@@ -6,8 +6,10 @@ import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
 import {
   useActualizarEstadoServicioMutation,
+  useObtenerDatosDeLaMuestraSegunServicioQuery,
   useServicioTerminadoMutation,
 } from "../../../store/api/servicio/serviciosSlice";
+import { useTranslation } from "react-i18next";
 
 const ModalServicioTerminado = ({
   visible,
@@ -20,8 +22,26 @@ const ModalServicioTerminado = ({
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const {t} = useTranslation()
+
   const [registroServicioTerminado] = useServicioTerminadoMutation();
   const [actualizarEstadoServicio] = useActualizarEstadoServicioMutation();
+  const { data: dataDelaMuestra } = useObtenerDatosDeLaMuestraSegunServicioQuery(servicioId);
+
+  const [unidadMedidaMuestra, setUnidadMedidaMuestra] = useState("");
+
+  useEffect(() => {
+    if (dataDelaMuestra && dataDelaMuestra.length > 0) {
+      const muestra = dataDelaMuestra[0]; 
+      if (muestra.UnidadMedida) {
+        setUnidadMedidaMuestra(muestra.UnidadMedida);
+      } else {
+        console.log('No se encontró UnidadMedida en la muestra');
+      }
+    }
+  }, [dataDelaMuestra]);
+  
 
   const onSubmitServicioTerminado = async (data) => {
     const payload = {
@@ -47,7 +67,7 @@ const ModalServicioTerminado = ({
           );
         });
 
-        cerrarModal();
+      cerrarModal();
     } catch (error) {
       toast.error("Error al registrar el servicio terminado: " + error.message);
     }
@@ -59,20 +79,20 @@ const ModalServicioTerminado = ({
         <ModalOrganismo
           visible={visible}
           closeModal={cerrarModal}
-          title="Registro termino de servicio"
+          title={t("Registro termino de servicio")}
         >
           <form onSubmit={handleSubmit(onSubmitServicioTerminado)}>
             <InputAtomo
               type="number"
               id="cantidad_salida"
               name="cantidad_salida"
-              placeholder="cantidad de salida"
+              placeholder={`${t('Cantidad de salida en')} (${unidadMedidaMuestra})`} 
               register={register}
               erros={errors}
             />
             <div className="flex justify-center mt-6">
               <Mybutton color={"primary"} type="submit">
-                Enviar
+                {t('Enviar')}
               </Mybutton>
             </div>
           </form>

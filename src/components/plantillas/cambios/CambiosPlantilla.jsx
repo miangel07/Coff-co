@@ -9,8 +9,11 @@ import PaginationMolecula from '../../molecules/pagination/PaginationMolecula';
 import Search from '../../atoms/Search';
 import { FaRegEye } from "react-icons/fa";
 import ToolTip from '../../molecules/toolTip/ToolTip';
+import { useTranslation } from 'react-i18next';
 
 const CambiosPlantilla = () => {
+
+  const {t}= useTranslation()
 
   const { data: dataCambios, isLoading, refetch } = useListarCambiosQuery()
 
@@ -46,11 +49,11 @@ console.log(data)
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Descripción</Th>
-              <Th>Fecha</Th>
-              <Th>Muestra</Th>
-              <Th>Quien cambio</Th>
-              <Th>Rol</Th>
+              <Th>{t("Descripción")}</Th>
+              <Th>{t('Fecha')}</Th>
+              <Th>{t('Muestra')}</Th>
+              <Th>{t('Responsable')}</Th>
+              <Th>{t('Rol')}</Th>
 
             </Thead>
             <Tbody>
@@ -70,7 +73,7 @@ console.log(data)
                 <tr>
                 <td colSpan={10} className="text-center">
                   <h1 className="text-2xl">
-                    <b>No hay datos</b>
+                    <b>{t('No hay datos')}</b>
                   </h1>
                 </td>
               </tr>
