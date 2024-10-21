@@ -143,7 +143,6 @@ const UsersPlantilla = () => {
       setOpenModal(false);
       
       // Reinicia el formulario utilizando el reset proveido por useForm de react
-      reset();
     } catch (error) {
       // En caso de error, obtiene los mensajes de error y los une en una cadena
       const mensajesError = error.errors.join(', ');
@@ -265,7 +264,7 @@ const UsersPlantilla = () => {
   
   return (
     <>
-    <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
+    <div className=" flex rounded-tl-xl flex-col gap-8 overflow-y-hidden">
 
     {/* TABLA */}
     <div className="flex pt-5 justify-center items-center ">
