@@ -34,7 +34,7 @@ const GraficaDocumento = () => {
                         borderWidth: 2
                     },
                     label: {
-                        show: true,
+                        show: false,
                         position: 'outside',
                         formatter: '{b}: {c}',
                     },

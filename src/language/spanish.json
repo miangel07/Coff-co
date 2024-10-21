@@ -115,5 +115,11 @@
     "actualizarContraseña": "Actualizar Contraseña",
     "miPerfil": "Mi perfil",
     "logos": "Logos",
-    "ayuda": "Ayuda"
+    "ayuda": "Ayuda",
+    "manual_usuario":"Manual de Usuario",
+    "manual_tecnico":"Manual Tecnico",
+    "aqui_encontrar_manual_tecnico":"Aqui encontrar el manual tecnico",
+    "aqui_encontrar_manual_usuario":"Aqui encontrar el manual de usuario",
+         "Ver_pdf":"Ver Pdf",
+     "descargar_pdf":"download pdf"
 }

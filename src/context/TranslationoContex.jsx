@@ -9,10 +9,10 @@ export const TranslateProvider = ({ children }) => {
 
     useEffect(() => {
         i18n.changeLanguage(language);
-        localStorage.setItem("lenguague", language)
     }, [language])
     const changeLanguage = (lang) => {
         setLanguage(lang)
+        localStorage.setItem("lenguague", lang)
     }
     const value = {
         changeLanguage,

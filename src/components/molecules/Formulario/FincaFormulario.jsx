@@ -17,19 +17,21 @@ const FincaFormulario = ({ closeModal }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (isSuccess && !hasNotified.current) {
+    if (isSuccess ) {
       toast.success(dataResponse?.message || "Finca registrada con éxito");
-      hasNotified.current = true;
       closeModal();
-      reset(); // Limpiar el formulario después de un registro exitoso
-    } else if (isError && !hasNotified.current) {
+      reset(); 
+
+    } 
+    if (isError ) {
       toast.error(error?.error || "Error al registrar la finca");
-      hasNotified.current = true;
+      closeModal();
+      reset(); 
+
+      return
     }
 
-    return () => {
-      hasNotified.current = false;
-    };
+
   }, [isSuccess, isError, closeModal, dataResponse, error, reset]);
 
   useEffect(() => {

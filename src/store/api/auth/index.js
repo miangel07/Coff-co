@@ -7,6 +7,7 @@ export const authApi = createApi({
     baseUrl: import.meta.env.VITE_BASE_URL,
     headers: {
       "Content-Type": "application/json",
+      token: `${getCookie("Token")}`
     },
   }),
   endpoints: (build) => ({
@@ -39,7 +40,7 @@ export const authApi = createApi({
         url: `user/list`,
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getCookie("authToken")}`,
+          Authorization: `Bearer ${getCookie("Token")}`,
         },
       }),
     }),

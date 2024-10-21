@@ -100,6 +100,23 @@ export const servicioApiSlice = createApi({
             invalidatesTags:['servicios']
         }),
 
+        //obtener los datos de la muestra segun el id del servicio
+        obtenerDatosDeLaMuestraSegunServicio: build.query({
+            query: (id) => ({
+                url: `servicios/gedatosmuestra/${id}`,
+                method: 'GET'
+            }),
+            transformErrorResponse: (response, meta, arg) => {
+                return {
+                    originalArg: arg,
+                    error: response.data.message
+                };
+            },
+            providesTags: ['servicios']
+        }),
+
+
+
         //registrar servicio
         registrarServicio:build.mutation({
             query:(data)=>({
@@ -194,8 +211,7 @@ export const servicioApiSlice = createApi({
             },
             invalidatesTags:['servicios']
         })
-
-
+   
     })
 })
 
@@ -204,4 +220,4 @@ export const { useGetServicioQuery,useObtenerMuestrasParaServicioQuery,
     useEliminarServicioMutation, useActualizarEstadoServicioMutation, 
     useObtenerVariablesParaServicioMutation,useEditarValoresPorServicioMutation,
     useObtenerIdTipoServicioMutation,useObtenerVariablesParaActualizarServicioMutation, 
-    useObtenerPrecioSegunTipoServicioMutation,useListarCambiosQuery} = servicioApiSlice;
+    useObtenerPrecioSegunTipoServicioMutation,useListarCambiosQuery,useObtenerDatosDeLaMuestraSegunServicioQuery} = servicioApiSlice;
