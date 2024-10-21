@@ -27,8 +27,12 @@ import InputAtomo from "../../atoms/Input";
 import SelectAtomo from "../../atoms/Select";
 import Search from "../../atoms/Search";
 import { AuthContext } from "../../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const PreciosPlantilla = () => {
+
+  const {t} = useTranslation()
+
   const [paginaActual, setPaginaActual] = useState(1);
   const { authData } = useContext(AuthContext)
   const itemsPorPagina = 4;
@@ -229,7 +233,7 @@ const PreciosPlantilla = () => {
             rol === "administrador" && (
               <>
                 <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
-                  <b>Nuevo Precio</b>
+                  <b>{t('Nuevo Precio')}</b>
                 </Mybutton>
               </>
             )
@@ -237,19 +241,19 @@ const PreciosPlantilla = () => {
 
           <Search
             label={""}
-            placeholder={"buscar precio"}
+            placeholder={t("buscar precio")}
             onchange={(e) => setfiltro(e.target.value)} />
         </div>
         <div className="w-full px-20 h-auto overflow-y-auto">
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Presentacion</Th>
-              <Th>Precio</Th>
-              <Th>Tipo servicio</Th>
-              <Th>Unida de Medida</Th>
-              <Th>Estado</Th>
-              <Th>{rol === "administrador" ? "Acciones" : ""}</Th>
+              <Th>{t('Presentacion')}</Th>
+              <Th>{t('Precio')}</Th>
+              <Th>{t('Tipo servicio')}</Th>
+              <Th>{t('unidadMedida')}</Th>
+              <Th>{t('estado')}</Th>
+              <Th>{rol === "administrador" ? t('acciones') : ""}</Th>
             </Thead>
             <Tbody>
               {articulosActualesPrecio.length > 0 ? (
@@ -312,7 +316,7 @@ const PreciosPlantilla = () => {
                 <tr>
                   <td colSpan={6} className="text-center">
                     <h1 className="text-2xl">
-                      <b>No hay datos</b>
+                      <b>{t('No hay datos')}</b>
                     </h1>
                   </td>
                 </tr>
@@ -347,7 +351,7 @@ const PreciosPlantilla = () => {
                 type="text"
                 id="presentacion"
                 name="presentacion"
-                placeholder="presentacion"
+                placeholder={t("Presentacion")}
                 register={register}
                 erros={errors}
               />
@@ -355,7 +359,7 @@ const PreciosPlantilla = () => {
                 type="number"
                 id="precio"
                 name="precio"
-                placeholder="Ingrese el precio"
+                placeholder={t("Ingrese el precio")}
                 register={register}
                 erros={errors}
               />
@@ -363,7 +367,7 @@ const PreciosPlantilla = () => {
                 <div className="flex gap-2 flex-col">
                   <SelectAtomo
                     data={dataTipoServicio}
-                    label="Tipo de servicio"
+                    label={t("tipoServicios")}
                     onChange={(e) => {
                       setValue("fk_idTipoServicio", e.target.value);
                       setTipoServicioActual(e.target.value);
@@ -376,7 +380,7 @@ const PreciosPlantilla = () => {
                     value={UnidadMedida}
                     data={dataUnidadMedida}
                     items={"value"}
-                    label={"unidad de medida"}
+                    label={t('unidadMedida')}
                     ValueItem={"label"}
                     onChange={(e) => setUnidadMedida(e.target.value)}
                   />
@@ -385,7 +389,7 @@ const PreciosPlantilla = () => {
             </div>
             <div className="flex justify-center mt-6">
               <Mybutton color={"primary"} type="submit">
-                {precioSeleccionado ? "Actualizar" : "Registrar"}
+                {precioSeleccionado ? "Actualizar" : t('registrar')}
               </Mybutton>
             </div>
           </form>

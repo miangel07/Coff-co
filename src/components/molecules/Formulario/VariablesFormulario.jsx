@@ -8,7 +8,12 @@ import {
 } from "../../../store/api/variables";
 import Mybutton from "../../atoms/Mybutton";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
+
 const VariablesFormulario = ({ closeModal, dataValue }) => {
+  const { t } = useTranslation();
+
   const [tipoDato, setTipoDato] = useState("");
   const [unidadadMedida, setUnidadMedida] = useState("");
   const {
@@ -109,7 +114,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
           <InputAtomo
             name={"nombre"}
             erros={errors}
-            placeholder={"Ingrese el nombre"}
+            placeholder={t("nombre")}
             register={register}
             type={"text"}
             id={"nombre"}
@@ -118,7 +123,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
             value={tipoDato}
             data={TipoDatos}
             items={"value"}
-            label={"Seleccione El Tipo de Dato"}
+            label={t("tipoDeDatos")}
             ValueItem={"label"}
             onChange={(e) => setTipoDato(e.target.value)}
           />
@@ -126,7 +131,7 @@ const VariablesFormulario = ({ closeModal, dataValue }) => {
             value={unidadadMedida}
             data={UnidadadMedidas}
             items={"value"}
-            label={"Selecione la unidad de medida"}
+            label={t("unidadMedida")}
             ValueItem={"label"}
             onChange={(e) => setUnidadMedida(e.target.value)}
           />

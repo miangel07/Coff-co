@@ -121,5 +121,15 @@
     "aqui_encontrar_manual_tecnico":"Aqui encontrar el manual tecnico",
     "aqui_encontrar_manual_usuario":"Aqui encontrar el manual de usuario",
          "Ver_pdf":"Ver Pdf",
-     "descargar_pdf":"download pdf"
+     "descargar_pdf":"download pdf",
+     "generarreportepdf": "Generar reporte PDF",
+     "generarreporteexcel": "Generar reporte EXCEL",
+     "reporteservicios": "Reporte de Servicios",
+     "facturaalquiler": "Factura Alquiler",
+     "registrarVariable": "Registrar nueva variable"
+
+
+
+
+
 }
