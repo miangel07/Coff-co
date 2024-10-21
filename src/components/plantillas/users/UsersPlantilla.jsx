@@ -265,7 +265,7 @@ const UsersPlantilla = () => {
   
   return (
     <>
-    <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
+    <div className=" flex rounded-tl-xl flex-col gap-8 overflow-y-hidden">
 
     {/* TABLA */}
     <div className="flex pt-5 justify-center items-center ">
