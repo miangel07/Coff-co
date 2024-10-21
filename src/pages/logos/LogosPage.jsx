@@ -14,17 +14,13 @@ const Logos = () => {
 
   return (
     <>
-      <div className="h-screen  bg-gray-100 flex flex-col overflow-x-hidden">
+      <div className="h-screen flex flex-col overflow-x-hidden">
         <Header  />
         <div className="flex flex-grow">
-          <div
-            className={`transition-all duration-300 ease-in-out ${
-              menuAbierto ? "w-60" : "w-16"
-            }bg-gray-100`}
-          >
+          <div>
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
-          <div className="w-full overflow-auto">
+          <div className="w-full rounded-tl-xl bg-gray-100 overflow-auto">
             <LogosPlantilla />
           </div>
         </div>

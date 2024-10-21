@@ -111,7 +111,6 @@ const LogosPlantilla = () => {
     const closeLogoModal = () => {setOpenLogoModal(false);};
      
     const onsubmit = async (data) => {
-      console.log("data",data);
       const formData = new FormData();
       formData.append('file', data.file[0]);
       formData.append('nombre', data.nombre);
@@ -129,6 +128,7 @@ const LogosPlantilla = () => {
           },
           icon: <FcOk />,
         });
+        setOpenModal(false);
       } catch (error) {
         console.error("Error:", error);
         toast.error(error.error || "Ocurrió un error", {
@@ -139,10 +139,8 @@ const LogosPlantilla = () => {
             color: "#fff",
           },
         });
+        setOpenModal(false);
       }
-    
-      reset();
-      setOpenModal(false);
     };
     
     //SUBMIT ACTUALIZAR

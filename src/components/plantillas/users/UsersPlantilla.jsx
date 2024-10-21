@@ -143,7 +143,6 @@ const UsersPlantilla = () => {
       setOpenModal(false);
       
       // Reinicia el formulario utilizando el reset proveido por useForm de react
-      reset();
     } catch (error) {
       // En caso de error, obtiene los mensajes de error y los une en una cadena
       const mensajesError = error.errors.join(', ');
