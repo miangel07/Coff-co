@@ -17,6 +17,7 @@ import { AuthContext } from "../../../context/AuthContext";
 import { useGetMuestrasQuery } from "../../../store/api/muestra";
 import { useGetServicioQuery } from "../../../store/api/servicio/serviciosSlice.js";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 const MuestrasPlantilla = () => {
   const [showModal, setShowModal] = useState(false);
@@ -238,6 +239,7 @@ console.log(numeroPagina)
                     color={
                       muestra.estado === "terminado" ? "success" : "default"
                     }
+                    onClick={()=>toast.error("La muestra no puede cambiar de estado...")}
                   >
                     {muestra.estado}
                   </Switch>
