@@ -17,7 +17,11 @@ export const preciosSlice = createApi({
             query:()=>({
                 url:'precio/listar',
                 method:'GET',
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
+            
             providesTags:['precios']
         }),
 
@@ -40,6 +44,9 @@ export const preciosSlice = createApi({
             query:(data)=>({
                 url:`precio/actualizar/${data.id}`,
                 method:'PUT',
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
                 body:data,
             }),
             transformErrorResponse:(response,meta,arg)=>{
@@ -57,6 +64,9 @@ export const preciosSlice = createApi({
                 url:`precio/actualizarestadoprecio/${data.id}`,
                 method:'PUT',
                 body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },  
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -72,6 +82,9 @@ export const preciosSlice = createApi({
             query:(id)=>({
                 url:`precio/eliminar/${id}`,
                 method:'DELETE',
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
