@@ -79,28 +79,28 @@ const LogosPlantilla = () => {
     
     //CAMBIAR EL ESTADO DEL LOGO
     const handleSwitchChange = async (id, nombre) => {
-    confirmAlert({
-      title: 'Confirmación',
-      message: `¿Cambiar el estado del Logo ${id},  ${nombre}?`,
-      buttons: [
-        {
-          label: 'Sí',
-          onClick: async () => {
-            try {
-              await actualizarEstado(id).unwrap();
-              toast.success("Estado actualizado con éxito");
-            } catch (error) {
-              console.error('Error al actualizar el estado:', error);
+      confirmAlert({
+        title: `${t("confirmacion")}`,
+        message: `¿ ${t("cambioestadologo")} ${id},  ${nombre}?`,
+        buttons: [
+          {
+            label: 'Sí',
+            onClick: async () => {
+              try {
+                await actualizarEstado(id).unwrap();
+                toast.success(t("cambioestadoexitoso"));
+              } catch (error) {
+                console.error(t("cambioestadofallido"), error);
+              }
             }
+          },
+          {
+            label: 'No',
+            onClick: () => toast.warn(t("operacioncancelada"))
           }
-        },
-        {
-          label: 'No',
-          onClick: () => toast.warn('Operacion cancelada')
-        }
-      ],
-      closeOnClickOutside: true,
-    });
+        ],
+        closeOnClickOutside: true,
+      });
     };  
     
     useEffect(() => {
@@ -111,7 +111,6 @@ const LogosPlantilla = () => {
     const closeLogoModal = () => {setOpenLogoModal(false);};
      
     const onsubmit = async (data) => {
-      console.log("data",data);
       const formData = new FormData();
       formData.append('file', data.file[0]);
       formData.append('nombre', data.nombre);
@@ -129,6 +128,7 @@ const LogosPlantilla = () => {
           },
           icon: <FcOk />,
         });
+        setOpenModal(false);
       } catch (error) {
         console.error("Error:", error);
         toast.error(error.error || "Ocurrió un error", {
@@ -139,10 +139,8 @@ const LogosPlantilla = () => {
             color: "#fff",
           },
         });
+        setOpenModal(false);
       }
-    
-      reset();
-      setOpenModal(false);
     };
     
     //SUBMIT ACTUALIZAR
@@ -188,12 +186,12 @@ const LogosPlantilla = () => {
       <div className=" flex rounded-tl-xl flex-col gap-8 bg-gray-100 overflow-y-hidden">
 
     {/* TABLA */}
-      <div className="flex justify-center items-center ">
+    <div className="flex justify-center items-center ">
         {Rol === "administrador" ? (<div className="pt-10 pl-20">
-        <Mybutton onClick={handleClick} color={"primary"}>Nuevo Logo<IoAtCircle/></Mybutton>
+        <Mybutton onClick={handleClick} color={"primary"}>{t("nuevo")} logo<IoAtCircle/></Mybutton>
       </div>) : null}
       <div className="w-[550px] pt-10 pl-20 ">
-          <Search label={""} placeholder={"Buscar..."} onchange={(e) => setBusqueda(e.target.value)} />
+          <Search label={""} placeholder={t("buscar")} onchange={(e) => setBusqueda(e.target.value)} />
       </div>
       <div className="pt-10 pl-20 ">
           <Switch
@@ -208,11 +206,11 @@ const LogosPlantilla = () => {
         <TableMolecula lassName="w-full">
           <Thead>
             <Th>ID</Th>
-            <Th>Nombre</Th>
+            <Th>{t("nombre")}</Th>
             {/* <Th>Ruta</Th> */}
             <Th>Logo</Th>
-            <Th>Editar</Th>
-            <Th>Estado</Th>
+            <Th>{t("editar")}</Th>
+            <Th>{t("estado")}</Th>
           </Thead>
           <Tbody>
             {elementosActuales.length>0?(
@@ -271,7 +269,7 @@ const LogosPlantilla = () => {
     {/* MODAL REGISTRO*/}
     {openModal && (
           <ModalOrganismo
-          logo={""}
+          logo={<Logosímbolo />}
           children={
             <UserFrom
               onsubmit={handleSubmit(onsubmit)}
@@ -282,7 +280,7 @@ const LogosPlantilla = () => {
                   name={"nombre"}
                   erros={errors}
                   id={"nombre"}
-                  placeholder={"Ingrese el nombre de el logo"}
+                  placeholder={t("ingreseNombreLogo")}
                   type={"text"}
                 />
                 <InputAtomo
@@ -292,14 +290,14 @@ const LogosPlantilla = () => {
                   name={"file"}
                   erros={errors}
                   id={"file"}
-                  placeholder={"Selecciona tu logo"}
+                  placeholder={t("seleccionaTuLogo")}
                   type={"file"}
                 />
                 </>
               }/>
           }
           visible={true}
-          title={"Registro de Logo"}
+          title={t("registroDeLogo")}
           closeModal={closeModal}
         />
     )}
@@ -308,7 +306,7 @@ const LogosPlantilla = () => {
     {/* MODAL ACTUALIZAR*/}
     {openModalActualizar && (
     <ModalOrganismo
-      logo={""}
+      logo={<Logosímbolo />}
       children={
         <UserFrom
           onsubmit={handleSubmit(onsubmitActualizar)}
@@ -319,7 +317,7 @@ const LogosPlantilla = () => {
                 name={"nombre"}
                 errores={errors}
                 id={"nombre"}
-                placeholder={"Ingrese el nombre del logo"}
+                placeholder={t("ingreseNombreLogo")}
                 type={"text"}
                 defaultValue={logoSeleccionado?.nombre || ""}
               />
@@ -329,7 +327,7 @@ const LogosPlantilla = () => {
                   name={"file"}
                   errores={errors}
                   id={"file"}
-                  placeholder={"Selecciona tu nuevo logo"}
+                  placeholder={t("seleccionaTuLogo")}
                   type={"file"}
                   defaultValue={logoSeleccionado?.ruta || ""}
                   isRequired={false} 
@@ -340,7 +338,7 @@ const LogosPlantilla = () => {
         />
       }
       visible={true}
-      title={"Actualizar Logo"}
+      title={t("actualizarLogo")}
       closeModal={closeModalActualizar}
     />
 

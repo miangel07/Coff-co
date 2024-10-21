@@ -320,7 +320,7 @@ const PerfilPlantilla = () => {
 const Contenedor = styled.div`
     .cont-item{
         background: linear-gradient(to bottom, #c8c8c846, #e9e9e9a9, #ffffffad);
-        border-radius: 15px 15px 0 0;
+        border-radius: 15px 0 0 0;
         padding-top: 15px;
     }
     .cont-prin{
@@ -328,7 +328,6 @@ const Contenedor = styled.div`
         flex-direction: column;
         align-items: center;
         height: 85vh;
-        overflow-y: scroll;
     }
     .card-content{
         width: 60vw;

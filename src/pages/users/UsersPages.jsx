@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import UsersPlantilla from "../../components/plantillas/users/UsersPlantilla";
 import Header from "../../components/molecules/layout/Header";
-import DropDownMenu from "../../components/molecules/users/DropDownMenu";
 import Navbar from "../../components/molecules/Navbar/Navbar";
 import Footer from "../../components/molecules/Footer/Footer";
 
@@ -25,7 +24,7 @@ const UsersPages = () => {
           >
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
-          <div className="w-full overflow-auto">
+          <div className="w-full rounded-tl-xl bg-gray-100 overflow-auto">
             <UsersPlantilla />
           </div>
         </div>
