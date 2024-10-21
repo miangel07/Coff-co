@@ -19,7 +19,7 @@ const MuestrasPage = () => {
             className={`transition-all duration-300 ease-in-out`}>
             <Navbar menuAbierto={menuAbierto} toggleMenu={toggleMenu} />
           </div>
-          <div className="w-full overflow-auto">
+          <div className="w-full overflow-auto bg-gray-100">
             <MuestrasPlantilla />
           </div>
         </div>
