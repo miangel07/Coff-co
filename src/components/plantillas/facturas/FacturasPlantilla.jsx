@@ -17,6 +17,8 @@ import { useForm } from "react-hook-form";
 import InputAtomo from "../../atoms/Input";
 import Search from "../../atoms/Search";
 import FacturasAlquiler from "./FacturasAlquiler";
+import { useTranslation } from "react-i18next";
+
 
 const FacturasPlantilla = () => {
   const [datosFactura, setDatosDelFormulario] = useState([]);
@@ -26,6 +28,7 @@ const FacturasPlantilla = () => {
   const [pages, setPages] = useState(1);
   const [generaFactura, { isLoading: isLoadingFactura, isSuccess, data: dataFactura }] = useGeneraFacturaMutation();
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { t } = useTranslation();
 
   const handleFactura = async (codigo) => {
     console.log(codigo);
@@ -85,7 +88,7 @@ const FacturasPlantilla = () => {
   }
   return (
     <section className="w-full mt-5 gap-4 flex flex-wrap flex-col">
-      <h2 className="text-2xl px-20  font-bold">Facturas</h2>
+      <h2 className="text-2xl px-20  font-bold">{t("facturas")}</h2>
       <div className="w-full px-20 overflow-x-auto flex gap-2 flex-col ">
         {showModal &&
           <ModalOrganismo visible={showModal} closeModal={closeModal}>
@@ -99,7 +102,7 @@ const FacturasPlantilla = () => {
           </ModalOrganismo>}
         <div className="flex flex-row justify-between items-center">
           <Mybutton color={"primary"} onClick={handleFacturaAlquiler}>
-            Facura Alquiler
+          {t("facturaalquiler")}
           </Mybutton>
           <div>
 
@@ -110,13 +113,13 @@ const FacturasPlantilla = () => {
         <TableMolecula>
           <Thead>
             <Th>ID</Th>
-            <Th>Código</Th>
-            <Th>Cantidad</Th>
-            <Th>Fecha</Th>
-            <Th>Finca</Th>
-            <Th>Usuario</Th>
-            <Th>Estado</Th>
-            <Th>Acciones</Th>
+            <Th>{t("Codigo")}</Th>
+            <Th>{t("cantidad")}</Th>
+            <Th>{t("fecha")}</Th>
+            <Th>{t("finca")}</Th>
+            <Th>{t("usuario")}</Th>
+            <Th>{t("estado")}</Th>
+            <Th>{t("acciones")}</Th>
           </Thead>
           <Tbody>
             {DataArrayPaginacion?.map((muestra) => (

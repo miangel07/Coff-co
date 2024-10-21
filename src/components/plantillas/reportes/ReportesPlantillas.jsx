@@ -14,6 +14,9 @@ import { toast } from "react-toastify";
 import { Spinner } from "@nextui-org/react";
 import ReporteExcel from '../../molecules/Formulario/ExcelForm.jsx'
 import GraficaAlquiler from '../../molecules/graficas/GraficaAlquiler.jsx'
+import { useTranslation } from "react-i18next";
+
+
 
 const ReportesPlantillas = () => {
   const [show, setShow] = useState(false)
@@ -23,6 +26,7 @@ const ReportesPlantillas = () => {
   const { data: tipoServicio, isLoading: tipoLoading, isError: tipoError } = useGetTipoServicioQuery();
   const [postReporteTipoServicio, { isSuccess, data: dataReporte, isError: errorReporte, error }] = usePostRepoteTipoServcioMutation();
   const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm()
+  const { t } = useTranslation();
   const handleReporte = (data) => {
 
     postReporteTipoServicio(
@@ -96,13 +100,13 @@ const ReportesPlantillas = () => {
         }
         <section>
 
-          <h2 className='text-2xl font-bold'>Reporte de Servicios</h2>
+          <h2 className='text-2xl font-bold'>{t("reporteservicios")}</h2>
           <div className='flex flex-row gap-3'>
             <Mybutton color={"primary"} onClick={() => setShow(true)}>
-              Generar Repote Pdf
+            {t("generarreportepdf")}
             </Mybutton>
             <Mybutton color={"primary"} onClick={() => setExcel(true)}>
-              Generar Repote Excel
+            {t("generarreporteexcel")}
             </Mybutton>
 
           </div>
