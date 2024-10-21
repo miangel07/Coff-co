@@ -143,7 +143,7 @@ const VariablesPlantilla = () => {
 
   return (
     <section className="w-full   mt-5 gap-4 flex flex-wrap flex-col">
-      <h2 className="text-2xl px-20 font-bold">Variables</h2>
+      <h2 className="text-2xl px-20 font-bold">{t("variables")}</h2>
       <div className="px-20   w-full flex flex-wrap justify-between items-center">
         {
           rol === "administrador" &&

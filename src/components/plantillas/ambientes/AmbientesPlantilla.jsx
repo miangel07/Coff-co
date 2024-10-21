@@ -24,9 +24,12 @@ import ToolTip from "../../molecules/toolTip/ToolTip";
 import InputAtomo from "../../atoms/Input";
 import { AuthContext } from "../../../context/AuthContext";
 import Search from "../../atoms/Search";
+import { useTranslation } from "react-i18next";
 
 
 const AmbientesPlantilla = () => {
+
+  const {t} = useTranslation()
   const [paginaActual, setPaginaActual] = useState(1);
   const [filtro, setfiltro] = useState("");
   const itemsPorPagina = 4;
@@ -198,7 +201,7 @@ const AmbientesPlantilla = () => {
             rol === "administrador" && (
               <>
                 <Mybutton color={"primary"} onClick={() => abrirModal(null)}>
-                  <b>Nuevo Ambiente</b>
+                  <b>{t('Nuevo ambiente')}</b>
                 </Mybutton>
               </>
             )
@@ -206,7 +209,7 @@ const AmbientesPlantilla = () => {
           <Search
             onchange={(e) => setfiltro(e.target.value.toLowerCase())}
             label={""}
-            placeholder={"Filtro por ambiente..."}
+            placeholder={t('Filtro por ambiente')}
 
 
 
@@ -217,10 +220,10 @@ const AmbientesPlantilla = () => {
           <TableMolecula>
             <Thead>
               <Th>ID</Th>
-              <Th>Nombre ambiente</Th>
-              <Th>Estado</Th>
+              <Th>{t('Nombre ambiente')}</Th>
+              <Th>{t('Estado')}</Th>
               <Th>{
-                rol === "administrador" ? "Acciones" : ""
+                rol === "administrador" ? t("acciones") : ""
               }</Th>
             </Thead>
             <Tbody>
@@ -268,7 +271,7 @@ const AmbientesPlantilla = () => {
                 <tr>
                   <td colSpan={4} className="text-center">
                     <h1 className="text-2xl">
-                      <b>No hay datos</b>
+                      <b>{t('No hay datos')}</b>
                     </h1>
                   </td>
                 </tr>
@@ -295,21 +298,21 @@ const AmbientesPlantilla = () => {
             className="flex flex-col items-center"
           >
             <h2 className="text-2xl font-bold mb-4 text-center">
-              {ambienteSeleccionado ? "Actualizar ambiente" : "Nuevo ambiente"}
+              {ambienteSeleccionado ? "Actualizar ambiente" : t("Nuevo ambiente")}
             </h2>
             <div className="w-full max-w-xs">
               <InputAtomo
                 type="text"
                 id="nombre_ambiente"
                 name="nombre_ambiente"
-                placeholder="Nombre del ambiente"
+                placeholder={t("Nombre del ambiente")}
                 register={register}
                 erros={errors}
               />
             </div>
             <div className="flex justify-center mt-6">
               <Mybutton type="submit" color="primary">
-                {ambienteSeleccionado ? "Actualizar" : "Registrar"}
+                {ambienteSeleccionado ? "Actualizar" : t("registrar")}
               </Mybutton>
             </div>
           </form>
