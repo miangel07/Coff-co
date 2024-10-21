@@ -17,6 +17,7 @@ import { Switch } from "@nextui-org/react";
 import { AuthContext } from "../../../context/AuthContext";
 import Search from "../../atoms/Search";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 
 const TipoServicioPlantilla = () => {

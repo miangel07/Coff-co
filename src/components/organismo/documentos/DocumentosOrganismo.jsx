@@ -111,6 +111,10 @@ const DocumentosOrganismo = () => {
 
   const handleClick = async (doc) => {
     try {
+      if(rol != "administrador") {
+        toast.error("No tienes permiso para ejecutar esta accion");
+        return;
+      }
       const id = doc.id_documentos;
       console.log(doc)
 
