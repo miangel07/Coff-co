@@ -16,6 +16,9 @@ export const servicioApiSlice = createApi({
             query: () => ({
                 url: "servicios/listar",
                 method: "GET",
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             providesTags:['servicios']
         }),
@@ -24,6 +27,9 @@ export const servicioApiSlice = createApi({
             query: () => ({
                 url: "servicios/getcambios",
                 method: "GET",
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             providesTags:['servicios']
         }),
@@ -31,7 +37,10 @@ export const servicioApiSlice = createApi({
         obtenerMuestrasParaServicio:build.query({
             query:()=>({
                 url:'servicios/getmuestrasser',
-                method: 'GET'
+                method: 'GET',
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             providesTags:['servicios']
         }),
@@ -41,7 +50,10 @@ export const servicioApiSlice = createApi({
             query:(data)=>({
                 url:'servicios/getvariables',
                 method:'POST',
-                body:data
+                body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -57,7 +69,10 @@ export const servicioApiSlice = createApi({
             query:(data)=>({
                 url:'servicios/getvariablesupdate',
                 method:'POST',
-                body:data
+                body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -73,7 +88,10 @@ export const servicioApiSlice = createApi({
             query:(data)=>({
                 url:'servicios/getprecio',
                 method:'POST',
-                body:data
+                body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -89,7 +107,10 @@ export const servicioApiSlice = createApi({
             query:(data)=>({
                 url:'servicios/gettiposervicio',
                 method:'POST',
-                body:data
+                body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -104,7 +125,10 @@ export const servicioApiSlice = createApi({
         obtenerDatosDeLaMuestraSegunServicio: build.query({
             query: (id) => ({
                 url: `servicios/gedatosmuestra/${id}`,
-                method: 'GET'
+                method: 'GET',
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse: (response, meta, arg) => {
                 return {
@@ -123,6 +147,9 @@ export const servicioApiSlice = createApi({
                 url:'servicios/registrarser',
                 method:'POST',
                 body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -138,6 +165,9 @@ export const servicioApiSlice = createApi({
                 url:`servicios/servicioter/${data.id}`,
                 method:'PUT',
                 body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -154,6 +184,9 @@ export const servicioApiSlice = createApi({
                     url:`servicios/editarvaloresvariables`,
                     method:'POST',
                     body:data,
+                    headers :{
+                        token: `${getCookie("Token")}`,
+                    },
                 }),
                 transformErrorResponse:(response,meta,arg)=>{
                     return{
@@ -170,6 +203,9 @@ export const servicioApiSlice = createApi({
                     url:`servicios/registrarcambio`,
                     method:'POST',
                     body:data,
+                    headers :{
+                        token: `${getCookie("Token")}`,
+                    },
                 }),
                 transformErrorResponse:(response,meta,arg)=>{
                     return{
@@ -184,7 +220,10 @@ export const servicioApiSlice = createApi({
         eliminarServicio:build.mutation({
             query:(id)=>({
                 url:`servicios/eliminar/${id}`,
-                method:'DELETE'
+                method:'DELETE',
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
@@ -202,6 +241,9 @@ export const servicioApiSlice = createApi({
                 url:`servicios/actualizarestadoservicio/${data.id}`,
                 method:'PUT',
                 body:data,
+                headers :{
+                    token: `${getCookie("Token")}`,
+                },
             }),
             transformErrorResponse:(response,meta,arg)=>{
                 return{
