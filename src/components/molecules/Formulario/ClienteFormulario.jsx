@@ -16,6 +16,7 @@ const ClienteFormulario = ({ closeModal }) => {
   useEffect(() => {
     if (isError ) {
         toast.error(error.errors);
+        closeModal();
         return
     }
 

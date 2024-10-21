@@ -25,7 +25,9 @@ const ReportesGrafica = () => {
                     position: 'bottom',
                     color: '#000',
                     fontSize: 12,
-                    formatter: (params) => params.value,
+                    formatter: function(value, index) {
+                        return value + '\n(' + data[index].cantidad_uso + ')';
+                    },
                 },
             },
             yAxis: {
